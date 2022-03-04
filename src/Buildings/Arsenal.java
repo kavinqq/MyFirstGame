@@ -1,6 +1,16 @@
 package Buildings;
 
+import Main.City;
+
+/**
+ * 兵工廠
+ */
 public class Arsenal extends Building {
+    public enum UpgradeEvent{
+        UPGRADE_SOLDIER,
+        UPGRADE_AIRPLANE;
+    }
+
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠)
@@ -21,7 +31,11 @@ public class Arsenal extends Building {
      * levelUp() → City類別的 第 347行 使用
      */
     public Arsenal(){
-        super(6,"兵工廠",0,3,48,-1,2,false,
+        super(6,"兵工廠",0,3,48,0,2,false,30,
                 30,10,70,40);
     }
+
+
+
+
 }

@@ -193,8 +193,7 @@ public class City {
     /**
      * 工作相關方法  像是 派幾個人去採 木頭 / 鋼鐵
      */
-    public void assignWork(int humansNum, Main.Command workType)
-    {
+    public void assignWork(int humansNum, Main.Command workType) {
         //預設他是去伐木
         boolean isWorkedForWood = true;
         //如果 這個指令是 去採鋼 那麼把把isWorkForWood 改為 false

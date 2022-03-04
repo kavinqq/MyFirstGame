@@ -16,8 +16,15 @@ public class SteelMill extends Building {
      * woodCostLevelUp 升級所需要的木頭量
      * steelCostLevelUp 升級所需要的鋼鐵量
      */
-        public SteelMill(){
-            super(5,"煉鋼場",0,1,30,-1,1,false,
-                    15,5,30,15);
-        }
+    public SteelMill() {
+        super(5, "煉鋼場", 0, 1, 30, 0, 1, false, 10,
+                15, 5, 30, 15);
+    }
+
+    /**
+     * 生產鋼鐵
+     */
+    public int steelSpeed(){
+        return getLevel()+1;
+    }
 }

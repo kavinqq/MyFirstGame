@@ -23,9 +23,10 @@ public abstract class Zombie {
     }
 
     /**
-     * 規定每一個子類別殭屍 要有一個回傳該殭屍攻擊力總和的方法 (該怎麼計算分別設定)
-     * @param round 這是第幾波的進攻
-     * @return 這個殭屍類別這一波的總攻擊
+     * 殭屍數量成長
+     * @param time 現在遊戲時間
+     * @return 當前此類殭屍的數量
      */
-    public abstract  int getAttack(double round);
+    public abstract int currentTimeCount(int time);
+
 }

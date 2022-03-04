@@ -8,12 +8,9 @@ public class ZombieLichKing extends Zombie{
         super(25);
     }
 
-    /**
-     * @param round 這是第幾波的進攻
-     * @return 回傳這波巫妖的總攻擊力
-     */
+
     @Override
-    public int getAttack(double round){
-        return (int)(round  / 10d) * super.getAttack();
+    public int currentTimeCount(int time) {
+        return time/10;
     }
 }

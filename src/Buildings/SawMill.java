@@ -1,5 +1,8 @@
 package Buildings;
 
+/**
+ * 筏木場
+ */
 public class SawMill extends Building {
     /**
      * 父類建構子
@@ -16,8 +19,16 @@ public class SawMill extends Building {
      * woodCostLevelUp 升級所需要的木頭量
      * steelCostLevelUp 升級所需要的鋼鐵量
      */
-    public SawMill(){
-        super(4,"筏木場",0,1,30,-1,1,false,
-                15,0,30,15);
+    public SawMill() {
+        super(4, "筏木場", 0, 1, 30, 0, 1, false, 10,
+                15, 0, 30, 15);
+    }
+
+    /**
+     * 生產的木頭量
+     * @return
+     */
+    public int woodSpeed() {
+        return (getLevel() + 1) * 2;
     }
 }

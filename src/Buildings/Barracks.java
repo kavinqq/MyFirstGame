@@ -1,5 +1,11 @@
 package Buildings;
 
+import Main.City;
+import Main.MyCity;
+
+/**
+ * 軍營
+ */
 public class Barracks extends Building {
     /**
      * 父類建構子
@@ -16,8 +22,21 @@ public class Barracks extends Building {
      * woodCostLevelUp 升級所需要的木頭量
      * steelCostLevelUp 升級所需要的鋼鐵量
      */
-    public Barracks(){
-        super(3,"軍營",0,2,30,-1,1,false,
-                20,10,30,15);
+    public Barracks() {
+        super(3, "軍營", 0, 2, 30, 0, 1, false,30,
+                20, 10, 30, 15);
     }
+
+    /**
+     * 增加的士兵數
+     * @return 增加的士兵數
+     */
+    public int produceSoldier(){
+        if(MyCity.getGameTime()%3==0){
+            return getLevel()*3;
+        }
+        return 0;
+    }
+
+
 }
