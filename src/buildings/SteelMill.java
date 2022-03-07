@@ -1,6 +1,6 @@
-package Buildings;
+package buildings;
 
-public class Lab extends Building {
+public class SteelMill extends Building {
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠)
@@ -16,8 +16,20 @@ public class Lab extends Building {
      * woodCostLevelUp 升級所需要的木頭量
      * steelCostLevelUp 升級所需要的鋼鐵量
      */
-    public Lab(){
-        super(2,"研究所",0,3,24,0,1,false,30,
-                10,5,50,20);
+    public SteelMill() {
+        super(5, "煉鋼場", 0, 1, 30, 0, 2, false, 10,
+                15, 5, 30, 15,false,0,0);
+    }
+
+    /**
+     * 生產鋼鐵
+     */
+    public int steelSpeed(){
+        return getLevel()+1;
+    }
+
+    @Override
+    public String toString() {
+        return "煉鋼廠:每小時採集量+1(每房屋等級+2)";
     }
 }

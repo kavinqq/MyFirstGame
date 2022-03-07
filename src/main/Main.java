@@ -1,18 +1,19 @@
-package Main;
+package main;
 
 import java.util.*;
 
 public class Main
 {
     public enum Command{
-        Status(1),
-        Wood(2),
-        Steel(3),
-        Build(4),
-        NextHour(5),
-        NextHalfDay(6),
-        NextDay(7),
-        Exit(8);
+        STATUS(1),//"1.顯示資源\n" +
+        WOOD(2),//木材指定幾人採
+        STEEL(3),//鋼鐵指定幾人採
+        BUILD(4),//建立/升級建築
+        SET_SWITCH(5),//開啟關閉建築///
+        NEXT_HOUR(6),//時間過 1小時
+        NEXT_HALF_DAY(7),//時間過12小時
+        NEXT_DAY(8),//時間過24小時
+        EXIT(9);//離開遊戲
         private final int value;
         private Command(int value){
             this.value = value;
@@ -24,7 +25,7 @@ public class Main
                     return command;
                 }
             }
-            return Status;
+            return STATUS;
         }
     }
 
@@ -50,41 +51,50 @@ public class Main
                         "1.顯示資源\n" +
                         "2.木材指定幾人採\n" +
                         "3.鋼鐵指定幾人採\n" +
-                        "4.建立/升級建築\n" +
-                        "5.時間過1小時\n" +
-                        "6.時間過12小時\n" +
-                        "7.時間過24小時\n" +
-                        "8.離開遊戲", 1 , 8);
+                        "4.建立/升級/查看建築/\n" +
+                        "5.開啟/關閉建築\n" +///
+                        "6.時間過 1小時\n" +
+                        "7.時間過12小時\n" +
+                        "8.時間過24小時\n" +
+                        "9.離開遊戲", 1 , 9);
                 Command command = Command.getCommandByInt(option);
                 switch (command) {
-                    case Status:{
+                    case STATUS:{
                         city.showInfo();
                         break;
                     }
-                    case Wood:{
+                    case WOOD:{
                         System.out.println("目前閒人有 : " + city.getFreeCitizen());
                         if(city.getFreeCitizen() <= 0){
                             System.out.println("目前沒有閒置狀態的村民!");
                         }else{
                             int humanNum = inputInt("要指派幾位村民去伐木?",0, city.getFreeCitizen());
-                            city.assignWork(humanNum, Command.Wood);
+                            city.assignWork(humanNum, Command.WOOD);
                         }
                         break;
                     }
-                    case Steel:{
+                    case STEEL:{
                         System.out.println("目前閒人有 : " + city.getFreeCitizen());
                         if(city.getFreeCitizen() <= 0){
                             System.out.println("目前沒有閒置狀態的村民!");
                         }else{
                             int humanNum = inputInt("要指派幾位村民去採鋼鐵?",0, city.getFreeCitizen() ); //city.getTotalFreeMan()
-                            city.assignWork(humanNum, Command.Steel);
+                            city.assignWork(humanNum, Command.STEEL);
                         }
                         break;
 
                     }
-                    case Build:{
-                        int opt = inputInt("請選擇要 1.建造 2.升級: ",1,2);
-
+                    case BUILD:{
+                        int opt = inputInt("請選擇要 1.建造 2.升級 3.查看建築介紹 4.取消 ",1,4);///
+                        if(opt == 4){///新增取消的功能
+                            break;
+                        }
+                        if(opt == 3){///新增各種建築介紹
+                            for (int i = 0; i < preSaleBuildings.getPreBuildings().length ; i++){
+                                System.out.println("建築效果");
+                            }
+                            break;
+                        }
                         if(opt == 1){
 
                             //建造
@@ -151,15 +161,15 @@ public class Main
                                 for(int i = 0; i < preSaleBuildings.getPreBuildings().length; i++){
                                     //可升級的建築:
                                     if(preSaleBuildings.getPreBuildingByIndex(i).getId()==2){
-                                        System.out.printf("%d.%s\t共%d單位可升級:\t需要升級成本:\t%d木材\t%d鋼鐵",
+                                        System.out.printf("%d.%s\t共%d單位可升級:\t需要升級成本:\t%d木材\t%d鋼鐵",///\t
                                                 preSaleBuildings.getPreBuildingByIndex(i).getId(),
                                                 "文明等級",
                                                 preSaleBuildings.getSum(i),
                                                 preSaleBuildings.getPreBuildingByIndex(i).getWoodCostLevelUp(),
                                                 preSaleBuildings.getPreBuildingByIndex(i).getSteelCostLevelUp());
-
+                                                System.out.println("升級花費時間: " + "xxx");///取得升級花費時間
                                     }else if(preSaleBuildings.getPreBuildingByIndex(i).getId()==6){
-                                        System.out.printf("%d.%s\t共%d單位可升級:\t需要升級成本:\t%d木材\t%d鋼鐵",
+                                        System.out.printf("%d.%s\t共%d單位可升級:\t需要升級成本:\t%d木材\t%d鋼鐵",///\t
                                                 preSaleBuildings.getPreBuildingByIndex(i).getId(),
                                                 "士兵等級",
                                                 preSaleBuildings.getSum(i),
@@ -167,12 +177,13 @@ public class Main
                                                 preSaleBuildings.getPreBuildingByIndex(i).getSteelCostLevelUp());
 
                                     }else{
-                                        System.out.printf("%d.%s\t\t共%d間可升級:\t\t需要升級成本:\t%d木材\t%d鋼鐵",
+                                        System.out.printf("%d.%s\t\t共%d間可升級:\t\t需要升級成本:\t%d木材\t%d鋼鐵",///\t
                                                 preSaleBuildings.getPreBuildingByIndex(i).getId(),
                                                 preSaleBuildings.getPreBuildingByIndex(i).getName(),
                                                 preSaleBuildings.getSum(i),
                                                 preSaleBuildings.getPreBuildingByIndex(i).getWoodCostLevelUp(),
                                                 preSaleBuildings.getPreBuildingByIndex(i).getSteelCostLevelUp());
+                                        System.out.println("升級花費時間: " + "xxx");///取得升級花費時間
                                     }
                                     // 木頭不足
                                     if (city.getResource().getTotalWood() < preSaleBuildings.getPreBuildingByIndex(i).getWoodCostLevelUp()) {
@@ -184,10 +195,9 @@ public class Main
                                         System.out.printf("\t缺%d鋼鐵 ",
                                                 preSaleBuildings.getPreBuildingByIndex(i).getSteelCostLevelUp() - city.getResource().getTotalSteel());
                                     }
-                                    System.out.println("");
                                 }
                                 //輸入建築編號
-                                opt = inputInt("",1,6);
+                                opt = inputInt("",1,7);
                                 //紀錄是否有可以升級的建築
                                 boolean isBuildingFreeToBuildExist = false;
                                 for(int i = 0; i < city.getBuildingCount(); i++){
@@ -233,22 +243,22 @@ public class Main
                         }
                         break;
                     }
-                    case NextHour:{
+                    case NEXT_HOUR:{
                         //時間流動 1小時
                         thisRoundTimePass = 1;
                         break;
                     }
-                    case NextHalfDay:{
+                    case NEXT_HALF_DAY:{
                         //時間流動 12小時
                         thisRoundTimePass = 12;
                         break;
                     }
-                    case NextDay:{
+                    case NEXT_DAY:{
                         //時間流動 24小時
                         thisRoundTimePass = 24;
                         break;
                     }
-                    case Exit:{
+                    case EXIT:{
                         System.exit(0);
                         break;
                     }

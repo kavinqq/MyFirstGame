@@ -32,13 +32,13 @@ public class ZombieGroup {
 
     /**
      * 殭屍數量增長
-     * @param currentTime 現在遊戲時間
+     * @param gameTime 現在遊戲時間
      */
-    public void groupGrowUp(int currentTime){
+    public void groupGrowUp(int gameTime){
         for(Map.Entry<Zombie,Integer> entry : zombies.entrySet()){
             Zombie currentType = entry.getKey();
             //該殭屍種類數量增加
-            int currentNum = currentType.currentTimeCount(currentTime);
+            int currentNum = currentType.currentTimeCount(gameTime);
             //更新殭屍數量
             if(currentType instanceof ZombieBigger){
                 zombies.put(zombieBigger,currentNum);
@@ -60,11 +60,11 @@ public class ZombieGroup {
         }
     }
 
-    /**
-     * 殭屍族群map
-     * @return 殭屍族群map
-     */
-    public Map<Zombie, Integer> getZombies() {
-        return zombies;
-    }
+//    /**
+//     * 殭屍族群 map
+//     * @return 殭屍族群map
+//     */
+//    public Map<Zombie, Integer> getZombies() {
+//        return zombies;
+//    }
 }

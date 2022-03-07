@@ -1,6 +1,6 @@
-package Main;
+package main;
 
-import Buildings.*;
+import buildings.*;
 //預建設建築物的資訊（每一個先建立一個實體，以供參考）
 public class PreSaleBuildings {
     //目前總共有幾種建築物可供建造

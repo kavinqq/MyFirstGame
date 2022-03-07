@@ -1,6 +1,12 @@
-package Buildings;
+package buildings;
 
-public class SteelMill extends Building {
+import main.City;
+import main.MyCity;
+
+/**
+ * 軍營
+ */
+public class Barracks extends Building {
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠)
@@ -16,15 +22,24 @@ public class SteelMill extends Building {
      * woodCostLevelUp 升級所需要的木頭量
      * steelCostLevelUp 升級所需要的鋼鐵量
      */
-    public SteelMill() {
-        super(5, "煉鋼場", 0, 1, 30, 0, 1, false, 10,
-                15, 5, 30, 15);
+    public Barracks() {
+        super(3, "軍營", 0, 2, 30, 0, 2, false,30,
+                20, 10, 30, 15,false,0,0);
     }
 
     /**
-     * 生產鋼鐵
+     * 增加的士兵數
+     * @return 增加的士兵數
      */
-    public int steelSpeed(){
-        return getLevel()+1;
+    public int produceSoldier(){
+        if(City.getGameTime()%3==0){
+            return getLevel()*3;
+        }
+        return 0;
     }
+    @Override
+    public String toString() {
+        return "軍營:每3小時消耗2木材2鋼鐵產生1位士兵(每房屋等級+2人)";
+    }
+
 }
