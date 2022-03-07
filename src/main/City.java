@@ -3,8 +3,9 @@ package main;
 import buildings.*;
 import human.*;
 import Zombies.*;
-
+import main.BuildingsCollection.*;
 import java.util.ArrayList;
+import static main.BuildingsCollection.BuildingType.*;
 
 public class City {
     /**
@@ -22,10 +23,6 @@ public class City {
      * 遊戲的建築物
      */
     private BuildingsCollection buildings;
-    /**
-     * 建築數量
-     */
-    private int buildingCount;
     // 目前已建造的研究所的數量
     private int numOfLab;
     // 正在升級技術中的研究所的數量
@@ -45,7 +42,15 @@ public class City {
     /**
      * 由於整個遊戲 只有一個文明等級 所以設定在 City全域變數
      */
-    private int techLevel;
+    private static int techLevel = 1;
+    /**
+     * 士兵等級
+     */
+    private static int soldierLevel = 1;
+    /**
+     * 飛機等級
+     */
+    private static int planeLevel = 1;
     /**
      * 整個遊戲的時間軸 (小時為單位)
      */
@@ -88,14 +93,11 @@ public class City {
         numOfLab = 0;
         //已經建造的建築物的數量
         buildingCount = 0;
-        techLevel = 1;
         freeCitizen = 0;
         woodMan = 0;
         steelMan = 0;
         resource = new Resource();
         buildings = new BuildingsCollection();
-//        buildings = new Building[MAX_CAN_BUILD];
-//        zombies = new Zombie[ZOMBIE_TYPE];
         zombies = new ZombieGroup();
         /*
           用來所有士兵new出來 放在 人類的ArrayList
@@ -253,7 +255,6 @@ public class City {
 
     /**
      * 取得這一座程式的總資源
-     *
      * @return 目前程式的資源
      */
     public Resource getResource() {
@@ -289,16 +290,16 @@ public class City {
      * 生產市民
      * @return 生成數量
      */
-    private int productCitizen(int index) {
-
+    private int productCitizen() {
+        return buildings.getNewCitizenNum();
     }
 
     /**
      * 生產士兵
      * @return 生成數量
      */
-    private int productSoldier(int index) {
-
+    private int productSoldier() {
+        return buildings.getNewSoldierNum();
     }
 
     /**
@@ -317,63 +318,11 @@ public class City {
     }
 
     /**
-     * 檢查所有的建築物
-     * 如果符合建造中 且 建造時間完成
-     * 就會讓該建築物 成為建造完成/功能升級完成 的建築物
-     * <p>
-     * 文明用研究所的等級來取代
-     * 士兵等級用兵工廠的等級來取代
-     * <p>
-     * 筏木場.煉鋼廠 會因為升級而使產量增加
+     * 建築的建造與升級完成
      */
-    private void buildingsUpgrade() {
-
-        for (int i = 0; i < buildingCount; i++) {
-            //如果isUpgradeFinish 回傳 true 表示該建物已經建造完成 false表示 還在建造中或是還沒建造
-            if (buildings[i] != null) {
-                if (buildings[i].isUpgradeFinish(gameTime)) {
-                    //如果該建築物是研究所 && 該建築物等級 > 0 (PS: 等級== -1 : 已安排建造但尚未建造 / = 0:建造好了 / >0:建造好且升級好了 )
-                    if (buildings[i].getId() == 2 && buildings[i].getLevel() > 0) { //文明升級到2
-                        System.out.println("文明已升級");
-                        //文明等級++
-                        techLevel++;
-                        //釋出可升級的空間
-                        buildingsInLab--;
-                        //如果該建築物是研究所 && 該建築物等級 == 0 (PS: 等級== -1 : 已安排建造但尚未建造 / = 0:建造好了 / >0:建造好且升級好了 )
-                    } else if (buildings[i].getId() == 2 && buildings[i].getLevel() == 0) {  //研究所建造完成
-                        System.out.println("研究所已建造");     //新增顯示文明等級
-                        //研究所總數量++
-                        numOfLab++;
-                        //如果該建築物是兵工廠 && 該建築物等級 == 0 (PS: 等級== -1 : 已安排建造但尚未建造 / = 0:建造好了 / >0:建造好且升級好了 )
-                    } else if (buildings[i].getId() == 6 && buildings[i].getLevel() > 0) {
-                        System.out.println("士兵等級已升級為" + buildings[i].getLevel() + " 等");
-                        for (Human human : humans) {
-                            //因為levelUP()裡面已經有寫判斷是否是士兵，所以可以直接跑完整個arrayList沒問題
-                            human.levelUP();
-                        }
-                    } else {
-                        System.out.println(buildings[i].getName() + " 建造完成 建築等級為" + (buildings[i].getLevel() + 1));
-                        if (buildings[i].getLevel() > 0 && buildings[i].getId() != 6) {   //為升級狀態 && 非兵工廠
-                            buildingsInLab--;   //釋出可升級的空間
-                        }
-                        if (buildings[i].getId() == 4) {
-                            if (buildings[i].getLevel() == 0) {
-                                resource.upgradeWoodSpeed(3);
-                            } else {
-                                resource.upgradeWoodSpeed(2);
-                            }
-                            System.out.println("木材產量效率增加");
-                        }
-                        if (buildings[i].getId() == 5) {
-                            resource.upgradeSteelSpeed(1);
-                            System.out.println("鋼鐵產量效率增加");
-                        }
-                    }
-                }
-            } else {
-                break;
-            }
-        }
+    private void finishBuildAndUpgrade() {
+        buildings.showBuildCompleted();
+        buildings.showUpgradeCompleted();
     }
 
     /**
@@ -391,7 +340,7 @@ public class City {
      */
     public boolean doCityWorkAndTimePass(int thisRoundTimePass) {
         //把時間流動前做的指令 && 決定流動的時間跑完
-        while (thisRoundTimePass != 0) {
+       for(int time = 0; time<thisRoundTimePass; time++) {
             //遊戲時間 流動 1小時
             timePass();
             //生產 木&鋼
@@ -407,11 +356,12 @@ public class City {
                     System.out.printf("第%d回合 有新戰士出生,目前一共有%d個戰士\n", getGameTime() + 1, getTotalSolider());
                 }
             }
-            //建築.升級() +升級文明() + 升級士兵()
-            buildingsUpgrade();
+            //完成建築的升級和建造，科技等級提升
+            buildings.completeBuildingJob();
 
-            //這是殭屍來襲時間( 每16小時來一次 )
-            if (getGameTime() % 16 == 0) {
+
+            //殭屍來襲時間( 每16小時來一次 )
+            if (City.getGameTime() % 16 == 0) {
                 //用來 計算抵擋完殭屍後的人口狀況 和 算完後遊戲是否結束
                 if (!liveOrDead()) {
                     System.out.println("城鎮人口皆被消滅!");
@@ -419,93 +369,82 @@ public class City {
                     return false;
                 }
             }
-            thisRoundTimePass--;
+
         }
         return true;
     }
 
     /**
-     * 單純檢查是否可以升級or建造
-     *
-     * @param index 在buildings[] 的位置
-     * @return 可以升級/建造 true
+     * 顯示可以蓋的建築物
      */
-    public boolean checkOnlyForCanUpgrade(int index) {
-        if (buildings[index] != null) {
-            if (!buildings[index].isReadyToUpgrade()) {  //非安排佇列中
-                if (buildings[index].getLevel() == -1) {    //鋼建造
-                    if (buildings[index].getWoodCostCreate() <= resource.getTotalWood() && buildings[index].getSteelCostCreate() <= resource.getTotalSteel()) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    if (buildings[index].getWoodCostLevelUp() <= resource.getTotalWood() && buildings[index].getSteelCostLevelUp() <= resource.getTotalSteel()) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+    public void showCanBuildBuilding(){
+        System.out.println(buildingSelectString(HOUSE.getInstance()));
+        System.out.println(buildingSelectString(LAB.getInstance()));
+        System.out.println(buildingSelectString(BARRACKS.getInstance()));
+        System.out.println(buildingSelectString(SAW_MILL.getInstance()));
+        System.out.println(buildingSelectString(STEEL_MILL.getInstance()));
+        System.out.println(buildingSelectString(ARSENAL.getInstance()));
+        System.out.println(buildingSelectString(GAS_MILL.getInstance()));
+        System.out.println(buildingSelectString(AIRPLANE_MILL.getInstance()));
     }
 
     /**
-     * 檢查所有建築
-     * 確認每一個建築物依照條件可不可以被建造
-     * 條件有物資.文明等級
-     *
-     * @param index 要建造的建築物在buildings陣列裡的 索引
-     * @return 如果回傳true 表示該建築物可以建造 且安排建造 回傳 false 代表該建築物沒有達到建造的條件
+     * 建造需求字串
+     * @param building 建築
+     * @return 建造需求字串
      */
-    public boolean canUpgradeBuilding(int index) {
-        //文明等級==2時   同時建築代號為2 (研究所)   以及該研究所已經被建立  ---> 不給升級
-        if (techLevel == 2 && buildings[index].getId() == 2 && buildings[index].getLevel() >= 0) {
-            //文明等級已經到2  不需要再升級一次
-            return false;
-        } else {
-            //該建築物已經安排建造但尚未建造好 (level = -1)
-            if (buildings[index].getLevel() == -1) {
-                // 如果可以建造則安排他去建造 (可不可以 →判斷: 文明等級 / 所需要資源)， 傳入遊戲時間是用來設定建造完成時間用
-                if (buildings[index].setToUpgrade(resource.getTotalWood(), resource.getTotalSteel(), techLevel, gameTime)) {
-                    //消耗木頭
-                    resource.takeWood(buildings[index].getWoodCostCreate());
-                    //消耗鋼鐵
-                    resource.takeSteel(buildings[index].getSteelCostCreate());
-                    //總建築物數量 + 1
-                    buildingCount++;
-                    //可以建造新建築
-                    return true;
-                } else {
-                    //沒有足夠資源去建造
-                    return false;
-                }
-            } else if (buildingsInLab < numOfLab) { //先檢查有沒有空間 在去設定去升級
-                //如果建築物可以建造的話 安排建築物建造
-                if (buildings[index].setToUpgrade(resource.getTotalWood(), resource.getTotalSteel(), techLevel, gameTime)) {
-                    //消耗的木頭
-                    resource.takeWood(buildings[index].getWoodCostCreate());
-                    //消耗的鋼鐵
-                    resource.takeSteel(buildings[index].getSteelCostCreate());
-                    //如果他是升級狀態(已經建造出來的話getLevel()會>=0 如果建築物還沒建造會等於-1) && 他不是兵工廠 (PS:兵工廠 ID = 6) 不會增加buildingsInLab
-                    if (buildings[index].getLevel() >= 0 && buildings[index].getId() != 6) {
-                        buildingsInLab++;
-                    }
-                    //可以建造或升級
-                    return true;
-                } else {
-                    //沒有足夠的資源去升級 或 建造
-                    return false;
-                }
-            } else {
-                //目前沒有足夠的研究所，去支援升級
-                return false;
-            }
-        }
+    private String buildingSelectString(Building building){
+        return (building.getId() + ". " + building +
+                "資源需求： " + building.getWoodCostCreate() + building.getSteelCostCreate() + building.getGasCostCreate() +
+                "科技等級需求： " + building.getTechLevelNeedBuild());
+    }
+
+    /**
+     * 建築物可不可以建造
+     * @param type 建築物類型
+     * @return 可否建造
+     */
+    public boolean canBuildBuilding(BuildingType type){
+        return buildings.canBuild(type,resource);
+    }
+
+    /**
+     * 開始建造
+     * @param type
+     */
+    public void build(BuildingType type){
+        buildings.build(type,resource);
+    }
+
+    /**
+     * 顯示每種建築物可以升級的數量
+     */
+    public void showCanUpgradeBuilding() {
+        System.out.printf("房屋：%d間可升級\n",
+                buildings.getCanUpgradeNum(HOUSE,resource));
+        System.out.printf("研究所：%d間可升級\n",
+                buildings.getCanUpgradeNum(LAB,resource));
+        System.out.printf("軍營：%d間可升級\n",
+                buildings.getCanUpgradeNum(BARRACKS,resource));
+        System.out.printf("伐木場：%d間可升級\n",
+                buildings.getCanUpgradeNum(SAW_MILL,resource));
+        System.out.printf("煉鋼廠：%d間可升級\n",
+                buildings.getCanUpgradeNum(STEEL_MILL,resource));
+        System.out.printf("兵工廠：%d間可升級\n",
+                buildings.getCanUpgradeNum(ARSENAL,resource));
+        System.out.printf("瓦斯場：%d間可升級\n",
+                buildings.getCanUpgradeNum(GAS_MILL,resource));
+        System.out.printf("飛機工廠：%d間可升級\n",
+                buildings.getCanUpgradeNum(AIRPLANE_MILL,resource));
+    }
+
+    /**
+     * 建築物可不可以升級
+     * @param type 建築物類型
+     * @return 可否升級
+     */
+    public boolean canUpgradeBuilding(BuildingsCollection.BuildingType type) {
+        return buildings.getCanUpgradeNum(type,resource)!=0;
     }
 
     /**
@@ -685,8 +624,15 @@ public class City {
     /**
      * @return 文明等級
      */
-    public int getTechLevel() {
+    public static int getTechLevel() {
         return techLevel;
+    }
+
+    /**
+     * 科技等級提升
+     */
+    public static void addTechLevel(){
+        techLevel++;
     }
 
     /**
@@ -733,4 +679,13 @@ public class City {
             }
         }
     }
+
+    /**
+     * 城市中的建築數量
+     * @return 城市中的建築數量
+     */
+    public int getBuildingNum(){
+        return buildings.getBuildingNum();
+    }
+
 }

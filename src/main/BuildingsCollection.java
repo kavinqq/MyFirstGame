@@ -3,6 +3,7 @@ package main;
 import buildings.*;
 
 import java.util.LinkedList;
+import static main.BuildingsCollection.BuildingType.*;
 
 /**
  * @author Lillian
@@ -10,17 +11,38 @@ import java.util.LinkedList;
  * @Description
  */
 public class BuildingsCollection {
-//    private City city;
+
+    public static final int PLANE_LEVEL_UPGRADE_TIME = 48;
+    public static final int SOLDIER_LEVEL_UPGRADE_TIME = 48;
+    public static final int TECH_LEVEL_UPGRADE_TIME = 24;
 
     public enum BuildingType {
-        ARSENAL,
-        BARRACKS,
-        HOUSE,
-        LAB,
-        SAW_MILL,
-        STEEL_MILL,
-        GAS_MILL,
-        AIRPLANE_MILL;
+        ARSENAL(6,new Arsenal()),
+        BARRACKS(3,new Barracks()),
+        HOUSE(1,new House()),
+        LAB(2,new Lab()),
+        SAW_MILL(4,new SawMill()),
+        STEEL_MILL(5,new SteelMill()),
+        GAS_MILL(7,new GasMill()),
+        AIRPLANE_MILL(8,new AirPlaneMill());
+
+        private int id;
+        private Building instance;
+        BuildingType(int id,Building building){
+            this.id = id;
+            instance = building;
+        }
+        public static BuildingType getBuildingTypeByInt(int option){
+            for(BuildingType type: values()){
+                if(type.id == option){
+                    return type;
+                }
+            }
+            return HOUSE;
+        }
+        public Building getInstance(){
+            return instance;
+        }
     }
 
     private class BuildingNode {
@@ -52,9 +74,28 @@ public class BuildingsCollection {
     private LinkedList<BuildingNode> steelMillList;
     private LinkedList<BuildingNode> gasMillList;
     private LinkedList<BuildingNode> airplaneMillList;
+    /**
+     * 科技等級開始升級時間
+     */
+    private int techLevelStartUpgradeTime;
+    /**
+     * 士兵等級開始升級時間
+     */
+    private int soldierLevelStartUpgradeTime;
+    /**
+     * 飛機等級開始升級時間
+     */
+    private int planeLevelStartUpgradeTime;
+    /**
+     * 閒置驗究所數量
+     */
+    private int freeLadNum;
+    /**
+     * 建築數量
+     */
+    private int buildingNum;
 
     public BuildingsCollection() {
-//        this.city = city;
         arsenalList = new LinkedList<>();
         barracksList = new LinkedList<>();
         houseList = new LinkedList<>();
@@ -63,67 +104,67 @@ public class BuildingsCollection {
         steelMillList = new LinkedList<>();
         gasMillList = new LinkedList<>();
         airplaneMillList = new LinkedList<>();
+        techLevelStartUpgradeTime = 0;
+        buildingNum = 0;
     }
 
     /**
      * 建造
-     *
-     * @param type
+     * @param type 建築種類
+     * @param resource 城市資源
      */
-    public void buildProcess(BuildingType type) {
+    public void build(BuildingType type,Resource resource) {
         BuildingNode newBuilding;
         switch (type) {
             case ARSENAL: {
                 newBuilding = new BuildingNode(new Arsenal());
-                setBuildingBuilding(newBuilding);
+                setBuildingBuilding(newBuilding,resource);
                 arsenalList.add(newBuilding);
                 break;
             }
             case BARRACKS: {
                 newBuilding = new BuildingNode(new Barracks());
-                setBuildingBuilding(newBuilding);
+                setBuildingBuilding(newBuilding,resource);
                 barracksList.add(newBuilding);
                 break;
             }
             case HOUSE: {
                 newBuilding = new BuildingNode(new House());
-                setBuildingBuilding(newBuilding);
+                setBuildingBuilding(newBuilding,resource);
                 houseList.add(newBuilding);
                 break;
             }
             case LAB: {
                 newBuilding = new BuildingNode(new Lab());
-                setBuildingBuilding(newBuilding);
+                setBuildingBuilding(newBuilding,resource);
                 labList.add(newBuilding);
                 break;
             }
             case SAW_MILL: {
                 newBuilding = new BuildingNode(new SawMill());
-                setBuildingBuilding(newBuilding);
+                setBuildingBuilding(newBuilding,resource);
                 sawMillList.add(newBuilding);
                 break;
             }
             case STEEL_MILL: {
                 newBuilding = new BuildingNode(new SteelMill());
-                setBuildingBuilding(newBuilding);
+                setBuildingBuilding(newBuilding,resource);
                 steelMillList.add(newBuilding);
                 break;
             }
             case GAS_MILL: {
                 newBuilding = new BuildingNode(new GasMill());
-                setBuildingBuilding(newBuilding);
+                setBuildingBuilding(newBuilding,resource);
                 gasMillList.add(newBuilding);
                 break;
             }
             case AIRPLANE_MILL: {
                 newBuilding = new BuildingNode(new AirPlaneMill());
-                setBuildingBuilding(newBuilding);
+                setBuildingBuilding(newBuilding,resource);
                 airplaneMillList.add(newBuilding);
                 break;
             }
-
         }
-
     }
 
     /**
@@ -131,7 +172,11 @@ public class BuildingsCollection {
      *
      * @param newBuilding
      */
-    private void setBuildingBuilding(BuildingNode newBuilding) {
+    private void setBuildingBuilding(BuildingNode newBuilding,Resource resource) {
+        alreadyTakeResource(resource,
+                newBuilding.building.getWoodCostLevelUp(),
+                newBuilding.building.getSteelCostLevelUp(),
+                newBuilding.building.getGasCostLevelUp());
         newBuilding.buildStartTime = City.getGameTime();
         newBuilding.buildEndTime = City.getGameTime() + newBuilding.building.getBuildTime();
         newBuilding.building.setWorking(false);
@@ -140,83 +185,28 @@ public class BuildingsCollection {
     }
 
     /**
-     * 升級
-     *
-     * @param type
-     * @param fromLevel
-     * @return 是否已安排升級
-     */
-    private void upgradeProcess(BuildingType type, int fromLevel) {
-        switch (type) {
-            case ARSENAL: {
-                findUpgradeTargetFrom(arsenalList);
-                break;
-            }
-            case BARRACKS: {
-                findUpgradeTargetFrom(barracksList);
-                break;
-            }
-            case HOUSE: {
-                findUpgradeTargetFrom(houseList);
-                break;
-            }
-            case LAB: {
-                findUpgradeTargetFrom(labList);
-                break;
-            }
-            case SAW_MILL: {
-                findUpgradeTargetFrom(sawMillList);
-                break;
-            }
-            case STEEL_MILL: {
-                findUpgradeTargetFrom(steelMillList);
-                break;
-            }
-            case GAS_MILL: {
-                findUpgradeTargetFrom(gasMillList);
-                break;
-            }
-            case AIRPLANE_MILL: {
-                findUpgradeTargetFrom(airplaneMillList);
-                break;
-            }
-        }
-    }
-
-    /**
-     * 從list中找到要升級的目標
+     * 建築開始運作，建築等級提升，關閉升級中狀態，開啟工作中狀態
      *
      * @param list
      */
-    public void findUpgradeTargetFrom(LinkedList<BuildingNode> list) {
+    private void setBuildingStartWork(LinkedList<BuildingNode> list) {
+        int sum = 0;
         for (BuildingNode node : list) {
-            if (!node.building.isUpgrading()) {
-                setBuildingUpgrading(node);
+            //若建造完成時間==當前時間->建造完成
+            if (node.buildEndTime == City.getGameTime()) {
+                node.building.setLevel(node.building.getLevel() + 1);
+                node.building.setUpgrading(false);
+                node.building.setWorking(true);
+                node.building.setReadyToUpgrade(true);
+                buildingNum++; //建造完成，建築數+1
+                sum++;
+                //若建造的是研究所，閒置數+1
+                if (node.building instanceof Lab) {
+                    freeLadNum++;
+                }
             }
         }
-    }
-
-    /**
-     * 將建築設為升級中
-     *
-     * @param node
-     */
-    private void setBuildingUpgrading(BuildingNode node) {
-        node.upgradeStartTime = City.getGameTime();
-        node.upgradeEndTime = City.getGameTime() + node.building.getUpgradeTime();
-        node.building.setUpgrading(true);
-        node.building.setWorking(false);
-        node.building.setReadyToUpgrade(false);
-    }
-
-    /**
-     * 完成建造和升級的工作
-     */
-    public void completeBuildingJob() {
-        //建立完成
-        showBuildCompleted();
-        //升級完成
-        showUpgradeCompleted();
+        System.out.println(sum + "間建造完成");
     }
 
     /**
@@ -243,23 +233,145 @@ public class BuildingsCollection {
     }
 
     /**
-     * 建築開始運作，建築等級提升，關閉升級中狀態，開啟工作中狀態
+     * 能不能建造
+     * @param type
+     */
+    public boolean canBuild(BuildingType type,Resource resource){
+        switch (type) {
+            case ARSENAL:{
+                if (City.getTechLevel() < ARSENAL.getInstance().getTechLevelNeedBuild()) {
+                    return false;
+                }
+                return hasEnoughResourceToBuild(ARSENAL.getInstance(),resource);
+            }
+            case BARRACKS: {
+                return hasEnoughResourceToBuild(BARRACKS.getInstance(),resource);
+            }
+            case HOUSE: {
+                return hasEnoughResourceToBuild(HOUSE.getInstance(),resource);
+            }
+            case LAB: {
+                return hasEnoughResourceToBuild(LAB.getInstance(),resource);
+            }
+            case SAW_MILL: {
+                return hasEnoughResourceToBuild(SAW_MILL.getInstance(),resource);
+            }
+            case STEEL_MILL: {
+                return hasEnoughResourceToBuild(STEEL_MILL.getInstance(),resource);
+            }
+            case GAS_MILL: {
+                if(City.getTechLevel()<GAS_MILL.getInstance().getTechLevelNeedBuild()){
+                    return false;
+                }
+                return hasEnoughResourceToBuild(GAS_MILL.getInstance(),resource);
+            }
+            case AIRPLANE_MILL: {
+                if(City.getTechLevel()<AIRPLANE_MILL.getInstance().getTechLevelNeedBuild()){
+                    return false;
+                }
+                return hasEnoughResourceToBuild(AIRPLANE_MILL.getInstance(),resource);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判斷可否建造
+     * @param building 要蓋的建築
+     * @param resource
+     * @return
+     */
+    private boolean hasEnoughResourceToBuild(Building building,Resource resource){
+        return resource.getTotalWood()>=building.getWoodCostCreate()
+            && resource.getTotalSteel()>=building.getSteelCostCreate()
+            && resource.getTotalGas()>=building.getSteelCostCreate();
+    }
+
+    /**
+     * 升級
+     *
+     * @param type
+     * @return 是否已安排升級
+     */
+    public boolean upgrade(BuildingType type,Resource resource) {
+        switch (type) {
+            case BARRACKS: {
+                setBuildingUpgrade(barracksList,resource);
+                return true;
+            }
+            case HOUSE: {
+                setBuildingUpgrade(houseList,resource);
+                return true;
+            }
+            case LAB: {
+                setBuildingUpgrade(labList,resource);
+                return true;
+            }
+            case SAW_MILL: {
+                setBuildingUpgrade(sawMillList,resource);
+                return true;
+            }
+            case STEEL_MILL: {
+                setBuildingUpgrade(steelMillList,resource);
+                return true;
+            }
+            case GAS_MILL: {
+                setBuildingUpgrade(gasMillList,resource);
+                return true;
+            }
+            case AIRPLANE_MILL: {
+                setBuildingUpgrade(airplaneMillList,resource);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 將建築設為升級中
      *
      * @param list
      */
-    private void setBuildingStartWork(LinkedList<BuildingNode> list) {
+    private void setBuildingUpgrade(LinkedList<BuildingNode> list,Resource resource) {
+        for (BuildingNode node : list) {
+            if (!node.building.isUpgrading()) {
+                alreadyTakeResource(resource,
+                        node.building.getWoodCostLevelUp(),
+                        node.building.getSteelCostLevelUp(),
+                        node.building.getGasCostLevelUp());
+                node.upgradeStartTime = City.getGameTime();
+                node.upgradeEndTime = City.getGameTime() + node.building.getUpgradeTime();
+                node.building.setUpgrading(true);
+                node.building.setWorking(false);
+                node.building.setReadyToUpgrade(false);
+                freeLadNum--; //占用研究所資源
+                if (freeLadNum <= 0) {
+                    freeLadNum = 0;
+                }
+                return;
+            }
+        }
+    }
+
+    /**
+     * 將建築完成升級
+     *
+     * @param list
+     */
+    private void finishUpgradeBuilding(LinkedList<BuildingNode> list) {
         int sum = 0;
         for (BuildingNode node : list) {
-            if (node.buildEndTime == City.getGameTime()) {
+            //若建築的升級完成時間==當前時間->升級完成
+            if (node.upgradeEndTime == City.getGameTime()) {
                 node.building.setLevel(node.building.getLevel() + 1);
                 node.building.setUpgrading(false);
                 node.building.setWorking(true);
                 node.building.setReadyToUpgrade(true);
-//                city.setBuildingCount(city.getBuildingCount() + 1);
+                freeLadNum++; //釋放研究所資源
                 sum++;
             }
         }
-        System.out.println(sum + "間完成建造");
+        System.out.println(sum + "間完成升級");
     }
 
     /**
@@ -286,26 +398,133 @@ public class BuildingsCollection {
     }
 
     /**
-     * 將建築完成升級
-     *
-     * @param list
+     * 完成建造和升級的工作
      */
-    private void finishUpgradeBuilding(LinkedList<BuildingNode> list) {
+    public void completeBuildingJob() {
+        //建立完成
+        showBuildCompleted();
+        //升級完成
+        showUpgradeCompleted();
+        //科技等級升級
+        if (City.getGameTime() - techLevelStartUpgradeTime - TECH_LEVEL_UPGRADE_TIME == 0) {
+            City.addTechLevel();
+        }
+        //士兵等級升級
+        if (City.getGameTime() - soldierLevelStartUpgradeTime - SOLDIER_LEVEL_UPGRADE_TIME == 0) {
+            City.addTechLevel();
+        }
+        //飛機等級升級
+        if (City.getGameTime() - planeLevelStartUpgradeTime - PLANE_LEVEL_UPGRADE_TIME == 0) {
+            City.addTechLevel();
+        }
+    }
+
+    /**
+     * 取得各建築可以升級的數量
+     * @param type     建築種類
+     * @param resource 都市的物資
+     * @return 可以升級數量
+     */
+    public int getCanUpgradeNum(BuildingType type, Resource resource) {
+        //若沒有研究所不可以升級
+        if (freeLadNum == 0) {
+            return 0;
+        }
+        switch (type) {
+            case BARRACKS: {
+                if(City.getTechLevel()<BARRACKS.getInstance().getTechLevelNeedBuild()){
+                    return 0;
+                }
+                return countCanUpgradeNum(barracksList, resource);
+            }
+            case HOUSE: {
+                if(City.getTechLevel()<HOUSE.getInstance().getTechLevelNeedBuild()){
+                    return 0;
+                }
+                return countCanUpgradeNum(houseList, resource);
+            }
+            case LAB: {
+                return countCanUpgradeNum(labList, resource);
+            }
+            case SAW_MILL: {
+                if(City.getTechLevel()<SAW_MILL.getInstance().getTechLevelNeedBuild()){
+                    return 0;
+                }
+                return countCanUpgradeNum(sawMillList, resource);
+            }
+            case STEEL_MILL: {
+                return countCanUpgradeNum(steelMillList, resource);
+            }
+            case GAS_MILL: {
+                if (City.getTechLevel() < GAS_MILL.getInstance().getTechLevelNeedBuild()) {
+                    return 0;
+                }
+                return countCanUpgradeNum(gasMillList, resource);
+            }
+            case AIRPLANE_MILL: {
+                if (City.getTechLevel() < AIRPLANE_MILL.getInstance().getTechLevelNeedBuild()) {
+                    return 0;
+                }
+                return countCanUpgradeNum(airplaneMillList, resource);
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 計算某種類的建築有多少可以升級
+     *
+     * @param list     建築鏈表
+     * @param resource 都市的物資
+     * @return 可以升級的數量
+     */
+    private int countCanUpgradeNum(LinkedList<BuildingNode> list, Resource resource) {
         int sum = 0;
         for (BuildingNode node : list) {
-            if (node.upgradeEndTime == City.getGameTime()) {
-                node.building.setLevel(node.building.getLevel() + 1);
-                node.building.setUpgrading(false);
-                node.building.setWorking(true);
-                node.building.setReadyToUpgrade(true);
+            //建築是否可升級 && 木頭夠 && 鋼鐵夠 && 瓦斯夠
+            if (node.building.isReadyToUpgrade() && resource.getTotalWood()>=node.building.getGasCostLevelUp()
+                && resource.getTotalSteel()>=node.building.getSteelCostLevelUp()
+                && resource.getTotalGas()>=node.building.getGasCostLevelUp()) {
                 sum++;
             }
         }
-        System.out.println(sum + "間完成升級");
+        return sum;
+    }
+
+    /**
+     * 取得當前建築數量
+     *
+     * @return
+     */
+    public int getBuildingNum() {
+        return buildingNum;
+    }
+
+    /**
+     * 升級科技等級
+     */
+    public void upgradeTechLevel() {
+        //紀錄開始升級的時間點
+        techLevelStartUpgradeTime = City.getGameTime();
+    }
+
+    /**
+     * 升級士兵等級
+     */
+    public void upgradeSoldier(){
+        soldierLevelStartUpgradeTime = City.getGameTime();
+    }
+
+    /**
+     * 升級飛機等級
+     */
+    public void upgradePlane(){
+        planeLevelStartUpgradeTime = City.getGameTime();
     }
 
     /**
      * 生成的居民數量
+     *
      * @return 生成的人數
      */
     public int getNewCitizenNum() {
@@ -324,6 +543,7 @@ public class BuildingsCollection {
 
     /**
      * 生成的士兵數量
+     *
      * @return 生成的士兵數
      */
     public int getNewSoldierNum() {
@@ -445,7 +665,13 @@ public class BuildingsCollection {
      * @return 總數
      */
     private int countBuildingNum(LinkedList<BuildingNode> list) {
-        return list.size();
+        int sum = 0;
+        for (BuildingNode node : list) {
+            if (node.building.getLevel() != 0) {
+                sum++;
+            }
+        }
+        return sum;
     }
 
     /**
@@ -468,85 +694,5 @@ public class BuildingsCollection {
             }
         }
     }
-
-    /**
-     * 對外升級接口，回傳可以升級的數量
-     *
-     * @param cityTechLevel 建築等級
-     * @param type          建築種類
-     * @param resource      都市的物資
-     * @return 可以升級的數量
-     */
-    public int upgradeNum(int cityTechLevel, BuildingType type, Resource resource) {
-        //若沒有研究所不可以升級
-        if (labList.size() == 0) {
-            return 0;
-        }
-        return getUpgradeNumInType(cityTechLevel, type, resource);
-    }
-
-    /**
-     * 取得各建築可以升級的數量
-     *
-     * @param type     建築種類
-     * @param resource 都市的物資
-     * @return 可以升級數量
-     */
-    public int getUpgradeNumInType(int techLevel, BuildingType type, Resource resource) {
-        switch (type) {
-            case ARSENAL: {
-                if (techLevel < 2) {
-                    return 0;
-                }
-                return countCanUpgradeNumFrom(arsenalList, resource);
-            }
-            case BARRACKS: {
-                return countCanUpgradeNumFrom(barracksList, resource);
-            }
-            case HOUSE: {
-                return countCanUpgradeNumFrom(houseList, resource);
-            }
-            case LAB: {
-                return countCanUpgradeNumFrom(labList, resource);
-            }
-            case SAW_MILL: {
-                return countCanUpgradeNumFrom(sawMillList, resource);
-            }
-            case STEEL_MILL: {
-                return countCanUpgradeNumFrom(steelMillList, resource);
-            }
-            case GAS_MILL: {
-                if (techLevel < 2) {
-                    return 0;
-                }
-                return countCanUpgradeNumFrom(gasMillList, resource);
-            }
-            case AIRPLANE_MILL: {
-                if (techLevel < 2) {
-                    return 0;
-                }
-                return countCanUpgradeNumFrom(airplaneMillList, resource);
-            }
-        }
-        return 0;
-    }
-
-    /**
-     * 計算某種類的建築有多少可以升級
-     *
-     * @param list     建築鏈表
-     * @param resource 都市的物資
-     * @return 可以升級的數量
-     */
-    private int countCanUpgradeNumFrom(LinkedList<BuildingNode> list, Resource resource) {
-        int sum = 0;
-        for (BuildingNode node : list) {
-            if (node.building.isReadyToUpgrade() && takeResource(resource)) {
-                sum++;
-            }
-        }
-        return sum;
-    }
-
 
 }

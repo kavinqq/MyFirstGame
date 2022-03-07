@@ -33,7 +33,11 @@ public abstract class Building {
     /**
      * 建造的科技需求
      */
-    private int techLevelNeed;
+    private int techLevelNeedBuild;
+    /**
+     * 升級的科技需求
+     */
+    private int techLevelNeedUpgrade;
     /**
      * 是否在運轉
      */
@@ -105,8 +109,8 @@ public abstract class Building {
      * @param buildStart 建築物開始時間
      * @param buildTime 建築物持續時間
      * @param upgradeTime 建築物升級時間
-     * @param level 建築物等級 預設-1  建好 0 升級過 1~2,147,483,647
-     * @param techLevelNeed 需要科技等級
+     * @param level 建築物等級 初始 0 建好 1 升級過2~n
+     * @param techLevelNeedBuild 需要科技等級
      * @param hp 建築物血量
      * @param woodCostCreate 創建所需要的木頭量
      * @param steelCostCreate 創建所需要的鋼鐵量
@@ -117,7 +121,7 @@ public abstract class Building {
      * @param gasCostLevelUp 升級所需要的瓦斯量
      */
     public Building(int id, String name, int buildStart, int buildTime, int upgradeTime,
-                    int level, int techLevelNeed, int hp,
+                    int level, int techLevelNeedBuild,int techLevelNeedUpgrade, int hp,
                     int woodCostCreate, int steelCostCreate, int woodCostLevelUp,
                     int steelCostLevelUp, boolean isWorking,
                     int gasCostCreate,int gasCostLevelUp){
@@ -133,8 +137,10 @@ public abstract class Building {
         this.upgradeTime=upgradeTime;
         //建築物等級 預設-1  建好 0 升級過 1~2,147,483,647
         this.level=level;
-        //需要科技等級
-        this.techLevelNeed = techLevelNeed;
+        //需要科技等級建造
+        this.techLevelNeedBuild = techLevelNeedBuild;
+        //需要科技等級升級
+        this.techLevelNeedUpgrade = techLevelNeedUpgrade;
         //建築物是否在建築，建築中 -> true
         this.readyToUpgrade=true;
         //血量
@@ -415,12 +421,12 @@ public abstract class Building {
         this.level = level;
     }
 
-    public int getTechLevelNeed() {
-        return techLevelNeed;
+    public int getTechLevelNeedBuild() {
+        return techLevelNeedBuild;
     }
 
-    public void setTechLevelNeed(int techLevelNeed) {
-        this.techLevelNeed = techLevelNeed;
+    public void setTechLevelNeedBuild(int techLevelNeedBuild) {
+        this.techLevelNeedBuild = techLevelNeedBuild;
     }
 
     public boolean isWorking() {

@@ -105,6 +105,14 @@ public class Resource {
     }
 
     /**
+     * 取得目前 瓦斯 總數
+     * @return 目前 瓦斯 總數
+     */
+    public int getTotalGas(){
+        return totalGas;
+    }
+
+    /**
      * 升級採木效率 每次 呼叫升級 +1
      */
     public void upgradeWoodSpeed(int speedChange){
