@@ -235,109 +235,6 @@ public abstract class Building {
         return gasCostLevelUp;
     }
 
-    //    /**
-//     * 可否升級用
-//     * 安排建築去升級 如果該建築已安排 會回傳false
-//     * 建築物level屬性( = 建築物升級的次數) ↓↓
-//     *  level分三個階段 -1 (代表已經安排建造但還沒建造完成)  0還沒升級過已經建造完成()  >0 每升級一次多1
-//     *
-//     * 因為建築物、科技、士兵 升級的規則相同
-//     * 所以用
-//     * a.研究所升級 代表 科技升級
-//     * b.兵工廠升級 代表 士兵升級
-//     *
-//     * @param wood  升級/建造 需要的木頭
-//     * @param steel 升級/建造 需要的鋼鐵
-//     * @param techLevel 科技等級
-//     * @param gameTime 遊戲的標準時間
-//     * @return 如果可以安排 / 升級 回傳true 不行回傳 false
-//     */
-//    public boolean setToUpgrade(int wood,int steel, int techLevel, int gameTime){
-//        //如果已安排建築or升級
-//        if(readyToUpgrade){
-//            return false; //升級or建造中 return false
-//        }else{
-//            //為了方便擴充 所以使用switch
-//            if(level == -1) { //尚未有此建築
-//                //檢查物資 科技是否足夠
-//                if(wood >= woodCostCreate && steel >= steelCostCreate && techLevel >= techLevelNeed){
-//                    readyToUpgrade = true;
-//                    //設定建造開始時間
-//                    buildStart = gameTime;
-//                    return true;
-//                }else{
-//                    return false;
-//                }
-//            }else { //已經有此建築
-//                //lab建造後才能升級
-//                if(isLabBuild){
-//                    //研究所只能升級一次
-//                    if(id==2 && level>=1){
-//                        return false;
-//                    }else if(wood >= woodCostLevelUp && steel >= steelCostLevelUp ){  //物資 科技足夠
-//                        //該建築物是否準備好要升級
-//                        readyToUpgrade = true;
-//                        woodCostCreate = woodCostLevelUp; //第一次建造，第二次開始為升級
-//                        steelCostCreate = steelCostLevelUp;
-//                        //設定建造開始時間
-//                        buildStart = gameTime;
-//                            /*
-//                                在isUpgradeFinish()裡面的運算，由於都是使用 buildStart + buildTime，所以才會做替換。
-//                                替換原因:
-//                                1.建造好之後 會把buildStart = gameTime(建造好的當下紀錄成目前遊戲總時間)
-//                                2.把buildTime(建造所需時間) =(換成) upgradeTime(升級所需時間) [因為不需要建造所需時間了]
-//                             */
-//                        buildTime = upgradeTime;
-//                        return true;
-//                    //物資&&科技不足夠
-//                    }else{
-//                        return false;
-//                    }
-//                }else{
-//                    //尚未建造lab不可升級
-//                    return false;
-//                }
-//            }
-//        }
-//    }
-//
-//    /**
-//     * 判斷 建築物/等級 是否已經 建造/升級完成
-//     * @param gameTime 遊戲總時間
-//     * @return true 建築物/等級 已經 建造/升級 完成 false 還沒完成
-//     */
-//    public boolean isUpgradeFinish(int gameTime){
-//        //該建築有被安排才會開始建造
-//        if(readyToUpgrade){
-//            //建造(升級)完成 的條件為: [建造(升級)開始時間 + buildTime(建造所需時間/升級所需時間) <= 遊戲總時間]
-//            if(buildStart + buildTime <= gameTime){
-//                //如果研究所建立
-//                if(id == 2){
-//                    isLabBuild = true;
-//                }
-//                //如果兵工廠建立
-//                if(id == 6){
-//                    isArsenalBuild = true;
-//                }
-//                //建築物等級 + 1
-//                level++;
-//                //
-//                readyToUpgrade = false;
-//                //如果此建築物 一建造完 便記錄該建造時間
-//                if(level == 0){
-//                    createTime = gameTime;
-//                }
-//                return true;
-//            }else{
-//                //尚未建造完成
-//                return false;
-//            }
-//        }else{
-//            //尚未安排建造
-//            return false;
-//        }
-//    }
-
     public boolean isEnoughProduction(){///是否已經拿取資源來生產
         return ( (woodForProduction == woodGeted) &&
                 (steelForProduction == steelGeted) &&
@@ -429,6 +326,10 @@ public abstract class Building {
         this.techLevelNeedBuild = techLevelNeedBuild;
     }
 
+    public int getTechLevelNeedUpgrade() {
+        return techLevelNeedUpgrade;
+    }
+
     public boolean isWorking() {
         return isWorking;
     }
@@ -464,6 +365,18 @@ public abstract class Building {
     public void setHp(int hp) {
         this.hp = hp;
     }
+
+    /**
+     * 建築的效果說明
+     * @return 建築的效果說明
+     */
+    public abstract String buildingDetail();
+
+    /**
+     * 建築升下一級的效果說明
+     * @return 建築升級後的效果說明
+     */
+    public abstract String buildingUpgradeDetail();
 
 
 }

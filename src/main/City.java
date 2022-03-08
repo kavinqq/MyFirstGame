@@ -291,7 +291,7 @@ public class City {
      * @return 生成數量
      */
     private int productCitizen() {
-        return buildings.getNewCitizenNum();
+        return buildings.getNewCitizenNum(resource);
     }
 
     /**
@@ -299,7 +299,15 @@ public class City {
      * @return 生成數量
      */
     private int productSoldier() {
-        return buildings.getNewSoldierNum();
+        return buildings.getNewSoldierNum(resource);
+    }
+
+    /**
+     * 生產飛機
+     * @return 生成數量
+     */
+    private int productPlane() {
+        return buildings.getNewPlaneNum(resource);
     }
 
     /**
@@ -357,7 +365,7 @@ public class City {
                 }
             }
             //完成建築的升級和建造，科技等級提升
-            buildings.completeBuildingJob();
+            buildings.completeJob();
 
 
             //殭屍來襲時間( 每16小時來一次 )
@@ -420,34 +428,11 @@ public class City {
      * 顯示每種建築物可以升級的數量
      */
     public void showCanUpgradeBuilding() {
-        System.out.printf("%d.房屋：%d間可升級\n",
-                HOUSE.instance().getId(),
-                buildings.getCanUpgradeNum(HOUSE,resource));
-        System.out.printf("%d.研究所：%d間可升級\n",
-                LAB.instance().getId(),
-                buildings.getCanUpgradeNum(LAB,resource));
-        System.out.printf("%d.軍營：%d間可升級\n",
-                BARRACKS.instance().getId(),
-                buildings.getCanUpgradeNum(BARRACKS,resource));
-        System.out.printf("%d.伐木場：%d間可升級\n",
-                SAW_MILL.instance().getId(),
-                buildings.getCanUpgradeNum(SAW_MILL,resource));
-        System.out.printf("%d.煉鋼廠：%d間可升級\n",
-                STEEL_MILL.instance().getId(),
-                buildings.getCanUpgradeNum(STEEL_MILL,resource));
-        System.out.printf("%d.兵工廠：%d間可升級\n",
-                ARSENAL.instance().getId(),
-                buildings.getCanUpgradeNum(ARSENAL,resource));
-        System.out.printf("%d.瓦斯場：%d間可升級\n",
-                GAS_MILL.instance().getId(),
-                buildings.getCanUpgradeNum(GAS_MILL,resource));
-        System.out.printf("%d.飛機工廠：%d間可升級\n",
-                AIRPLANE_MILL.instance().getId(),
-                buildings.getCanUpgradeNum(AIRPLANE_MILL,resource));
+       buildings.showCanUpgradeBuildingNum(resource);
     }
 
     /**
-     * 建築物可不可以升級
+     * 判斷該類建築的鏈表中可以升級的建築數量==0? ==0代表不能升級
      * @param type 建築物類型
      * @return 可否升級
      */
@@ -458,9 +443,41 @@ public class City {
     /**
      * 顯示該種類可以升級的建築細節
      * @param type 建築種類
+     * @return 可以升級的建築陣列
+     * 若選擇升級建築，但沒有閒置的研究所 -> null
+     * 若選擇升級建築，但沒有閒置的研究所 -> null
      */
-    public void showCanUpgradeTypeDetail(BuildingType type){
+    public ArrayList<BuildingNode> showCanUpgradeTypeDetail(BuildingType type){
+        return buildings.showCanUpgradeTypeDetail(type);
+    }
 
+    /**
+     * 升級指定index的建築
+     * @param node 指定建築
+     */
+    public void upgrade(BuildingNode node){
+        buildings.upgrade(node,resource);
+    }
+
+    /**
+     * 升級科技等級
+     */
+    public void upgradeTechLevel() {
+        buildings.upgradeTechLevel();
+    }
+
+    /**
+     * 升級士兵等級
+     */
+    public void upgradeSoldier() {
+       buildings.upgradeSoldier();
+    }
+
+    /**
+     * 升級飛機等級
+     */
+    public void upgradePlane() {
+        buildings.upgradePlane();
     }
 
     /**
@@ -565,7 +582,7 @@ public class City {
      */
     public void showInfo() {
         //所有資源的資訊
-        System.out.printf("第%d回合\n目前總資源量如下:\n" +
+        System.out.printf("第%d小時\n目前總資源量如下:\n" +
                 "木材: %d , 鋼鐵: %d\n", getGameTime() + 1, resource.getTotalWood(), resource.getTotalSteel());
         //所有人力資源的資訊
         System.out.printf("目前人力資源如下:\n" +
@@ -579,62 +596,7 @@ public class City {
         System.out.println("距下波攻擊還有 " + (16 - getGameTime() % 16) + " 小時");
         System.out.println("---------------------------------------------------");
 
-        //所有建築物的數量
-        int count = 0;
-        //房屋數量
-        int countBuilding1 = 0;
-        //研究所數量
-        int countBuilding2 = 0;
-        //軍營數量
-        int countBuilding3 = 0;
-        //伐木場數量
-        int countBuilding4 = 0;
-        //煉鋼廠數量
-        int countBuilding5 = 0;
-        //兵工廠數量
-        int countBuilding6 = 0;
-        for (int i = 0; i < buildingCount; i++) {
-            //若建築物已經被建造出來
-            if (buildings[i].getLevel() >= 0) {
-                //總建築物數量+1
-                count++;
-                if (buildings[i].getId() == 1) {
-                    countBuilding1++;
-                } else if (buildings[i].getId() == 2) {
-                    countBuilding2++;
-                } else if (buildings[i].getId() == 3) {
-                    countBuilding3++;
-                } else if (buildings[i].getId() == 4) {
-                    countBuilding4++;
-                } else if (buildings[i].getId() == 5) {
-                    countBuilding5++;
-                } else if (buildings[i].getId() == 6) {
-                    countBuilding6++;
-                }
-            }
-        }
-        if (count == 0) {
-            System.out.println("目前沒有建好的建築!\n");
-        } else {
-            System.out.println("目前已經建造好的建築物有:");
-            System.out.println("房屋:" + countBuilding1 + " 研究所:" + countBuilding2 + " 軍營:" + countBuilding3 +
-                    " 伐木場:" + countBuilding4 + " 煉鋼廠:" + countBuilding5 + " 兵工廠:" + countBuilding6 + " \n還可建造建築物數量:" + (MAX_CAN_BUILD - getBuildingCount()));
-        }
-
-        System.out.println("目前尚可升級的建築物數量:" + (numOfLab - buildingsInLab)); //目前研究所數量  - 目前正在研究中的研究所
-        System.out.println("------------------<以下為作業中建築>------------------");
-
-        for (int i = 0; i < buildingCount; i++) {
-            if (buildings[i].isReadyToUpgrade() && buildings[i].getLevel() == -1) { //建築物已經有被指定建造  以及該建築物等級為-1 (代表還沒被造出來)
-                System.out.println(buildings[i].getName() + " 正在建造 剩餘時間:" + (buildings[i].getBuildTime() - (gameTime) + buildings[i].getBuildStart()) + " 小時");
-            }
-        }
-        for (int i = 0; i < buildingCount; i++) {
-            if (buildings[i].isReadyToUpgrade() && buildings[i].getLevel() > -1) {  //建築物已經有被指定建造  以及該建築物等級大於-1 (代表該建築物已經被造出來)
-                System.out.println(buildings[i].getName() + " 正在升級 剩餘時間:" + (buildings[i].getBuildTime() - (gameTime) + buildings[i].getBuildStart()) + " 小時");
-            }
-        }
-        System.out.println("---------------------------------------------------");
+        buildings.getCurrentInformation();
     }
 
     /**
@@ -702,6 +664,22 @@ public class City {
      */
     public int getBuildingNum(){
         return buildings.getBuildingNum();
+    }
+
+    /**
+     * 取得閒置的研究所數量
+     * @return 閒置的研究所數量
+     */
+    public int getFreeLabNum(){
+        return buildings.getFreeLadNum();
+    }
+
+    /**
+     * 取得閒置的兵工廠數量
+     * @return 閒置的兵工廠數量
+     */
+    public int getFreeArsenalNum(){
+        return buildings.getFreeArsenalNum();
     }
 
 }
