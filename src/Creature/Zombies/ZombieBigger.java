@@ -9,7 +9,7 @@ public class ZombieBigger extends Zombie {
     }
 
     @Override
-    public int currentTimeCount(int time) {
-        return (time/10)*5;
+    public int currentRoundCount(int round) {
+        return (round/10)*5;
     }
 }

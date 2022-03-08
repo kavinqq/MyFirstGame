@@ -6,9 +6,13 @@ import java.util.Map;
 /**
  * 殭屍族群類
  */
-public class ZombieGroup {
+public class ZombieKingdom {
 
     private int zombieTime;
+    private int attackRound;
+    private ZombieTroop zombieTroop;
+
+    private static final int attackRate = 16;//attack once per x days
     private final Map<Zombie,Integer> zombies;
     private final ZombieBigger zombieBigger = new ZombieBigger();
     private final ZombieKing zombieKing = new ZombieKing();
@@ -19,8 +23,9 @@ public class ZombieGroup {
     private final ZombieFlying zombieFlying = new ZombieFlying();
     private final ZombieFlyingBigger zombieFlyingBigger = new ZombieFlyingBigger();
 
-    public ZombieGroup() {
+    public ZombieKingdom() {
         this.zombieTime = 0;
+        this.attackRound = 0;
         zombies = new HashMap<>();
         this.zombies.put(zombieBigger,0);
         this.zombies.put(zombieKing,0);
@@ -34,13 +39,13 @@ public class ZombieGroup {
 
     /**
      * 殭屍數量增長
-     * @param gameTime 現在遊戲時間
      */
-    public void groupGrowUp(int gameTime){
+    public void troopLevelUp(){
+        this.attackRound++;
         for(Map.Entry<Zombie,Integer> entry : zombies.entrySet()){
             Zombie currentType = entry.getKey();
             //該殭屍種類數量增加
-            int currentNum = currentType.currentTimeCount(gameTime);
+            int currentNum = currentType.currentRoundCount(this.attackRound);
             //更新殭屍數量
             if(currentType instanceof ZombieBigger){
                 zombies.put(zombieBigger,currentNum);
@@ -60,14 +65,18 @@ public class ZombieGroup {
                 zombies.put(zombieFlyingBigger,currentNum);
             }
         }
+        this.zombieTroop = new ZombieTroop();
     }
 
     public boolean isAttacking(){
         return (this.zombieTime%16==0);
     }
 
-    public void updateTime(){
+    public void timePass(){
         this.zombieTime++;
+        if(this.zombieTime%this.attackRate==0){
+            this.troopLevelUp();
+        }
     }
 //    /**
 //     * 殭屍族群 map
@@ -76,4 +85,31 @@ public class ZombieGroup {
 //    public Map<Zombie, Integer> getZombies() {
 //        return zombies;
 //    }
+
+    public class ZombieTroop {
+        private int landAttack = 0;
+        private int airAttack = 0;
+        public ZombieTroop(){
+            int number;
+            Zombie zombieGenre;
+            for(Map.Entry<Zombie,Integer> entry: zombies.entrySet()){
+                zombieGenre = entry.getKey();
+                number = entry.getValue();
+                if(zombieGenre.isFlyable()){
+                    this.airAttack += (number*zombieGenre.getAttack());
+                }
+                else{
+                    this.landAttack += (number*zombieGenre.getAttack());
+                }
+            }
+        }
+
+        public int getLandAttack(){
+            return this.landAttack;
+        }
+
+        public int getAirAttack(){
+            return this.airAttack;
+        }
+    }
 }

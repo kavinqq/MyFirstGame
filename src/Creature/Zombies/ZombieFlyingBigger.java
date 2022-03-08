@@ -13,7 +13,7 @@ public class ZombieFlyingBigger extends Zombie implements Flyable {
 
 
     @Override
-    public int currentTimeCount(int time) {
-        return (time-7)/2;
+    public int currentRoundCount(int round) {
+        return (round-7)/2;
     }
 }

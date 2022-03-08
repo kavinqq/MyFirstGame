@@ -27,10 +27,10 @@ public abstract class Zombie extends Creature {
 
     /**
      * 殭屍數量成長
-     * @param time 現在遊戲時間
+     * @param round 現在第幾輪
      * @return 當前此類殭屍的數量
      */
-    public abstract int currentTimeCount(int time);
+    public abstract int currentRoundCount(int round);
 
 
 

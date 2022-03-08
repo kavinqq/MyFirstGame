@@ -77,7 +77,7 @@ public class City {
      * 殭屍單位
      */
 //    private final Zombie[] zombies;
-    private ZombieGroup zombies;
+    private ZombieKingdom zombies;
     /**
      * 全部的資源 類別
      */
@@ -98,7 +98,7 @@ public class City {
         steelMan = 0;
         resource = new Resource();
         buildings = new BuildingsCollection();
-        zombies = new ZombieGroup();
+        zombies = new ZombieKingdom();
         /*
           用來所有士兵new出來 放在 人類的ArrayList
         */
@@ -369,7 +369,7 @@ public class City {
 
 
             //???先update看大家Ｏ不ＯＫ
-            zombies.updateTime();
+            zombies.timePass();
             //殭屍來襲時間( 每16小時來一次 )
            if(zombies.isAttacking()){
                //用來 計算抵擋完殭屍後的人口狀況 和 算完後遊戲是否結束
@@ -535,9 +535,10 @@ public class City {
         // 用來記錄戰役結束後 士兵剩下人數
         int soldierRemain = 0;
         for (int i = 0; i < humans.size(); i++) {
-            if (humans.get(i).getIsSoldier())
+            if (humans.get(i).isArmy())
                 soldierRemain++;
         }
+        //需要補上計算空軍的部分
 
         // 殭屍還沒殺完
         // 士兵全死
@@ -590,7 +591,6 @@ public class City {
                 System.out.println("不平靜的夜晚過去了\n你活了下來 但是\n戰士們為了拯救你 流光了鮮血\n");
             }//全死 遊戲結束
         } else {
-            this.isAlive = false;
             System.out.println("不平靜的夜晚終於過去了 但是你再也撐不住了\n");
         }
     }
