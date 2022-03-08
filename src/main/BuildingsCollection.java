@@ -302,7 +302,7 @@ public class BuildingsCollection {
      * @param type 建築種類
      * @return 可以升級的建築陣列
      * 若選擇升級建築，但沒有閒置的研究所 -> null
-     * 若選擇升級建築，但沒有閒置的研究所 -> null
+     * 若選擇升級軍力，但沒有閒置的兵工廠 -> null
      */
     public ArrayList<BuildingNode> showCanUpgradeTypeDetail(BuildingType type) {
         //若選擇升級建築，但沒有閒置的研究所
