@@ -112,4 +112,8 @@ public class ZombieKingdom {
             return this.airAttack;
         }
     }
+
+    public ZombieTroop getZombieTroop(){
+        return this.zombieTroop;
+    }
 }

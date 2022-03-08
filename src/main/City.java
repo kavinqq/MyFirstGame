@@ -373,7 +373,8 @@ public class City {
             //殭屍來襲時間( 每16小時來一次 )
            if(zombies.isAttacking()){
                //用來 計算抵擋完殭屍後的人口狀況 和 算完後遊戲是否結束
-               if (!fightZombies()) {
+               this.fightZombies(this.zombies.getZombieTroop());
+               if (!this.isAlive()) {
                    System.out.println("城鎮人口皆被消滅!");
                    System.out.println("Game Over");
                }
@@ -493,7 +494,7 @@ public class City {
      *
      * @return 回傳true 活著  false 死去
      */
-    public void fightZombies() {
+    public void fightZombies(ZombieKingdom.ZombieTroop zombieTroop) {
         //這個數值是 最終結果 也就是 是否能夠抵擋這一波殭屍潮的判斷數 >0 死亡  <=0 存活
 
         int landAttack = 0;
