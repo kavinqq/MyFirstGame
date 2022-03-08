@@ -1,4 +1,4 @@
-package human;
+package Creature.human;
 
 public class Citizen extends Human {   //市民
     /**
@@ -11,6 +11,7 @@ public class Citizen extends Human {   //市民
     public Citizen(){
         this.setType(TYPE.CITIZEN);
         this.status = STATUS.FREE; //建立時 同時設定狀態為 Free
+        this.setFlyability(FLYABILITY.CANNOT_FLY);
     }
     /**
      * 派遣村民去採木頭

@@ -1,4 +1,4 @@
-package human;
+package Creature.human;
 
 public class Army extends Soldier  {  //士兵
     /**
@@ -8,6 +8,7 @@ public class Army extends Soldier  {  //士兵
         this.setValue(2);
         this.setIsArmy();
         this.setMilitaryType(MILITARY_TYPE.ARMY);
+        this.setFlyability(FLYABILITY.CANNOT_FLY);
     }
 }
 

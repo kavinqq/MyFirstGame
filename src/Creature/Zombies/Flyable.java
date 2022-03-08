@@ -1,4 +1,4 @@
-package Zombies;
+package Creature.Zombies;
 
 public interface Flyable {
 }

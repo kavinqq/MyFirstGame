@@ -1,4 +1,4 @@
-package Zombies;
+package Creature.Zombies;
 
 /**
  * @author Lillian
@@ -8,7 +8,7 @@ package Zombies;
 public class ZombieFlyingBigger extends Zombie implements Flyable {
 
     public ZombieFlyingBigger(){
-        super(4);
+        super(4, FLYABILITY.CAN_FLY);
     }
 
 

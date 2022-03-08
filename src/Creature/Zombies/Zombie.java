@@ -1,6 +1,8 @@
-package Zombies;
+package Creature.Zombies;
 
-public abstract class Zombie {
+import Creature.Creature;
+
+public abstract class Zombie extends Creature {
     /**
      * 由於目前 遊戲只有很單純的規定 殭屍 有攻擊力這件事 只設定這樣
      */
@@ -10,8 +12,9 @@ public abstract class Zombie {
      * 殭屍的建構子
      * @param attack 該殭屍的預設攻擊力
      */
-    public Zombie(int attack){
+    public Zombie(int attack, FLYABILITY flyability){
         this.attack = attack;
+        this.setFlyability(flyability);
     }
 
     /**
@@ -28,5 +31,7 @@ public abstract class Zombie {
      * @return 當前此類殭屍的數量
      */
     public abstract int currentTimeCount(int time);
+
+
 
 }

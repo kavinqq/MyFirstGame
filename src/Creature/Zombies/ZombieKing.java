@@ -1,11 +1,11 @@
-package Zombies;
+package Creature.Zombies;
 
 public class ZombieKing extends Zombie {
     /**
      * 這種殭屍的預設攻擊力
      */
     public ZombieKing() {
-        super(17);
+        super(17, FLYABILITY.CAN_FLY);
     }
 
 

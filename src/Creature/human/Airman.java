@@ -1,4 +1,4 @@
-package human;
+package Creature.human;
 
 /**
  * @author Lillian
@@ -10,5 +10,6 @@ public class Airman extends Soldier{
         this.setValue(2);
         this.setIsAirForce();
         this.setMilitaryType(MILITARY_TYPE.AIR_FORCE);
+        this.setFlyability(FLYABILITY.CAN_FLY);
     }
 }

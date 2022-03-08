@@ -1,4 +1,4 @@
-package Zombies;
+package Creature.Zombies;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public class ZombieGroup {
 
+    private int zombieTime;
     private final Map<Zombie,Integer> zombies;
     private final ZombieBigger zombieBigger = new ZombieBigger();
     private final ZombieKing zombieKing = new ZombieKing();
@@ -19,6 +20,7 @@ public class ZombieGroup {
     private final ZombieFlyingBigger zombieFlyingBigger = new ZombieFlyingBigger();
 
     public ZombieGroup() {
+        this.zombieTime = 0;
         zombies = new HashMap<>();
         this.zombies.put(zombieBigger,0);
         this.zombies.put(zombieKing,0);
@@ -60,6 +62,13 @@ public class ZombieGroup {
         }
     }
 
+    public boolean isAttacking(){
+        return (this.zombieTime%16==0);
+    }
+
+    public void updateTime(){
+        this.zombieTime++;
+    }
 //    /**
 //     * 殭屍族群 map
 //     * @return 殭屍族群map

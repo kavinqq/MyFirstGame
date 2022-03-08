@@ -1,6 +1,8 @@
-package human;
+package Creature.human;
 
-public abstract class Human {
+import Creature.Creature;
+
+public abstract class Human extends Creature {
     public enum TYPE {
         CITIZEN, SOLDIER;
     }
@@ -70,5 +72,11 @@ public abstract class Human {
     protected void setIsAirForce(){
         this.isAirForce = true;
     }
+
+    public boolean isCitizen(){
+        return (this.type==TYPE.CITIZEN);
+    }
+
+
 }
 

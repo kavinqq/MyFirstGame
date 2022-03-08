@@ -1,8 +1,8 @@
 package main;
 
 import buildings.*;
-import human.*;
-import Zombies.*;
+import Creature.human.*;
+import Creature.Zombies.*;
 import main.BuildingsCollection.*;
 import java.util.ArrayList;
 import static main.BuildingsCollection.BuildingType.*;
@@ -346,7 +346,7 @@ public class City {
      * @param thisRoundTimePass 這一輪指令的時間
      * @return 如果 回傳值為true 繼續遊戲  false 結束遊戲
      */
-    public boolean doCityWorkAndTimePass(int thisRoundTimePass) {
+    public void doCityWorkAndTimePass(int thisRoundTimePass) {
         //把時間流動前做的指令 && 決定流動的時間跑完
        for(int time = 0; time<thisRoundTimePass; time++) {
             //遊戲時間 流動 1小時
@@ -368,18 +368,26 @@ public class City {
             buildings.completeJob();
 
 
+            //???先update看大家Ｏ不ＯＫ
+            zombies.updateTime();
             //殭屍來襲時間( 每16小時來一次 )
-            if (City.getGameTime() % 16 == 0) {
-                //用來 計算抵擋完殭屍後的人口狀況 和 算完後遊戲是否結束
-                if (!liveOrDead()) {
-                    System.out.println("城鎮人口皆被消滅!");
-                    System.out.println("Game Over");
-                    return false;
-                }
-            }
+           if(zombies.isAttacking()){
+               //用來 計算抵擋完殭屍後的人口狀況 和 算完後遊戲是否結束
+               if (!fightZombies()) {
+                   System.out.println("城鎮人口皆被消滅!");
+                   System.out.println("Game Over");
+               }
+           }
+//            if (City.getGameTime() % 16 == 0) {
+//                //用來 計算抵擋完殭屍後的人口狀況 和 算完後遊戲是否結束
+//                if (!liveOrDead()) {
+//                    System.out.println("城鎮人口皆被消滅!");
+//                    System.out.println("Game Over");
+//                    return false;
+//                }
+//            }
 
         }
-        return true;
     }
 
     /**
@@ -485,12 +493,23 @@ public class City {
      *
      * @return 回傳true 活著  false 死去
      */
-    public boolean liveOrDead() {
+    public void fightZombies() {
         //這個數值是 最終結果 也就是 是否能夠抵擋這一波殭屍潮的判斷數 >0 死亡  <=0 存活
-        int result = 0;
+
+        int landAttack = 0;
+        int airAttack = 0;
+        int totalAttack = 0;
         //首先計算 所有殭屍 攻擊力總和
+        Zombie zombie;
         for (int i = 0; i < ZOMBIE_TYPE; i++) {
-            result += zombies[i].getAttack(getGameTime() / 16);
+            zombie = zombies[i];
+            if(zombie.isFlyable()){
+                airAttack += zombie.getAttack();
+            }
+            else{
+                landAttack += zombie.getAttack();
+            }
+            totalAttack += zombies[i].getAttack(getGameTime() / 16);
         }
         //走訪 humans 陣列，找尋每一個士兵出來戰鬥
         int totalHumans = humans.size();
@@ -498,13 +517,13 @@ public class City {
         int index = 0;
         // 總共要跑 humans.size() 次
         for (int i = index; i < totalHumans; i++) {
-            if (result > 0) {
-                if (humans.get(index).getIsSoldier()) {
-                    if (result >= humans.get(index).getValue()) {  //判斷士兵是否還有身體沒被消滅
-                        result -= humans.get(index).getValue(); //殭屍傷害扣掉士兵值
+            if (totalAttack > 0) {
+                if (humans.get(index).isArmy()) {
+                    if (totalAttack >= humans.get(index).getValue()) {  //判斷士兵是否還有身體沒被消滅
+                        totalAttack -= humans.get(index).getValue(); //殭屍傷害扣掉士兵值
                         humans.remove(index);
                     } else {
-                        result -= humans.get(index).getValue(); //殭屍傷害扣掉士兵值
+                        totalAttack -= humans.get(index).getValue(); //殭屍傷害扣掉士兵值
                     }
                 } else {
                     index++;
@@ -523,13 +542,13 @@ public class City {
         // 殭屍還沒殺完
         // 士兵全死
         totalHumans = humans.size();
-        if (result > 0) {
+        if (totalAttack > 0) {
             // 再次走訪 humans 陣列，找尋每一個市民
             for (int i = 0; i < totalHumans; i++) {
                 // 殭屍攻擊力還有剩下
-                if (result > 0) {
+                if (totalAttack > 0) {
                     //殭屍攻擊力 - 市民攻擊力
-                    result = result - humans.get(0).getValue(); //剩下都是市民 刪第0個就可以了
+                    totalAttack = totalAttack - humans.get(0).getValue(); //剩下都是市民 刪第0個就可以了
                     //該格市民死亡移除他
                     humans.remove(0);
                     /*
@@ -569,11 +588,10 @@ public class City {
                 System.out.println("不平靜的夜晚過去了\n你也活下來了\n");
             } else {
                 System.out.println("不平靜的夜晚過去了\n你活了下來 但是\n戰士們為了拯救你 流光了鮮血\n");
-            }
-            return true;    //全死 遊戲結束
+            }//全死 遊戲結束
         } else {
+            this.isAlive = false;
             System.out.println("不平靜的夜晚終於過去了 但是你再也撐不住了\n");
-            return false;
         }
     }
 
@@ -680,6 +698,10 @@ public class City {
      */
     public int getFreeArsenalNum(){
         return buildings.getFreeArsenalNum();
+    }
+
+    public boolean isAlive(){
+        return (this.humans.size()>0);
     }
 
 }

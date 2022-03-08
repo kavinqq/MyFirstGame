@@ -1,4 +1,4 @@
-package human;
+package Creature.human;
 
 /**
  * @author Lillian
@@ -15,5 +15,11 @@ public abstract class Soldier extends Human{
     }
     public void setMilitaryType(MILITARY_TYPE militaryType){
         this.militaryType = militaryType;
+    }
+    public boolean isArmy(){
+        return (this.militaryType==MILITARY_TYPE.ARMY);
+    }
+    public boolean isAirForce(){
+        return (this.militaryType==MILITARY_TYPE.AIR_FORCE);
     }
 }
