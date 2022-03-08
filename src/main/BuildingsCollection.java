@@ -798,5 +798,44 @@ public class BuildingsCollection {
         return freeArsenalNum;
     }
 
+    /**
+     * 取得停工中的非升級中建築
+     * @return 停工中的非升級中建築陣列
+     */
+    public ArrayList<BuildingNode> getNotWorkingBuildingList(){
+        ArrayList<BuildingNode> notWorking = new ArrayList<>();
+        for (int i = 0; i < HOUSE.list.size(); i++) {
+            if(!HOUSE.list.get(i).building.isWorking() && !HOUSE.list.get(i).building.isUpgrading()){
+                notWorking.add(HOUSE.list.get(i));
+            }
+        }
+        for (int i = 0; i < BARRACKS.list.size(); i++) {
+            if(!BARRACKS.list.get(i).building.isWorking() && !BARRACKS.list.get(i).building.isUpgrading()){
+                notWorking.add(BARRACKS.list.get(i));
+            }
+        }for (int i = 0; i < AIRPLANE_MILL.list.size(); i++) {
+            if(!AIRPLANE_MILL.list.get(i).building.isWorking() && !AIRPLANE_MILL.list.get(i).building.isUpgrading()){
+                notWorking.add(AIRPLANE_MILL.list.get(i));
+            }
+        }
+        return notWorking;
+    }
+
+    /**
+     * 讓指定建築物停工
+     * @param buildingNode 指定建築物
+     */
+    public void setStop(BuildingNode buildingNode){
+        buildingNode.building.setWorking(false);
+    }
+
+    /**
+     * 讓指定建築物開始運作
+     * @param buildingNode 指定開始運作
+     */
+    public void setStart(BuildingNode buildingNode){
+        buildingNode.building.setWorking(true);
+    }
+
 
 }
