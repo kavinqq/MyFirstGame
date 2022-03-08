@@ -368,15 +368,11 @@ public abstract class Building {
 
     /**
      * 建築的效果說明
+     * @level 幾等時的作用
      * @return 建築的效果說明
      */
-    public abstract String buildingDetail();
+    public abstract String buildingDetail(int level);
 
-    /**
-     * 建築升下一級的效果說明
-     * @return 建築升級後的效果說明
-     */
-    public abstract String buildingUpgradeDetail();
 
 
 }

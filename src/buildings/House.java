@@ -22,12 +22,7 @@ public class House extends Building {
     }
 
     @Override
-    public String buildingDetail() {
+    public String buildingDetail(int level) {
         return String.format("每24小時消耗%d木頭產生%d位市民", 1, getLevel() * 2 - 1);
-    }
-
-    @Override
-    public String buildingUpgradeDetail() {
-        return String.format("每24小時消耗%d木頭產生%d位市民", 1, (getLevel()+1) * 2 - 1);
     }
 }

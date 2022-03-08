@@ -322,8 +322,8 @@ public class BuildingsCollection {
         for (int i = 0; i < type.list.size(); i++) {
             if(type.list.get(i).building.isReadyToUpgrade()){
                 BuildingNode buildingNode = type.list.get(i);
-                System.out.println( count++ + ". " + buildingNode.building.toString() + " 當前效果：" + buildingNode.building.buildingDetail()
-                        + "\n升級後：" + buildingNode.building.buildingUpgradeDetail()
+                System.out.println( count++ + ". " + buildingNode.building.toString() + " 當前效果：" + buildingNode.building.buildingDetail(buildingNode.building.getLevel())
+                        + "\n升級後：" + buildingNode.building.buildingDetail(buildingNode.building.getLevel()+1)
                         + "\n---------------------------");
                 canUpgrade.add(type.list.get(i));
             }
