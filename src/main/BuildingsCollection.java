@@ -17,31 +17,36 @@ public class BuildingsCollection {
     public static final int TECH_LEVEL_UPGRADE_TIME = 24;
 
     public enum BuildingType {
-        ARSENAL(6,new Arsenal()),
-        BARRACKS(3,new Barracks()),
-        HOUSE(1,new House()),
-        LAB(2,new Lab()),
-        SAW_MILL(4,new SawMill()),
-        STEEL_MILL(5,new SteelMill()),
-        GAS_MILL(7,new GasMill()),
-        AIRPLANE_MILL(8,new AirPlaneMill());
+        ARSENAL(new Arsenal(),new LinkedList<>()),
+        BARRACKS(new Barracks(),new LinkedList<>()),
+        HOUSE(new House(),new LinkedList<>()),
+        LAB(new Lab(),new LinkedList<>()),
+        SAW_MILL(new SawMill(),new LinkedList<>()),
+        STEEL_MILL(new SteelMill(),new LinkedList<>()),
+        GAS_MILL(new GasMill(),new LinkedList<>()),
+        AIRPLANE_MILL(new AirPlaneMill(),new LinkedList<>());
 
-        private int id;
         private Building instance;
-        BuildingType(int id,Building building){
-            this.id = id;
+        private LinkedList<BuildingNode> list;
+        BuildingType(Building building,LinkedList<BuildingNode> list){
             instance = building;
+            this.list = list;
+
         }
         public static BuildingType getBuildingTypeByInt(int option){
             for(BuildingType type: values()){
-                if(type.id == option){
+                if(type.instance.getId() == option){
                     return type;
                 }
             }
             return HOUSE;
         }
-        public Building getInstance(){
+        public Building instance(){
             return instance;
+        }
+
+        public LinkedList<BuildingNode> list() {
+            return list;
         }
     }
 
@@ -66,14 +71,14 @@ public class BuildingsCollection {
         }
     }
 
-    private LinkedList<BuildingNode> arsenalList;
-    private LinkedList<BuildingNode> barracksList;
-    private LinkedList<BuildingNode> houseList;
-    private LinkedList<BuildingNode> labList;
-    private LinkedList<BuildingNode> sawMillList;
-    private LinkedList<BuildingNode> steelMillList;
-    private LinkedList<BuildingNode> gasMillList;
-    private LinkedList<BuildingNode> airplaneMillList;
+//    private LinkedList<BuildingNode> arsenalList;
+//    private LinkedList<BuildingNode> barracksList;
+//    private LinkedList<BuildingNode> houseList;
+//    private LinkedList<BuildingNode> labList;
+//    private LinkedList<BuildingNode> sawMillList;
+//    private LinkedList<BuildingNode> steelMillList;
+//    private LinkedList<BuildingNode> gasMillList;
+//    private LinkedList<BuildingNode> airplaneMillList;
     /**
      * 科技等級開始升級時間
      */
@@ -96,14 +101,14 @@ public class BuildingsCollection {
     private int buildingNum;
 
     public BuildingsCollection() {
-        arsenalList = new LinkedList<>();
-        barracksList = new LinkedList<>();
-        houseList = new LinkedList<>();
-        labList = new LinkedList<>();
-        sawMillList = new LinkedList<>();
-        steelMillList = new LinkedList<>();
-        gasMillList = new LinkedList<>();
-        airplaneMillList = new LinkedList<>();
+//        arsenalList = new LinkedList<>();
+//        barracksList = new LinkedList<>();
+//        houseList = new LinkedList<>();
+//        labList = new LinkedList<>();
+//        sawMillList = new LinkedList<>();
+//        steelMillList = new LinkedList<>();
+//        gasMillList = new LinkedList<>();
+//        airplaneMillList = new LinkedList<>();
         techLevelStartUpgradeTime = 0;
         buildingNum = 0;
     }
@@ -119,7 +124,7 @@ public class BuildingsCollection {
             case ARSENAL: {
                 newBuilding = new BuildingNode(new Arsenal());
                 setBuildingBuilding(newBuilding,resource);
-                arsenalList.add(newBuilding);
+                ARSENAL.list.add(newBuilding);
                 break;
             }
             case BARRACKS: {
@@ -239,37 +244,37 @@ public class BuildingsCollection {
     public boolean canBuild(BuildingType type,Resource resource){
         switch (type) {
             case ARSENAL:{
-                if (City.getTechLevel() < ARSENAL.getInstance().getTechLevelNeedBuild()) {
+                if (City.getTechLevel() < ARSENAL.instance().getTechLevelNeedBuild()) {
                     return false;
                 }
-                return hasEnoughResourceToBuild(ARSENAL.getInstance(),resource);
+                return hasEnoughResourceToBuild(ARSENAL.instance(),resource);
             }
             case BARRACKS: {
-                return hasEnoughResourceToBuild(BARRACKS.getInstance(),resource);
+                return hasEnoughResourceToBuild(BARRACKS.instance(),resource);
             }
             case HOUSE: {
-                return hasEnoughResourceToBuild(HOUSE.getInstance(),resource);
+                return hasEnoughResourceToBuild(HOUSE.instance(),resource);
             }
             case LAB: {
-                return hasEnoughResourceToBuild(LAB.getInstance(),resource);
+                return hasEnoughResourceToBuild(LAB.instance(),resource);
             }
             case SAW_MILL: {
-                return hasEnoughResourceToBuild(SAW_MILL.getInstance(),resource);
+                return hasEnoughResourceToBuild(SAW_MILL.instance(),resource);
             }
             case STEEL_MILL: {
-                return hasEnoughResourceToBuild(STEEL_MILL.getInstance(),resource);
+                return hasEnoughResourceToBuild(STEEL_MILL.instance(),resource);
             }
             case GAS_MILL: {
-                if(City.getTechLevel()<GAS_MILL.getInstance().getTechLevelNeedBuild()){
+                if(City.getTechLevel()<GAS_MILL.instance().getTechLevelNeedBuild()){
                     return false;
                 }
-                return hasEnoughResourceToBuild(GAS_MILL.getInstance(),resource);
+                return hasEnoughResourceToBuild(GAS_MILL.instance(),resource);
             }
             case AIRPLANE_MILL: {
-                if(City.getTechLevel()<AIRPLANE_MILL.getInstance().getTechLevelNeedBuild()){
+                if(City.getTechLevel()<AIRPLANE_MILL.instance().getTechLevelNeedBuild()){
                     return false;
                 }
-                return hasEnoughResourceToBuild(AIRPLANE_MILL.getInstance(),resource);
+                return hasEnoughResourceToBuild(AIRPLANE_MILL.instance(),resource);
             }
         }
         return false;
@@ -432,13 +437,13 @@ public class BuildingsCollection {
         }
         switch (type) {
             case BARRACKS: {
-                if(City.getTechLevel()<BARRACKS.getInstance().getTechLevelNeedBuild()){
+                if(City.getTechLevel()<BARRACKS.instance().getTechLevelNeedBuild()){
                     return 0;
                 }
                 return countCanUpgradeNum(barracksList, resource);
             }
             case HOUSE: {
-                if(City.getTechLevel()<HOUSE.getInstance().getTechLevelNeedBuild()){
+                if(City.getTechLevel()<HOUSE.instance().getTechLevelNeedBuild()){
                     return 0;
                 }
                 return countCanUpgradeNum(houseList, resource);
@@ -447,7 +452,7 @@ public class BuildingsCollection {
                 return countCanUpgradeNum(labList, resource);
             }
             case SAW_MILL: {
-                if(City.getTechLevel()<SAW_MILL.getInstance().getTechLevelNeedBuild()){
+                if(City.getTechLevel()<SAW_MILL.instance().getTechLevelNeedBuild()){
                     return 0;
                 }
                 return countCanUpgradeNum(sawMillList, resource);
@@ -456,13 +461,13 @@ public class BuildingsCollection {
                 return countCanUpgradeNum(steelMillList, resource);
             }
             case GAS_MILL: {
-                if (City.getTechLevel() < GAS_MILL.getInstance().getTechLevelNeedBuild()) {
+                if (City.getTechLevel() < GAS_MILL.instance().getTechLevelNeedBuild()) {
                     return 0;
                 }
                 return countCanUpgradeNum(gasMillList, resource);
             }
             case AIRPLANE_MILL: {
-                if (City.getTechLevel() < AIRPLANE_MILL.getInstance().getTechLevelNeedBuild()) {
+                if (City.getTechLevel() < AIRPLANE_MILL.instance().getTechLevelNeedBuild()) {
                     return 0;
                 }
                 return countCanUpgradeNum(airplaneMillList, resource);
@@ -693,6 +698,14 @@ public class BuildingsCollection {
                 record[2]++;
             }
         }
+    }
+
+    /**
+     * 印出可以升級的建築種類的細節選單
+     * @param type 建築種類
+     */
+    public void showCanUpgradeTypeDetail(BuildingType type){
+        switch
     }
 
 }

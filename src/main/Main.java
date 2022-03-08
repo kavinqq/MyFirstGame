@@ -88,31 +88,46 @@ public class Main {
 
                     }
                     case BUILD: {
+                        int choose = inputInt("1.建造 2.升級\n", HOUSE.instance().getId(), AIRPLANE_MILL.instance().getId());
                         System.out.println("科技等級：" + City.getTechLevel());
                         System.out.println(city.getResource());
-                        //建造
-                        //show出全部的房屋種類+功能+需要資源
-                        city.showCanBuildBuilding();
-                        //取得要建造的種類
-                        int choose = inputInt("請選擇要建造的建築：", HOUSE.getInstance().getId(), AIRPLANE_MILL.getInstance().getId());
-                        BuildingType type = BuildingType.getBuildingTypeByInt(choose);
-                        //建造成功與否
-                        if (city.canBuildBuilding(type)) {
-                            city.build(type);
-                        } else {
-                            if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
-                                System.out.println("資源不足");
-                            }else if(City.getTechLevel()<type.getInstance().getTechLevelNeedBuild()){
-                                System.out.println("科技等級不足");
+                        switch(choose) {
+                            case 1: {
+                                //建造
+                                //show出全部的房屋種類+功能+需要資源
+                                city.showCanBuildBuilding();
+                                //取得要建造的種類
+                                choose = inputInt("請選擇要建造的建築：", HOUSE.instance().getId(), AIRPLANE_MILL.instance().getId());
+                                BuildingType type = BuildingType.getBuildingTypeByInt(choose);
+                                //建造成功與否
+                                if (city.canBuildBuilding(type)) {
+                                    city.build(type);
+                                } else {
+                                    if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
+                                        System.out.println("資源不足");
+                                    } else if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
+                                        System.out.println("科技等級不足");
+                                    }
+                                }
+                                break;
+                            }
+                            case 2: {
+                                //升級
+                                //show出可以升級的建築
+                                city.showCanUpgradeBuilding();
+                                //選取要升級的種類
+                                choose = inputInt("請選擇要升級的建築種類：", HOUSE.instance().getId(), AIRPLANE_MILL.instance().getId());
+                                BuildingType type = BuildingType.getBuildingTypeByInt(choose);
+                                //選取要升級的建築
+                                if(city.canUpgradeBuilding(type)){
+                                    city.getCa
+                                }else{
+                                    System.out.println("沒有可升級建築");
+                                }
+                                //升級成功與否
+                                break;
                             }
                         }
-
-                        //升級
-                        //show出可以升級的建築
-                        city.showCanUpgradeBuilding();
-                        //選取要升級的種類
-                        //選取要升級的建築
-                        //升級成功與否
                         break;
                     }
                     case NEXT_HOUR: {

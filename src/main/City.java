@@ -378,14 +378,14 @@ public class City {
      * 顯示可以蓋的建築物
      */
     public void showCanBuildBuilding(){
-        System.out.println(buildingSelectString(HOUSE.getInstance()));
-        System.out.println(buildingSelectString(LAB.getInstance()));
-        System.out.println(buildingSelectString(BARRACKS.getInstance()));
-        System.out.println(buildingSelectString(SAW_MILL.getInstance()));
-        System.out.println(buildingSelectString(STEEL_MILL.getInstance()));
-        System.out.println(buildingSelectString(ARSENAL.getInstance()));
-        System.out.println(buildingSelectString(GAS_MILL.getInstance()));
-        System.out.println(buildingSelectString(AIRPLANE_MILL.getInstance()));
+        System.out.println(buildingSelectString(HOUSE.instance()));
+        System.out.println(buildingSelectString(LAB.instance()));
+        System.out.println(buildingSelectString(BARRACKS.instance()));
+        System.out.println(buildingSelectString(SAW_MILL.instance()));
+        System.out.println(buildingSelectString(STEEL_MILL.instance()));
+        System.out.println(buildingSelectString(ARSENAL.instance()));
+        System.out.println(buildingSelectString(GAS_MILL.instance()));
+        System.out.println(buildingSelectString(AIRPLANE_MILL.instance()));
     }
 
     /**
@@ -420,21 +420,29 @@ public class City {
      * 顯示每種建築物可以升級的數量
      */
     public void showCanUpgradeBuilding() {
-        System.out.printf("房屋：%d間可升級\n",
+        System.out.printf("%d.房屋：%d間可升級\n",
+                HOUSE.instance().getId(),
                 buildings.getCanUpgradeNum(HOUSE,resource));
-        System.out.printf("研究所：%d間可升級\n",
+        System.out.printf("%d.研究所：%d間可升級\n",
+                LAB.instance().getId(),
                 buildings.getCanUpgradeNum(LAB,resource));
-        System.out.printf("軍營：%d間可升級\n",
+        System.out.printf("%d.軍營：%d間可升級\n",
+                BARRACKS.instance().getId(),
                 buildings.getCanUpgradeNum(BARRACKS,resource));
-        System.out.printf("伐木場：%d間可升級\n",
+        System.out.printf("%d.伐木場：%d間可升級\n",
+                SAW_MILL.instance().getId(),
                 buildings.getCanUpgradeNum(SAW_MILL,resource));
-        System.out.printf("煉鋼廠：%d間可升級\n",
+        System.out.printf("%d.煉鋼廠：%d間可升級\n",
+                STEEL_MILL.instance().getId(),
                 buildings.getCanUpgradeNum(STEEL_MILL,resource));
-        System.out.printf("兵工廠：%d間可升級\n",
+        System.out.printf("%d.兵工廠：%d間可升級\n",
+                ARSENAL.instance().getId(),
                 buildings.getCanUpgradeNum(ARSENAL,resource));
-        System.out.printf("瓦斯場：%d間可升級\n",
+        System.out.printf("%d.瓦斯場：%d間可升級\n",
+                GAS_MILL.instance().getId(),
                 buildings.getCanUpgradeNum(GAS_MILL,resource));
-        System.out.printf("飛機工廠：%d間可升級\n",
+        System.out.printf("%d.飛機工廠：%d間可升級\n",
+                AIRPLANE_MILL.instance().getId(),
                 buildings.getCanUpgradeNum(AIRPLANE_MILL,resource));
     }
 
@@ -445,6 +453,14 @@ public class City {
      */
     public boolean canUpgradeBuilding(BuildingsCollection.BuildingType type) {
         return buildings.getCanUpgradeNum(type,resource)!=0;
+    }
+
+    /**
+     * 顯示該種類可以升級的建築細節
+     * @param type 建築種類
+     */
+    public void showCanUpgradeTypeDetail(BuildingType type){
+
     }
 
     /**
