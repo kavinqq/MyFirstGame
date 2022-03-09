@@ -17,6 +17,9 @@ public class BuildingsCollection {
     public static final int PLANE_LEVEL_UPGRADE_TIME = 48;
     public static final int SOLDIER_LEVEL_UPGRADE_TIME = 48;
     public static final int TECH_LEVEL_UPGRADE_TIME = 24;
+    private boolean isRecentlyUpgradeTech;
+    private boolean isRecentlyUpgradeArmySoldier;
+    private boolean isRecentlyUpgradeAirForceSoldier;
 
     public enum BuildingType {
         ARSENAL(new Arsenal(), new LinkedList<>()),
@@ -90,7 +93,7 @@ public class BuildingsCollection {
     /**
      * 閒置驗究所數量
      */
-    private int freeLadNum;
+    private int freeLabNum;
     /**
      * 閒置兵工廠數量
      */
@@ -214,7 +217,7 @@ public class BuildingsCollection {
                 sum++;
                 //若建造的是研究所，閒置數+1
                 if (node.building instanceof Lab) {
-                    freeLadNum++;
+                    freeLabNum++;
                 }
             }
         }
@@ -264,7 +267,7 @@ public class BuildingsCollection {
      */
     public void showCanUpgradeBuildingNum(Resource resource) {
         //若沒有研究所不可以升級
-        if (freeLadNum == 0) {
+        if (freeLabNum == 0) {
             System.out.println("沒有研究所可以升級建築");
         }else {
             System.out.printf("%d.房屋：%d間可升級\n",
@@ -306,7 +309,7 @@ public class BuildingsCollection {
      */
     public ArrayList<BuildingNode> showCanUpgradeTypeDetail(BuildingType type) {
         //若選擇升級建築，但沒有閒置的研究所
-        if(type!=ARSENAL && freeLadNum==0){
+        if(type!=ARSENAL && freeLabNum ==0){
             return null;
         }
         //若選擇升級建築，但沒有閒置的研究所
@@ -346,9 +349,9 @@ public class BuildingsCollection {
         node.building.setUpgrading(true); //設為升級中
         node.building.setWorking(false); //停工
         node.building.setReadyToUpgrade(false); //非可升級狀態
-        freeLadNum--; //占用研究所資源
-        if (freeLadNum <= 0) {
-            freeLadNum = 0;
+        freeLabNum--; //占用研究所資源
+        if (freeLabNum <= 0) {
+            freeLabNum = 0;
         }
         return;
     }
@@ -359,14 +362,18 @@ public class BuildingsCollection {
      * 完成士兵/飛機等級升級
      */
     public void completeJob() {
+        isRecentlyUpgradeTech = false;
+        isRecentlyUpgradeArmySoldier = false;
+        isRecentlyUpgradeAirForceSoldier = false;
         //建立完成
         showBuildCompleted();
         //升級完成
         showUpgradeCompleted();
         //科技等級升級
         if (City.getGameTime() - techLevelStartUpgradeTime - TECH_LEVEL_UPGRADE_TIME == 0) {
+            isRecentlyUpgradeTech = true;
             City.addTechLevel();
-            freeLadNum++;
+            freeLabNum++;
         }
         //士兵等級升級
         if (City.getGameTime() - soldierLevelStartUpgradeTime - SOLDIER_LEVEL_UPGRADE_TIME == 0) {
@@ -423,7 +430,7 @@ public class BuildingsCollection {
                 node.building.setUpgrading(false);
                 node.building.setWorking(true);
                 node.building.setReadyToUpgrade(true);
-                freeLadNum++; //釋放研究所資源
+                freeLabNum++; //釋放研究所資源
                 sum++;
             }
         }
@@ -459,7 +466,7 @@ public class BuildingsCollection {
             }
             //研究所直接升級科技等級
             case LAB:{
-                if(freeLadNum!=0){
+                if(freeLabNum !=0){
                     return 1;
                 }else{
                     return 0;
@@ -523,7 +530,7 @@ public class BuildingsCollection {
     public void upgradeTechLevel() {
         //紀錄開始升級的時間點
         techLevelStartUpgradeTime = City.getGameTime();
-        freeLadNum--;
+        freeLabNum--;
     }
 
     /**
@@ -576,7 +583,7 @@ public class BuildingsCollection {
      *
      * @return 生成的士兵數
      */
-    public int getNewSoldierNum(Resource resource) {
+    public int getNewArmyNum(Resource resource) {
         int newSoldierCount = 0;
         for (BuildingNode buildingNode : BARRACKS.list) {
             if (buildingNode.building.isWorking() && buildingNode.building instanceof Barracks) {
@@ -786,8 +793,8 @@ public class BuildingsCollection {
      * 取得閒置的研究所數量
      * @return 閒置的研究所數量
      */
-    public int getFreeLadNum() {
-        return freeLadNum;
+    public int getFreeLabNum() {
+        return freeLabNum;
     }
 
     /**
@@ -837,5 +844,20 @@ public class BuildingsCollection {
         buildingNode.building.setWorking(true);
     }
 
+    /**
+     *
+     * @return
+     */
+    public boolean isRecentlyUpgradeTech() {
+        return isRecentlyUpgradeTech;
+    }
+
+    public boolean isRecentlyUpgradeArmySoldier() {
+        return isRecentlyUpgradeArmySoldier;
+    }
+
+    public boolean isRecentlyUpgradeAirForceSoldier() {
+        return isRecentlyUpgradeAirForceSoldier;
+    }
 
 }

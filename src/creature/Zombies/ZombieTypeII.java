@@ -1,4 +1,4 @@
-package Creature.Zombies;
+package creature.Zombies;
 
 public class ZombieTypeII extends Zombie{
     /**

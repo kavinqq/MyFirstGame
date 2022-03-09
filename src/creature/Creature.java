@@ -1,4 +1,4 @@
-package Creature;
+package creature;
 
 public abstract class Creature {
     public enum FLYABILITY{

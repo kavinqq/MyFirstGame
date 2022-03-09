@@ -1,4 +1,4 @@
-package Creature.Zombies;
+package creature.Zombies;
 
 /**
  * 飛行殭屍

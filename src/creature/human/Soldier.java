@@ -1,4 +1,4 @@
-package Creature.human;
+package creature.human;
 
 /**
  * @author Lillian
