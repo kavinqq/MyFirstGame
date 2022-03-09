@@ -640,6 +640,20 @@ public class City {
     }
 
     /**
+     * 士兵等級提升
+     */
+    public static void addSoldierLevel(){
+        soldierLevel++;
+    }
+
+    /**
+     * 飛機等級提升
+     */
+    public static void addPlaneLevel(){
+        planeLevel++;
+    }
+
+    /**
      * 獲取目前士兵總數
      *
      * @return 目前士兵總數
@@ -711,5 +725,7 @@ public class City {
     public boolean isAlive(){
         return (this.humans.size()>0);
     }
+
+
 
 }

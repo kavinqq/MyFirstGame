@@ -56,10 +56,27 @@ public class BuildingsCollection {
 
     public class BuildingNode {
         Building building;
+        /**
+         * 建造開始的時間
+         */
         int buildStartTime;
+        /**
+         * 建造結束的時間
+         */
         int buildEndTime;
+        /**
+         * 升級開始時間
+         */
         int upgradeStartTime;
+        /**
+         * 升級結束的時間
+         */
         int upgradeEndTime;
+        /**
+         * 上次開起運作的時間
+         */
+        int updateStartTime;
+
 
         public BuildingNode(Building building) {
             this.building = building;
@@ -99,6 +116,10 @@ public class BuildingsCollection {
      * 建築數量
      */
     private int buildingNum;
+
+    private boolean isRecentlyUpgradeTech;
+    private boolean isRecentlyUpgradeArmySoldier;
+    private boolean isRecentlyUpgradeAirForceSoldier;
 
     public BuildingsCollection() {
 //        arsenalList = new LinkedList<>();
@@ -370,12 +391,12 @@ public class BuildingsCollection {
         }
         //士兵等級升級
         if (City.getGameTime() - soldierLevelStartUpgradeTime - SOLDIER_LEVEL_UPGRADE_TIME == 0) {
-            City.addTechLevel();
+            City.addSoldierLevel();
             freeArsenalNum++;
         }
         //飛機等級升級
         if (City.getGameTime() - planeLevelStartUpgradeTime - PLANE_LEVEL_UPGRADE_TIME == 0) {
-            City.addTechLevel();
+            City.addPlaneLevel();
             freeArsenalNum++;
         }
     }
@@ -837,5 +858,15 @@ public class BuildingsCollection {
         buildingNode.building.setWorking(true);
     }
 
+    public boolean isRecentlyUpgradeTech() {
+        return isRecentlyUpgradeTech;
+    }
 
+    public boolean isRecentlyUpgradeArmySoldier() {
+        return isRecentlyUpgradeArmySoldier;
+    }
+
+    public boolean isRecentlyUpgradeAirForceSoldier() {
+        return isRecentlyUpgradeAirForceSoldier;
+    }
 }

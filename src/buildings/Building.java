@@ -11,14 +11,6 @@ public abstract class Building {
      */
     private final String name;
     /**
-     * 開始 建築物 剛建造完的時間
-     */
-    private int createTime;
-    /**
-     * 開始 建造時間
-     */
-    private int buildStart;
-    /**
      * 建造 需要的時間
      */
     private int buildTime;
@@ -51,14 +43,6 @@ public abstract class Building {
      */
     private int hp;
 
-    /**
-     * 研究所建了嗎
-     */
-    private static boolean isLabBuild = false;
-    /**
-     * 兵工廠建造了嗎
-     */
-    private static boolean isArsenalBuild = false;
     /**
      * 是否要準備要升級了
      */
