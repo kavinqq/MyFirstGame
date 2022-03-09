@@ -1,4 +1,4 @@
-package Creature.Zombies;
+package creature.Zombies;
 
 import java.util.HashMap;
 import java.util.Map;

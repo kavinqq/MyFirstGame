@@ -1,4 +1,4 @@
-package Creature.human;
+package creature.human;
 
 public class Citizen extends Human {   //市民
     /**

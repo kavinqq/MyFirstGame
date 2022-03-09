@@ -1,6 +1,6 @@
-package Creature.human;
+package creature.human;
 
-import Creature.Creature;
+import creature.Creature;
 
 public abstract class Human extends Creature {
     public enum HUMAN_TYPE {

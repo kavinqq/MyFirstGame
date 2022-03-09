@@ -1,6 +1,6 @@
-package Creature.Zombies;
+package creature.Zombies;
 
-import Creature.Creature;
+import creature.Creature;
 
 public abstract class Zombie extends Creature {
     /**
