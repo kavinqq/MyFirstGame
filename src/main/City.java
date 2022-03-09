@@ -23,6 +23,7 @@ public class City {
      * 遊戲的建築物
      */
     private BuildingsCollection buildings;
+    private int buildingCount;
     // 目前已建造的研究所的數量
     private int numOfLab;
     // 正在升級技術中的研究所的數量
@@ -225,26 +226,24 @@ public class City {
             isWorkedForWood = false;
         }
         for (Human human : humans) {
-            // 如果他不是士兵 && 他是一個閒人 派遣工作 ( 捷徑運算 )
-            if (!human.getIsSoldier() && human.getState().equals("Free")) {
-                if (isWorkedForWood) {
-                    //把該人類物件 狀態 設定為 伐木
-                    human.setStateToWood();
-                    //全部伐木人數 + 1
-                    addWoodCitizen(1);
-                    //全部閒人數 -1
-                } else {
-                    //把該人類物件 狀態 設定為 採鋼
-                    human.setStateToSteel();
-                    //為什麼不用紀錄採鐵人數? 因為把 全部人humans.size() -士兵 - 全部伐木 - 全部閒人 = 採鐵 (算得出來)....我還是做出來了
-                    //全部煉鋼人數 + 1
-                    addSteelCitizen(1);
-                    //全部閒人數 -1
+            // 如果他不是士兵 && 他是一個閒人 派遣工作
+            if(human.isCitizen()){
+                Citizen citizen = (Citizen) human;
+                if(citizen.isFree()){
+                    if (isWorkedForWood) {
+                        citizen.staratToLog();//把該人類物件 狀態 設定為 伐木
+                        addWoodCitizen(1);//全部伐木人數 + 1
+                    } else {
+                        citizen.startToMine();//把該人類物件 狀態 設定為 採鋼
+                        //為什麼不用紀錄採鐵人數? 因為把 全部人humans.size() -士兵 - 全部伐木 - 全部閒人 = 採鐵 (算得出來)....我還是做出來了
+                        //全部煉鋼人數 + 1
+                        addSteelCitizen(1);
+                    }
+                    //由於有分配了工作，閒人-1
+                    addFreeCitizen(-1);
+                    //指派的工作量 - 1
+                    humansNum -= 1;
                 }
-                //由於有分配了工作，閒人-1
-                addFreeCitizen(-1);
-                //指派的工作量 - 1
-                humansNum -= 1;
             }
             //如果指派量 ==0 表示都指派完了 跳出
             if (humansNum == 0) {
@@ -497,21 +496,29 @@ public class City {
     public void fightZombies(ZombieKingdom.ZombieTroop zombieTroop) {
         //這個數值是 最終結果 也就是 是否能夠抵擋這一波殭屍潮的判斷數 >0 死亡  <=0 存活
 
-        int landAttack = 0;
-        int airAttack = 0;
+        int landAttack = zombieTroop.getLandAttack();
+        int airAttack = zombieTroop.getAirAttack();
+
+        while(airAttack>0){
+            for(int i=0; i<humans.size(); i++){
+                Human human = humans.get(i);
+
+            }
+        }
+
         int totalAttack = 0;
         //首先計算 所有殭屍 攻擊力總和
-        Zombie zombie;
-        for (int i = 0; i < ZOMBIE_TYPE; i++) {
-            zombie = zombies[i];
-            if(zombie.isFlyable()){
-                airAttack += zombie.getAttack();
-            }
-            else{
-                landAttack += zombie.getAttack();
-            }
-            totalAttack += zombies[i].getAttack(getGameTime() / 16);
-        }
+//        Zombie zombie;
+//        for (int i = 0; i < ZOMBIE_TYPE; i++) {
+//            zombie = zombies[i];
+//            if(zombie.isFlyable()){
+//                airAttack += zombie.getAttack();
+//            }
+//            else{
+//                landAttack += zombie.getAttack();
+//            }
+//            totalAttack += zombies[i].getAttack(getGameTime() / 16);
+//        }
         //走訪 humans 陣列，找尋每一個士兵出來戰鬥
         int totalHumans = humans.size();
         //由於目前humans 內有士兵以及市民  遇到市民跳過　→　index++  但若為士兵 他被消滅了  下一個human會補到原來位置上 因此不index++

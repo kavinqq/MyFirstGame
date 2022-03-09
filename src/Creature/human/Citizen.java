@@ -9,21 +9,21 @@ public class Citizen extends Human {   //市民
     }
     private STATUS status;
     public Citizen(){
-        this.setType(TYPE.CITIZEN);
+        this.setType(HUMAN_TYPE.CITIZEN);
         this.status = STATUS.FREE; //建立時 同時設定狀態為 Free
         this.setFlyability(FLYABILITY.CANNOT_FLY);
     }
     /**
      * 派遣村民去採木頭
      */
-    public void setStateToWood(){
+    public void staratToLog(){
         status = STATUS.WOOD;
     }
 
     /**
      * 派遣村民去採鐵
      */
-    public void setStateToSteel(){
+    public void startToMine(){
         status = STATUS.STEEL;
     }
 
@@ -40,5 +40,9 @@ public class Citizen extends Human {   //市民
      */
     public STATUS getState(){
         return status;
+    }
+
+    public boolean isFree(){
+        return (this.status==STATUS.FREE);
     }
 }

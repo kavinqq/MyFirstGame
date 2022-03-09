@@ -6,8 +6,7 @@ public class Army extends Soldier  {  //士兵
      */
     public Army(){
         this.setValue(2);
-        this.setIsArmy();
-        this.setMilitaryType(MILITARY_TYPE.ARMY);
+        this.setSoldierType(SOLDIER_TYPE.ARMY);
         this.setFlyability(FLYABILITY.CANNOT_FLY);
     }
 }

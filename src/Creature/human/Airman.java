@@ -8,8 +8,7 @@ package Creature.human;
 public class Airman extends Soldier{
     public Airman(){
         this.setValue(2);
-        this.setIsAirForce();
-        this.setMilitaryType(MILITARY_TYPE.AIR_FORCE);
+        this.setSoldierType(SOLDIER_TYPE.AIR_FORCE);
         this.setFlyability(FLYABILITY.CAN_FLY);
     }
 }

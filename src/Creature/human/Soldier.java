@@ -6,20 +6,20 @@ package Creature.human;
  * @Description
  */
 public abstract class Soldier extends Human{
-    public enum MILITARY_TYPE {
+    public enum SOLDIER_TYPE {
         ARMY, AIR_FORCE;
     }
-    private MILITARY_TYPE militaryType;
+    private SOLDIER_TYPE soldierType;
     public Soldier(){
-        this.setType(Human.TYPE.SOLDIER);
+        this.setType(HUMAN_TYPE.SOLDIER);
     }
-    public void setMilitaryType(MILITARY_TYPE militaryType){
-        this.militaryType = militaryType;
+    public void setSoldierType(SOLDIER_TYPE soldierType){
+        this.soldierType = soldierType;
     }
     public boolean isArmy(){
-        return (this.militaryType==MILITARY_TYPE.ARMY);
+        return (this.soldierType == SOLDIER_TYPE.ARMY);
     }
     public boolean isAirForce(){
-        return (this.militaryType==MILITARY_TYPE.AIR_FORCE);
+        return (this.soldierType == SOLDIER_TYPE.AIR_FORCE);
     }
 }
