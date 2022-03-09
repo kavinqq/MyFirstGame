@@ -25,7 +25,7 @@ public class PreSaleBuildings {
     }
     //回傳這一個裝著所有類型 建築物物件 的陣列
     public Building[] getPreBuildings(){
-       return preBuilding;
+        return preBuilding;
     }
 
     /**

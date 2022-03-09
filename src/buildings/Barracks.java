@@ -22,7 +22,7 @@ public class Barracks extends Building {
      * steelCostLevelUp 升級所需要的鋼鐵量
      */
     public Barracks() {
-        super(3, "軍營", 0, 2, 30, 0, 2, false,30,
+        super(3, "軍營",  2, 30, 0, 1, false,30,
                 20, 10, 30, 15,false,0,0);
     }
 
@@ -37,6 +37,10 @@ public class Barracks extends Building {
     @Override
     public String toString() {
         return "軍營:每3小時消耗2木材2鋼鐵產生1位士兵(每房屋等級+2人)";
+    }
+
+    public String buildingDetail(int level){
+        return "每3小時消耗2木材、2鋼鐵生產" + (super.getLevel() * 2 + 1) + "位士兵";
     }
 
 }

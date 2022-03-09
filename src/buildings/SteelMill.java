@@ -1,5 +1,10 @@
 package buildings;
 
+import main.Resource;
+
+/**
+ * 煉鋼廠
+ */
 public class SteelMill extends Building {
     /**
      * 父類建構子
@@ -17,7 +22,7 @@ public class SteelMill extends Building {
      * steelCostLevelUp 升級所需要的鋼鐵量
      */
     public SteelMill() {
-        super(5, "煉鋼場", 0, 1, 30, 0, 2, false, 10,
+        super(5, "煉鋼場",  1, 30, 0, 1, false, 10,
                 15, 5, 30, 15,false,0,0);
     }
 
@@ -31,5 +36,10 @@ public class SteelMill extends Building {
     @Override
     public String toString() {
         return "煉鋼廠:每小時採集量+1(每房屋等級+2)";
+    }
+
+    public String buildingDetail(int level){
+        return "市民每小時鋼鐵採集量提升至" + (Resource.DEFAULT_STEEL_SPEED + 1 + super.getLevel()) + "單位鋼鐵";
+
     }
 }

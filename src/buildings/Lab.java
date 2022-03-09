@@ -1,5 +1,8 @@
 package buildings;
 
+/**
+ * 研究所
+ */
 public class Lab extends Building {
     /**
      * 父類建構子
@@ -17,7 +20,7 @@ public class Lab extends Building {
      * steelCostLevelUp 升級所需要的鋼鐵量
      */
     public Lab(){
-        super(2,"研究所",0,3,24,0,1,false,30,
+        super(2,"研究所",3,24,0,1,false,30,
                 10,5,50,20,false,0,0);
 
     }
@@ -25,5 +28,9 @@ public class Lab extends Building {
     @Override
     public String toString() {
         return "研究所:蓋了才能升級科技和房屋";
+    }
+
+    public String buildingDetail(int level){
+        return "";
     }
 }

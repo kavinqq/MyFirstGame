@@ -1,5 +1,5 @@
 package buildings;
-import main.Resource;///
+import main.Resource;
 
 public abstract class Building {
     /**
@@ -90,11 +90,11 @@ public abstract class Building {
      * 建構子
      * @param id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠)
      * @param name 建築物名稱
-     * @param buildStart 建築物開始時間
      * @param buildTime 建築物持續時間
      * @param upgradeTime 建築物升級時間
-     * @param level 建築物等級 初始 0 建好 1 升級過2~n
-     * @param techLevelNeedBuild 需要科技等級
+     * @param level 建築物等級 預設-1  建好 0 升級過 1~2,147,483,647
+     * @param techLevelNeed 需要科技等級
+     * @param readyToUpgrade 建築物是否在建築，建築中 -> true
      * @param hp 建築物血量
      * @param woodCostCreate 創建所需要的木頭量
      * @param steelCostCreate 創建所需要的鋼鐵量
@@ -104,8 +104,8 @@ public abstract class Building {
      * @param gasCostCreate 創建所需要的瓦斯量
      * @param gasCostLevelUp 升級所需要的瓦斯量
      */
-    public Building(int id, String name, int buildStart, int buildTime, int upgradeTime,
-                    int level, int techLevelNeedBuild,int techLevelNeedUpgrade, int hp,
+    public Building(int id, String name,int buildTime, int upgradeTime,
+                    int level, int techLevelNeed, boolean readyToUpgrade, int hp,
                     int woodCostCreate, int steelCostCreate, int woodCostLevelUp,
                     int steelCostLevelUp, boolean isWorking,
                     int gasCostCreate,int gasCostLevelUp){
@@ -113,8 +113,6 @@ public abstract class Building {
         this.id=id;
         //建築物名稱
         this.name=name;
-        //建築物開始時間
-        this.buildStart=buildStart;
         //建築物持續時間
         this.buildTime=buildTime;
         //建築物升級時間
@@ -235,9 +233,9 @@ public abstract class Building {
      * @param resource 建築的資源
      */
     public void takeResource(Resource resource) {
-            resource.takeWood(woodForProduction);
-            resource.takeSteel(steelForProduction);
-            resource.takeGas(gasForProduction);
+        resource.takeWood(woodForProduction);
+        resource.takeSteel(steelForProduction);
+        resource.takeGas(gasForProduction);
     }
 
     public boolean isReadyToUpgrade(){

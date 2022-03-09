@@ -1,7 +1,9 @@
 package buildings;
 
+import main.Resource;
+
 /**
- * 筏木場
+ * 伐木場
  */
 public class SawMill extends Building {
     /**
@@ -20,7 +22,7 @@ public class SawMill extends Building {
      * steelCostLevelUp 升級所需要的鋼鐵量
      */
     public SawMill() {
-        super(4, "筏木場", 0, 1, 30, 0, 2, false, 10,
+        super(4, "筏木場",  1, 30, 0, 1, false, 10,
                 15, 0, 30, 15,false,0,0);
     }
 
@@ -35,5 +37,9 @@ public class SawMill extends Building {
     @Override
     public String toString() {
         return "伐木場:每小時採集量+1(每房屋等級+2)";
+    }
+
+    public String buildingDetail(int level){
+        return "市民每小時木材採集量提升至" + (Resource.DEFAULT_WOOD_SPEED + 1 + super.getLevel()) + "單位木材";
     }
 }

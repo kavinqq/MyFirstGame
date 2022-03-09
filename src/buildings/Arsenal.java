@@ -13,7 +13,6 @@ public class Arsenal extends Building {
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠)
      * name 建築物名稱
-     * buildStart 建築物開始時間
      * buildTime 建築物持續時間
      * upgradeTime 建築物升級時間
      * level 建築物等級 預設-1  建好 0 升級過 1~2,147,483,647
@@ -29,13 +28,16 @@ public class Arsenal extends Building {
      * levelUp() → City類別的 第 347行 使用
      */
     public Arsenal(){
-        super(6,"兵工廠",0,3,48,0,2,false,30,
+        super(6,"兵工廠",3,48,0,2,false,30,
                 30,10,70,40,false,0,0);
     }
 
     @Override
     public String toString() {
         return "兵工廠:可以升級士兵";
+    }
+    public String buildingDetail(int level){
+        return "";
     }
 
 }
