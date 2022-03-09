@@ -218,7 +218,49 @@ public abstract class Building {
     }
 
     /**
-     * 是否已經拿取資源來生產
+     * 是否有足夠的資源建造
+     * @param resource 資源
+     * @return
+     */
+    public boolean isEnoughBuild(Resource resource){
+        return ( (woodCostCreate <= resource.getTotalWood()) &&
+                (steelCostCreate <= resource.getTotalSteel()) &&
+                ((gasCostCreate <= resource.getTotalGas())) );
+    }
+
+    /**
+     * 消耗資源，建築物建造
+     * @param resource 建築的資源
+     */
+    public void takeResourceBuild(Resource resource) {
+        resource.takeWood(woodCostCreate);
+        resource.takeSteel(steelCostCreate);
+        resource.takeGas(gasCostCreate);
+    }
+
+    /**
+     * 是否有足夠的資源升級
+     * @param resource
+     * @return
+     */
+    public boolean isEnoughUpgrade(Resource resource){
+        return ( (woodCostLevelUp <= resource.getTotalWood()) &&
+                (steelCostLevelUp <= resource.getTotalSteel()) &&
+                ((gasCostLevelUp <= resource.getTotalGas())) );
+    }
+
+    /**
+     * 消耗資源，建築物升級
+     * @param resource 建築的資源
+     */
+    public void takeResourceUpgrade(Resource resource) {
+        resource.takeWood(woodCostLevelUp);
+        resource.takeSteel(steelCostLevelUp);
+        resource.takeGas(gasCostLevelUp);
+    }
+
+    /**
+     * 是否有足夠的資源生產
      * @param resource
      * @return
      */
@@ -229,10 +271,10 @@ public abstract class Building {
     }
 
     /**
-     * 建築物生產
+     * 消耗資源，建築物生產
      * @param resource 建築的資源
      */
-    public void takeResource(Resource resource) {
+    public void takeResourceProduce(Resource resource) {
         resource.takeWood(woodForProduction);
         resource.takeSteel(steelForProduction);
         resource.takeGas(gasForProduction);

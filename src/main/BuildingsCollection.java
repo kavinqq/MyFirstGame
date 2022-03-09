@@ -14,12 +14,43 @@ import static main.BuildingsCollection.BuildingType.*;
  */
 public class BuildingsCollection {
 
+    /**
+     * 飛機升級時間
+     */
     public static final int PLANE_LEVEL_UPGRADE_TIME = 48;
+    /**
+     * 士兵升級時間
+     */
     public static final int SOLDIER_LEVEL_UPGRADE_TIME = 48;
+    /**
+     * 科技升級時間
+     */
     public static final int TECH_LEVEL_UPGRADE_TIME = 24;
+    /**
+     * 此回合有升級科技
+     */
     private boolean isRecentlyUpgradeTech;
+    /**
+     * 此回合有升級士兵
+     */
     private boolean isRecentlyUpgradeArmySoldier;
+    /**
+     * 此回合有升級飛機
+     */
     private boolean isRecentlyUpgradeAirForceSoldier;
+
+    /**
+     * 是否已在升級士兵
+     */
+    private boolean isUpgradingSoldier;
+    /**
+     * 是否已在升級飛機
+     */
+    private boolean isUpgradingPlane;
+    /**
+     * 是否已在升級科技
+     */
+    private boolean isUpgradingTech;
 
     public enum BuildingType {
         ARSENAL(new Arsenal(), new LinkedList<>()),
@@ -52,13 +83,14 @@ public class BuildingsCollection {
         public Building instance() {
             return instance;
         }
-        public LinkedList<BuildingNode> getList(){
+
+        public LinkedList<BuildingNode> getList() {
             return list;
         }
     }
 
     public class BuildingNode {
-        Building building;
+        private Building building;
         /**
          * 建造開始的時間
          */
@@ -93,6 +125,10 @@ public class BuildingsCollection {
         public int getBuildEndTime() {
             return buildEndTime;
         }
+
+        public Building getBuilding() {
+            return building;
+        }
     }
 
     /**
@@ -121,16 +157,11 @@ public class BuildingsCollection {
     private int buildingNum;
 
     public BuildingsCollection() {
-//        arsenalList = new LinkedList<>();
-//        barracksList = new LinkedList<>();
-//        houseList = new LinkedList<>();
-//        labList = new LinkedList<>();
-//        sawMillList = new LinkedList<>();
-//        steelMillList = new LinkedList<>();
-//        gasMillList = new LinkedList<>();
-//        airplaneMillList = new LinkedList<>();
         techLevelStartUpgradeTime = 0;
         buildingNum = 0;
+        isUpgradingSoldier = false;
+        isUpgradingPlane = false;
+        isUpgradingTech = false;
     }
 
     /**
@@ -174,14 +205,17 @@ public class BuildingsCollection {
                 break;
             }
         }
-        alreadyTakeResource(resource,
-                newBuilding.building.getWoodCostLevelUp(),
-                newBuilding.building.getSteelCostLevelUp(),
-                newBuilding.building.getGasCostLevelUp());
+        //消耗資源
+        newBuilding.building.takeResourceBuild(resource);
+        //設置開始建造時間
         newBuilding.buildStartTime = City.getGameTime();
+        //設定結束時間
         newBuilding.buildEndTime = City.getGameTime() + newBuilding.building.getBuildTime();
+        //尚未開始運作
         newBuilding.building.setWorking(false);
+        //設置為升級中
         newBuilding.building.setUpgrading(true);
+        //設置為不可升級狀態
         newBuilding.building.setReadyToUpgrade(false);
         type.list.add(newBuilding);
     }
@@ -191,28 +225,28 @@ public class BuildingsCollection {
      */
     public void showBuildCompleted() {
         System.out.printf("房屋 %d間完成建造",
-                setBuildingStartWorkAndGetNum(HOUSE.list));
+                setBuildingStartWorkAndGetSum(HOUSE.list));
 
         System.out.printf("研究所 %d間完成建造",
-                setBuildingStartWorkAndGetNum(LAB.list));
+                setBuildingStartWorkAndGetSum(LAB.list));
 
         System.out.printf("軍營 %d間完成建造",
-                setBuildingStartWorkAndGetNum(BARRACKS.list));
+                setBuildingStartWorkAndGetSum(BARRACKS.list));
 
         System.out.printf("伐木場 %d間完成建造",
-                setBuildingStartWorkAndGetNum(SAW_MILL.list));
+                setBuildingStartWorkAndGetSum(SAW_MILL.list));
 
         System.out.printf("煉鋼廠 %d間完成建造",
-                setBuildingStartWorkAndGetNum(STEEL_MILL.list));
+                setBuildingStartWorkAndGetSum(STEEL_MILL.list));
 
         System.out.printf("兵工廠 %d間完成建造",
-                setBuildingStartWorkAndGetNum(ARSENAL.list));
+                setBuildingStartWorkAndGetSum(ARSENAL.list));
 
         System.out.printf("瓦斯廠 %d間完成建造",
-                setBuildingStartWorkAndGetNum(GAS_MILL.list));
+                setBuildingStartWorkAndGetSum(GAS_MILL.list));
 
         System.out.printf("飛機工廠 %d間完成建造",
-                setBuildingStartWorkAndGetNum(AIRPLANE_MILL.list));
+                setBuildingStartWorkAndGetSum(AIRPLANE_MILL.list));
     }
 
     /**
@@ -221,7 +255,7 @@ public class BuildingsCollection {
      * @param list
      * @return 完成建造的數量
      */
-    private int setBuildingStartWorkAndGetNum(LinkedList<BuildingNode> list) {
+    private int setBuildingStartWorkAndGetSum(LinkedList<BuildingNode> list) {
         int sum = 0;
         for (BuildingNode node : list) {
             //若建造完成時間==當前時間->建造完成
@@ -264,19 +298,7 @@ public class BuildingsCollection {
                 }
             }
         }
-        return enoughResourceBuild(resource,type);
-    }
-
-    /**
-     * 判斷該建築夠不夠資源建造
-     * @param resource 資源
-     * @param type 建築種類
-     * @return
-     */
-    private boolean enoughResourceBuild(Resource resource,BuildingType type){
-        return resource.getTotalWood() >= type.instance.getWoodCostCreate()
-                && resource.getTotalSteel() >= type.instance.getSteelCostCreate()
-                && resource.getTotalGas() >= type.instance.getSteelCostCreate();
+        return type.instance.isEnoughBuild(resource);
     }
 
     /**
@@ -286,7 +308,7 @@ public class BuildingsCollection {
         //若沒有研究所不可以升級
         if (freeLabNum == 0) {
             System.out.println("沒有研究所可以升級建築");
-        }else {
+        } else {
             System.out.printf("%d.房屋：%d間可升級\n",
                     HOUSE.instance.getId(),
                     getCanUpgradeNum(HOUSE, resource));
@@ -312,38 +334,39 @@ public class BuildingsCollection {
         }
         if (freeArsenalNum == 0) {
             System.out.println("沒有兵工廠可以升級士兵/飛機");
-        }else{
+        } else {
             System.out.printf("%d.士兵/飛機等級可升級", LAB.instance.getId());
         }
     }
 
     /**
      * 顯示該種類可以升級的建築細節
+     *
      * @param type 建築種類
      * @return 可以升級的建築陣列
      * 若選擇升級建築，但沒有閒置的研究所 -> null
      * 若選擇升級軍力，但沒有閒置的兵工廠 -> null
      */
-    public ArrayList<BuildingNode> showCanUpgradeTypeDetail(BuildingType type) {
+    public ArrayList<BuildingNode> showAndGetCanUpgradeTypeDetail(BuildingType type) {
         //若選擇升級建築，但沒有閒置的研究所
-        if(type!=ARSENAL && freeLabNum ==0){
+        if (type != ARSENAL && freeLabNum == 0) {
             return null;
         }
         //若選擇升級建築，但沒有閒置的研究所
-        if(type==ARSENAL && freeArsenalNum==0){
+        if (type == ARSENAL && freeArsenalNum == 0) {
             return null;
         }
         ArrayList<BuildingNode> canUpgrade = new ArrayList<>(); //回傳可以升級的鏈表
         //若選擇研究所或兵工廠，沒有實際建築物可以升級，直接回傳
-        if(type==LAB || type==ARSENAL){
+        if (type == LAB || type == ARSENAL) {
             return canUpgrade;
         }
         int count = 1;
         for (int i = 0; i < type.list.size(); i++) {
-            if(type.list.get(i).building.isReadyToUpgrade()){
+            if (type.list.get(i).building.isReadyToUpgrade()) {
                 BuildingNode buildingNode = type.list.get(i);
-                System.out.println( count++ + ". " + buildingNode.building.toString() + " 當前效果：" + buildingNode.building.buildingDetail(buildingNode.building.getLevel())
-                        + "\n升級後：" + buildingNode.building.buildingDetail(buildingNode.building.getLevel()+1)
+                System.out.println(count++ + ". " + buildingNode.building.toString() + " 當前效果：" + buildingNode.building.buildingDetail(buildingNode.building.getLevel())
+                        + "\n升級後：" + buildingNode.building.buildingDetail(buildingNode.building.getLevel() + 1)
                         + "\n---------------------------");
                 canUpgrade.add(type.list.get(i));
             }
@@ -353,14 +376,12 @@ public class BuildingsCollection {
 
     /**
      * 升級
-     * @param node 指定要升級的建築
+     *
+     * @param node     指定要升級的建築
      * @param resource 城市資源
      */
-    public void upgrade(BuildingNode node , Resource resource) {
-        alreadyTakeResource(resource,
-                node.building.getWoodCostLevelUp(),
-                node.building.getSteelCostLevelUp(),
-                node.building.getGasCostLevelUp());
+    public void upgrade(BuildingNode node, Resource resource) {
+        node.building.takeResourceUpgrade(resource);
         node.upgradeStartTime = City.getGameTime();
         node.upgradeEndTime = City.getGameTime() + node.building.getUpgradeTime();
         node.building.setUpgrading(true); //設為升級中
@@ -391,16 +412,19 @@ public class BuildingsCollection {
             isRecentlyUpgradeTech = true;
             City.addTechLevel();
             freeLabNum++;
+            isUpgradingTech = false;
         }
         //士兵等級升級
         if (City.getGameTime() - soldierLevelStartUpgradeTime - SOLDIER_LEVEL_UPGRADE_TIME == 0) {
             City.addSoldierLevel();
             freeArsenalNum++;
+            isUpgradingSoldier = false;
         }
         //飛機等級升級
         if (City.getGameTime() - planeLevelStartUpgradeTime - PLANE_LEVEL_UPGRADE_TIME == 0) {
             City.addPlaneLevel();
             freeArsenalNum++;
+            isUpgradingPlane = false;
         }
     }
 
@@ -464,10 +488,10 @@ public class BuildingsCollection {
     public int getCanUpgradeNum(BuildingType type, Resource resource) {
         switch (type) {
             //兵工廠直接升級士兵/飛機等級
-            case ARSENAL:{
-                if(freeArsenalNum!=0){
+            case ARSENAL: {
+                if (freeArsenalNum != 0) {
                     return 1;
-                }else{
+                } else {
                     return 0;
                 }
             }
@@ -482,10 +506,10 @@ public class BuildingsCollection {
                 }
             }
             //研究所直接升級科技等級
-            case LAB:{
-                if(freeLabNum !=0){
+            case LAB: {
+                if (freeLabNum != 0) {
                     return 1;
-                }else{
+                } else {
                     return 0;
                 }
             }
@@ -513,23 +537,11 @@ public class BuildingsCollection {
         int sum = 0;
         for (BuildingNode node : type.list) {
             //建築是否可升級 && 木頭夠 && 鋼鐵夠 && 瓦斯夠
-            if (node.building.isReadyToUpgrade() && enoughResourceUpgrade(resource,node)) {
+            if (node.building.isReadyToUpgrade() && node.building.isEnoughUpgrade(resource)) {
                 sum++;
             }
         }
         return sum;
-    }
-
-    /**
-     * 判斷該建築夠不夠資源升級
-     * @param resource 資源
-     * @param buildingNode 建築
-     * @return
-     */
-    private boolean enoughResourceUpgrade(Resource resource,BuildingNode buildingNode){
-        return resource.getTotalWood() >= buildingNode.building.getGasCostLevelUp()
-                && resource.getTotalSteel() >= buildingNode.building.getSteelCostLevelUp()
-                && resource.getTotalGas() >= buildingNode.building.getGasCostLevelUp();
     }
 
     /**
@@ -548,6 +560,7 @@ public class BuildingsCollection {
         //紀錄開始升級的時間點
         techLevelStartUpgradeTime = City.getGameTime();
         freeLabNum--;
+        isUpgradingTech = true;
     }
 
     /**
@@ -556,6 +569,7 @@ public class BuildingsCollection {
     public void upgradeSoldier() {
         soldierLevelStartUpgradeTime = City.getGameTime();
         freeArsenalNum--;
+        isUpgradingSoldier=true;
     }
 
     /**
@@ -564,6 +578,7 @@ public class BuildingsCollection {
     public void upgradePlane() {
         planeLevelStartUpgradeTime = City.getGameTime();
         freeArsenalNum--;
+        isUpgradingPlane = false;
     }
 
     /**
@@ -571,7 +586,7 @@ public class BuildingsCollection {
      *
      * @return 生成的人數
      */
-    public int getNewCitizenNum(Resource resource){
+    public int getNewCitizenNum(Resource resource) {
         int newPeopleCount = 0;
         for (BuildingNode buildingNode : HOUSE.list) {
             //如果建築在運作
@@ -583,7 +598,7 @@ public class BuildingsCollection {
                         buildingNode.building.setWorking(false); //將建築關閉
                     } else {
                         buildingNode.updateStartTime = City.getGameTime();
-                        buildingNode.building.takeResource(resource);
+                        buildingNode.building.takeResourceProduce(resource);
                     }
                 }
             }
@@ -596,11 +611,12 @@ public class BuildingsCollection {
      *
      * @return 生成的士兵數
      */
-    public int getNewArmyNum(Resource resource) {
+    public int getNewSoldierNum(Resource resource) {
         int newSoldierCount = 0;
         for (BuildingNode buildingNode : BARRACKS.list) {
             //如果建築在運作
             if (buildingNode.building.isWorking() && buildingNode.building instanceof House) {
+                //當前時間-上次啟動的時間 滿3小時->生產士兵
                 if ((City.getGameTime() - buildingNode.updateStartTime) % 3 == 0) {
                     Barracks barracks = (Barracks) buildingNode.building;
                     newSoldierCount += barracks.produceSoldier();
@@ -608,7 +624,7 @@ public class BuildingsCollection {
                         buildingNode.building.setWorking(false); //將建築關閉
                     } else {
                         buildingNode.updateStartTime = City.getGameTime();
-                        buildingNode.building.takeResource(resource);
+                        buildingNode.building.takeResourceProduce(resource);
                     }
                 }
             }
@@ -633,24 +649,12 @@ public class BuildingsCollection {
                         buildingNode.building.setWorking(false); //將建築關閉
                     } else {
                         buildingNode.updateStartTime = City.getGameTime();
-                        buildingNode.building.takeResource(resource);
+                        buildingNode.building.takeResourceProduce(resource);
                     }
                 }
             }
         }
         return newPlaneCount;
-    }
-
-    /**
-     * 判斷該建築夠不夠資源自動生產
-     * @param resource 資源
-     * @param buildingNode 建築
-     * @return
-     */
-    private boolean enoughResourceProduce(Resource resource,BuildingNode buildingNode){
-        return resource.getTotalWood() >= buildingNode.building.getWoodForProduction()
-                && resource.getTotalSteel() >= buildingNode.building.getSteelForProduction()
-                && resource.getTotalGas() >= buildingNode.building.getGasForProduction();
     }
 
     /**
@@ -798,6 +802,7 @@ public class BuildingsCollection {
 
     /**
      * 取得閒置的研究所數量
+     *
      * @return 閒置的研究所數量
      */
     public int getFreeLabNum() {
@@ -806,6 +811,7 @@ public class BuildingsCollection {
 
     /**
      * 取得閒置的兵工廠數量
+     *
      * @return 閒置的兵工廠數量
      */
     public int getFreeArsenalNum() {
@@ -814,21 +820,48 @@ public class BuildingsCollection {
 
     /**
      * 取得停工中的非升級中建築
+     *
      * @return 停工中的非升級中建築陣列
      */
-    public ArrayList<BuildingNode> getNotWorkingBuildingList(){
+    public ArrayList<BuildingNode> getNotWorkingBuildingList() {
         ArrayList<BuildingNode> notWorking = new ArrayList<>();
         for (int i = 0; i < HOUSE.list.size(); i++) {
-            if(!HOUSE.list.get(i).building.isWorking() && !HOUSE.list.get(i).building.isUpgrading()){
+            if (!HOUSE.list.get(i).building.isWorking() && !HOUSE.list.get(i).building.isUpgrading()) {
                 notWorking.add(HOUSE.list.get(i));
             }
         }
         for (int i = 0; i < BARRACKS.list.size(); i++) {
-            if(!BARRACKS.list.get(i).building.isWorking() && !BARRACKS.list.get(i).building.isUpgrading()){
+            if (!BARRACKS.list.get(i).building.isWorking() && !BARRACKS.list.get(i).building.isUpgrading()) {
                 notWorking.add(BARRACKS.list.get(i));
             }
-        }for (int i = 0; i < AIRPLANE_MILL.list.size(); i++) {
-            if(!AIRPLANE_MILL.list.get(i).building.isWorking() && !AIRPLANE_MILL.list.get(i).building.isUpgrading()){
+        }
+        for (int i = 0; i < AIRPLANE_MILL.list.size(); i++) {
+            if (!AIRPLANE_MILL.list.get(i).building.isWorking() && !AIRPLANE_MILL.list.get(i).building.isUpgrading()) {
+                notWorking.add(AIRPLANE_MILL.list.get(i));
+            }
+        }
+        return notWorking;
+    }
+
+    /**
+     * 取得工作中建築
+     *
+     * @return 工作中建築陣列
+     */
+    public ArrayList<BuildingNode> getWorkingBuildingList() {
+        ArrayList<BuildingNode> notWorking = new ArrayList<>();
+        for (int i = 0; i < HOUSE.list.size(); i++) {
+            if (HOUSE.list.get(i).building.isWorking()) {
+                notWorking.add(HOUSE.list.get(i));
+            }
+        }
+        for (int i = 0; i < BARRACKS.list.size(); i++) {
+            if (BARRACKS.list.get(i).building.isWorking()) {
+                notWorking.add(BARRACKS.list.get(i));
+            }
+        }
+        for (int i = 0; i < AIRPLANE_MILL.list.size(); i++) {
+            if (AIRPLANE_MILL.list.get(i).building.isWorking()) {
                 notWorking.add(AIRPLANE_MILL.list.get(i));
             }
         }
@@ -837,23 +870,25 @@ public class BuildingsCollection {
 
     /**
      * 讓指定建築物停工
+     *
      * @param buildingNode 指定建築物
      */
-    public void setStop(BuildingNode buildingNode){
+    public void setStop(BuildingNode buildingNode) {
         buildingNode.building.setWorking(false);
     }
 
     /**
      * 讓指定建築物開始運作
+     *
      * @param buildingNode 指定開始運作
      */
-    public void setStart(BuildingNode buildingNode){
+    public void setStart(BuildingNode buildingNode) {
         buildingNode.building.setWorking(true);
+        //紀錄更新時間
         buildingNode.updateStartTime = City.getGameTime();
     }
 
     /**
-     *
      * @return
      */
     public boolean isRecentlyUpgradeTech() {
@@ -863,8 +898,32 @@ public class BuildingsCollection {
     public boolean isRecentlyUpgradeArmySoldier() {
         return isRecentlyUpgradeArmySoldier;
     }
+
     public boolean isRecentlyUpgradeAirForceSoldier() {
         return isRecentlyUpgradeAirForceSoldier;
     }
 
+    /**
+     * 是否正在升級士兵
+     * @return 是否正在升級士兵
+     */
+    public boolean isUpgradingSoldier() {
+        return isUpgradingSoldier;
+    }
+
+    /**
+     * 是否正在升級飛機
+     * @return 是否正在升級飛機
+     */
+    public boolean isUpgradingPlane() {
+        return isUpgradingPlane;
+    }
+
+    /**
+     * 是否正在升級科技
+     * @return 是否正在升級科技
+     */
+    public boolean isUpgradingTech() {
+        return isUpgradingTech;
+    }
 }
