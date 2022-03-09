@@ -52,5 +52,13 @@ public abstract class Human extends Creature {
     public boolean isSoldier(){
         return (this.type == HUMAN_TYPE.SOLDIER);
     }
+
+    public boolean isAlive(){
+        return (this.value>0);
+    }
+
+    public void getAttacked(int value){
+        this.setValue(this.getValue()-value);
+    }
 }
 

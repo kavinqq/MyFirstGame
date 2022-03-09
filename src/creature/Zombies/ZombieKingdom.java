@@ -78,19 +78,14 @@ public class ZombieKingdom {
             this.troopLevelUp();
         }
     }
-//    /**
-//     * 殭屍族群 map
-//     * @return 殭屍族群map
-//     */
-//    public Map<Zombie, Integer> getZombies() {
-//        return zombies;
-//    }
 
     public class ZombieTroop {
-        private int landAttack = 0;
-        private int airAttack = 0;
+        private int landAttack;
+        private int airAttack;
         public ZombieTroop(){
             int number;
+            this.landAttack = 0;
+            this.airAttack = 0;
             Zombie zombieGenre;
             for(Map.Entry<Zombie,Integer> entry: zombies.entrySet()){
                 zombieGenre = entry.getKey();
@@ -110,6 +105,10 @@ public class ZombieKingdom {
 
         public int getAirAttack(){
             return this.airAttack;
+        }
+
+        public boolean isStillAlive(){
+            return (this.airAttack>0||this.landAttack>0);
         }
     }
 
