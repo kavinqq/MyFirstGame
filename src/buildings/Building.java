@@ -219,41 +219,27 @@ public abstract class Building {
         return gasCostLevelUp;
     }
 
-    public boolean isEnoughProduction(){///是否已經拿取資源來生產
-        return ( (woodForProduction == woodGeted) &&
-                (steelForProduction == steelGeted) &&
-                ((gasForProduction == gasGeted)) );
+    /**
+     * 是否已經拿取資源來生產
+     * @param resource
+     * @return
+     */
+    public boolean isEnoughProduction(Resource resource){
+        return ( (woodForProduction <= resource.getTotalWood()) &&
+                (steelForProduction <= resource.getTotalSteel()) &&
+                ((gasForProduction <= resource.getTotalGas())) );
     }
 
     /**
      * 建築物生產
      * @param resource 建築的資源
-     * @return 是否有拿取資源
      */
-    public boolean takeResource(Resource resource){
-        if(     resource.canTakeWood(woodForProduction)&&
-                resource.canTakeSteel(steelForProduction) &&
-                resource.canTakeGas(gasForProduction) )
-        {
+    public void takeResource(Resource resource) {
             resource.takeWood(woodForProduction);
             resource.takeSteel(steelForProduction);
             resource.takeGas(gasForProduction);
-            woodGeted+=woodForProduction;
-            steelGeted+=steelForProduction;
-            gasGeted+=gasForProduction;
-            return true;
-        }
-        return false;
     }
 
-    public void consumeResource(){///生產完畢歸零
-        woodGeted = 0;
-        steelGeted = 0;
-        gasGeted = 0;
-    }
-    /**
-     * @return 是否已經準備好要升級
-     */
     public boolean isReadyToUpgrade(){
         return readyToUpgrade;
     }

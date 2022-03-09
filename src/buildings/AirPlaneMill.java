@@ -38,11 +38,8 @@ public class AirPlaneMill extends Building {
      * 生產的飛機數
      * @return 生產的飛機數(含升級)
      */
-    public int ProduceAirPlane(){
-        if(City.getGameTime()%3==0){
-            return getLevel();
-        }
-        return 0;
+    public int produceAirPlane(){
+        return getLevel()+1;
     }
 
     @Override

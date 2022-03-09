@@ -120,10 +120,6 @@ public class BuildingsCollection {
      */
     private int buildingNum;
 
-    private boolean isRecentlyUpgradeTech;
-    private boolean isRecentlyUpgradeArmySoldier;
-    private boolean isRecentlyUpgradeAirForceSoldier;
-
     public BuildingsCollection() {
 //        arsenalList = new LinkedList<>();
 //        barracksList = new LinkedList<>();
@@ -575,24 +571,20 @@ public class BuildingsCollection {
      *
      * @return 生成的人數
      */
-    public int getNewCitizenNum(Resource resource) {
+    public int getNewCitizenNum(Resource resource){
         int newPeopleCount = 0;
         for (BuildingNode buildingNode : HOUSE.list) {
             //如果建築在運作
             if (buildingNode.building.isWorking() && buildingNode.building instanceof House) {
-                //如果物資不夠自動生產
-                if (!enoughResourceProduce(resource,buildingNode)){
-                    buildingNode.building.setWorking(false); //將建築關閉
-                    continue;
-                }
-                alreadyTakeResource(resource,
-                        buildingNode.building.getWoodForProduction(),
-                        buildingNode.building.getSteelForProduction(),
-                        buildingNode.building.getGasForProduction());
-                //當前時間-建造完成時間，若為24的倍數，產生市民
-                if ((City.getGameTime() - buildingNode.buildEndTime) % 24 == 0) {
+                if ((City.getGameTime() - buildingNode.updateStartTime) % 24 == 0) {
                     House house = (House) buildingNode.building;
                     newPeopleCount += house.produceCitizen();
+                    if (!buildingNode.building.isEnoughProduction(resource)) {
+                        buildingNode.building.setWorking(false); //將建築關閉
+                    } else {
+                        buildingNode.updateStartTime = City.getGameTime();
+                        buildingNode.building.takeResource(resource);
+                    }
                 }
             }
         }
@@ -607,20 +599,17 @@ public class BuildingsCollection {
     public int getNewArmyNum(Resource resource) {
         int newSoldierCount = 0;
         for (BuildingNode buildingNode : BARRACKS.list) {
-            if (buildingNode.building.isWorking() && buildingNode.building instanceof Barracks) {
-                //如果物資不夠自動生產
-                if (!enoughResourceProduce(resource,buildingNode)){
-                    buildingNode.building.setWorking(false); //將建築關閉
-                    continue;
-                }
-                alreadyTakeResource(resource,
-                        buildingNode.building.getWoodForProduction(),
-                        buildingNode.building.getSteelForProduction(),
-                        buildingNode.building.getGasForProduction());
-                //當前時間-建造完成時間，若為3的倍數，產生士兵
-                if ((City.getGameTime() - buildingNode.buildEndTime) % 3 == 0) {
+            //如果建築在運作
+            if (buildingNode.building.isWorking() && buildingNode.building instanceof House) {
+                if ((City.getGameTime() - buildingNode.updateStartTime) % 3 == 0) {
                     Barracks barracks = (Barracks) buildingNode.building;
                     newSoldierCount += barracks.produceSoldier();
+                    if (!buildingNode.building.isEnoughProduction(resource)) {
+                        buildingNode.building.setWorking(false); //將建築關閉
+                    } else {
+                        buildingNode.updateStartTime = City.getGameTime();
+                        buildingNode.building.takeResource(resource);
+                    }
                 }
             }
         }
@@ -635,20 +624,17 @@ public class BuildingsCollection {
     public int getNewPlaneNum(Resource resource) {
         int newPlaneCount = 0;
         for (BuildingNode buildingNode : AIRPLANE_MILL.list) {
-            if (buildingNode.building.isWorking() && buildingNode.building instanceof AirPlaneMill) {
-                //如果物資不夠自動生產
-                if (!enoughResourceProduce(resource,buildingNode)){
-                    buildingNode.building.setWorking(false); //將建築關閉
-                    continue;
-                }
-                alreadyTakeResource(resource,
-                        buildingNode.building.getWoodForProduction(),
-                        buildingNode.building.getSteelForProduction(),
-                        buildingNode.building.getGasForProduction());
-                //當前時間-建造完成時間，若為3的倍數，產生士兵
-                if ((City.getGameTime() - buildingNode.buildEndTime) % 3 == 0) {
-                    Barracks barracks = (Barracks) buildingNode.building;
-                    newPlaneCount += barracks.produceSoldier();
+            //如果建築在運作
+            if (buildingNode.building.isWorking() && buildingNode.building instanceof House) {
+                if ((City.getGameTime() - buildingNode.updateStartTime) % 3 == 0) {
+                    AirPlaneMill airPlaneMill = (AirPlaneMill) buildingNode.building;
+                    newPlaneCount += airPlaneMill.produceAirPlane();
+                    if (!buildingNode.building.isEnoughProduction(resource)) {
+                        buildingNode.building.setWorking(false); //將建築關閉
+                    } else {
+                        buildingNode.updateStartTime = City.getGameTime();
+                        buildingNode.building.takeResource(resource);
+                    }
                 }
             }
         }
@@ -863,15 +849,13 @@ public class BuildingsCollection {
      */
     public void setStart(BuildingNode buildingNode){
         buildingNode.building.setWorking(true);
+        buildingNode.updateStartTime = City.getGameTime();
     }
 
-<<<<<<< HEAD
-=======
     /**
      *
      * @return
      */
->>>>>>> 5c023a454c816c8f3ebaadae85cb92313b45e396
     public boolean isRecentlyUpgradeTech() {
         return isRecentlyUpgradeTech;
     }
@@ -879,15 +863,8 @@ public class BuildingsCollection {
     public boolean isRecentlyUpgradeArmySoldier() {
         return isRecentlyUpgradeArmySoldier;
     }
-<<<<<<< HEAD
-=======
-
     public boolean isRecentlyUpgradeAirForceSoldier() {
         return isRecentlyUpgradeAirForceSoldier;
     }
->>>>>>> 5c023a454c816c8f3ebaadae85cb92313b45e396
 
-    public boolean isRecentlyUpgradeAirForceSoldier() {
-        return isRecentlyUpgradeAirForceSoldier;
-    }
 }

@@ -31,10 +31,8 @@ public class Barracks extends Building {
      * @return 增加的士兵數
      */
     public int produceSoldier(){
-        if(City.getGameTime()%3==0){
-            return getLevel()*3;
-        }
-        return 0;
+        return getLevel()*2-1;
+
     }
     @Override
     public String toString() {
