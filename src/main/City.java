@@ -3,11 +3,11 @@ package main;
 import buildings.*;
 import creature.human.*;
 import creature.Zombies.*;
-import main.BuildingsCollection.*;
+import main.BuildingSystem.*;
 
 import java.util.ArrayList;
 
-import static main.BuildingsCollection.BuildingType.*;
+import static main.BuildingSystem.BuildingType.*;
 
 public class City {
     /**
@@ -23,7 +23,7 @@ public class City {
     /**
      * 遊戲的建築物
      */
-    private BuildingsCollection buildings;
+    private BuildingSystem buildings;
     private int buildingCount;
     // 目前已建造的研究所的數量
     private int numOfLab;
@@ -93,7 +93,7 @@ public class City {
         woodMan = 0;
         steelMan = 0;
         resource = new Resource();
-        buildings = new BuildingsCollection();
+        buildings = new BuildingSystem();
         zombies = new ZombieKingdom();
         /*
           用來所有士兵new出來 放在 人類的ArrayList
@@ -369,12 +369,12 @@ public class City {
     }
 
     /**
-     * 判斷該類建築的鏈表中可以升級的建築數量==0? ==0代表不能升級
+     * 判斷該類建築的鏈表中有沒有可以升級的建築數量，沒有代表不能升級
      *
      * @param type 建築物類型
      * @return 可否升級
      */
-    public boolean canUpgradeBuilding(BuildingsCollection.BuildingType type) {
+    public boolean canUpgradeBuilding(BuildingSystem.BuildingType type) {
         return buildings.getCanUpgradeNum(type, resource) != 0;
     }
 

@@ -5,14 +5,12 @@ import buildings.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import static main.BuildingsCollection.BuildingType.*;
+import static main.BuildingSystem.BuildingType.*;
 
 /**
- * @author Lillian
- * @Date 2022/3/3
- * @Description
+ * 城市中的建築運作系統
  */
-public class BuildingsCollection {
+public class BuildingSystem {
 
     /**
      * 飛機升級時間
@@ -52,6 +50,9 @@ public class BuildingsCollection {
      */
     private boolean isUpgradingTech;
 
+    /**
+     * 建築的種類和實體與儲存鏈表
+     */
     public enum BuildingType {
         ARSENAL(new Arsenal(), new LinkedList<>()),
         BARRACKS(new Barracks(), new LinkedList<>()),
@@ -89,7 +90,13 @@ public class BuildingsCollection {
         }
     }
 
+    /**
+     * 儲存各個建築的建造/升級時間
+     */
     public class BuildingNode {
+        /**
+         * 建築本身
+         */
         private Building building;
         /**
          * 建造開始的時間
@@ -112,13 +119,12 @@ public class BuildingsCollection {
          */
         int updateStartTime;
 
-
         public BuildingNode(Building building) {
             this.building = building;
         }
 
         /**
-         * 建造完成的時間
+         * 取得建造完成的時間
          *
          * @return 建造完成的時間
          */
@@ -126,6 +132,11 @@ public class BuildingsCollection {
             return buildEndTime;
         }
 
+        /**
+         * 取得這間建築
+         *
+         * @return 建築實體
+         */
         public Building getBuilding() {
             return building;
         }
@@ -156,7 +167,7 @@ public class BuildingsCollection {
      */
     private int buildingNum;
 
-    public BuildingsCollection() {
+    public BuildingSystem() {
         techLevelStartUpgradeTime = 0;
         buildingNum = 0;
         isUpgradingSoldier = false;
@@ -217,6 +228,7 @@ public class BuildingsCollection {
         newBuilding.building.setUpgrading(true);
         //設置為不可升級狀態
         newBuilding.building.setReadyToUpgrade(false);
+        //添加進該分類的鏈表中
         type.list.add(newBuilding);
     }
 
@@ -281,22 +293,8 @@ public class BuildingsCollection {
      * @param type
      */
     public boolean canBuild(BuildingType type, Resource resource) {
-        switch (type) {
-            case ARSENAL: {
-                if (City.getTechLevel() < ARSENAL.instance.getTechLevelNeedBuild()) {
-                    return false;
-                }
-            }
-            case GAS_MILL: {
-                if (City.getTechLevel() < GAS_MILL.instance.getTechLevelNeedBuild()) {
-                    return false;
-                }
-            }
-            case AIRPLANE_MILL: {
-                if (City.getTechLevel() < AIRPLANE_MILL.instance.getTechLevelNeedBuild()) {
-                    return false;
-                }
-            }
+        if (City.getTechLevel() < type.instance.getTechLevelNeedBuild()) {
+            return false;
         }
         return type.instance.isEnoughBuild(resource);
     }
@@ -352,10 +350,11 @@ public class BuildingsCollection {
         if (type != ARSENAL && freeLabNum == 0) {
             return null;
         }
-        //若選擇升級建築，但沒有閒置的研究所
+        //若選擇升級武力，但沒有閒置的兵工廠
         if (type == ARSENAL && freeArsenalNum == 0) {
             return null;
         }
+
         ArrayList<BuildingNode> canUpgrade = new ArrayList<>(); //回傳可以升級的鏈表
         //若選擇研究所或兵工廠，沒有實際建築物可以升級，直接回傳
         if (type == LAB || type == ARSENAL) {
@@ -495,16 +494,6 @@ public class BuildingsCollection {
                     return 0;
                 }
             }
-            case BARRACKS: {
-                if (City.getTechLevel() < BARRACKS.instance.getTechLevelNeedBuild()) {
-                    return 0;
-                }
-            }
-            case HOUSE: {
-                if (City.getTechLevel() < HOUSE.instance.getTechLevelNeedBuild()) {
-                    return 0;
-                }
-            }
             //研究所直接升級科技等級
             case LAB: {
                 if (freeLabNum != 0) {
@@ -513,26 +502,9 @@ public class BuildingsCollection {
                     return 0;
                 }
             }
-            case SAW_MILL: {
-                if (City.getTechLevel() < SAW_MILL.instance.getTechLevelNeedBuild()) {
-                    return 0;
-                }
-            }
-            case STEEL_MILL: {
-                if (City.getTechLevel() < STEEL_MILL.instance.getTechLevelNeedBuild()) {
-                    return 0;
-                }
-            }
-            case GAS_MILL: {
-                if (City.getTechLevel() < GAS_MILL.instance.getTechLevelNeedBuild()) {
-                    return 0;
-                }
-            }
-            case AIRPLANE_MILL: {
-                if (City.getTechLevel() < AIRPLANE_MILL.instance.getTechLevelNeedBuild()) {
-                    return 0;
-                }
-            }
+        }
+        if(City.getTechLevel()<type.instance.getTechLevelNeedUpgrade()){
+            return 0;
         }
         int sum = 0;
         for (BuildingNode node : type.list) {
@@ -569,7 +541,7 @@ public class BuildingsCollection {
     public void upgradeSoldier() {
         soldierLevelStartUpgradeTime = City.getGameTime();
         freeArsenalNum--;
-        isUpgradingSoldier=true;
+        isUpgradingSoldier = true;
     }
 
     /**
@@ -905,6 +877,7 @@ public class BuildingsCollection {
 
     /**
      * 是否正在升級士兵
+     *
      * @return 是否正在升級士兵
      */
     public boolean isUpgradingSoldier() {
@@ -913,6 +886,7 @@ public class BuildingsCollection {
 
     /**
      * 是否正在升級飛機
+     *
      * @return 是否正在升級飛機
      */
     public boolean isUpgradingPlane() {
@@ -921,6 +895,7 @@ public class BuildingsCollection {
 
     /**
      * 是否正在升級科技
+     *
      * @return 是否正在升級科技
      */
     public boolean isUpgradingTech() {

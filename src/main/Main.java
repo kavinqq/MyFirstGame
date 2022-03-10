@@ -4,10 +4,10 @@ import buildings.Building;
 
 import java.util.*;
 
-import static main.BuildingsCollection.*;
-import static main.BuildingsCollection.BuildingType.*;
+import static main.BuildingSystem.*;
+import static main.BuildingSystem.BuildingType.*;
 
-import main.BuildingsCollection.BuildingNode;
+import main.BuildingSystem.BuildingNode;
 
 public class Main {
 
