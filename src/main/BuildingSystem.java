@@ -222,7 +222,7 @@ public class BuildingSystem {
                 newBuilding = new BuildingNode(new AirPlaneMill());
                 break;
             }
-            default:{
+            default: {
                 newBuilding = new BuildingNode(new House());
             }
         }
@@ -246,42 +246,42 @@ public class BuildingSystem {
      * 所有建造完成的建築開始運作
      */
     public void showBuildCompleted() {
-        if(setBuildingStartWorkAndGetSum(HOUSE.list)!=0) {
+        if (setBuildingStartWorkAndGetSum(HOUSE.list) != 0) {
             System.out.printf("房屋 %d間完成建造\n",
                     setBuildingStartWorkAndGetSum(HOUSE.list));
         }
 
-        if(setBuildingStartWorkAndGetSum(LAB.list)!=0) {
+        if (setBuildingStartWorkAndGetSum(LAB.list) != 0) {
             System.out.printf("研究所 %d間完成建造\n",
                     setBuildingStartWorkAndGetSum(LAB.list));
         }
 
-        if(setBuildingStartWorkAndGetSum(BARRACKS.list)!=0) {
+        if (setBuildingStartWorkAndGetSum(BARRACKS.list) != 0) {
             System.out.printf("軍營 %d間完成建造\n",
                     setBuildingStartWorkAndGetSum(BARRACKS.list));
         }
 
-        if(setBuildingStartWorkAndGetSum(SAW_MILL.list)!=0) {
+        if (setBuildingStartWorkAndGetSum(SAW_MILL.list) != 0) {
             System.out.printf("伐木場 %d間完成建造\n",
                     setBuildingStartWorkAndGetSum(SAW_MILL.list));
         }
 
-        if(setBuildingStartWorkAndGetSum(STEEL_MILL.list)!=0){
+        if (setBuildingStartWorkAndGetSum(STEEL_MILL.list) != 0) {
             System.out.printf("煉鋼廠 %d間完成建造\n",
                     setBuildingStartWorkAndGetSum(STEEL_MILL.list));
         }
 
-        if(setBuildingStartWorkAndGetSum(ARSENAL.list)!=0){
+        if (setBuildingStartWorkAndGetSum(ARSENAL.list) != 0) {
             System.out.printf("兵工廠 %d間完成建造\n",
                     setBuildingStartWorkAndGetSum(ARSENAL.list));
         }
 
-        if(setBuildingStartWorkAndGetSum(GAS_MILL.list)!=0){
+        if (setBuildingStartWorkAndGetSum(GAS_MILL.list) != 0) {
             System.out.printf("瓦斯廠 %d間完成建造\n",
                     setBuildingStartWorkAndGetSum(GAS_MILL.list));
         }
 
-        if(setBuildingStartWorkAndGetSum(AIRPLANE_MILL.list)!=0) {
+        if (setBuildingStartWorkAndGetSum(AIRPLANE_MILL.list) != 0) {
             System.out.printf("飛機工廠 %d間完成建造\n",
                     setBuildingStartWorkAndGetSum(AIRPLANE_MILL.list));
         }
@@ -308,6 +308,9 @@ public class BuildingSystem {
                 if (node.building instanceof Lab) {
                     freeLabNum++;
                 }
+                if ((node.building instanceof Arsenal)) {
+                    freeArsenalNum++;
+                }
             }
         }
         return sum;
@@ -327,39 +330,72 @@ public class BuildingSystem {
 
     /**
      * 顯示每種建築物可以升級的數量
+     *
+     * @param resource 城市資源
      */
     public void showCanUpgradeBuildingNum(Resource resource) {
         //若沒有研究所不可以升級
         if (freeLabNum == 0) {
             System.out.println("沒有研究所可以升級建築");
         } else {
-            System.out.printf("%d.房屋：%d間可升級\n",
+            System.out.printf("%d.房屋：%d間可升級，資源需求：木材:%d, 鋼鐵:%d, 瓦斯:%d，科技等級需求：%d\n",
                     HOUSE.instance.getId(),
-                    getCanUpgradeNum(HOUSE, resource));
+                    getCanUpgradeNum(HOUSE, resource),
+                    HOUSE.instance.getWoodCostLevelUp(),
+                    HOUSE.instance.getSteelCostLevelUp(),
+                    HOUSE.instance.getGasCostLevelUp(),
+                    HOUSE.instance.getTechLevelNeedUpgrade());
 
-            System.out.printf("%d.科技等級可升級", LAB.instance.getId());
+            System.out.printf("%d.科技等級可升級，資源需求：木材:%d, 鋼鐵:%d, 瓦斯:%d\n",
+                    LAB.instance.getId(),
+                    LAB.instance.getWoodCostLevelUp(),
+                    LAB.instance.getSteelCostLevelUp(),
+                    LAB.instance.getGasCostLevelUp());
 
-            System.out.printf("%d.軍營：%d間可升級\n",
+            System.out.printf("%d.軍營：%d間可升級，資源需求：木材:%d, 鋼鐵:%d, 瓦斯:%d，科技等級需求：%d\n",
                     BARRACKS.instance.getId(),
-                    getCanUpgradeNum(BARRACKS, resource));
-            System.out.printf("%d.伐木場：%d間可升級\n",
+                    getCanUpgradeNum(BARRACKS, resource),
+                    BARRACKS.instance.getWoodCostLevelUp(),
+                    BARRACKS.instance.getSteelCostLevelUp(),
+                    BARRACKS.instance.getGasCostLevelUp(),
+                    BARRACKS.instance.getTechLevelNeedUpgrade());
+            System.out.printf("%d.伐木場：%d間可升級，資源需求：木材:%d, 鋼鐵:%d, 瓦斯:%d，科技等級需求：%d\n",
                     SAW_MILL.instance.getId(),
-                    getCanUpgradeNum(SAW_MILL, resource));
-            System.out.printf("%d.煉鋼廠：%d間可升級\n",
+                    getCanUpgradeNum(SAW_MILL, resource),
+                    SAW_MILL.instance.getWoodCostLevelUp(),
+                    SAW_MILL.instance.getSteelCostLevelUp(),
+                    SAW_MILL.instance.getGasCostLevelUp(),
+                    SAW_MILL.instance.getTechLevelNeedUpgrade());
+            System.out.printf("%d.煉鋼廠：%d間可升級，資源需求：木材:%d, 鋼鐵:%d, 瓦斯:%d，科技等級需求：%d\n",
                     STEEL_MILL.instance.getId(),
-                    getCanUpgradeNum(STEEL_MILL, resource));
-
-            System.out.printf("%d.瓦斯場：%d間可升級\n",
+                    getCanUpgradeNum(STEEL_MILL, resource),
+                    STEEL_MILL.instance.getWoodCostLevelUp(),
+                    STEEL_MILL.instance.getSteelCostLevelUp(),
+                    STEEL_MILL.instance.getGasCostLevelUp(),
+                    STEEL_MILL.instance.getTechLevelNeedUpgrade());
+            System.out.printf("%d.瓦斯廠：%d間可升級，資源需求：木材:%d, 鋼鐵:%d, 瓦斯:%d，科技等級需求：%d\n",
                     GAS_MILL.instance.getId(),
-                    getCanUpgradeNum(GAS_MILL, resource));
-            System.out.printf("%d.飛機工廠：%d可升級\n",
+                    getCanUpgradeNum(GAS_MILL, resource),
+                    GAS_MILL.instance.getWoodCostLevelUp(),
+                    GAS_MILL.instance.getSteelCostLevelUp(),
+                    GAS_MILL.instance.getGasCostLevelUp(),
+                    GAS_MILL.instance.getTechLevelNeedUpgrade());
+            System.out.printf("%d.飛機工廠：%d間可升級，資源需求：木材:%d, 鋼鐵:%d, 瓦斯:%d，科技等級需求：%d\n",
                     AIRPLANE_MILL.instance.getId(),
-                    getCanUpgradeNum(AIRPLANE_MILL, resource));
+                    getCanUpgradeNum(AIRPLANE_MILL, resource),
+                    AIRPLANE_MILL.instance.getWoodCostLevelUp(),
+                    AIRPLANE_MILL.instance.getSteelCostLevelUp(),
+                    AIRPLANE_MILL.instance.getGasCostLevelUp(),
+                    AIRPLANE_MILL.instance.getTechLevelNeedUpgrade());
         }
         if (freeArsenalNum == 0) {
             System.out.println("沒有兵工廠可以升級士兵/飛機");
         } else {
-            System.out.printf("%d.士兵/飛機等級可升級", LAB.instance.getId());
+            System.out.printf("%d.士兵/飛機等級可升級，資源需求：木材:%d, 鋼鐵:%d, 瓦斯:%d\n",
+                    ARSENAL.instance.getId(),
+                    ARSENAL.instance.getWoodCostLevelUp(),
+                    ARSENAL.instance.getSteelCostLevelUp(),
+                    ARSENAL.instance.getGasCostLevelUp());
         }
     }
 
@@ -433,10 +469,10 @@ public class BuildingSystem {
         //升級完成
         showUpgradeCompleted();
         //科技等級升級
-        if (City.getGameTime() - techLevelStartUpgradeTime - TECH_LEVEL_UPGRADE_TIME == 0) {
-            if(LAB.instance instanceof Lab){
-                Lab lab= (Lab) LAB.instance;
-                lab.levelUpTechResource(lab.getLevel()+1);
+        if (isUpgradingTech && City.getGameTime() - techLevelStartUpgradeTime - TECH_LEVEL_UPGRADE_TIME == 0) {
+            if (LAB.instance instanceof Lab) {
+                Lab lab = (Lab) LAB.instance;
+                lab.levelUpTechResource(lab.getLevel() + 1);
             }
             isRecentlyUpgradeTech = true;
             City.addTechLevel();
@@ -444,12 +480,12 @@ public class BuildingSystem {
             isUpgradingTech = false;
         }
         //士兵等級升級
-        if (City.getGameTime() - soldierLevelStartUpgradeTime - SOLDIER_LEVEL_UPGRADE_TIME == 0) {
+        if (isUpgradingSoldier && City.getGameTime() - soldierLevelStartUpgradeTime - SOLDIER_LEVEL_UPGRADE_TIME == 0) {
             freeArsenalNum++;
             isUpgradingSoldier = false;
         }
         //飛機等級升級
-        if (City.getGameTime() - planeLevelStartUpgradeTime - PLANE_LEVEL_UPGRADE_TIME == 0) {
+        if (isUpgradingPlane && City.getGameTime() - planeLevelStartUpgradeTime - PLANE_LEVEL_UPGRADE_TIME == 0) {
             freeArsenalNum++;
             isUpgradingPlane = false;
         }
@@ -459,29 +495,45 @@ public class BuildingSystem {
      * 所有完成升級的建築升級
      */
     public void showUpgradeCompleted() {
-        System.out.printf("房屋 %d間完成升級",
-                finishUpgradeBuilding(HOUSE.list));
+        if (finishUpgradeBuilding(HOUSE.list) != 0) {
+            System.out.printf("房屋 %d間完成升級\n",
+                    finishUpgradeBuilding(HOUSE.list));
+        }
 
-        System.out.printf("研究所 %d間完成升級",
-                finishUpgradeBuilding(LAB.list));
+        if (finishUpgradeBuilding(LAB.list) != 0) {
+            System.out.printf("研究所 %d間完成升級\n",
+                    finishUpgradeBuilding(LAB.list));
+        }
 
-        System.out.printf("軍營 %d間完成升級",
-                finishUpgradeBuilding(BARRACKS.list));
+        if (finishUpgradeBuilding(BARRACKS.list) != 0) {
+            System.out.printf("軍營 %d間完成升級\n",
+                    finishUpgradeBuilding(BARRACKS.list));
+        }
 
-        System.out.printf("伐木場 %d間完成升級",
-                finishUpgradeBuilding(SAW_MILL.list));
+        if (finishUpgradeBuilding(SAW_MILL.list) != 0) {
+            System.out.printf("伐木場 %d間完成升級\n",
+                    finishUpgradeBuilding(SAW_MILL.list));
+        }
 
-        System.out.printf("煉鋼廠 %d間完成升級",
-                finishUpgradeBuilding(STEEL_MILL.list));
+        if (finishUpgradeBuilding(STEEL_MILL.list) != 0) {
+            System.out.printf("煉鋼廠 %d間完成升級\n",
+                    finishUpgradeBuilding(STEEL_MILL.list));
+        }
 
-        System.out.printf("兵工廠 %d間完成升級",
-                finishUpgradeBuilding(ARSENAL.list));
+        if (finishUpgradeBuilding(ARSENAL.list) != 0) {
+            System.out.printf("兵工廠 %d間完成升級\n",
+                    finishUpgradeBuilding(ARSENAL.list));
+        }
 
-        System.out.printf("瓦斯廠 %d間完成升級",
-                finishUpgradeBuilding(GAS_MILL.list));
+        if (finishUpgradeBuilding(GAS_MILL.list) != 0) {
+            System.out.printf("瓦斯廠 %d間完成升級\n",
+                    finishUpgradeBuilding(GAS_MILL.list));
+        }
 
-        System.out.printf("飛機工廠 %d間完成升級",
-                finishUpgradeBuilding(AIRPLANE_MILL.list));
+        if (finishUpgradeBuilding(AIRPLANE_MILL.list) != 0) {
+            System.out.printf("飛機工廠 %d間完成升級\n",
+                    finishUpgradeBuilding(AIRPLANE_MILL.list));
+        }
     }
 
     /**
@@ -531,7 +583,7 @@ public class BuildingSystem {
                 }
             }
         }
-        if(City.getTechLevel()<type.instance.getTechLevelNeedUpgrade()){
+        if (City.getTechLevel() < type.instance.getTechLevelNeedUpgrade()) {
             return 0;
         }
         int sum = 0;
@@ -714,44 +766,54 @@ public class BuildingSystem {
      *
      * @return 建築資訊文字
      */
-    public String getCurrentInformation() {
+    public String showInfo() {
         StringBuilder info = new StringBuilder();
 
-        info.append("房屋：").append("\t"+countBuildingNum(HOUSE.list)).append("間\n");
-        info.append("研究所：").append("\t"+countBuildingNum(LAB.list)).append("間\n");
-        info.append("兵營：").append("\t"+countBuildingNum(BARRACKS.list)).append("間\n");
-        info.append("兵工廠：").append("\t"+countBuildingNum(ARSENAL.list)).append("間\n");
-        info.append("伐木場：").append("\t"+countBuildingNum(SAW_MILL.list)).append("間\n");
-        info.append("煉鋼廠：").append("\t"+countBuildingNum(STEEL_MILL.list)).append("間\n");
-        info.append("瓦斯廠：").append("\t"+countBuildingNum(GAS_MILL.list)).append("間\n");
-        info.append("飛機工廠：").append(""+countBuildingNum(AIRPLANE_MILL.list)).append("間\n");
+        info.append("房屋：").append("\t" + countBuildingNum(HOUSE.list)).append("間\n");
+        info.append("研究所：").append("\t" + countBuildingNum(LAB.list)).append("間\n");
+        info.append("軍營：").append("\t" + countBuildingNum(BARRACKS.list)).append("間\n");
+        info.append("兵工廠：").append("\t" + countBuildingNum(ARSENAL.list)).append("間\n");
+        info.append("伐木場：").append("\t" + countBuildingNum(SAW_MILL.list)).append("間\n");
+        info.append("煉鋼廠：").append("\t" + countBuildingNum(STEEL_MILL.list)).append("間\n");
+        info.append("瓦斯廠：").append("\t" + countBuildingNum(GAS_MILL.list)).append("間\n");
+        info.append("飛機工廠：").append("" + countBuildingNum(AIRPLANE_MILL.list)).append("間\n");
 
         info.append("=====正在進行中的工程=====\n");
 
         int[] record = new int[3];
         countStatus(HOUSE.list, record);
-        info.append("房屋：").append("\t"+getStatusWord(record));
+        info.append("房屋：").append("\t" + getStatusWord(record));
 
         countStatus(LAB.list, record);
-        info.append("\n研究所：").append("\t"+getStatusWord(record));
+        info.append("\n研究所：").append("\t" + getStatusWord(record));
 
         countStatus(BARRACKS.list, record);
-        info.append("\n兵營：").append("\t"+getStatusWord(record));
+        info.append("\n軍營：").append("\t" + getStatusWord(record));
 
         countStatus(ARSENAL.list, record);
-        info.append("\n兵工廠：").append("\t"+getStatusWord(record));
+        info.append("\n兵工廠：").append("\t" + getStatusWord(record));
 
         countStatus(SAW_MILL.list, record);
-        info.append("\n伐木場：").append("\t"+getStatusWord(record));
+        info.append("\n伐木場：").append("\t" + getStatusWord(record));
 
         countStatus(STEEL_MILL.list, record);
-        info.append("\n煉鋼廠：").append("\t"+getStatusWord(record));
+        info.append("\n煉鋼廠：").append("\t" + getStatusWord(record));
 
         countStatus(GAS_MILL.list, record);
-        info.append("\n瓦斯廠：").append("\t"+getStatusWord(record));
+        info.append("\n瓦斯廠：").append("\t" + getStatusWord(record));
 
         countStatus(AIRPLANE_MILL.list, record);
-        info.append("\n飛機工廠：").append("\t"+getStatusWord(record));
+        info.append("\n飛機工廠：").append("\t" + getStatusWord(record));
+
+        if (isUpgradingTech) {
+            info.append("\n科技升級中，尚餘：").append(techLevelStartUpgradeTime + TECH_LEVEL_UPGRADE_TIME - City.getGameTime()).append("小時");
+        }
+        if (isUpgradingSoldier) {
+            info.append("\n士兵升級中，尚餘：").append(soldierLevelStartUpgradeTime + SOLDIER_LEVEL_UPGRADE_TIME - City.getGameTime()).append("小時");
+        }
+        if (isUpgradingPlane) {
+            info.append("\n飛機升級中，尚餘：").append(planeLevelStartUpgradeTime + PLANE_LEVEL_UPGRADE_TIME - City.getGameTime()).append("小時");
+        }
 
         return info.toString();
     }
@@ -763,7 +825,15 @@ public class BuildingSystem {
      * @return 文字敘述
      */
     private String getStatusWord(int[] record) {
-        return record[0] + "間 工作中 / " + record[1] + "間 建造中 / " + record[2] + "間 升級中";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(record[0]).append("間 工作中");
+        if (record[1] != 0) {
+            stringBuilder.append(" / ").append(record[1]).append("間 建造中");
+        }
+        if (record[2] != 0) {
+            stringBuilder.append(" / ").append(record[2]).append("間 升級中");
+        }
+        return stringBuilder.toString();
     }
 
     /**
@@ -789,6 +859,9 @@ public class BuildingSystem {
      * @param record 傳入陣列以獲取資料
      */
     private void countStatus(LinkedList<BuildingNode> list, int[] record) {
+        record[0] = 0;
+        record[1] = 0;
+        record[2] = 0;
         for (BuildingNode node : list) {
             if (node.building.isWorking()) {
                 record[0]++;
@@ -876,6 +949,12 @@ public class BuildingSystem {
      * @param buildingNode 指定建築物
      */
     public void setStop(BuildingNode buildingNode) {
+        if (buildingNode.building instanceof Lab) {
+            freeLabNum--;
+        }
+        if (buildingNode.building instanceof Arsenal) {
+            freeArsenalNum--;
+        }
         buildingNode.building.setWorking(false);
     }
 
@@ -885,6 +964,12 @@ public class BuildingSystem {
      * @param buildingNode 指定開始運作
      */
     public void setStart(BuildingNode buildingNode) {
+        if (buildingNode.building instanceof Lab) {
+            freeLabNum++;
+        }
+        if (buildingNode.building instanceof Arsenal) {
+            freeArsenalNum++;
+        }
         buildingNode.building.setWorking(true);
         //紀錄更新時間
         buildingNode.updateStartTime = City.getGameTime();
@@ -940,23 +1025,24 @@ public class BuildingSystem {
 
     /**
      * 建築受到傷害
+     *
      * @param damage 傷害值
      */
-    public void getDamage(int damage){
+    public void getDamage(int damage) {
         ArrayList<Building> hpZeroBuilding = new ArrayList<>();
 
         //走訪每個BuildingType
         for (int i = 0; i < values().length; i++) {
             BuildingType type = values()[i];
             //如果type的鏈表的size不為0，依序開始攻擊建築
-            if(type.list.size()!=0){
+            if (type.list.size() != 0) {
                 //走訪建築類別的鏈表
                 for (int k = 0; k < type.list.size(); k++) {
                     Building building = type.list.get(k).building;
                     //讓建築受到傷害
                     building.getDamage(damage);
                     //建築hp為0就從鏈表刪除
-                    if(building.getHp()<=0){
+                    if (building.getHp() <= 0) {
                         //將爆掉的建築進列表中紀錄
                         hpZeroBuilding.add(building);
                         type.list.remove(k--);
@@ -964,11 +1050,12 @@ public class BuildingSystem {
                 }
             }
         }
-        damageBuilding =  hpZeroBuilding;
+        damageBuilding = hpZeroBuilding;
     }
 
     /**
      * 被炸毀的建築總數字串
+     *
      * @return 各類建築被炸毀的總數字串
      */
     public String sumDamageBuilding() {
@@ -993,36 +1080,36 @@ public class BuildingSystem {
         StringBuilder builder = new StringBuilder();
         //轉成字串
         for (Map.Entry<BuildingType, Integer> entry : sum.entrySet()) {
-            switch (entry.getKey()){
-                case HOUSE:{
+            switch (entry.getKey()) {
+                case HOUSE: {
                     builder.append("房屋").append(entry.getValue()).append("爆掉了");
                     break;
                 }
-                case LAB:{
+                case LAB: {
                     builder.append("研究所").append(entry.getValue()).append("爆掉了");
                     break;
                 }
-                case BARRACKS:{
+                case BARRACKS: {
                     builder.append("軍營").append(entry.getValue()).append("爆掉了");
                     break;
                 }
-                case SAW_MILL:{
+                case SAW_MILL: {
                     builder.append("伐木廠").append(entry.getValue()).append("爆掉了");
                     break;
                 }
-                case STEEL_MILL:{
+                case STEEL_MILL: {
                     builder.append("煉鋼廠").append(entry.getValue()).append("爆掉了");
                     break;
                 }
-                case ARSENAL:{
+                case ARSENAL: {
                     builder.append("兵工廠").append(entry.getValue()).append("爆掉了");
                     break;
                 }
-                case GAS_MILL:{
+                case GAS_MILL: {
                     builder.append("瓦斯廠").append(entry.getValue()).append("爆掉了");
                     break;
                 }
-                case AIRPLANE_MILL:{
+                case AIRPLANE_MILL: {
                     builder.append("飛機工廠").append(entry.getValue()).append("爆掉了");
                     break;
                 }
@@ -1032,4 +1119,17 @@ public class BuildingSystem {
         return builder.toString();
     }
 
+    /**
+     * 沒有研究所
+     */
+    public boolean isNoLab() {
+        return freeLabNum == 0;
+    }
+
+    /**
+     * 沒有兵工廠
+     */
+    public boolean isNoArsenal() {
+        return freeArsenalNum == 0;
+    }
 }

@@ -39,11 +39,11 @@ public class GasMill extends Building{
 
     @Override
     public String toString(){
-        return "瓦斯場:每小時生產5瓦斯(每房屋等級+1)";
+        return "瓦斯廠:每小時生產5瓦斯(每房屋等級+1)";
     }
 
     public String buildingDetail(int level){
-        return String.format("每小時生產%d瓦斯",getLevel()+5);
+        return String.format("瓦斯廠：每小時生產%d瓦斯",getLevel()+5);
     }
 
 

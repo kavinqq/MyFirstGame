@@ -38,7 +38,7 @@ public class SteelMill extends Building {
     }
 
     public String buildingDetail(int level){
-        return "市民每小時鋼鐵採集量提升至" + (Resource.DEFAULT_STEEL_SPEED + 1 + super.getLevel()) + "單位鋼鐵";
+        return "煉鋼廠：市民每小時鋼鐵採集量提升至" + (Resource.DEFAULT_STEEL_SPEED + 1 + super.getLevel()) + "單位鋼鐵";
 
     }
 }

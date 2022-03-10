@@ -48,7 +48,9 @@ public class AirPlaneMill extends Building {
 
     @Override
     public String buildingDetail(int level){
-        return "每3小時花費" + super.getLevel() *5 + "瓦斯生產" + (super.getLevel()+1) + "台戰鬥機";
+        return "飛機工廠：每3小時花費" + super.getLevel() *5 + "瓦斯生產" + (super.getLevel()+1) + "台戰鬥機";
     }
+
+
 
 }

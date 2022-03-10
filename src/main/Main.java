@@ -60,7 +60,7 @@ public class Main {
          */
         do {
             thisRoundTimePass = 0;
-            option = inputInt("第" + (City.getGameTime() + 1) + "小時\n請選擇你要執行的指令:\n" +
+            option = inputInt("===================第" + (City.getGameTime() + 1) + "小時===================\n請選擇你要執行的指令:\n" +
                     "1.顯示資源\n" +
                     "2.木材指定幾人採\n" +
                     "3.鋼鐵指定幾人採\n" +
@@ -100,7 +100,6 @@ public class Main {
                 case BUILD: {
                     int choose = inputInt("1.建造 2.升級  (-1離開)\n", 1, 2);
                     System.out.println("科技等級：" + City.getTechLevel());
-                    System.out.println(city.getResource());
                     switch (choose) {
                         case BUILD_BUILD: {
                             //建造
@@ -115,6 +114,7 @@ public class Main {
                             //建造成功與否
                             if (city.canBuildBuilding(type)) {
                                 city.build(type);
+                                System.out.println(type.instance().getName() + "建造中");
                             } else {
                                 if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
                                     System.out.println("你的城市 經過多年風風雨雨 鐵與血的灌溉\n如今 從杳無人煙之地 成了 充斥著滿滿的高樓大廈 人車馬龍的繁華之地\n你的城市 已沒有地方可以建造新的建築了");
@@ -131,9 +131,12 @@ public class Main {
 
                         case BUILD_UPGRADE: {
                             //升級
-                            //show出可以升級的建築
+                            //show出可以升級的建築，且有可以升級的才執行選項
                             city.showCanUpgradeBuilding();
                             //選取要升級的種類
+                            if(city.isNoLab()&& city.isNoArsenal()){
+                                break;
+                            }
                             choose = inputInt("請選擇要升級的建築種類(-1離開)：", HOUSE.instance().getId(), AIRPLANE_MILL.instance().getId());
                             if (choose == LEAVE) {
                                 break;
@@ -151,6 +154,7 @@ public class Main {
                                                 System.out.println("科技已在升級中");
                                             } else {
                                                 city.upgradeTechLevel();
+                                                System.out.println("科技升級中");
                                             }
                                             break;
                                         }
@@ -162,6 +166,7 @@ public class Main {
                                                         System.out.println("士兵已在升級中");
                                                     } else {
                                                         city.upgradeSoldier();
+                                                        System.out.println("士兵升級中");
                                                     }
                                                     break;
                                                 }
@@ -170,6 +175,7 @@ public class Main {
                                                         System.out.println("飛機已在升級中");
                                                     } else {
                                                         city.upgradePlane();
+                                                        System.out.println("飛機升級中");
                                                     }
                                                     break;
                                                 }
@@ -182,6 +188,7 @@ public class Main {
                                                 break;
                                             }
                                             city.upgrade(canUpgradeTypeList.get(choose - 1));
+                                            System.out.println("安排升級中");
                                         }
                                     }
                                 }
@@ -205,10 +212,17 @@ public class Main {
                     break;
                 }
                 case SET_SWITCH: {
-                    int choose = inputInt("請選擇：1.開啟建築 2.關閉建築", 1, 2);
+                    int choose = inputInt("請選擇：1.開啟建築 2.關閉建築 -1返回", 1, 2);
+                    if(choose==LEAVE){
+                        break;
+                    }
                     switch (choose) {
                         case 1: {
                             ArrayList<BuildingNode> notWorkingBuildingList = city.getNotWorkingBuildingList();
+                            if (notWorkingBuildingList.isEmpty()) {
+                                System.out.println("沒有可以開啟的建築");
+                                break;
+                            }
                             System.out.println("目前停止運轉的建築：");
                             for (int i = 0; i < notWorkingBuildingList.size(); i++) {
                                 Building building = notWorkingBuildingList.get(i).getBuilding();
@@ -216,18 +230,23 @@ public class Main {
                             }
                             choose = inputInt("", 1, notWorkingBuildingList.size()) - 1;
                             city.setStart(notWorkingBuildingList.get(choose));
+                            System.out.println("開啟成功");
                             break;
                         }
                         case 2: {
                             ArrayList<BuildingNode> workingBuildingList = city.getWorkingBuildingList();
+                            if (workingBuildingList.isEmpty()) {
+                                System.out.println("沒有可以關閉的建築");
+                                break;
+                            }
                             System.out.println("目前可關閉的建築：");
                             for (int i = 0; i < workingBuildingList.size(); i++) {
                                 Building building = workingBuildingList.get(i).getBuilding();
                                 System.out.println((i + 1) + ". " + building.buildingDetail(building.getLevel()));
                             }
-
                             choose = inputInt("", 1, workingBuildingList.size()) - 1;
                             city.setStop(workingBuildingList.get(choose));
+                            System.out.println("關閉成功");
                             break;
                         }
                     }

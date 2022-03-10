@@ -311,24 +311,8 @@ public abstract class Building {
         return gasCostCreate;
     }
 
-    public void setCreateTime(int createTime) {
-        this.createTime = createTime;
-    }
-
-    public void setBuildStart(int buildStart) {
-        this.buildStart = buildStart;
-    }
-
-    public void setBuildTime(int buildTime) {
-        this.buildTime = buildTime;
-    }
-
     public int getUpgradeTime() {
         return upgradeTime;
-    }
-
-    public void setUpgradeTime(int upgradeTime) {
-        this.upgradeTime = upgradeTime;
     }
 
     public void setLevel(int level) {
@@ -337,10 +321,6 @@ public abstract class Building {
 
     public int getTechLevelNeedBuild() {
         return techLevelNeedBuild;
-    }
-
-    public void setTechLevelNeedBuild(int techLevelNeedBuild) {
-        this.techLevelNeedBuild = techLevelNeedBuild;
     }
 
     public int getTechLevelNeedUpgrade() {
@@ -357,14 +337,6 @@ public abstract class Building {
 
     public void setReadyToUpgrade(boolean readyToUpgrade) {
         this.readyToUpgrade = readyToUpgrade;
-    }
-
-    public void setWoodCostCreate(int woodCostCreate) {
-        this.woodCostCreate = woodCostCreate;
-    }
-
-    public void setSteelCostCreate(int steelCostCreate) {
-        this.steelCostCreate = steelCostCreate;
     }
 
     public boolean isUpgrading() {
@@ -404,4 +376,6 @@ public abstract class Building {
      * @return 建築的效果說明
      */
     public abstract String buildingDetail(int level);
+
+
 }
