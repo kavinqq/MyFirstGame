@@ -243,13 +243,6 @@ public class City {
     }
 
     /**
-     * 增加市民
-     */
-    public void addCitizen() {
-        citizens.add(new Citizen());
-    }
-
-    /**
      * 建築的建造與升級完成
      */
     private void finishBuildAndUpgrade() {
@@ -491,7 +484,7 @@ public class City {
     public void showInfo() {
         //所有資源的資訊
         System.out.printf("第%d小時\n目前總資源量如下:\n" +
-                "木材: %d , 鋼鐵: %d\n", getGameTime() + 1, resource.getTotalWood(), resource.getTotalSteel());
+                "木材: %d , 鋼鐵: %d\n, 瓦斯: %d\n", getGameTime() + 1, resource.getTotalWood(), resource.getTotalSteel(), resource.getTotalGas());
         //所有人力資源的資訊
         System.out.printf("目前人力資源如下:\n" +
                 "採木人: %d , 採鋼人: %d, 閒人: %d\n", woodMan, steelMan, freeCitizen);

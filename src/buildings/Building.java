@@ -66,11 +66,11 @@ public abstract class Building {
     /**
      * 升級需要木
      */
-    final int woodCostLevelUp;
+    private int woodCostLevelUp;
     /**
      * 升級需要鋼
      */
-    final int steelCostLevelUp;
+    private int steelCostLevelUp;
 
     /**
      * 建造需要瓦斯

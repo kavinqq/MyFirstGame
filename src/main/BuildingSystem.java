@@ -684,41 +684,41 @@ public class BuildingSystem {
     public String getCurrentInformation() {
         StringBuilder info = new StringBuilder();
 
-        info.append("房屋：").append(countBuildingNum(HOUSE.list)).append("間\n");
-        info.append("研究所：").append(countBuildingNum(LAB.list)).append("間\n");
-        info.append("兵營：").append(countBuildingNum(BARRACKS.list)).append("間\n");
-        info.append("兵工廠：").append(countBuildingNum(ARSENAL.list)).append("間\n");
-        info.append("伐木場：").append(countBuildingNum(SAW_MILL.list)).append("間\n");
-        info.append("煉鋼廠：").append(countBuildingNum(STEEL_MILL.list)).append("間\n");
-        info.append("瓦斯廠：").append(countBuildingNum(GAS_MILL.list)).append("間\n");
-        info.append("飛機工廠：").append(countBuildingNum(AIRPLANE_MILL.list)).append("間\n");
+        info.append("房屋：").append("\t"+countBuildingNum(HOUSE.list)).append("間\n");
+        info.append("研究所：").append("\t"+countBuildingNum(LAB.list)).append("間\n");
+        info.append("兵營：").append("\t"+countBuildingNum(BARRACKS.list)).append("間\n");
+        info.append("兵工廠：").append("\t"+countBuildingNum(ARSENAL.list)).append("間\n");
+        info.append("伐木場：").append("\t"+countBuildingNum(SAW_MILL.list)).append("間\n");
+        info.append("煉鋼廠：").append("\t"+countBuildingNum(STEEL_MILL.list)).append("間\n");
+        info.append("瓦斯廠：").append("\t"+countBuildingNum(GAS_MILL.list)).append("間\n");
+        info.append("飛機工廠：").append(""+countBuildingNum(AIRPLANE_MILL.list)).append("間\n");
 
         info.append("=====正在進行中的工程=====\n");
 
         int[] record = new int[3];
         countStatus(HOUSE.list, record);
-        info.append("房屋：").append(getStatusWord(record));
+        info.append("房屋：").append("\t"+getStatusWord(record));
 
         countStatus(LAB.list, record);
-        info.append("\n研究所：").append(getStatusWord(record));
+        info.append("\n研究所：").append("\t"+getStatusWord(record));
 
         countStatus(BARRACKS.list, record);
-        info.append("\n兵營：").append(getStatusWord(record));
+        info.append("\n兵營：").append("\t"+getStatusWord(record));
 
         countStatus(ARSENAL.list, record);
-        info.append("\n兵工廠：").append(getStatusWord(record));
+        info.append("\n兵工廠：").append("\t"+getStatusWord(record));
 
         countStatus(SAW_MILL.list, record);
-        info.append("\n伐木場：").append(getStatusWord(record));
+        info.append("\n伐木場：").append("\t"+getStatusWord(record));
 
         countStatus(STEEL_MILL.list, record);
-        info.append("\n煉鋼廠：").append(getStatusWord(record));
+        info.append("\n煉鋼廠：").append("\t"+getStatusWord(record));
 
         countStatus(GAS_MILL.list, record);
-        info.append("\n瓦斯廠：").append(getStatusWord(record));
+        info.append("\n瓦斯廠：").append("\t"+getStatusWord(record));
 
         countStatus(AIRPLANE_MILL.list, record);
-        info.append("\n飛機工廠：").append(getStatusWord(record));
+        info.append("\n飛機工廠：").append("\t"+getStatusWord(record));
 
         return info.toString();
     }

@@ -64,8 +64,8 @@ public class Main {
                     "1.顯示資源\n" +
                     "2.木材指定幾人採\n" +
                     "3.鋼鐵指定幾人採\n" +
-                    "4.建立/升級/查看建築/\n" +
-                    "5.開啟/關閉建築\n" +///
+                    "4.建立/升級\n" +
+                    "5.開啟/關閉建築\n" +
                     "6.時間過 1小時\n" +
                     "7.時間過12小時\n" +
                     "8.時間過24小時\n" +
@@ -98,7 +98,7 @@ public class Main {
 
                 }
                 case BUILD: {
-                    int choose = inputInt("1.建造 2.升級 (-1離開)\n", HOUSE.instance().getId(), AIRPLANE_MILL.instance().getId());
+                    int choose = inputInt("1.建造 2.升級  (-1離開)\n", 1, 2);
                     System.out.println("科技等級：" + City.getTechLevel());
                     System.out.println(city.getResource());
                     switch (choose) {
