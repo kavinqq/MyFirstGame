@@ -82,9 +82,9 @@ public abstract class Building {
     /**
      * 已經從City拿取的資源
      */
-    private int woodGeted;
-    private int steelGeted;
-    private int gasGeted;
+    private int woodGot;
+    private int steelGot;
+    private int gasGot;
 
     /**
      * 建構子
@@ -94,7 +94,7 @@ public abstract class Building {
      * @param upgradeTime 建築物升級時間
      * @param level 建築物等級 預設-1  建好 0 升級過 1~2,147,483,647
      * @param techLevelNeed 需要科技等級
-     * @param readyToUpgrade 建築物是否在建築，建築中 -> true
+     * @param isUpgrading 建築物是否在建築，建築中 -> true
      * @param hp 建築物血量
      * @param woodCostCreate 創建所需要的木頭量
      * @param steelCostCreate 創建所需要的鋼鐵量
@@ -105,7 +105,7 @@ public abstract class Building {
      * @param gasCostLevelUp 升級所需要的瓦斯量
      */
     public Building(int id, String name,int buildTime, int upgradeTime,
-                    int level, int techLevelNeed, boolean readyToUpgrade, int hp,
+                    int level, int techLevelNeed, boolean isUpgrading, int hp,
                     int woodCostCreate, int steelCostCreate, int woodCostLevelUp,
                     int steelCostLevelUp, boolean isWorking,
                     int gasCostCreate,int gasCostLevelUp){

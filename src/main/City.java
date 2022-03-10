@@ -4,9 +4,7 @@ import buildings.*;
 import creature.human.*;
 import creature.Zombies.*;
 import main.BuildingSystem.*;
-
 import java.util.ArrayList;
-
 import static main.BuildingSystem.BuildingType.*;
 
 public class City {
@@ -61,7 +59,7 @@ public class City {
      * 遊戲的人類單位 1.士兵 2.市民
      * 建立一Human的陣列 以存放人類
      */
-    static final ArrayList<Citizen> citizens = new ArrayList<>();
+    public static final ArrayList<Citizen> citizens = new ArrayList<>();
     public static final Military military = new Military();
 
     /**
@@ -162,9 +160,9 @@ public class City {
         }
         for (Human human : citizens) {
             // 如果他不是士兵 && 他是一個閒人 派遣工作
-            if (human.isCitizen()) {
+            if(human.isCitizen()){
                 Citizen citizen = (Citizen) human;
-                if (citizen.isFree()) {
+                if(citizen.isFree()){
                     if (isWorkedForWood) {
                         citizen.staratToLog();//把該人類物件 狀態 設定為 伐木
                         addWoodCitizen(1);//全部伐木人數 + 1
@@ -189,7 +187,6 @@ public class City {
 
     /**
      * 取得這一座程式的總資源
-     *
      * @return 目前程式的資源
      */
     public Resource getResource() {
@@ -217,13 +214,12 @@ public class City {
      */
     public void gainResource() {
         resource.addWood(buildings.getWoodSpeed() * woodMan);
-        resource.addSteel(buildings.getSteelSpeed() * steelMan);
+        resource.addSteel(buildings.getSteelSpeed()* steelMan);
         resource.addGas(buildings.getGasProduceNum());
     }
 
     /**
      * 生產市民
-     *
      * @return 生成數量
      */
     private int productCitizen() {
@@ -232,16 +228,14 @@ public class City {
 
     /**
      * 生產士兵
-     *
      * @return 生成數量
      */
     private int productSoldier() {
-        return buildings.getNewSoldierNum(resource);
+        return buildings.getNewArmyNum(resource);
     }
 
     /**
      * 生產飛機
-     *
      * @return 生成數量
      */
     private int productPlane() {
@@ -278,25 +272,25 @@ public class City {
      */
     public void doCityWorkAndTimePass(int thisRoundTimePass) {
         //把時間流動前做的指令 && 決定流動的時間跑完
-        for (int time = 0; time < thisRoundTimePass; time++) {
+       for(int time = 0; time<thisRoundTimePass; time++) {
             //遊戲時間 流動 1小時
             timePass();
             //生產 木&鋼
             gainResource();
             //建物.生成人()
             int numOfNewCitizens = buildings.getNewCitizenNum(resource);
-            if (numOfNewCitizens != 0) {
+            if(numOfNewCitizens!=0){
                 System.out.printf("第%d回合 有新市民出生,目前一共有%d個市民 ,閒置人數:%d\n", getGameTime() + 1, getTotalCitizen(), freeCitizen);
             }
-            int numOfNewArmySoldiers = buildings.getNewSoldierNum(resource);
-            if (numOfNewArmySoldiers != 0) {
+            int numOfNewArmySoldiers = buildings.getNewArmyNum(resource);
+            if(numOfNewArmySoldiers!=0){
                 this.military.addArmy(numOfNewArmySoldiers);
-                System.out.printf("第%d回合 有 %d 個新戰士出生,目前一共有%d個戰士\n", getGameTime() + 1, numOfNewArmySoldiers, getTotalSolider());
+                System.out.printf("第%d回合 有 %d 個新戰士出生,目前一共有%d個戰士\n", getGameTime() + 1, numOfNewArmySoldiers, military.getNumOfArmySoldier());
             }
             int numOfNewAirMen = buildings.getNewPlaneNum(resource);
-            if (numOfNewAirMen != 0) {
+            if(numOfNewAirMen!=0){
                 this.military.addArmy(numOfNewAirMen);
-                System.out.printf("第%d回合 有 %d 架新飛機產生,目前一共有%d個戰士\n", getGameTime() + 1, numOfNewAirMen, getTotalSolider());
+                System.out.printf("第%d回合 有 %d 架新飛機產生,目前一共有%d架飛機\n", getGameTime() + 1, numOfNewAirMen, military.getNumOfAirmen());
             }
             //完成建築的升級和建造，科技等級提升
             buildings.completeJob();
@@ -305,38 +299,37 @@ public class City {
             //???先update看大家Ｏ不ＯＫ
             zombies.timePass();
             //殭屍來襲時間( 每16小時來一次 )
-            if (zombies.isAttacking()) {
-                //用來 計算抵擋完殭屍後的人口狀況 和 算完後遊戲是否結束
-                this.fightZombies(this.zombies.getZombieTroop());
-                if (!this.isAlive()) {
-                    System.out.println("城鎮人口皆被消滅!");
-                    System.out.println("Game Over");
-                }
-            }
+           if(zombies.isAttacking()){
+               //用來 計算抵擋完殭屍後的人口狀況 和 算完後遊戲是否結束
+               this.fightZombies(this.zombies.getZombieTroop());
+               if (!this.isAlive()) {
+                   System.out.println("城鎮人口皆被消滅!");
+                   System.out.println("Game Over");
+               }
+           }
         }
     }
 
     /**
      * 顯示可以蓋的建築物
      */
-    public void showCanBuildBuilding() {
-        System.out.println(buildingSelectString(HOUSE.instance()) + "\n" +
-                buildingSelectString(LAB.instance()) + "\n" +
-                buildingSelectString(BARRACKS.instance()) + "\n" +
-                buildingSelectString(SAW_MILL.instance()) + "\n" +
-                buildingSelectString(STEEL_MILL.instance()) + "\n" +
-                buildingSelectString(ARSENAL.instance()) + "\n" +
-                buildingSelectString(GAS_MILL.instance()) + "\n" +
-                buildingSelectString(AIRPLANE_MILL.instance()));
+    public void showCanBuildBuilding(){
+        System.out.println(buildingSelectString(HOUSE.instance()));
+        System.out.println(buildingSelectString(LAB.instance()));
+        System.out.println(buildingSelectString(BARRACKS.instance()));
+        System.out.println(buildingSelectString(SAW_MILL.instance()));
+        System.out.println(buildingSelectString(STEEL_MILL.instance()));
+        System.out.println(buildingSelectString(ARSENAL.instance()));
+        System.out.println(buildingSelectString(GAS_MILL.instance()));
+        System.out.println(buildingSelectString(AIRPLANE_MILL.instance()));
     }
 
     /**
      * 建造需求字串
-     *
      * @param building 建築
      * @return 建造需求字串
      */
-    private String buildingSelectString(Building building) {
+    private String buildingSelectString(Building building){
         return (building.getId() + ". " + building +
                 "資源需求： " + building.getWoodCostCreate() + building.getSteelCostCreate() + building.getGasCostCreate() +
                 "科技等級需求： " + building.getTechLevelNeedBuild());
@@ -344,28 +337,26 @@ public class City {
 
     /**
      * 建築物可不可以建造
-     *
      * @param type 建築物類型
      * @return 可否建造
      */
-    public boolean canBuildBuilding(BuildingType type) {
-        return buildings.canBuild(type, resource);
+    public boolean canBuildBuilding(BuildingType type){
+        return buildings.canBuild(type,resource);
     }
 
     /**
      * 開始建造
-     *
      * @param type
      */
-    public void build(BuildingType type) {
-        buildings.build(type, resource);
+    public void build(BuildingType type){
+        buildings.build(type,resource);
     }
 
     /**
      * 顯示每種建築物可以升級的數量
      */
     public void showCanUpgradeBuilding() {
-        buildings.showCanUpgradeBuildingNum(resource);
+       buildings.showCanUpgradeBuildingNum(resource);
     }
 
     /**
@@ -374,29 +365,27 @@ public class City {
      * @param type 建築物類型
      * @return 可否升級
      */
-    public boolean canUpgradeBuilding(BuildingSystem.BuildingType type) {
+    public boolean canUpgradeBuilding(BuildingType type) {
         return buildings.getCanUpgradeNum(type, resource) != 0;
     }
 
     /**
      * 顯示該種類可以升級的建築細節
-     *
      * @param type 建築種類
      * @return 可以升級的建築陣列
      * 若選擇升級建築，但沒有閒置的研究所 -> null
      * 若選擇升級軍力，但沒有閒置的兵工廠 -> null
      */
-    public ArrayList<BuildingNode> showAndGetCanUpgradeTypeDetail(BuildingType type) {
+    public ArrayList<BuildingNode> showAndGetCanUpgradeTypeDetail(BuildingSystem.BuildingType type){
         return buildings.showAndGetCanUpgradeTypeDetail(type);
     }
 
     /**
      * 升級指定index的建築
-     *
      * @param node 指定建築
      */
-    public void upgrade(BuildingNode node) {
-        buildings.upgrade(node, resource);
+    public void upgrade(BuildingNode node){
+        buildings.upgrade(node,resource);
     }
 
     /**
@@ -410,7 +399,7 @@ public class City {
      * 升級士兵等級
      */
     public void upgradeSoldier() {
-        buildings.upgradeSoldier();
+       buildings.upgradeSoldier();
     }
 
     /**
@@ -431,106 +420,58 @@ public class City {
         int landAttack = zombieTroop.getLandAttack();
         int airAttack = zombieTroop.getAirAttack();
 
-        while (airAttack > 0) {
-            for (int i = 0; i < citizens.size(); i++) {
-                Human human = citizens.get(i);
 
-            }
-        }
-
-        int totalAttack = 0;
-        //首先計算 所有殭屍 攻擊力總和
-//        Zombie zombie;
-//        for (int i = 0; i < ZOMBIE_TYPE; i++) {
-//            zombie = zombies[i];
-//            if(zombie.isFlyable()){
-//                airAttack += zombie.getAttack();
-//            }
-//            else{
-//                landAttack += zombie.getAttack();
-//            }
-//            totalAttack += zombies[i].getAttack(getGameTime() / 16);
-//        }
-        //走訪 humans 陣列，找尋每一個士兵出來戰鬥
-        int totalHumans = citizens.size();
-        //由於目前humans 內有士兵以及市民  遇到市民跳過　→　index++  但若為士兵 他被消滅了  下一個human會補到原來位置上 因此不index++
-        int index = 0;
-        // 總共要跑 humans.size() 次
-        for (int i = index; i < totalHumans; i++) {
-            if (totalAttack > 0) {
-                if (citizens.get(index).isArmy()) {
-                    if (totalAttack >= citizens.get(index).getValue()) {  //判斷士兵是否還有身體沒被消滅
-                        totalAttack -= citizens.get(index).getValue(); //殭屍傷害扣掉士兵值
-                        citizens.remove(index);
-                    } else {
-                        totalAttack -= citizens.get(index).getValue(); //殭屍傷害扣掉士兵值
-                    }
-                } else {
-                    index++;
-                }
-            } else {
-                break;
-            }
-        }
-        // 用來記錄戰役結束後 士兵剩下人數
-        int soldierRemain = 0;
-        for (int i = 0; i < citizens.size(); i++) {
-            if (citizens.get(i).isArmy())
-                soldierRemain++;
-        }
-        //需要補上計算空軍的部分
-
-        // 殭屍還沒殺完
-        // 士兵全死
-        totalHumans = citizens.size();
-        if (totalAttack > 0) {
-            // 再次走訪 humans 陣列，找尋每一個市民
-            for (int i = 0; i < totalHumans; i++) {
-                // 殭屍攻擊力還有剩下
-                if (totalAttack > 0) {
-                    //殭屍攻擊力 - 市民攻擊力
-                    totalAttack = totalAttack - citizens.get(0).getValue(); //剩下都是市民 刪第0個就可以了
-                    //該格市民死亡移除他
-                    citizens.remove(0);
-                    /*
-                    1.由於ArrayList的remove() 是直接把該格移除，後面往前移動。
-                    2.所以如果直接一直往後刪除會造成跳號
-                        (remove(index0) 之後 後面會馬上往前移動一格 → index1 = index0 index2 = index1)。
-                        (在直接i++然後remove()， 會刪除到原本的index2)
-                    */
-                } else {
-                    break;
-                }
-            }
-            //由於市民要出來戰鬥，所以要更改所有市民工作計數 (伐木人 / 採鐵人)歸0
-            woodMan = 0;
-            steelMan = 0;
-            //走訪人類的 ArrayList
-            for (int i = 0; i < citizens.size(); i++) {
-                //遇到不是士兵的人(他是市民)
-                if (!citizens.get(i).getIsSoldier() && citizens.get(i).getState().equals("Free")) {
-                    //把他的狀態改成閒人
-                    citizens.get(i).setStateToFree();
-                    //閒人數量+1
-                    addFreeCitizen(1);
-                }
-            }
-            //如果這個時候閒人數量 >0
-            if (freeCitizen > 0) {
-                System.out.println("這裡是誰? 我是哪裡? \n市民受到驚嚇 都忘記自己要做甚麼了\n");
-            }
-        }
+       if(airAttack >= military.getAirForceValue()){
+           airAttack -= military.getAirForceValue();
+           military.getAirForceWipedOut();
+           Citizen citizen;
+           for(int i=0; airAttack>0 && i<citizens.size(); i++){
+               citizen = citizens.get(i);
+               if(airAttack>=citizen.getValue()){
+                   airAttack-=citizen.getValue();
+                   citizens.remove(i);
+                   i--;
+               }
+               else{
+                   citizen.getAttacked(airAttack);
+                   airAttack = 0;
+               }
+           }
+       }
+       else{
+           military.getAirForceHarmed(airAttack);
+       }
 
 
-        //還有人活著 遊戲繼續
-        if (citizens.size() != 0) {
-            //
-            if (soldierRemain > 0) {
-                System.out.println("不平靜的夜晚過去了\n你也活下來了\n");
-            } else {
-                System.out.println("不平靜的夜晚過去了\n你活了下來 但是\n戰士們為了拯救你 流光了鮮血\n");
-            }//全死 遊戲結束
-        } else {
+       if(landAttack >= military.getArmyValue()){
+           landAttack -= military.getArmyValue();
+           military.getArmyWipedOut();
+           Citizen citizen;
+           for(int i=0; airAttack>0 && i<citizens.size(); i++){
+               citizen = citizens.get(i);
+               if(airAttack>=citizen.getValue()){
+                   airAttack-=citizen.getValue();
+                   citizens.remove(i);
+                   i--;
+               }
+               else{
+                   citizen.getAttacked(airAttack);
+                   airAttack = 0;
+               }
+           }
+       }
+       else{
+           military.getArmyHarmed(landAttack);
+       }
+
+       if(citizens.size()>0){//還有人活著 遊戲繼續
+           if (military.isAllDied()) {
+               System.out.println("不平靜的夜晚過去了\n你活了下來 但是\n戰士們為了拯救你 流光了鮮血\n");
+           } else {
+               System.out.println("不平靜的夜晚過去了\n你也活下來了\n");
+           }
+       }
+        else {//全死 遊戲結束
             System.out.println("不平靜的夜晚終於過去了 但是你再也撐不住了\n");
         }
     }
@@ -547,7 +488,7 @@ public class City {
                 "採木人: %d , 採鋼人: %d, 閒人: %d\n", woodMan, steelMan, freeCitizen);
         //所有人民的資訊
         System.out.printf("目前士兵量如下:\n" +
-                "士兵: %d名, 市民: %d名\n", getTotalSolider(), getTotalCitizen());
+                "士兵: %d名, 飛機 %d架, 市民: %d名\n", military.getNumOfArmySoldier(), military.getNumOfAirmen(), getTotalCitizen());
         //顯示科技等級
         System.out.println("目前科技等級為:" + techLevel);
         //顯示下波攻擊倒數
@@ -567,40 +508,10 @@ public class City {
     /**
      * 科技等級提升
      */
-    public static void addTechLevel() {
+    public static void addTechLevel(){
         techLevel++;
     }
 
-    /**
-     * 士兵等級提升
-     */
-    public static void addSoldierLevel() {
-        soldierLevel++;
-    }
-
-    /**
-     * 飛機等級提升
-     */
-    public static void addPlaneLevel() {
-        planeLevel++;
-    }
-
-    /**
-     * 獲取目前士兵總數
-     *
-     * @return 目前士兵總數
-     */
-    public int getTotalSolider() {
-        int soliderNum = 0;
-        for (Human human : citizens) {
-            if (human.isSoldier()) {
-                Soldier soldier = (Soldier) human;
-                if ()
-                    soliderNum += 1;
-            }
-        }
-        return soliderNum;
-    }
 
     public int getTotalAirMen() {
         int soliderNum = 0;
@@ -618,77 +529,52 @@ public class City {
      * @return 目前市民總數
      */
     public int getTotalCitizen() {
-        int citizenNum = 0;
-        for (Human human : citizens) {
-            if (!human.getIsSoldier()) {
-                citizenNum += 1;
-            }
-        }
-        return citizenNum;
+        return this.citizens.size();
     }
+
+//    /**
+//     * 把所有建築物陣列中的建築物 根據建築物ID 由小到大排
+//     */
+//    public void sortBuildingArrByID() {
+//        for (int i = 0; i < buildingCount - i; i++) {
+//            for (int j = 0; j < buildingCount - i - 1; j++) {
+//                if (buildings[j].getId() > buildings[j + 1].getId()) {
+//                    Building tmpBuilding = buildings[j + 1];
+//                    buildings[j + 1] = buildings[j];
+//                    buildings[j] = tmpBuilding;
+//                }
+//            }
+//        }
+//    }
 
     /**
      * 城市中的建築數量
-     *
      * @return 城市中的建築數量
      */
-    public int getBuildingNum() {
+    public int getBuildingNum(){
         return buildings.getBuildingNum();
     }
 
     /**
      * 取得閒置的研究所數量
-     *
      * @return 閒置的研究所數量
      */
-    public int getFreeLabNum() {
+    public int getFreeLabNum(){
         return buildings.getFreeLabNum();
     }
 
     /**
      * 取得閒置的兵工廠數量
-     *
      * @return 閒置的兵工廠數量
      */
-    public int getFreeArsenalNum() {
+    public int getFreeArsenalNum(){
         return buildings.getFreeArsenalNum();
     }
 
-    public boolean isAlive() {
-        return (this.citizens.size() > 0);
+    public boolean isAlive(){
+        return (this.citizens.size()>0);
     }
 
-    /**
-     * 取得工作中建築
-     *
-     * @return 工作中建築陣列
-     */
-    public ArrayList<BuildingNode> getWorkingBuildingList() {
-        return buildings.getWorkingBuildingList();
-    }
-
-    /**
-     * 將建築停工
-     */
-    public void setStop(BuildingNode buildingNode) {
-        buildings.setStop(buildingNode);
-    }
-
-    /**
-     * 取得停工中的非升級中建築
-     *
-     * @return 停工中的非升級中建築陣列
-     */
-    public ArrayList<BuildingNode> getNotWorkingBuildingList() {
-        return buildings.getNotWorkingBuildingList();
-    }
-
-    /**
-     * 將建築啟動
-     */
-    public void setStart(BuildingNode buildingNode) {
-        buildings.setStart(buildingNode);
-    }
 
     /**
      * 是否正在升級士兵
@@ -717,4 +603,39 @@ public class City {
         return buildings.isUpgradingTech();
     }
 
+    /**
+     * 取得停工中的非升級中建築
+     *
+     * @return 停工中的非升級中建築陣列
+     */
+    public ArrayList<BuildingNode> getNotWorkingBuildingList() {
+        return buildings.getNotWorkingBuildingList();
+    }
+
+    /**
+     * 取得工作中建築
+     *
+     * @return 工作中建築陣列
+     */
+    public ArrayList<BuildingNode> getWorkingBuildingList() {
+        return buildings.getWorkingBuildingList();
+    }
+
+    /**
+     * 讓指定建築物停工
+     *
+     * @param buildingNode 指定建築物
+     */
+    public void setStop(BuildingNode buildingNode) {
+        buildings.setStop(buildingNode);
+    }
+
+    /**
+     * 讓指定建築物開始運作
+     *
+     * @param buildingNode 指定開始運作
+     */
+    public void setStart(BuildingNode buildingNode) {
+        buildings.setStart(buildingNode);
+    }
 }
