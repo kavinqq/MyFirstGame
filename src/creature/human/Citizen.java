@@ -1,14 +1,16 @@
 package creature.human;
 
 public class Citizen extends Human {   //市民
-    /**
-     * 建構子 預設市民數值為1 , 不能打架 , 初始設定為閒人
-     */
+    private STATUS status;
+    private int value;
     public enum STATUS {
         FREE, WOOD, STEEL;
     }
-    private STATUS status;
+    /**
+     * 建構子 預設市民數值為1 , 不能打架 , 初始設定為閒人
+     */
     public Citizen(){
+        this.value = 1;
         this.setType(HUMAN_TYPE.CITIZEN);
         this.status = STATUS.FREE; //建立時 同時設定狀態為 Free
         this.setFlyability(FLYABILITY.CANNOT_FLY);
@@ -16,7 +18,7 @@ public class Citizen extends Human {   //市民
     /**
      * 派遣村民去採木頭
      */
-    public void staratToLog(){
+    public void startToLog(){
         status = STATUS.WOOD;
     }
 
@@ -38,7 +40,7 @@ public class Citizen extends Human {   //市民
      * 取得狀態
      * @return 該人物的狀態
      */
-    public STATUS getState(){
+    public STATUS getStatus(){
         return status;
     }
 

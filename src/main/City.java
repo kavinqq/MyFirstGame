@@ -62,8 +62,8 @@ public class City {
      * 遊戲的人類單位 1.士兵 2.市民
      * 建立一Human的陣列 以存放人類
      */
-    public static final ArrayList<Citizen> citizens = new ArrayList<>();
-    public static final Military military = new Military();
+    public final Citizens citizens;
+    public final Military military;
 
     /**
      * 遊戲的建築物  1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠
@@ -96,23 +96,8 @@ public class City {
         resource = new Resource();
         buildings = new BuildingSystem();
         zombies = new ZombieKingdom();
-        /*
-          用來所有士兵new出來 放在 人類的ArrayList
-        */
-        for (int i = 0; i < DEFAULT_CITIZEN; i++) {
-            //這些是預設市民物件
-            if (i < DEFAULT_CITIZEN) {
-                citizens.add(i, new Citizen());
-                addFreeCitizen(1);
-            }
-        }
-        //創建所有殭屍的物件
-//        zombies[0] = new ZombieNormal();
-//        zombies[1] = new ZombieBigger();
-//        zombies[2] = new ZombieTypeI();
-//        zombies[3] = new ZombieTypeII();
-//        zombies[4] = new ZombieKing();
-//        zombies[5] = new ZombieLichKing();
+        citizens = new Citizens(DEFAULT_CITIZEN);
+        military = new Military();
     }
 
     /**
@@ -154,38 +139,8 @@ public class City {
     /**
      * 工作相關方法  像是 派幾個人去採 木頭 / 鋼鐵
      */
-    public void assignWork(int humansNum, Main.Command workType) {
-        //預設他是去伐木
-        boolean isWorkedForWood = true;
-        //如果 這個指令是 去採鋼 那麼把把isWorkForWood 改為 false
-        if (workType == Main.Command.STEEL) {
-            isWorkedForWood = false;
-        }
-        for (Human human : citizens) {
-            // 如果他不是士兵 && 他是一個閒人 派遣工作
-            if(human.isCitizen()){
-                Citizen citizen = (Citizen) human;
-                if(citizen.isFree()){
-                    if (isWorkedForWood) {
-                        citizen.staratToLog();//把該人類物件 狀態 設定為 伐木
-                        addWoodCitizen(1);//全部伐木人數 + 1
-                    } else {
-                        citizen.startToMine();//把該人類物件 狀態 設定為 採鋼
-                        //為什麼不用紀錄採鐵人數? 因為把 全部人humans.size() -士兵 - 全部伐木 - 全部閒人 = 採鐵 (算得出來)....我還是做出來了
-                        //全部煉鋼人數 + 1
-                        addSteelCitizen(1);
-                    }
-                    //由於有分配了工作，閒人-1
-                    addFreeCitizen(-1);
-                    //指派的工作量 - 1
-                    humansNum -= 1;
-                }
-            }
-            //如果指派量 ==0 表示都指派完了 跳出
-            if (humansNum == 0) {
-                break;
-            }
-        }
+    public void assignWork(int numOfCitizensToAssign, Main.Command workType) {
+        citizens.assignCitizenToWork(numOfCitizensToAssign, workType);
     }
 
     /**
@@ -276,6 +231,7 @@ public class City {
             //建物.生成人()
             int numOfNewCitizens = buildings.getNewCitizenNum(resource);
             if(numOfNewCitizens!=0){
+                this.citizens.add(numOfNewCitizens);
                 System.out.printf("第%d回合 有新市民出生,目前一共有%d個市民 ,閒置人數:%d\n", getGameTime() + 1, getTotalCitizen(), freeCitizen);
             }
             int numOfNewArmySoldiers = buildings.getNewArmyNum(resource);
@@ -300,8 +256,6 @@ public class City {
                 this.military.upgradeAirForce();
             }
 
-
-            //???先update看大家Ｏ不ＯＫ
             zombies.timePass();
             //殭屍來襲時間( 每16小時來一次 )
            if(zombies.isAttacking()){
@@ -416,61 +370,63 @@ public class City {
     }
 
     /**
-     * 檢查一下 這一波殭屍來襲 擋不擋得住
-     *
-     * @return 回傳true 活著  false 死去
+     * 只派軍隊去防禦殭屍
+     * @param zombieTroop 所要防禦的殭屍群
      */
     public void fightZombies(ZombieKingdom.ZombieTroop zombieTroop) {
         //這個數值是 最終結果 也就是 是否能夠抵擋這一波殭屍潮的判斷數 >0 死亡  <=0 存活
 
+        //將空中與地面的殭屍部隊攻擊分開看
         int landAttack = zombieTroop.getLandAttack();
         int airAttack = zombieTroop.getAirAttack();
-
 
        if(airAttack >= military.getAirForceValue()){
            airAttack -= military.getAirForceValue();
            military.getAirForceWipedOut();
-           Citizen citizen;
-           for(int i=0; airAttack>0 && i<citizens.size(); i++){
-               citizen = citizens.get(i);
-               if(airAttack>=citizen.getValue()){
-                   airAttack-=citizen.getValue();
-                   citizens.remove(i);
-                   i--;
-               }
-               else{
-                   citizen.getAttacked(airAttack);
-                   airAttack = 0;
-               }
-           }
        }
        else{
            military.getAirForceHarmed(airAttack);
+           airAttack = 0;
        }
 
-
-       if(landAttack >= military.getArmyValue()){
-           landAttack -= military.getArmyValue();
-           military.getArmyWipedOut();
-           Citizen citizen;
-           for(int i=0; airAttack>0 && i<citizens.size(); i++){
-               citizen = citizens.get(i);
-               if(airAttack>=citizen.getValue()){
-                   airAttack-=citizen.getValue();
-                   citizens.remove(i);
-                   i--;
-               }
-               else{
-                   citizen.getAttacked(airAttack);
-                   airAttack = 0;
-               }
-           }
+       if(airAttack >= citizens.getValueOfCitizens()){
+           airAttack -= citizens.getValueOfCitizens();
+           citizens.getWipedOut();
        }
        else{
-           military.getArmyHarmed(landAttack);
+           citizens.getHarmed(airAttack);
        }
 
-       if(citizens.size()>0){//還有人活著 遊戲繼續
+       if(airAttack>0){
+           buildings.getDamage(airAttack);
+           airAttack = 0;
+       }
+
+
+        if(landAttack >= military.getArmyValue()){
+            airAttack -= military.getArmyValue();
+            military.getArmyWipedOut();
+        }
+        else{
+            military.getArmyHarmed(landAttack);
+            landAttack = 0;
+        }
+
+        if(landAttack >= citizens.getValueOfCitizens()){
+            landAttack -= citizens.getValueOfCitizens();
+            citizens.getWipedOut();
+        }
+        else{
+            citizens.getHarmed(landAttack);
+        }
+
+        if(landAttack>0){
+            buildings.getDamage(landAttack);
+            landAttack = 0;
+        }
+
+
+       if(citizens.isAlive()){//還有人活著 遊戲繼續
            if (military.isAllDied()) {
                System.out.println("不平靜的夜晚過去了\n你活了下來 但是\n戰士們為了拯救你 流光了鮮血\n");
            } else {
@@ -584,24 +540,13 @@ public class City {
         techLevel++;
     }
 
-
-    public int getTotalAirMen() {
-        int soliderNum = 0;
-        for (Human human : citizens) {
-            if (human.isSoldier()) {
-                soliderNum += 1;
-            }
-        }
-        return soliderNum;
-    }
-
     /**
      * 獲取目前市民總數
      *
      * @return 目前市民總數
      */
     public int getTotalCitizen() {
-        return this.citizens.size();
+        return this.citizens.getNumOfCitizens();
     }
 
 
@@ -629,8 +574,10 @@ public class City {
         return buildings.getFreeArsenalNum();
     }
 
+
+    //TODO: add building.isAllDestroyed() (BuildingSystem.java)ß
     public boolean isAlive(){
-        return (this.citizens.size()>0);
+        return (this.citizens.isAlive() && !this.military.isAllDied());// && buildings.is);
     }
 
 

@@ -188,7 +188,7 @@ public class BuildingSystem {
      * @param resource 城市資源
      */
     public void build(BuildingType type, Resource resource) {
-        BuildingNode newBuilding = new BuildingNode(new House());
+        BuildingNode newBuilding;
         switch (type) {
             case ARSENAL: {
                 newBuilding = new BuildingNode(new Arsenal());
@@ -199,6 +199,7 @@ public class BuildingSystem {
                 break;
             }
             case HOUSE: {
+                newBuilding = new BuildingNode(new House());
                 break;
             }
             case LAB: {
@@ -220,6 +221,9 @@ public class BuildingSystem {
             case AIRPLANE_MILL: {
                 newBuilding = new BuildingNode(new AirPlaneMill());
                 break;
+            }
+            default:{
+                newBuilding = new BuildingNode(new House());
             }
         }
         //消耗資源

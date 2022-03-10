@@ -379,8 +379,23 @@ public abstract class Building {
         return hp;
     }
 
-    public void setHp(int hp) {
-        this.hp = hp;
+    public void setWoodCostLevelUp(int woodCostLevelUp){
+        this.woodCostLevelUp = woodCostLevelUp;
+    }
+
+    public void setSteelCostLevelUp(int steelCostLevelUp){
+        this.steelCostLevelUp = steelCostLevelUp;
+    }
+
+    public void setGasCostLevelUp(int gasCostLevelUp){
+        this.gasCostLevelUp = gasCostLevelUp;
+    }
+
+    public void getDamage(int damage) {
+        this.hp-=damage;
+        if(this.hp<=0){
+            this.hp=0;
+        }
     }
 
     /**
@@ -389,7 +404,4 @@ public abstract class Building {
      * @return 建築的效果說明
      */
     public abstract String buildingDetail(int level);
-
-
-
 }
