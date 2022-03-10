@@ -294,6 +294,15 @@ public class City {
             }
             //完成建築的升級和建造，科技等級提升
             buildings.completeJob();
+            if(buildings.isRecentlyUpgradeTech()){
+                this.upgradeTechLevel();
+            }
+            if(buildings.isRecentlyUpgradeArmySoldier()){
+                this.military.upgradeArmy();
+            }
+            if(buildings.isRecentlyUpgradeAirForceSoldier()){
+                this.military.upgradeAirForce();
+            }
 
 
             //???先update看大家Ｏ不ＯＫ
@@ -532,20 +541,6 @@ public class City {
         return this.citizens.size();
     }
 
-//    /**
-//     * 把所有建築物陣列中的建築物 根據建築物ID 由小到大排
-//     */
-//    public void sortBuildingArrByID() {
-//        for (int i = 0; i < buildingCount - i; i++) {
-//            for (int j = 0; j < buildingCount - i - 1; j++) {
-//                if (buildings[j].getId() > buildings[j + 1].getId()) {
-//                    Building tmpBuilding = buildings[j + 1];
-//                    buildings[j + 1] = buildings[j];
-//                    buildings[j] = tmpBuilding;
-//                }
-//            }
-//        }
-//    }
 
     /**
      * 城市中的建築數量

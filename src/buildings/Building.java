@@ -11,6 +11,14 @@ public abstract class Building {
      */
     private final String name;
     /**
+     * 被創造的時間
+     */
+    private int createTime;
+    /**
+     * 建造開始的時間
+     */
+    private int buildStart;
+    /**
      * 建造 需要的時間
      */
     private int buildTime;
@@ -142,7 +150,7 @@ public abstract class Building {
         //升級所需要的瓦斯量
         this.gasCostLevelUp=gasCostLevelUp;
         //建築物 剛建造完的時間 (那一個moment)，用來計算建築生產(和buildTime gameTime去做計算)
-        createTime = -1;
+        this.createTime = -1;
     }
 
 

@@ -415,13 +415,11 @@ public class BuildingSystem {
         }
         //士兵等級升級
         if (City.getGameTime() - soldierLevelStartUpgradeTime - SOLDIER_LEVEL_UPGRADE_TIME == 0) {
-            City.addSoldierLevel();
             freeArsenalNum++;
             isUpgradingSoldier = false;
         }
         //飛機等級升級
         if (City.getGameTime() - planeLevelStartUpgradeTime - PLANE_LEVEL_UPGRADE_TIME == 0) {
-            City.addPlaneLevel();
             freeArsenalNum++;
             isUpgradingPlane = false;
         }
@@ -583,7 +581,7 @@ public class BuildingSystem {
      *
      * @return 生成的士兵數
      */
-    public int getNewSoldierNum(Resource resource) {
+    public int getNewArmyNum(Resource resource) {
         int newSoldierCount = 0;
         for (BuildingNode buildingNode : BARRACKS.list) {
             //如果建築在運作
