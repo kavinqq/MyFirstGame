@@ -91,6 +91,8 @@ public class Citizens {
         Citizen citizen;
         for(int i=0; num>0; i++){
             citizen = citizens.get(i);
+            System.out.println(citizen.isFree());
+            System.out.println("-------");
             if(citizen.isFree()){
                 if(work == Main.Command.WOOD){
                     citizen.startToLog();
@@ -98,6 +100,7 @@ public class Citizens {
                 else if(work == Main.Command.STEEL){
                     citizen.startToMine();
                 }
+                num--;
             }
         }
     }
