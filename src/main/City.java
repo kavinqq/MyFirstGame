@@ -31,18 +31,6 @@ public class City {
     // 正在升級技術中的研究所的數量
     private int buildingsInLab;
     /**
-     * 目前在伐木的人
-     */
-    private int woodMan;
-    /**
-     * 目前在挖鋼的人
-     */
-    private int steelMan;
-    /**
-     * 目前的閒人(可只派工作之村民總共有幾個)
-     */
-    private int freeCitizen;
-    /**
      * 由於整個遊戲 只有一個文明等級 所以設定在 City全域變數
      */
     private static int techLevel = 1;
@@ -90,9 +78,6 @@ public class City {
         numOfLab = 0;
         //已經建造的建築物的數量
         buildingCount = 0;
-        freeCitizen = 0;
-        woodMan = 0;
-        steelMan = 0;
         resource = new Resource();
         buildings = new BuildingSystem();
         zombies = new ZombieKingdom();
@@ -101,39 +86,12 @@ public class City {
     }
 
     /**
-     * 設定目前伐木人數
-     *
-     * @param humanNum 伐木人數
-     */
-    public void addWoodCitizen(int humanNum) {
-        woodMan += humanNum;
-    }
-
-    /**
      * 取得所有閒人總數
      *
      * @return 所有閒人數
      */
     public int getFreeCitizen() {
-        return freeCitizen;
-    }
-
-    /**
-     * 設定 閒人數量 增減
-     *
-     * @param humanNum 要增減的量
-     */
-    public void addFreeCitizen(int humanNum) {
-        freeCitizen += humanNum;
-    }
-
-    /**
-     * 設定 鋼鐵數量 增減
-     *
-     * @param humanNum 要增減的量
-     */
-    public void addSteelCitizen(int humanNum) {
-        steelMan += humanNum;
+        return citizens.getNumOfFreeCitizens();
     }
 
     /**
@@ -171,8 +129,8 @@ public class City {
      * 每一次時間流動之後 計算市民採集的物資，加進resource中
      */
     public void gainResource() {
-        resource.addWood(buildings.getWoodSpeed() * woodMan);
-        resource.addSteel(buildings.getSteelSpeed()* steelMan);
+        resource.addWood(buildings.getWoodSpeed() * citizens.getNumOfLoggingCitizens());
+        resource.addSteel(buildings.getSteelSpeed()* citizens.getNumOfMiningCitizens());
         resource.addGas(buildings.getGasProduceNum());
     }
 
@@ -232,7 +190,7 @@ public class City {
             int numOfNewCitizens = buildings.getNewCitizenNum(resource);
             if(numOfNewCitizens!=0){
                 this.citizens.add(numOfNewCitizens);
-                System.out.printf("第%d回合 有新市民出生,目前一共有%d個市民 ,閒置人數:%d\n", getGameTime() + 1, getTotalCitizen(), freeCitizen);
+                System.out.printf("第%d回合 有新市民出生,目前一共有%d個市民 ,閒置人數:%d\n", getGameTime() + 1, getTotalCitizen(), citizens.getNumOfFreeCitizens());
             }
             int numOfNewArmySoldiers = buildings.getNewArmyNum(resource);
             if(numOfNewArmySoldiers!=0){
@@ -513,7 +471,7 @@ public class City {
                 "木材: %d , 鋼鐵: %d\n, 瓦斯: %d\n", getGameTime() + 1, resource.getTotalWood(), resource.getTotalSteel(), resource.getTotalGas());
         //所有人力資源的資訊
         System.out.printf("目前人力資源如下:\n" +
-                "採木人: %d , 採鋼人: %d, 閒人: %d\n", woodMan, steelMan, freeCitizen);
+                "採木人: %d , 採鋼人: %d, 閒人: %d\n", citizens.getNumOfLoggingCitizens(), citizens.getNumOfMiningCitizens(), citizens.getNumOfFreeCitizens());
         //所有人民的資訊
         System.out.printf("目前士兵量如下:\n" +
                 "士兵: %d名, 飛機 %d架, 市民: %d名\n", military.getNumOfArmySoldier(), military.getNumOfAirmen(), getTotalCitizen());

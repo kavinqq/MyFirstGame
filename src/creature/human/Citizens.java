@@ -8,12 +8,22 @@ import java.util.List;
 public class Citizens {
     private List<Citizen> citizens = new LinkedList<>();
     private int valueOfCitizens;
+    /**
+     * 目前的閒人(可指派工作之村民總共有幾個)
+     */
     private int numOfFreeCitizens;
+    /**
+     * 目前在伐木的人
+     */
     private int numOfLoggingCitizens;
+    /**
+     * 目前在挖鋼的人
+     */
     private int numOfMiningCitizens;
 
     public Citizens(int defaultNumOfCitizens){
         this.valueOfCitizens = 0;
+        this.numOfFreeCitizens = defaultNumOfCitizens;
         this.numOfLoggingCitizens = 0;
         this.numOfMiningCitizens = 0;
         this.add(defaultNumOfCitizens);
