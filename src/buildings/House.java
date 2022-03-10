@@ -18,7 +18,7 @@ public class House extends Building {
 
     @Override
     public String toString() {
-        return "房屋)";
+        return "房子：每24小時消耗1木頭產生1位市民(每房屋等級+2人)";
     }
 
     @Override

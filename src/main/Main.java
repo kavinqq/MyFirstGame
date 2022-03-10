@@ -60,7 +60,7 @@ public class Main {
          */
         do {
             thisRoundTimePass = 0;
-            option = inputInt("\n第" + (city.getGameTime() + 1) + "回合\n請選擇你要執行的指令:\n" +
+            option = inputInt("第" + (City.getGameTime() + 1) + "小時\n請選擇你要執行的指令:\n" +
                     "1.顯示資源\n" +
                     "2.木材指定幾人採\n" +
                     "3.鋼鐵指定幾人採\n" +

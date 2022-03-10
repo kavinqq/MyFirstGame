@@ -5,6 +5,9 @@ import creature.human.*;
 import creature.Zombies.*;
 import main.BuildingSystem.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import static main.BuildingSystem.BuildingType.*;
 
 public class City {
@@ -316,14 +319,15 @@ public class City {
      * 顯示可以蓋的建築物
      */
     public void showCanBuildBuilding(){
-        System.out.println(buildingSelectString(HOUSE.instance()));
-        System.out.println(buildingSelectString(LAB.instance()));
-        System.out.println(buildingSelectString(BARRACKS.instance()));
-        System.out.println(buildingSelectString(SAW_MILL.instance()));
-        System.out.println(buildingSelectString(STEEL_MILL.instance()));
-        System.out.println(buildingSelectString(ARSENAL.instance()));
-        System.out.println(buildingSelectString(GAS_MILL.instance()));
-        System.out.println(buildingSelectString(AIRPLANE_MILL.instance()));
+        System.out.printf("木材: %d , 鋼鐵: %d\n, 瓦斯: %d\n",  resource.getTotalWood(), resource.getTotalSteel(), resource.getTotalGas());
+        System.out.println(buildingSelectString(HOUSE.instance())+"\n"+
+                buildingSelectString(LAB.instance())+"\n"+
+                buildingSelectString(BARRACKS.instance())+"\n"+
+                buildingSelectString(SAW_MILL.instance())+"\n"+
+                buildingSelectString(STEEL_MILL.instance())+"\n"+
+                buildingSelectString(ARSENAL.instance())+"\n"+
+                buildingSelectString(GAS_MILL.instance())+"\n"+
+                buildingSelectString(AIRPLANE_MILL.instance())+"\n");
     }
 
     /**
@@ -333,8 +337,8 @@ public class City {
      */
     private String buildingSelectString(Building building){
         return (building.getId() + ". " + building +
-                "資源需求： " + building.getWoodCostCreate() + building.getSteelCostCreate() + building.getGasCostCreate() +
-                "科技等級需求： " + building.getTechLevelNeedBuild());
+                "資源需求： 木材：" + building.getWoodCostCreate() + " 鋼鐵："+building.getSteelCostCreate() + " 瓦斯：" +building.getGasCostCreate() +
+                " 科技等級需求： " + building.getTechLevelNeedBuild());
     }
 
     /**
@@ -394,21 +398,21 @@ public class City {
      * 升級科技等級
      */
     public void upgradeTechLevel() {
-        buildings.upgradeTechLevel();
+        buildings.upgradeTechLevel(resource);
     }
 
     /**
      * 升級士兵等級
      */
     public void upgradeSoldier() {
-       buildings.upgradeSoldier();
+       buildings.upgradeSoldier(resource);
     }
 
     /**
      * 升級飛機等級
      */
     public void upgradePlane() {
-        buildings.upgradePlane();
+        buildings.upgradePlane(resource);
     }
 
     /**
@@ -476,6 +480,72 @@ public class City {
         else {//全死 遊戲結束
             System.out.println("不平靜的夜晚終於過去了 但是你再也撐不住了\n");
         }
+    }
+
+    /**
+     * 被炸毀的建築總數字串
+     * @param list 被炸毀建築的列表
+     * @return 各類建築被炸毀的總數字串
+     */
+    public String sumDamageBuildingToString(ArrayList<Building> list) {
+        Map<BuildingType, Integer> sum = new HashMap<>();
+        //走訪列表
+        for (int i = 0; i < list.size(); i++) {
+            Building building = list.get(i);
+            //比對此建築是哪一個分類
+            for (int k = 0; k < values().length; k++) {
+                if (building.getId() == values()[k].instance().getId()) {
+                    //如果sum中已存在此分類，總數+1
+                    if (sum.containsKey(values()[k])) {
+                        sum.put(values()[k], sum.get(values()[k]) + 1);
+                    } else {
+                        //還不存在的話，新增1
+                        sum.put(values()[k], 1);
+                    }
+                }
+            }
+        }
+
+        StringBuilder builder = new StringBuilder();
+        //轉成字串
+        for (Map.Entry<BuildingType, Integer> entry : sum.entrySet()) {
+            switch (entry.getKey()){
+                case HOUSE:{
+                    builder.append("房屋").append(entry.getValue()).append("爆掉了\n");
+                    break;
+                }
+                case LAB:{
+                    builder.append("研究所").append(entry.getValue()).append("爆掉了\n");
+                    break;
+                }
+                case BARRACKS:{
+                    builder.append("軍營").append(entry.getValue()).append("爆掉了\n");
+                    break;
+                }
+                case SAW_MILL:{
+                    builder.append("伐木廠").append(entry.getValue()).append("爆掉了\n");
+                    break;
+                }
+                case STEEL_MILL:{
+                    builder.append("煉鋼廠").append(entry.getValue()).append("爆掉了\n");
+                    break;
+                }
+                case ARSENAL:{
+                    builder.append("兵工廠").append(entry.getValue()).append("爆掉了\n");
+                    break;
+                }
+                case GAS_MILL:{
+                    builder.append("瓦斯廠").append(entry.getValue()).append("爆掉了\n");
+                    break;
+                }
+                case AIRPLANE_MILL:{
+                    builder.append("飛機工廠").append(entry.getValue()).append("爆掉了");
+                    break;
+                }
+            }
+        }
+
+        return builder.toString();
     }
 
     /**

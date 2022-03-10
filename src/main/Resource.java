@@ -126,6 +126,8 @@ public class Resource {
         DEFAULT_STEEL_SPEED += speedChange;
     }
 
+
+
 }
 
 

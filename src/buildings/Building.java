@@ -79,8 +79,7 @@ public abstract class Building {
     /**
      * 升級需要瓦斯
      */
-    final int gasCostLevelUp;
-    ///張文偉
+    private int gasCostLevelUp;
     /**
      * 生產所需資源
      */

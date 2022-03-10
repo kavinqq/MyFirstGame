@@ -87,6 +87,11 @@ public class Military {
             }
         }
     }
+
+    /**
+     * 陸軍被攻擊，受到特定點數的傷害
+     * @param value 所受到的傷害
+     */
     public void getArmyHarmed(int value){
         this.armyValue -= value;
         ArmySoldier armySoldier;

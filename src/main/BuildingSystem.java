@@ -3,7 +3,9 @@ package main;
 import buildings.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import static main.BuildingSystem.BuildingType.*;
 
@@ -49,6 +51,10 @@ public class BuildingSystem {
      * 是否已在升級科技
      */
     private boolean isUpgradingTech;
+    /**
+     * 紀錄此波攻擊被炸毀的建築
+     */
+    private ArrayList<Building> damageBuilding;
 
     /**
      * 建築的種類和實體與儲存鏈表
@@ -236,29 +242,45 @@ public class BuildingSystem {
      * 所有建造完成的建築開始運作
      */
     public void showBuildCompleted() {
-        System.out.printf("房屋 %d間完成建造",
-                setBuildingStartWorkAndGetSum(HOUSE.list));
+        if(setBuildingStartWorkAndGetSum(HOUSE.list)!=0) {
+            System.out.printf("房屋 %d間完成建造\n",
+                    setBuildingStartWorkAndGetSum(HOUSE.list));
+        }
 
-        System.out.printf("研究所 %d間完成建造",
-                setBuildingStartWorkAndGetSum(LAB.list));
+        if(setBuildingStartWorkAndGetSum(LAB.list)!=0) {
+            System.out.printf("研究所 %d間完成建造\n",
+                    setBuildingStartWorkAndGetSum(LAB.list));
+        }
 
-        System.out.printf("軍營 %d間完成建造",
-                setBuildingStartWorkAndGetSum(BARRACKS.list));
+        if(setBuildingStartWorkAndGetSum(BARRACKS.list)!=0) {
+            System.out.printf("軍營 %d間完成建造\n",
+                    setBuildingStartWorkAndGetSum(BARRACKS.list));
+        }
 
-        System.out.printf("伐木場 %d間完成建造",
-                setBuildingStartWorkAndGetSum(SAW_MILL.list));
+        if(setBuildingStartWorkAndGetSum(SAW_MILL.list)!=0) {
+            System.out.printf("伐木場 %d間完成建造\n",
+                    setBuildingStartWorkAndGetSum(SAW_MILL.list));
+        }
 
-        System.out.printf("煉鋼廠 %d間完成建造",
-                setBuildingStartWorkAndGetSum(STEEL_MILL.list));
+        if(setBuildingStartWorkAndGetSum(STEEL_MILL.list)!=0){
+            System.out.printf("煉鋼廠 %d間完成建造\n",
+                    setBuildingStartWorkAndGetSum(STEEL_MILL.list));
+        }
 
-        System.out.printf("兵工廠 %d間完成建造",
-                setBuildingStartWorkAndGetSum(ARSENAL.list));
+        if(setBuildingStartWorkAndGetSum(ARSENAL.list)!=0){
+            System.out.printf("兵工廠 %d間完成建造\n",
+                    setBuildingStartWorkAndGetSum(ARSENAL.list));
+        }
 
-        System.out.printf("瓦斯廠 %d間完成建造",
-                setBuildingStartWorkAndGetSum(GAS_MILL.list));
+        if(setBuildingStartWorkAndGetSum(GAS_MILL.list)!=0){
+            System.out.printf("瓦斯廠 %d間完成建造\n",
+                    setBuildingStartWorkAndGetSum(GAS_MILL.list));
+        }
 
-        System.out.printf("飛機工廠 %d間完成建造",
-                setBuildingStartWorkAndGetSum(AIRPLANE_MILL.list));
+        if(setBuildingStartWorkAndGetSum(AIRPLANE_MILL.list)!=0) {
+            System.out.printf("飛機工廠 %d間完成建造\n",
+                    setBuildingStartWorkAndGetSum(AIRPLANE_MILL.list));
+        }
     }
 
     /**
@@ -408,6 +430,10 @@ public class BuildingSystem {
         showUpgradeCompleted();
         //科技等級升級
         if (City.getGameTime() - techLevelStartUpgradeTime - TECH_LEVEL_UPGRADE_TIME == 0) {
+            if(LAB.instance instanceof Lab){
+                Lab lab= (Lab) LAB.instance;
+                lab.levelUpTechResource(lab.getLevel()+1);
+            }
             isRecentlyUpgradeTech = true;
             City.addTechLevel();
             freeLabNum++;
@@ -526,7 +552,8 @@ public class BuildingSystem {
     /**
      * 升級科技等級
      */
-    public void upgradeTechLevel() {
+    public void upgradeTechLevel(Resource resource) {
+        LAB.instance.takeResourceUpgrade(resource);
         //紀錄開始升級的時間點
         techLevelStartUpgradeTime = City.getGameTime();
         freeLabNum--;
@@ -536,7 +563,8 @@ public class BuildingSystem {
     /**
      * 升級士兵等級
      */
-    public void upgradeSoldier() {
+    public void upgradeSoldier(Resource resource) {
+        ARSENAL.instance.takeResourceUpgrade(resource);
         soldierLevelStartUpgradeTime = City.getGameTime();
         freeArsenalNum--;
         isUpgradingSoldier = true;
@@ -545,7 +573,8 @@ public class BuildingSystem {
     /**
      * 升級飛機等級
      */
-    public void upgradePlane() {
+    public void upgradePlane(Resource resource) {
+        ARSENAL.instance.takeResourceUpgrade(resource);
         planeLevelStartUpgradeTime = City.getGameTime();
         freeArsenalNum--;
         isUpgradingPlane = false;
@@ -904,4 +933,99 @@ public class BuildingSystem {
     public boolean isUpgradingTech() {
         return isUpgradingTech;
     }
+
+    /**
+     * 建築受到傷害
+     * @param damage 傷害值
+     */
+    public void getDamage(int damage){
+        ArrayList<Building> hpZeroBuilding = new ArrayList<>();
+
+        //走訪每個BuildingType
+        for (int i = 0; i < values().length; i++) {
+            BuildingType type = values()[i];
+            //如果type的鏈表的size不為0，依序開始攻擊建築
+            if(type.list.size()!=0){
+                //走訪建築類別的鏈表
+                for (int k = 0; k < type.list.size(); k++) {
+                    Building building = type.list.get(k).building;
+                    //讓建築受到傷害
+                    building.getDamage(damage);
+                    //建築hp為0就從鏈表刪除
+                    if(building.getHp()<=0){
+                        //將爆掉的建築進列表中紀錄
+                        hpZeroBuilding.add(building);
+                        type.list.remove(k--);
+                    }
+                }
+            }
+        }
+        damageBuilding =  hpZeroBuilding;
+    }
+
+    /**
+     * 被炸毀的建築總數字串
+     * @return 各類建築被炸毀的總數字串
+     */
+    public String sumDamageBuilding() {
+        Map<BuildingType, Integer> sum = new HashMap<>();
+        //走訪列表
+        for (int i = 0; i < damageBuilding.size(); i++) {
+            Building building = damageBuilding.get(i);
+            //比對此建築是哪一個分類
+            for (int k = 0; k < values().length; k++) {
+                if (building.getId() == values()[k].instance().getId()) {
+                    //如果sum中已存在此分類，總數+1
+                    if (sum.containsKey(values()[k])) {
+                        sum.put(values()[k], sum.get(values()[k]) + 1);
+                    } else {
+                        //還不存在的話，新增1
+                        sum.put(values()[k], 1);
+                    }
+                }
+            }
+        }
+
+        StringBuilder builder = new StringBuilder();
+        //轉成字串
+        for (Map.Entry<BuildingType, Integer> entry : sum.entrySet()) {
+            switch (entry.getKey()){
+                case HOUSE:{
+                    builder.append("房屋").append(entry.getValue()).append("爆掉了");
+                    break;
+                }
+                case LAB:{
+                    builder.append("研究所").append(entry.getValue()).append("爆掉了");
+                    break;
+                }
+                case BARRACKS:{
+                    builder.append("軍營").append(entry.getValue()).append("爆掉了");
+                    break;
+                }
+                case SAW_MILL:{
+                    builder.append("伐木廠").append(entry.getValue()).append("爆掉了");
+                    break;
+                }
+                case STEEL_MILL:{
+                    builder.append("煉鋼廠").append(entry.getValue()).append("爆掉了");
+                    break;
+                }
+                case ARSENAL:{
+                    builder.append("兵工廠").append(entry.getValue()).append("爆掉了");
+                    break;
+                }
+                case GAS_MILL:{
+                    builder.append("瓦斯廠").append(entry.getValue()).append("爆掉了");
+                    break;
+                }
+                case AIRPLANE_MILL:{
+                    builder.append("飛機工廠").append(entry.getValue()).append("爆掉了");
+                    break;
+                }
+            }
+        }
+
+        return builder.toString();
+    }
+
 }
