@@ -495,7 +495,7 @@ public class City {
         System.out.println("距下波攻擊還有 " + (16 - getGameTime() % 16) + " 小時");
         System.out.println("---------------------------------------------------");
 
-        buildings.getCurrentInformation();
+        System.out.println(buildings.getCurrentInformation());
     }
 
     /**

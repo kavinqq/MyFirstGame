@@ -262,9 +262,9 @@ public class BuildingSystem {
     }
 
     /**
-     * 建築開始運作，建築等級提升，關閉升級中狀態，開啟工作中狀態
+     * 該類建築統一完成建造->建築開始運作，建築等級提升，關閉升級中狀態，開啟工作中狀態
      *
-     * @param list
+     * @param list 該類建築的鏈表
      * @return 完成建造的數量
      */
     private int setBuildingStartWorkAndGetSum(LinkedList<BuildingNode> list) {
@@ -290,7 +290,7 @@ public class BuildingSystem {
     /**
      * 能不能建造
      *
-     * @param type
+     * @param type 要檢查能不能建造的建築種類
      */
     public boolean canBuild(BuildingType type, Resource resource) {
         if (City.getTechLevel() < type.instance.getTechLevelNeedBuild()) {
@@ -457,9 +457,9 @@ public class BuildingSystem {
     }
 
     /**
-     * 將建築完成升級
+     * 該類建築統一完成升級
      *
-     * @param list
+     * @param list 該類建築的鏈表
      */
     private int finishUpgradeBuilding(LinkedList<BuildingNode> list) {
         int sum = 0;
@@ -519,7 +519,7 @@ public class BuildingSystem {
     /**
      * 取得當前建築數量
      *
-     * @return
+     * @return 當前建築數量
      */
     public int getBuildingNum() {
         return buildingNum;
@@ -681,7 +681,7 @@ public class BuildingSystem {
     /**
      * 獲取建築資訊
      *
-     * @return
+     * @return 建築資訊文字
      */
     public String getCurrentInformation() {
         StringBuilder info = new StringBuilder();
@@ -756,7 +756,6 @@ public class BuildingSystem {
      *
      * @param list   建築種類
      * @param record 傳入陣列以獲取資料
-     * @return [0]工作中數量 [1]建造中數量 [2]升級中數量
      */
     private void countStatus(LinkedList<BuildingNode> list, int[] record) {
         for (BuildingNode node : list) {
@@ -861,16 +860,22 @@ public class BuildingSystem {
     }
 
     /**
-     * @return
+     * @return 是否有升級科技
      */
     public boolean isRecentlyUpgradeTech() {
         return isRecentlyUpgradeTech;
     }
 
+    /**
+     * @return 是否有升級士兵
+     */
     public boolean isRecentlyUpgradeArmySoldier() {
         return isRecentlyUpgradeArmySoldier;
     }
 
+    /**
+     * @return 是否有升級飛機
+     */
     public boolean isRecentlyUpgradeAirForceSoldier() {
         return isRecentlyUpgradeAirForceSoldier;
     }
