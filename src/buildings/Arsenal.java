@@ -4,14 +4,10 @@ package buildings;
  * 兵工廠
  */
 public class Arsenal extends Building {
-    public enum UpgradeEvent{
-        UPGRADE_SOLDIER,
-        UPGRADE_AIRPLANE;
-    }
 
     /**
      * 父類建構子
-     * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠)
+     * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工場)
      * name 建築物名稱
      * buildTime 建築物持續時間
      * upgradeTime 建築物升級時間
@@ -31,6 +27,19 @@ public class Arsenal extends Building {
         super(6,"兵工廠",3,48,0,2,false,30,
                 30,10,70,40,false,0,0);
     }
+
+//    public void levelUpTechResource(int level){
+//        switch (level){
+//            case 0:{
+//                super.setLevel(0);
+//            }
+//            case 1:{//一級時 需要升級的資源改變
+//                super.setLevel(1);
+//                break;
+//            }
+//        }
+//    }
+
 
     @Override
     public String toString() {

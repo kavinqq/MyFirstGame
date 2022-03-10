@@ -96,7 +96,7 @@ public abstract class Building {
 
     /**
      * 建構子
-     * @param id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠)
+     * @param id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工場)
      * @param name 建築物名稱
      * @param buildTime 建築物持續時間
      * @param upgradeTime 建築物升級時間

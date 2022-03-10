@@ -43,7 +43,7 @@ public class GasMill extends Building{
     }
 
     public String buildingDetail(int level){
-        return "";
+        return String.format("每小時生產%d瓦斯",getLevel()+5);
     }
 
 
