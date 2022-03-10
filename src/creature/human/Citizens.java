@@ -23,7 +23,7 @@ public class Citizens {
 
     public Citizens(int defaultNumOfCitizens){
         this.valueOfCitizens = 0;
-        this.numOfFreeCitizens = defaultNumOfCitizens;
+        this.numOfFreeCitizens = 0;
         this.numOfLoggingCitizens = 0;
         this.numOfMiningCitizens = 0;
         this.add(defaultNumOfCitizens);
