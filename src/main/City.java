@@ -333,7 +333,7 @@ public class City {
         //地面殭屍攻擊建築
         if (landAttack > 0) {
             buildings.getDamage(landAttack);
-            landAttack = 0;
+            //landAttack = 0;
         }
 
 
