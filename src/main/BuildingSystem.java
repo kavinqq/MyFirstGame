@@ -1132,4 +1132,6 @@ public class BuildingSystem {
     public boolean isNoArsenal() {
         return freeArsenalNum == 0;
     }
+
+
 }
