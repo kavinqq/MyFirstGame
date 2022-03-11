@@ -294,7 +294,7 @@ public class City {
         int landAttack = zombieTroop.getLandAttack();
         int airAttack = zombieTroop.getAirAttack();
         //空中殭屍攻擊空中部隊
-        if (airAttack >= military.getAirForceValue()) {
+        if (airAttack>0 && airAttack >= military.getAirForceValue()) {
             airAttack -= military.getAirForceValue();
             military.getAirForceWipedOut();
         } else {
@@ -302,7 +302,7 @@ public class City {
             airAttack = 0;
         }
         //空中殭屍攻擊平民
-        if (airAttack >= citizens.getValueOfCitizens()) {
+        if (airAttack>0 && airAttack >= citizens.getValueOfCitizens()) {
             airAttack -= citizens.getValueOfCitizens();
             citizens.getWipedOut();
         } else {
@@ -315,7 +315,7 @@ public class City {
             airAttack = 0;
         }
         //地面殭屍攻擊地面部隊
-        if (landAttack >= military.getArmyValue()) {
+        if (landAttack>0 && landAttack >= military.getArmyValue()) {
             landAttack -= military.getArmyValue();
             military.getArmyWipedOut();
         } else {
@@ -323,7 +323,7 @@ public class City {
             landAttack = 0;
         }
         //地面殭屍攻擊平民
-        if (landAttack >= citizens.getValueOfCitizens()) {
+        if (landAttack>0 && landAttack >= citizens.getValueOfCitizens()) {
             landAttack -= citizens.getValueOfCitizens();
             citizens.getWipedOut();
         } else {
@@ -356,6 +356,7 @@ public class City {
         //所有人力資源的資訊
         System.out.printf("目前人力資源如下:\n" +
                 "採木人: %d , 採鋼人: %d, 閒人: %d\n", citizens.getNumOfLoggingCitizens(), citizens.getNumOfMiningCitizens(), citizens.getNumOfFreeCitizens());
+        System.out.println("總市民數量：" + citizens.getNumOfCitizens());
         //所有人民的資訊
         System.out.printf("目前士兵量如下:\n" +
                 "士兵: %d名, 飛機 %d架\n", military.getNumOfArmySoldier(), military.getNumOfAirmen());

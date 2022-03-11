@@ -80,6 +80,9 @@ public class Citizens {
     public void getWipedOut() {
         this.citizens.clear();
         this.valueOfCitizens = 0;
+        this.numOfFreeCitizens = 0;
+        this.numOfLoggingCitizens = 0;
+        this.numOfMiningCitizens = 0;
     }
 
 
