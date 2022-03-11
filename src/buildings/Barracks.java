@@ -21,7 +21,7 @@ public class Barracks extends Building {
      * steelCostLevelUp 升級所需要的鋼鐵量
      */
     public Barracks() {
-        super(3, "軍營",  2, 30, 0, 1, 2,30,
+        super(3, "軍營",  2, 30, -1, 1, 2,30,
                 20, 10, 30, 15,0,0);
     }
 

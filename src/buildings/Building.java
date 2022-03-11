@@ -101,7 +101,7 @@ public abstract class Building {
      * @param name                 建築物名稱
      * @param buildTime            建築物持續時間
      * @param upgradeTime          建築物升級時間
-     * @param level                建築物等級 預設-1  建好 0 升級過 1~2,147,483,647
+     * @param level                建築物等級 預設-1 建好 0 升級過 1~2,147,483,647
      * @param techLevelNeedBuild   建造需要的科技等級
      * @param techLevelNeedUpgrade 升級需要的科技等級
      * @param hp                   建築物血量

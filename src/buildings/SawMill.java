@@ -21,7 +21,7 @@ public class SawMill extends Building {
      * steelCostLevelUp 升級所需要的鋼鐵量
      */
     public SawMill() {
-        super(4, "筏木場",  1, 30, 0, 1, 2, 10,
+        super(4, "伐木場",  1, 30, -1, 1, 2, 10,
                 15, 0, 30, 15,0,0);
     }
 

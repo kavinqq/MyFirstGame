@@ -29,7 +29,7 @@ public class AirPlaneMill extends Building {
      */
 
     public AirPlaneMill() {
-        super(8, "飛機工廠",  2, 30, 0, 2, 2, 50,
+        super(8, "飛機工廠",  2, 30, -1, 2, 2, 50,
                 15, 5, 30, 15,5,5);
     }
 

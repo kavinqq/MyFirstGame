@@ -293,6 +293,7 @@ public class BuildingSystem {
                 node.building.setUpgrading(false);
                 node.building.setWorking(true);
                 node.building.setReadyToUpgrade(true);
+                node.updateStartTime = City.getGameTime();
                 buildingNum++; //建造完成，建築數+1
                 sum++;
                 //若建造的是研究所，閒置數+1
@@ -661,7 +662,7 @@ public class BuildingSystem {
         int newSoldierCount = 0;
         for (BuildingNode buildingNode : BARRACKS.list) {
             //如果建築在運作
-            if (buildingNode.building.isWorking() && buildingNode.building instanceof House) {
+            if (buildingNode.building.isWorking() && buildingNode.building instanceof Barracks) {
                 //當前時間-上次啟動的時間 滿3小時->生產士兵
                 if ((City.getGameTime() - buildingNode.updateStartTime) % 3 == 0) {
                     Barracks barracks = (Barracks) buildingNode.building;

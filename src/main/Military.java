@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Military {
     private List<AirForceSoldier> airForce;
-    private List<ArmySoldier> armies;
+    private List<ArmySoldier> army;
     private static final int INITIAL_ARMY_SIZE = 10;
     private int armyLevel;
     private int airForceLevel;
@@ -18,7 +18,7 @@ public class Military {
 
     public Military(){
         this.airForce = new LinkedList<>();
-        this.armies = new LinkedList<>();
+        this.army = new LinkedList<>();
         this.armyLevel = 0;
         this.airForceLevel = 0;
         this.armyValue = 0;
@@ -33,8 +33,11 @@ public class Military {
      * @param num
      */
     public void addArmy(int num){
+        ArmySoldier armySoldier;
         for(int i=0; i<num; i++){
-            this.armies.add(new ArmySoldier(this.airForceLevel));
+            armySoldier = new ArmySoldier(this.armyLevel);
+            this.armyValue += armySoldier.getValue();
+            this.army.add(armySoldier);
         }
     }
 
@@ -43,8 +46,11 @@ public class Military {
      * @param num
      */
     public void addAirForce(int num){
+        AirForceSoldier airForceSoldier;
         for(int i=0; i<num; i++){
-            this.armies.add(new ArmySoldier(this.airForceLevel));
+            airForceSoldier = new AirForceSoldier(this.airForceLevel);
+            this.airForceValue += airForceSoldier.getValue();
+            this.airForce.add(airForceSoldier);
         }
     }
 
@@ -83,7 +89,7 @@ public class Military {
      */
     public void upDateArmyValue(){
         this.armyValue = 0;
-        for(ArmySoldier armySoldier : this.armies){
+        for(ArmySoldier armySoldier : this.army){
             this.armyValue+= armySoldier.getValue();
         }
     }
@@ -124,11 +130,11 @@ public class Military {
     public void getArmyHarmed(int value){
         this.armyValue -= value;
         ArmySoldier armySoldier;
-        for(int i = 0; value>0 && i< armies.size(); i++){
-            armySoldier = armies.get(i);
+        for(int i = 0; value>0 && i< army.size(); i++){
+            armySoldier = army.get(i);
             if(value>=armySoldier.getValue()){
                 value -= armySoldier.getValue();
-                armies.remove(i);
+                army.remove(i);
                 i--;
             }
             else{
@@ -149,7 +155,7 @@ public class Military {
      * 陸軍被全滅
      */
     public void getArmyWipedOut(){
-        this.armies.clear();
+        this.army.clear();
         this.armyValue = 0;
     }
 
@@ -158,7 +164,7 @@ public class Military {
      * @return
      */
     public boolean isAllDead(){
-        return (this.armies.isEmpty() && this.airForce.isEmpty());
+        return (this.army.isEmpty() && this.airForce.isEmpty());
     }
 
     /**
@@ -174,6 +180,6 @@ public class Military {
      * @return
      */
     public int getNumOfArmySoldier(){
-        return this.armies.size();
+        return this.army.size();
     }
 }

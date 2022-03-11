@@ -115,7 +115,7 @@ public class Main {
                             }
                             BuildingType type = BuildingType.getBuildingTypeByInt(choose);
                             //建造成功與否
-                            if (city.canBuildBuilding(type)) {
+                            if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
                                 city.build(type);
                                 System.out.println(type.instance().getName() + "建造中");
                             } else {
@@ -137,7 +137,7 @@ public class Main {
                             //show出可以升級的建築，且有可以升級的才執行選項
                             city.showCanUpgradeBuilding();
                             //選取要升級的種類
-                            if(city.isNoLab()&& city.isNoArsenal()){
+                            if (city.isNoLab() && city.isNoArsenal()) {
                                 break;
                             }
                             choose = inputInt("請選擇要升級的建築種類(-1離開)：", HOUSE.instance().getId(), AIRPLANE_MILL.instance().getId());
@@ -154,7 +154,7 @@ public class Main {
                                     switch (type) {
                                         case LAB: {
                                             if (city.isUpgradingTech()) {
-                                                System.out.println("科技已在升級中");
+                                                System.out.println("科技已在升級中，請等待此次升級結束");
                                             } else {
                                                 city.upgradeTechLevel();
                                                 System.out.println("科技升級中");
@@ -166,7 +166,7 @@ public class Main {
                                             switch (choose) {
                                                 case 1: {
                                                     if (city.isUpgradingSoldier()) {
-                                                        System.out.println("士兵已在升級中");
+                                                        System.out.println("士兵已在升級中，請等待此次升級結束");
                                                     } else {
                                                         city.upgradeSoldier();
                                                         System.out.println("士兵升級中");
@@ -216,7 +216,7 @@ public class Main {
                 }
                 case SET_SWITCH: {
                     int choose = inputInt("請選擇：1.開啟建築 2.關閉建築 -1返回", 1, 2);
-                    if(choose==LEAVE){
+                    if (choose == LEAVE) {
                         break;
                     }
                     switch (choose) {
@@ -231,8 +231,11 @@ public class Main {
                                 Building building = notWorkingBuildingList.get(i).getBuilding();
                                 System.out.println((i + 1) + ". " + building.buildingDetail(building.getLevel()));
                             }
-                            choose = inputInt("", 1, notWorkingBuildingList.size()) - 1;
-                            city.setStart(notWorkingBuildingList.get(choose));
+                            choose = inputInt("輸入-1取消", 1, notWorkingBuildingList.size());
+                            if (choose == LEAVE) {
+                                break;
+                            }
+                            city.setStart(notWorkingBuildingList.get(choose - 1));
                             System.out.println("開啟成功");
                             break;
                         }
@@ -247,8 +250,11 @@ public class Main {
                                 Building building = workingBuildingList.get(i).getBuilding();
                                 System.out.println((i + 1) + ". " + building.buildingDetail(building.getLevel()));
                             }
-                            choose = inputInt("", 1, workingBuildingList.size()) - 1;
-                            city.setStop(workingBuildingList.get(choose));
+                            choose = inputInt("輸入-1取消", 1, workingBuildingList.size());
+                            if (choose == LEAVE) {
+                                break;
+                            }
+                            city.setStop(workingBuildingList.get(choose - 1));
                             System.out.println("關閉成功");
                             break;
                         }
@@ -303,7 +309,7 @@ public class Main {
         return 1;
     }
 
-    public static void pause(){
+    public static void pause() {
         System.out.println("===enter繼續===");
         SCANNER.nextLine();
     }

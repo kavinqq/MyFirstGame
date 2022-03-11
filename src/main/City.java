@@ -143,7 +143,7 @@ public class City {
             }
             int numOfNewAirMen = buildings.getNewPlaneNum(resource);
             if (numOfNewAirMen != 0) {
-                this.military.addArmy(numOfNewAirMen);
+                this.military.addAirForce(numOfNewAirMen);
                 System.out.printf("第%d回合 有 %d 架新飛機產生,目前一共有%d架飛機\n", getGameTime() + 1, numOfNewAirMen, military.getNumOfAirmen());
             }
             //完成建築的升級和建造，科技等級提升
