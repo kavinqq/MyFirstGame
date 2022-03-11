@@ -358,7 +358,7 @@ public class City {
                 "採木人: %d , 採鋼人: %d, 閒人: %d\n", citizens.getNumOfLoggingCitizens(), citizens.getNumOfMiningCitizens(), citizens.getNumOfFreeCitizens());
         //所有人民的資訊
         System.out.printf("目前士兵量如下:\n" +
-                "士兵: %d名, 飛機 %d架, 市民: %d名\n", military.getNumOfArmySoldier(), military.getNumOfAirmen(), getTotalCitizen());
+                "士兵: %d名, 飛機 %d架\n", military.getNumOfArmySoldier(), military.getNumOfAirmen());
         //顯示科技等級
         System.out.println("目前科技等級為:" + techLevel);
         //顯示下波攻擊倒數
