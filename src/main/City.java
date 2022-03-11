@@ -163,7 +163,7 @@ public class City {
             //殭屍來襲時間( 每16小時來一次 )
             if (zombies.isAttacking()) {
                 System.out.println("殭屍來襲：" + this.zombies.getZombieTroop());
-                System.out.println("你的部隊：空軍" + this.military.getAirForceValue()+"人，陸軍：" + this.military.getArmyValue()+"人");
+                System.out.println("你的部隊：空軍攻擊力：" + this.military.getAirForceValue()+"，陸軍攻擊力：" + this.military.getArmyValue());
                 //用來 計算抵擋完殭屍後的人口狀況 和 算完後遊戲是否結束
                 this.fightZombies(this.zombies.getZombieTroop());
                 //顯示被破壞的建築
