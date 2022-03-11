@@ -5,7 +5,7 @@ public class ZombieTypeII extends Zombie{
      * 這種殭屍的預設攻擊力
      */
     public ZombieTypeII(){
-        super(13, FLYABILITY.CAN_FLY);
+        super(13, FLYABILITY.CANNOT_FLY);
     }
 
 
