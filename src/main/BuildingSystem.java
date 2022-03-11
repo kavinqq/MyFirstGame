@@ -1111,7 +1111,7 @@ public class BuildingSystem {
             if(entry.getValue()!=0){
                 builder.append(entry.getValue());
             }
-            builder.append("爆掉了\n");
+            builder.append("間被炸掉了\n");
         }
 
         return builder.toString();

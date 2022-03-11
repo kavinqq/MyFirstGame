@@ -5,7 +5,7 @@ public class ZombieLichKing extends Zombie{
      * 這種殭屍的預設攻擊力
      */
     public ZombieLichKing(){
-        super(25, FLYABILITY.CAN_FLY);
+        super(25, FLYABILITY.CANNOT_FLY);
     }
 
 
