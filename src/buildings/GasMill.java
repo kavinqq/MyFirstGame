@@ -25,7 +25,7 @@ public class GasMill extends Building{
      * gasCostLevelUp 升級所需要的瓦斯量
      */
     public GasMill() {
-        super(7, "瓦斯場",  1, 30, -1, 2, 3, 20,
+        super(7, "瓦斯場",  1, 30, 0, 2, 3, 20,
                 15, 5, 40, 20,0,0);
     }
 

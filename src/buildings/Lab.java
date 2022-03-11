@@ -19,7 +19,7 @@ public class Lab extends Building {
      * steelCostLevelUp 升級所需要的鋼鐵量
      */
     public Lab(){
-        super(2,"研究所",3,24,-1,1,1,30,
+        super(2,"研究所",3,24,0,1,1,30,
                 10,5,50,20,0,0);
 
     }

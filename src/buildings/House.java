@@ -3,7 +3,7 @@ package buildings;
 
 public class House extends Building {
     public House() {
-        super(1, "房屋",  1, 30, -1, 1, 2, 10,
+        super(1, "房屋",  1, 30, 0, 1, 2, 10,
                 10, 0, 30, 15,0,0);
     }
 
@@ -13,7 +13,7 @@ public class House extends Building {
      * @return 增加的市民數
      */
     public int produceCitizen() {
-        return (getLevel()-1)*2 + 1;
+        return (getLevel()-2)*2 + 1;
     }
 
     @Override

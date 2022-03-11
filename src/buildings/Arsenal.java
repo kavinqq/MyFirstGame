@@ -24,7 +24,7 @@ public class Arsenal extends Building {
      * levelUp() → City類別的 第 347行 使用
      */
     public Arsenal(){
-        super(6,"兵工廠",3,48,-1,2,2,30,
+        super(6,"兵工廠",3,48,0,2,2,30,
                 30,10,70,40,0,0);
     }
 

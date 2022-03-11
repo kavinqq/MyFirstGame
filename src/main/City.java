@@ -134,7 +134,7 @@ public class City {
             int numOfNewCitizens = buildings.getNewCitizenNum(resource);
             if (numOfNewCitizens != 0) {
                 this.citizens.add(numOfNewCitizens);
-                System.out.printf("第%d回合 有新市民出生,目前一共有%d個市民 ,閒置人數:%d\n", getGameTime() + 1, getTotalCitizen(), citizens.getNumOfFreeCitizens());
+                System.out.printf("第%d回合 有新市民出生 ,閒置人數:%d\n", getGameTime() + 1, citizens.getNumOfFreeCitizens());
             }
             int numOfNewArmySoldiers = buildings.getNewArmyNum(resource);
             if (numOfNewArmySoldiers != 0) {
