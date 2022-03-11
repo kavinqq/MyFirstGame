@@ -21,8 +21,8 @@ public class SteelMill extends Building {
      * steelCostLevelUp 升級所需要的鋼鐵量
      */
     public SteelMill() {
-        super(5, "煉鋼場",  1, 30, 0, 1, false, 10,
-                15, 5, 30, 15,false,0,0);
+        super(5, "煉鋼場",  1, 30, 0, 1, 2, 10,
+                15, 5, 30, 15,0,0);
     }
 
     /**

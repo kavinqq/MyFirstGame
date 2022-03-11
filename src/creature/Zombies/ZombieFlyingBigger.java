@@ -1,10 +1,5 @@
 package creature.Zombies;
 
-/**
- * @author Lillian
- * @Date 2022/3/3
- * @Description
- */
 public class ZombieFlyingBigger extends Zombie implements Flyable {
 
     public ZombieFlyingBigger(){
@@ -14,6 +9,9 @@ public class ZombieFlyingBigger extends Zombie implements Flyable {
 
     @Override
     public int currentRoundCount(int round) {
+        if(round<7){
+            return 0;
+        }
         return (round-7)/2;
     }
 }

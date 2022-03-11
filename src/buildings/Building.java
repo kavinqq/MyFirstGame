@@ -1,4 +1,5 @@
 package buildings;
+
 import main.Resource;
 
 public abstract class Building {
@@ -73,7 +74,7 @@ public abstract class Building {
     private int steelCostLevelUp;
 
     /**
-     * 建造需要瓦斯
+     * 建造需要瓦斯P
      */
     private int gasCostCreate;
     /**
@@ -95,59 +96,58 @@ public abstract class Building {
 
     /**
      * 建構子
-     * @param id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工場)
-     * @param name 建築物名稱
-     * @param buildTime 建築物持續時間
-     * @param upgradeTime 建築物升級時間
-     * @param level 建築物等級 預設-1  建好 0 升級過 1~2,147,483,647
-     * @param techLevelNeed 需要科技等級
-     * @param isUpgrading 建築物是否在建築，建築中 -> true
-     * @param hp 建築物血量
-     * @param woodCostCreate 創建所需要的木頭量
-     * @param steelCostCreate 創建所需要的鋼鐵量
-     * @param woodCostLevelUp 升級所需要的木頭量
-     * @param steelCostLevelUp 升級所需要的鋼鐵量
-     * @param isWorking 建築物是否在運轉
-     * @param gasCostCreate 創建所需要的瓦斯量
-     * @param gasCostLevelUp 升級所需要的瓦斯量
+     *
+     * @param id                   建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工場)
+     * @param name                 建築物名稱
+     * @param buildTime            建築物持續時間
+     * @param upgradeTime          建築物升級時間
+     * @param level                建築物等級 預設-1  建好 0 升級過 1~2,147,483,647
+     * @param techLevelNeedBuild   建造需要的科技等級
+     * @param techLevelNeedUpgrade 升級需要的科技等級
+     * @param hp                   建築物血量
+     * @param woodCostCreate       創建所需要的木頭量
+     * @param steelCostCreate      創建所需要的鋼鐵量
+     * @param woodCostLevelUp      升級所需要的木頭量
+     * @param steelCostLevelUp     升級所需要的鋼鐵量
+     * @param gasCostCreate        創建所需要的瓦斯量
+     * @param gasCostLevelUp       升級所需要的瓦斯量
      */
-    public Building(int id, String name,int buildTime, int upgradeTime,
-                    int level, int techLevelNeed, boolean isUpgrading, int hp,
+    public Building(int id, String name, int buildTime, int upgradeTime,
+                    int level, int techLevelNeedBuild, int techLevelNeedUpgrade, int hp,
                     int woodCostCreate, int steelCostCreate, int woodCostLevelUp,
-                    int steelCostLevelUp, boolean isWorking,
-                    int gasCostCreate,int gasCostLevelUp){
+                    int steelCostLevelUp, int gasCostCreate, int gasCostLevelUp) {
         //建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠)
-        this.id=id;
+        this.id = id;
         //建築物名稱
-        this.name=name;
+        this.name = name;
         //建築物持續時間
-        this.buildTime=buildTime;
+        this.buildTime = buildTime;
         //建築物升級時間
-        this.upgradeTime=upgradeTime;
-        //建築物等級 預設-1  建好 0 升級過 1~2,147,483,647
-        this.level=level;
+        this.upgradeTime = upgradeTime;
+        //建築物等級 建好 0 升級過 1~2,147,483,647
+        this.level = level;
         //需要科技等級建造
         this.techLevelNeedBuild = techLevelNeedBuild;
         //需要科技等級升級
         this.techLevelNeedUpgrade = techLevelNeedUpgrade;
         //建築物是否在建築，建築中 -> true
-        this.readyToUpgrade=true;
+        this.readyToUpgrade = true;
         //血量
         this.hp = hp;
         //創建所需要的木頭量
-        this.woodCostCreate=woodCostCreate;
+        this.woodCostCreate = woodCostCreate;
         //創建所需要的鋼鐵量
-        this.steelCostCreate=steelCostCreate;
+        this.steelCostCreate = steelCostCreate;
         //升級所需要的木頭量
-        this.woodCostLevelUp=woodCostLevelUp;
+        this.woodCostLevelUp = woodCostLevelUp;
         //升級所需要的鋼鐵量
-        this.steelCostLevelUp=steelCostLevelUp;
+        this.steelCostLevelUp = steelCostLevelUp;
         //建築物是否在運轉
-        this.isWorking=isWorking;
+        this.isWorking = false;
         //創建所需要的瓦斯量
-        this.gasCostCreate=gasCostCreate;
+        this.gasCostCreate = gasCostCreate;
         //升級所需要的瓦斯量
-        this.gasCostLevelUp=gasCostLevelUp;
+        this.gasCostLevelUp = gasCostLevelUp;
         //建築物 剛建造完的時間 (那一個moment)，用來計算建築生產(和buildTime gameTime去做計算)
         this.createTime = -1;
     }
@@ -155,25 +155,28 @@ public abstract class Building {
 
     /**
      * 建築物編號 1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠
+     *
      * @return 建築物編號
      */
-    public int getId(){
+    public int getId() {
         return id;
     }
 
     /**
      * 總共有(房屋/研究所/軍營/伐木場/煉鋼廠/兵工廠)
+     *
      * @return 建築物名稱
      */
-    public String getName(){
+    public String getName() {
         return name;
     }
 
     /**
      * 獲得建築物初次建造完成的時間 (CreateTime: 只會在第一次建好的時候，被設定一次)
+     *
      * @return 建築物初次建造完成的時間
      */
-    public int getCreateTime(){
+    public int getCreateTime() {
         return createTime;
     }
 
@@ -181,43 +184,50 @@ public abstract class Building {
     /**
      * @return 獲得 建築物被設定去建造 或 升級時 的開始時間(設定的那一個瞬間 記錄下來 = 世紀帝國按下 升級帝王時代的時候)
      */
-    public int getBuildStart(){
+    public int getBuildStart() {
         return buildStart;
     }
 
 
-    /** 取得建築物 1.建造時間 2.升級時間 (建造完成後 升級時間會取代建造時間 成為新的建造時間 一起用這樣)
+    /**
+     * 取得建築物 1.建造時間 2.升級時間 (建造完成後 升級時間會取代建造時間 成為新的建造時間 一起用這樣)
+     *
      * @return 建築物的 建造時間/升級時間
      */
-    public int getBuildTime(){
+    public int getBuildTime() {
         return buildTime;
     }
 
     /**
      * 取得建築物等級
+     *
      * @return 建築物等級
      */
-    public int getLevel(){
+    public int getLevel() {
         return level;
     }
 
     /**
      * 取得升級所需要的木頭量
+     *
      * @return 升級所需要的木頭量
      */
-    public int getWoodCostLevelUp(){
+    public int getWoodCostLevelUp() {
         return woodCostLevelUp;
     }
 
     /**
      * 取得升級所需要的鋼鐵量
+     *
      * @return 升級所需要的鋼鐵量
      */
-    public int getSteelCostLevelUp(){
+    public int getSteelCostLevelUp() {
         return steelCostLevelUp;
     }
+
     /**
      * 取得升級所需要的瓦斯量
+     *
      * @return 升級所需要的瓦斯量
      */
     public int getGasCostLevelUp() {
@@ -226,17 +236,19 @@ public abstract class Building {
 
     /**
      * 是否有足夠的資源建造
+     *
      * @param resource 資源
      * @return
      */
-    public boolean isEnoughBuild(Resource resource){
-        return ( (woodCostCreate <= resource.getTotalWood()) &&
+    public boolean isEnoughBuild(Resource resource) {
+        return ((woodCostCreate <= resource.getTotalWood()) &&
                 (steelCostCreate <= resource.getTotalSteel()) &&
-                ((gasCostCreate <= resource.getTotalGas())) );
+                ((gasCostCreate <= resource.getTotalGas())));
     }
 
     /**
      * 消耗資源，建築物建造
+     *
      * @param resource 建築的資源
      */
     public void takeResourceBuild(Resource resource) {
@@ -247,17 +259,19 @@ public abstract class Building {
 
     /**
      * 是否有足夠的資源升級
+     *
      * @param resource
      * @return
      */
-    public boolean isEnoughUpgrade(Resource resource){
-        return ( (woodCostLevelUp <= resource.getTotalWood()) &&
+    public boolean isEnoughUpgrade(Resource resource) {
+        return ((woodCostLevelUp <= resource.getTotalWood()) &&
                 (steelCostLevelUp <= resource.getTotalSteel()) &&
-                ((gasCostLevelUp <= resource.getTotalGas())) );
+                ((gasCostLevelUp <= resource.getTotalGas())));
     }
 
     /**
      * 消耗資源，建築物升級
+     *
      * @param resource 建築的資源
      */
     public void takeResourceUpgrade(Resource resource) {
@@ -268,17 +282,19 @@ public abstract class Building {
 
     /**
      * 是否有足夠的資源生產
+     *
      * @param resource
      * @return
      */
-    public boolean isEnoughProduction(Resource resource){
-        return ( (woodForProduction <= resource.getTotalWood()) &&
+    public boolean isEnoughProduction(Resource resource) {
+        return ((woodForProduction <= resource.getTotalWood()) &&
                 (steelForProduction <= resource.getTotalSteel()) &&
-                ((gasForProduction <= resource.getTotalGas())) );
+                ((gasForProduction <= resource.getTotalGas())));
     }
 
     /**
      * 消耗資源，建築物生產
+     *
      * @param resource 建築的資源
      */
     public void takeResourceProduce(Resource resource) {
@@ -287,23 +303,24 @@ public abstract class Building {
         resource.takeGas(gasForProduction);
     }
 
-    public boolean isReadyToUpgrade(){
+    public boolean isReadyToUpgrade() {
         return readyToUpgrade;
     }
 
     /**
-     * @return  取得 創建要的木頭數
+     * @return 取得 創建要的木頭數
      */
-    public int getWoodCostCreate(){
+    public int getWoodCostCreate() {
         return woodCostCreate;
     }
 
     /**
      * @return 取得創建要的鋼鐵數
      */
-    public int getSteelCostCreate(){
+    public int getSteelCostCreate() {
         return steelCostCreate;
     }
+
     /**
      * @return 取得創建要的瓦斯數
      */
@@ -351,29 +368,30 @@ public abstract class Building {
         return hp;
     }
 
-    public void setWoodCostLevelUp(int woodCostLevelUp){
+    public void setWoodCostLevelUp(int woodCostLevelUp) {
         this.woodCostLevelUp = woodCostLevelUp;
     }
 
-    public void setSteelCostLevelUp(int steelCostLevelUp){
+    public void setSteelCostLevelUp(int steelCostLevelUp) {
         this.steelCostLevelUp = steelCostLevelUp;
     }
 
-    public void setGasCostLevelUp(int gasCostLevelUp){
+    public void setGasCostLevelUp(int gasCostLevelUp) {
         this.gasCostLevelUp = gasCostLevelUp;
     }
 
     public void getDamage(int damage) {
-        this.hp-=damage;
-        if(this.hp<=0){
-            this.hp=0;
+        this.hp -= damage;
+        if (this.hp <= 0) {
+            this.hp = 0;
         }
     }
 
     /**
      * 建築的效果說明
-     * @level 幾等時的作用
+     *
      * @return 建築的效果說明
+     * @level 幾等時的作用
      */
     public abstract String buildingDetail(int level);
 

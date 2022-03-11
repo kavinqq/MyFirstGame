@@ -3,8 +3,8 @@ package buildings;
 
 public class House extends Building {
     public House() {
-        super(1, "房屋",  1, 30, 0, 1, false, 10,
-                10, 0, 30, 15,false,0,0);
+        super(1, "房屋",  1, 30, 0, 1, 2, 10,
+                10, 0, 30, 15,0,0);
     }
 
     /**

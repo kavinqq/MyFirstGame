@@ -24,22 +24,9 @@ public class Arsenal extends Building {
      * levelUp() → City類別的 第 347行 使用
      */
     public Arsenal(){
-        super(6,"兵工廠",3,48,0,2,false,30,
-                30,10,70,40,false,0,0);
+        super(6,"兵工廠",3,48,0,2,2,30,
+                30,10,70,40,0,0);
     }
-
-//    public void levelUpTechResource(int level){
-//        switch (level){
-//            case 0:{
-//                super.setLevel(0);
-//            }
-//            case 1:{//一級時 需要升級的資源改變
-//                super.setLevel(1);
-//                break;
-//            }
-//        }
-//    }
-
 
     @Override
     public String toString() {

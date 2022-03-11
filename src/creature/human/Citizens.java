@@ -21,7 +21,12 @@ public class Citizens {
      */
     private int numOfMiningCitizens;
 
-    public Citizens(int defaultNumOfCitizens){
+    /**
+     * 創建新的居民群體並將size設成城市所傳入的預設值
+     *
+     * @param defaultNumOfCitizens
+     */
+    public Citizens(int defaultNumOfCitizens) {
         this.valueOfCitizens = 0;
         this.numOfFreeCitizens = 0;
         this.numOfLoggingCitizens = 0;
@@ -29,75 +34,119 @@ public class Citizens {
         this.add(defaultNumOfCitizens);
     }
 
-    public void add(int num){
+    /**
+     * 新增 num 個居民
+     *
+     * @param num
+     */
+    public void add(int num) {
         Citizen citizen;
         this.numOfFreeCitizens += num;
-        for(int i=0; i<num; i++){
+        for (int i = 0; i < num; i++) {
             citizen = new Citizen();
             this.valueOfCitizens += citizen.getValue();
             this.citizens.add(citizen);
         }
     }
 
-    public void getHarmed(int value){
+    /**
+     * 居民群體受到傷害
+     *
+     * @param value 殭屍攻擊力
+     */
+    public void getHarmed(int value) {
         this.valueOfCitizens -= value;
         Citizen citizen;
-        for(int i=0; value>0&&i<this.citizens.size(); i++){
+        for (int i = 0; value > 0 && i < this.citizens.size(); i++) {
             citizen = this.citizens.get(i);
-            if(value>=citizen.getValue()){
-                value-=citizen.getValue();
+            //平民被殺掉
+            if (value >= citizen.getValue()) {
+                //損耗殭屍總攻擊力
+                value -= citizen.getValue();
+                //將掛掉的平民從list移除
                 this.citizens.remove(i);
-            }
-            else{
-                citizen.setValue(citizen.getValue()-value);
+                i--;
+            } else {
+                //平民存活，扣血
+                citizen.setValue(citizen.getValue() - value);
             }
         }
     }
 
-    public void getWipedOut(){
+    /**
+     * 整個居民群體被消滅
+     */
+    public void getWipedOut() {
         this.citizens.clear();
         this.valueOfCitizens = 0;
     }
 
-    public boolean isAlive(){
+    /**
+     * 居民群體還有市民存活
+     *
+     * @return
+     */
+    public boolean isAlive() {
         return (!this.citizens.isEmpty());
     }
 
+    /**
+     * 回傳現在正在伐木的市民人數
+     *
+     * @return
+     */
     public int getNumOfLoggingCitizens() {
         return numOfLoggingCitizens;
     }
 
+    /**
+     * 回傳現在正在採鋼的居民人數
+     *
+     * @return
+     */
     public int getNumOfMiningCitizens() {
         return numOfMiningCitizens;
     }
 
+    /**
+     * 回傳現在整個市民群體的總體血量
+     *
+     * @return
+     */
     public int getValueOfCitizens() {
         return valueOfCitizens;
     }
 
+    /**
+     * 回傳現在狀態是空閑的居民人數
+     *
+     * @return
+     */
     public int getNumOfFreeCitizens() {
         return numOfFreeCitizens;
     }
 
-    public void assignCitizenToWork(int num, Main.Command work){
+    /**
+     * 將特定數量的市民指派去做特定種類的工作
+     *
+     * @param num
+     * @param work
+     */
+    public void assignCitizenToWork(int num, Main.Command work) {
         this.numOfFreeCitizens -= num;
-        if(work == Main.Command.WOOD){
-           this.numOfLoggingCitizens += num;
-        }
-        else if(work == Main.Command.STEEL){
+        if (work == Main.Command.WOOD) {
+            this.numOfLoggingCitizens += num;
+        } else if (work == Main.Command.STEEL) {
             this.numOfMiningCitizens += num;
         }
 
         Citizen citizen;
-        for(int i=0; num>0; i++){
+        for (int i = 0; num > 0; i++) {
             citizen = citizens.get(i);
-            System.out.println(citizen.isFree());
-            System.out.println("-------");
-            if(citizen.isFree()){
-                if(work == Main.Command.WOOD){
+            if (citizen.isFree()) {
+                if (work == Main.Command.WOOD) {
                     citizen.startToLog();
-                }
-                else if(work == Main.Command.STEEL){
+                } else if (work == Main.Command.STEEL) {
                     citizen.startToMine();
                 }
                 num--;
@@ -105,11 +154,21 @@ public class Citizens {
         }
     }
 
-    public boolean isAllDead(){
+    /**
+     * 回傳是否整個小鎮的居民都已經陣亡
+     *
+     * @return
+     */
+    public boolean isAllDead() {
         return this.citizens.isEmpty();
     }
 
-    public int getNumOfCitizens(){
+    /**
+     * 回傳現在市民群體的市民數量
+     *
+     * @return
+     */
+    public int getNumOfCitizens() {
         return this.citizens.size();
     }
 }

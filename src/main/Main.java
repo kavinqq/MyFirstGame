@@ -11,6 +11,8 @@ import main.BuildingSystem.BuildingNode;
 
 public class Main {
 
+    public final static Scanner SCANNER = new Scanner(System.in);
+
     public enum Command {
         STATUS(1),//"1.顯示資源\n" +
         WOOD(2),//木材指定幾人採
@@ -74,6 +76,7 @@ public class Main {
             switch (command) {
                 case STATUS: {
                     city.showInfo();
+                    pause();
                     break;
                 }
                 case WOOD: {
@@ -98,7 +101,7 @@ public class Main {
 
                 }
                 case BUILD: {
-                    int choose = inputInt("1.建造 2.升級  (-1離開)\n", 1, 2);
+                    int choose = inputInt("1.建造 2.升級  (-1離開)", 1, 2);
                     System.out.println("科技等級：" + City.getTechLevel());
                     switch (choose) {
                         case BUILD_BUILD: {
@@ -202,7 +205,7 @@ public class Main {
                                 if (City.getTechLevel() < type.instance().getTechLevelNeedUpgrade()) {
                                     System.out.println("科技等級不足");
                                 }
-                                if (type.instance().isEnoughUpgrade(city.getResource())) {
+                                if (!type.instance().isEnoughUpgrade(city.getResource())) {
                                     System.out.println("物資不足");
                                 }
                             }
@@ -281,12 +284,12 @@ public class Main {
      * -1 為取消選擇 離開
      */
     public static int inputInt(String hint, int min, int max) {
-        Scanner sc = new Scanner(System.in);
         int input = 0;
         try {
             do {
                 System.out.println(hint);
-                input = sc.nextInt();
+                input = SCANNER.nextInt();
+                SCANNER.nextLine();
                 if (input >= min && input <= max || input == LEAVE) {
                     return input;
                 } else {
@@ -298,5 +301,10 @@ public class Main {
             System.out.println("請重新輸入數字。");
         }
         return 1;
+    }
+
+    public static void pause(){
+        System.out.println("===enter繼續===");
+        SCANNER.nextLine();
     }
 }

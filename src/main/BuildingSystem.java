@@ -75,24 +75,24 @@ public class BuildingSystem {
         BuildingType(Building building, LinkedList<BuildingNode> list) {
             instance = building;
             this.list = list;
-
         }
 
+        /**
+         * 從int得到BuildingType
+         * @param option 數字選擇
+         * @return BuildingType
+         */
         public static BuildingType getBuildingTypeByInt(int option) {
             for (BuildingType type : values()) {
                 if (type.instance.getId() == option) {
                     return type;
                 }
             }
-            return HOUSE;
+            return null;
         }
 
         public Building instance() {
             return instance;
-        }
-
-        public LinkedList<BuildingNode> getList() {
-            return list;
         }
     }
 
@@ -127,15 +127,6 @@ public class BuildingSystem {
 
         public BuildingNode(Building building) {
             this.building = building;
-        }
-
-        /**
-         * 取得建造完成的時間
-         *
-         * @return 建造完成的時間
-         */
-        public int getBuildEndTime() {
-            return buildEndTime;
         }
 
         /**
@@ -246,44 +237,44 @@ public class BuildingSystem {
      * 所有建造完成的建築開始運作
      */
     public void showBuildCompleted() {
-        if (setBuildingStartWorkAndGetSum(HOUSE.list) != 0) {
+        if (setBuildingStartWork(HOUSE.list) != 0) {
             System.out.printf("房屋 %d間完成建造\n",
-                    setBuildingStartWorkAndGetSum(HOUSE.list));
+                    setBuildingStartWork(HOUSE.list));
         }
 
-        if (setBuildingStartWorkAndGetSum(LAB.list) != 0) {
+        if (setBuildingStartWork(LAB.list) != 0) {
             System.out.printf("研究所 %d間完成建造\n",
-                    setBuildingStartWorkAndGetSum(LAB.list));
+                    setBuildingStartWork(LAB.list));
         }
 
-        if (setBuildingStartWorkAndGetSum(BARRACKS.list) != 0) {
+        if (setBuildingStartWork(BARRACKS.list) != 0) {
             System.out.printf("軍營 %d間完成建造\n",
-                    setBuildingStartWorkAndGetSum(BARRACKS.list));
+                    setBuildingStartWork(BARRACKS.list));
         }
 
-        if (setBuildingStartWorkAndGetSum(SAW_MILL.list) != 0) {
+        if (setBuildingStartWork(SAW_MILL.list) != 0) {
             System.out.printf("伐木場 %d間完成建造\n",
-                    setBuildingStartWorkAndGetSum(SAW_MILL.list));
+                    setBuildingStartWork(SAW_MILL.list));
         }
 
-        if (setBuildingStartWorkAndGetSum(STEEL_MILL.list) != 0) {
+        if (setBuildingStartWork(STEEL_MILL.list) != 0) {
             System.out.printf("煉鋼廠 %d間完成建造\n",
-                    setBuildingStartWorkAndGetSum(STEEL_MILL.list));
+                    setBuildingStartWork(STEEL_MILL.list));
         }
 
-        if (setBuildingStartWorkAndGetSum(ARSENAL.list) != 0) {
+        if (setBuildingStartWork(ARSENAL.list) != 0) {
             System.out.printf("兵工廠 %d間完成建造\n",
-                    setBuildingStartWorkAndGetSum(ARSENAL.list));
+                    setBuildingStartWork(ARSENAL.list));
         }
 
-        if (setBuildingStartWorkAndGetSum(GAS_MILL.list) != 0) {
+        if (setBuildingStartWork(GAS_MILL.list) != 0) {
             System.out.printf("瓦斯廠 %d間完成建造\n",
-                    setBuildingStartWorkAndGetSum(GAS_MILL.list));
+                    setBuildingStartWork(GAS_MILL.list));
         }
 
-        if (setBuildingStartWorkAndGetSum(AIRPLANE_MILL.list) != 0) {
+        if (setBuildingStartWork(AIRPLANE_MILL.list) != 0) {
             System.out.printf("飛機工廠 %d間完成建造\n",
-                    setBuildingStartWorkAndGetSum(AIRPLANE_MILL.list));
+                    setBuildingStartWork(AIRPLANE_MILL.list));
         }
     }
 
@@ -293,7 +284,7 @@ public class BuildingSystem {
      * @param list 該類建築的鏈表
      * @return 完成建造的數量
      */
-    private int setBuildingStartWorkAndGetSum(LinkedList<BuildingNode> list) {
+    private int setBuildingStartWork(LinkedList<BuildingNode> list) {
         int sum = 0;
         for (BuildingNode node : list) {
             //若建造完成時間==當前時間->建造完成
@@ -346,7 +337,7 @@ public class BuildingSystem {
                     HOUSE.instance.getGasCostLevelUp(),
                     HOUSE.instance.getTechLevelNeedUpgrade());
 
-            System.out.printf("%d.科技等級可升級，資源需求：木材:%d, 鋼鐵:%d, 瓦斯:%d\n",
+            System.out.printf("%d.科技等級升級，資源需求：木材:%d, 鋼鐵:%d, 瓦斯:%d\n",
                     LAB.instance.getId(),
                     LAB.instance.getWoodCostLevelUp(),
                     LAB.instance.getSteelCostLevelUp(),
@@ -452,7 +443,6 @@ public class BuildingSystem {
         if (freeLabNum <= 0) {
             freeLabNum = 0;
         }
-        return;
     }
 
     /**
@@ -540,6 +530,7 @@ public class BuildingSystem {
      * 該類建築統一完成升級
      *
      * @param list 該類建築的鏈表
+     * @return 回傳有幾間完成升級
      */
     private int finishUpgradeBuilding(LinkedList<BuildingNode> list) {
         int sum = 0;
@@ -568,7 +559,7 @@ public class BuildingSystem {
         switch (type) {
             //兵工廠直接升級士兵/飛機等級
             case ARSENAL: {
-                if (freeArsenalNum != 0) {
+                if (freeArsenalNum != 0 && ARSENAL.instance.isEnoughUpgrade(resource)) {
                     return 1;
                 } else {
                     return 0;
@@ -576,7 +567,7 @@ public class BuildingSystem {
             }
             //研究所直接升級科技等級
             case LAB: {
-                if (freeLabNum != 0) {
+                if (freeLabNum != 0 && LAB.instance.isEnoughUpgrade(resource)) {
                     return 1;
                 } else {
                     return 0;
@@ -769,41 +760,41 @@ public class BuildingSystem {
     public String showInfo() {
         StringBuilder info = new StringBuilder();
 
-        info.append("房屋：").append("\t" + countBuildingNum(HOUSE.list)).append("間\n");
-        info.append("研究所：").append("\t" + countBuildingNum(LAB.list)).append("間\n");
-        info.append("軍營：").append("\t" + countBuildingNum(BARRACKS.list)).append("間\n");
-        info.append("兵工廠：").append("\t" + countBuildingNum(ARSENAL.list)).append("間\n");
-        info.append("伐木場：").append("\t" + countBuildingNum(SAW_MILL.list)).append("間\n");
-        info.append("煉鋼廠：").append("\t" + countBuildingNum(STEEL_MILL.list)).append("間\n");
-        info.append("瓦斯廠：").append("\t" + countBuildingNum(GAS_MILL.list)).append("間\n");
-        info.append("飛機工廠：").append("" + countBuildingNum(AIRPLANE_MILL.list)).append("間\n");
+        info.append("房屋：").append("\t" ).append( countBuildingNum(HOUSE.list)).append("間\n");
+        info.append("研究所：").append("\t" ).append( countBuildingNum(LAB.list)).append("間\n");
+        info.append("軍營：").append("\t" ).append( countBuildingNum(BARRACKS.list)).append("間\n");
+        info.append("兵工廠：").append("\t" ).append( countBuildingNum(ARSENAL.list)).append("間\n");
+        info.append("伐木場：").append("\t" ).append( countBuildingNum(SAW_MILL.list)).append("間\n");
+        info.append("煉鋼廠：").append("\t" ).append( countBuildingNum(STEEL_MILL.list)).append("間\n");
+        info.append("瓦斯廠：").append("\t" ).append( countBuildingNum(GAS_MILL.list)).append("間\n");
+        info.append("飛機工廠：").append(countBuildingNum(AIRPLANE_MILL.list)).append("間\n");
 
         info.append("=====正在進行中的工程=====\n");
 
         int[] record = new int[3];
         countStatus(HOUSE.list, record);
-        info.append("房屋：").append("\t" + getStatusWord(record));
+        info.append("房屋：").append("\t").append( getStatusWord(record));
 
         countStatus(LAB.list, record);
-        info.append("\n研究所：").append("\t" + getStatusWord(record));
+        info.append("\n研究所：").append("\t").append( getStatusWord(record));
 
         countStatus(BARRACKS.list, record);
-        info.append("\n軍營：").append("\t" + getStatusWord(record));
+        info.append("\n軍營：").append("\t" ).append( getStatusWord(record));
 
         countStatus(ARSENAL.list, record);
-        info.append("\n兵工廠：").append("\t" + getStatusWord(record));
+        info.append("\n兵工廠：").append("\t" ).append( getStatusWord(record));
 
         countStatus(SAW_MILL.list, record);
-        info.append("\n伐木場：").append("\t" + getStatusWord(record));
+        info.append("\n伐木場：").append("\t" ).append( getStatusWord(record));
 
         countStatus(STEEL_MILL.list, record);
-        info.append("\n煉鋼廠：").append("\t" + getStatusWord(record));
+        info.append("\n煉鋼廠：").append("\t").append( getStatusWord(record));
 
         countStatus(GAS_MILL.list, record);
-        info.append("\n瓦斯廠：").append("\t" + getStatusWord(record));
+        info.append("\n瓦斯廠：").append("\t" ).append( getStatusWord(record));
 
         countStatus(AIRPLANE_MILL.list, record);
-        info.append("\n飛機工廠：").append("\t" + getStatusWord(record));
+        info.append("\n飛機工廠：").append("\t" ).append( getStatusWord(record));
 
         if (isUpgradingTech) {
             info.append("\n科技升級中，尚餘：").append(techLevelStartUpgradeTime + TECH_LEVEL_UPGRADE_TIME - City.getGameTime()).append("小時");
@@ -1059,6 +1050,9 @@ public class BuildingSystem {
      * @return 各類建築被炸毀的總數字串
      */
     public String sumDamageBuilding() {
+        if(damageBuilding==null){
+            return "";
+        }
         Map<BuildingType, Integer> sum = new HashMap<>();
         //走訪列表
         for (int i = 0; i < damageBuilding.size(); i++) {
@@ -1082,38 +1076,42 @@ public class BuildingSystem {
         for (Map.Entry<BuildingType, Integer> entry : sum.entrySet()) {
             switch (entry.getKey()) {
                 case HOUSE: {
-                    builder.append("房屋").append(entry.getValue()).append("爆掉了");
+                    builder.append("房屋");
                     break;
                 }
                 case LAB: {
-                    builder.append("研究所").append(entry.getValue()).append("爆掉了");
+                    builder.append("研究所");
                     break;
                 }
                 case BARRACKS: {
-                    builder.append("軍營").append(entry.getValue()).append("爆掉了");
+                    builder.append("軍營");
                     break;
                 }
                 case SAW_MILL: {
-                    builder.append("伐木廠").append(entry.getValue()).append("爆掉了");
+                    builder.append("伐木廠");
                     break;
                 }
                 case STEEL_MILL: {
-                    builder.append("煉鋼廠").append(entry.getValue()).append("爆掉了");
+                    builder.append("煉鋼廠");
                     break;
                 }
                 case ARSENAL: {
-                    builder.append("兵工廠").append(entry.getValue()).append("爆掉了");
+                    builder.append("兵工廠");
                     break;
                 }
                 case GAS_MILL: {
-                    builder.append("瓦斯廠").append(entry.getValue()).append("爆掉了");
+                    builder.append("瓦斯廠");
                     break;
                 }
                 case AIRPLANE_MILL: {
-                    builder.append("飛機工廠").append(entry.getValue()).append("爆掉了");
+                    builder.append("飛機工廠");
                     break;
                 }
             }
+            if(entry.getValue()!=0){
+                builder.append(entry.getValue());
+            }
+            builder.append("爆掉了\n");
         }
 
         return builder.toString();
@@ -1133,5 +1131,12 @@ public class BuildingSystem {
         return freeArsenalNum == 0;
     }
 
-
+    public boolean isAllDestroyed(){
+        for(BuildingType buildingType : BuildingType.values()){
+            if(!buildingType.list.isEmpty()){
+                return false;
+            }
+        }
+        return true;
+    }
 }

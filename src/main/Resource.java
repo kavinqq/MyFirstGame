@@ -2,7 +2,6 @@ package main;
 
 /**
  * 控管所有物資 並不是單一物資屬性  因此用static
- *
  */
 public class Resource {
     /**
@@ -20,7 +19,7 @@ public class Resource {
     /**
      * Resource建構子 用來把 一開始的 木/鋼鐵 資源歸0
      */
-    public Resource(){
+    public Resource() {
         totalSteel = 0;
         totalWood = 0;
         totalGas = 0;
@@ -28,104 +27,107 @@ public class Resource {
 
     /**
      * 增加多少木頭
+     *
      * @param woodNewNum 新增的木頭量
      */
-    public void addWood(int woodNewNum){
+    public void addWood(int woodNewNum) {
         totalWood += woodNewNum;
     }
 
     /**
      * 增加多少鋼鐵
+     *
      * @param steelNewNum 新增的鋼鐵量
      */
-    public void addSteel(int steelNewNum){   //"採集"鐵   每次放數各數為 採鐵效率數量  <由市民使用此動作>
+    public void addSteel(int steelNewNum) {   //"採集"鐵   每次放數各數為 採鐵效率數量  <由市民使用此動作>
         totalSteel += steelNewNum;
     }
 
     /**
      * 增加多少瓦斯
+     *
      * @param gasNewNum 新增的瓦斯量
      */
-    public void addGas(int gasNewNum){   //"採集"鐵   每次放數各數為 採鐵效率數量  <由市民使用此動作>
+    public void addGas(int gasNewNum) {   //"採集"鐵   每次放數各數為 採鐵效率數量  <由市民使用此動作>
         totalGas += gasNewNum;
     }
 
     /**
      * 建築物 建造/升級 消耗多少木頭
+     *
      * @param woodQuantity 木頭數量
      */
-    public void takeWood(int woodQuantity){
+    public void takeWood(int woodQuantity) {
         totalWood -= woodQuantity;
-    }
-    public boolean canTakeWood(int woodQuantity){///
-        if(totalWood >= woodQuantity){
-            return true;
+        if (totalGas <= 0) {
+            totalWood = 0;
         }
-        return false;
     }
 
     /**
-     *  建築物 建造/升級 消耗多少鋼鐵
+     * 建築物 建造/升級 消耗多少鋼鐵
+     *
      * @param steelQuantity 鋼鐵數量
      */
-    public void takeSteel(int steelQuantity){///
+    public void takeSteel(int steelQuantity) {
         totalSteel -= steelQuantity;
-    }
-    public boolean canTakeSteel(int steelQuantity){///
-        if(totalSteel >= steelQuantity){
-            return true;
+        if (totalSteel <= 0) {
+            totalSteel = 0;
         }
-        return false;
     }
 
-    public void takeGas(int gasQuantity){///
+    /**
+     * 建築物 建造/升級 消耗多少瓦斯
+     *
+     * @param gasQuantity 瓦斯數量
+     */
+    public void takeGas(int gasQuantity) {
         totalGas -= gasQuantity;
-    }
-    public boolean canTakeGas(int steelQuantity){///
-        if(totalGas >= steelQuantity){
-            return true;
+        if (totalGas <= 0) {
+            totalGas = 0;
         }
-        return false;
     }
 
     /**
      * 取得目前木材總數
+     *
      * @return 目前 木材 總數
      */
-    public int getTotalWood(){
+    public int getTotalWood() {
         return totalWood;
     }
 
     /**
      * 取得目前 鐵 總數
+     *
      * @return 目前 鐵 總數
      */
-    public int getTotalSteel(){
+    public int getTotalSteel() {
         return totalSteel;
     }
 
     /**
      * 取得目前 瓦斯 總數
+     *
      * @return 目前 瓦斯 總數
      */
-    public int getTotalGas(){
+    public int getTotalGas() {
         return totalGas;
     }
 
     /**
      * 升級採木效率 每次 呼叫升級 +1
      */
-    public void upgradeWoodSpeed(int speedChange){
+    public void upgradeWoodSpeed(int speedChange) {
         DEFAULT_WOOD_SPEED += speedChange;
     }
 
     /**
      * 升級採鐵效率 每次 呼叫升級 +1
      */
-    public void upgradeSteelSpeed(int speedChange){
+    public void upgradeSteelSpeed(int speedChange) {
         DEFAULT_STEEL_SPEED += speedChange;
     }
-
 
 
 }

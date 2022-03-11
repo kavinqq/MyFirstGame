@@ -14,6 +14,10 @@ public class ZombieFlying extends Zombie implements Flyable {
 
     @Override
     public int currentRoundCount(int round) {
-        return round-7;
+        if (round < 7) {
+            return 0;
+        }
+        return round - 7;
+
     }
 }
