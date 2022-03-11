@@ -59,7 +59,7 @@ public class Resource {
      */
     public void takeWood(int woodQuantity) {
         totalWood -= woodQuantity;
-        if (totalGas <= 0) {
+        if (totalWood <= 0) {
             totalWood = 0;
         }
     }

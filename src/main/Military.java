@@ -23,10 +23,9 @@ public class Military {
         this.airForceLevel = 0;
         this.armyValue = 0;
         this.airForceValue = 0;
-        for(int i=0; i<INITIAL_ARMY_SIZE; i++){
-            this.armies.add(new ArmySoldier(this.armyLevel));
-        }
+        this.addArmy(INITIAL_ARMY_SIZE);
         upDateArmyValue();
+        upDateAirForceValue();
     }
 
     /**
@@ -125,11 +124,11 @@ public class Military {
     public void getArmyHarmed(int value){
         this.armyValue -= value;
         ArmySoldier armySoldier;
-        for(int i = 0; value>0 && i< airForce.size(); i++){
+        for(int i = 0; value>0 && i< armies.size(); i++){
             armySoldier = armies.get(i);
             if(value>=armySoldier.getValue()){
                 value -= armySoldier.getValue();
-                airForce.remove(i);
+                armies.remove(i);
                 i--;
             }
             else{
@@ -143,7 +142,7 @@ public class Military {
      */
     public void getAirForceWipedOut(){
         this.airForce.clear();
-        this.armyValue = 0;
+        this.airForceValue = 0;
     }
 
     /**
@@ -158,7 +157,7 @@ public class Military {
      * 檢查軍隊是否已全軍覆沒
      * @return
      */
-    public boolean isAllDied(){
+    public boolean isAllDead(){
         return (this.armies.isEmpty() && this.airForce.isEmpty());
     }
 

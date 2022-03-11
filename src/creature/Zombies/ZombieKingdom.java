@@ -96,6 +96,18 @@ public class ZombieKingdom {
         }
     }
 
+    public void showTroopValue(){
+        Zombie zombieGenre;
+        int number;
+        for (Map.Entry<Zombie, Integer> entry : zombies.entrySet()) {
+            zombieGenre = entry.getKey();
+            number = entry.getValue();
+            System.out.println(zombieGenre.getClass());
+            System.out.println(number);
+            System.out.println("----------------");
+        }
+    }
+
     /**
      * 殭屍族群
      */

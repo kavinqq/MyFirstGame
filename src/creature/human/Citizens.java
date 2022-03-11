@@ -69,6 +69,7 @@ public class Citizens {
             } else {
                 //平民存活，扣血
                 citizen.setValue(citizen.getValue() - value);
+                value = 0;
             }
         }
     }
@@ -81,14 +82,6 @@ public class Citizens {
         this.valueOfCitizens = 0;
     }
 
-    /**
-     * 居民群體還有市民存活
-     *
-     * @return
-     */
-    public boolean isAlive() {
-        return (!this.citizens.isEmpty());
-    }
 
     /**
      * 回傳現在正在伐木的市民人數

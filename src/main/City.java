@@ -6,8 +6,6 @@ import creature.Zombies.*;
 import main.BuildingSystem.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static main.BuildingSystem.BuildingType.*;
 
@@ -309,6 +307,7 @@ public class City {
             citizens.getWipedOut();
         } else {
             citizens.getHarmed(airAttack);
+            airAttack= 0;
         }
         //空中殭屍攻擊建築
         if (airAttack > 0) {
@@ -336,9 +335,8 @@ public class City {
             //landAttack = 0;
         }
 
-
-        if (citizens.isAlive()) {//還有人活著 遊戲繼續
-            if (military.isAllDied()) {
+        if (this.isAlive()) {//還有人活著 遊戲繼續
+            if (military.isAllDead()) {
                 System.out.println("不平靜的夜晚過去了\n你活了下來 但是\n戰士們為了拯救你 流光了鮮血\n");
             } else {
                 System.out.println("不平靜的夜晚過去了\n你也活下來了\n");
@@ -423,7 +421,7 @@ public class City {
 
 
     public boolean isAlive() {
-        return (!this.citizens.isAllDead() || !this.military.isAllDied() || !buildings.isAllDestroyed());
+        return (!this.citizens.isAllDead() || !this.military.isAllDead() || !buildings.isAllDestroyed());
     }
 
 

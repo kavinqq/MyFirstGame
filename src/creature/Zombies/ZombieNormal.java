@@ -5,7 +5,7 @@ public class ZombieNormal extends Zombie {
      * 這種殭屍的預設攻擊力
      */
     public ZombieNormal() {
-        super(5, FLYABILITY.CAN_FLY);
+        super(5, FLYABILITY.CANNOT_FLY);
     }
 
 
