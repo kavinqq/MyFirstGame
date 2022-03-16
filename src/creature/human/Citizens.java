@@ -1,6 +1,6 @@
 package creature.human;
 
-import main.Main;
+import main.OldMain;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -128,11 +128,11 @@ public class Citizens {
      * @param num
      * @param work
      */
-    public void assignCitizenToWork(int num, Main.Command work) {
+    public void assignCitizenToWork(int num, OldMain.Command work) {
         this.numOfFreeCitizens -= num;
-        if (work == Main.Command.WOOD) {
+        if (work == OldMain.Command.WOOD) {
             this.numOfLoggingCitizens += num;
-        } else if (work == Main.Command.STEEL) {
+        } else if (work == OldMain.Command.STEEL) {
             this.numOfMiningCitizens += num;
         }
 
@@ -140,9 +140,9 @@ public class Citizens {
         for (int i = 0; num > 0; i++) {
             citizen = citizens.get(i);
             if (citizen.isFree()) {
-                if (work == Main.Command.WOOD) {
+                if (work == OldMain.Command.WOOD) {
                     citizen.startToLog();
-                } else if (work == Main.Command.STEEL) {
+                } else if (work == OldMain.Command.STEEL) {
                     citizen.startToMine();
                 }
                 num--;

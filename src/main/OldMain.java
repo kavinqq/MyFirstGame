@@ -9,7 +9,7 @@ import static main.BuildingSystem.BuildingType.*;
 
 import main.BuildingSystem.BuildingNode;
 
-public class Main {
+public class OldMain {
 
     public final static Scanner SCANNER = new Scanner(System.in);
 

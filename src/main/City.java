@@ -73,7 +73,7 @@ public class City {
     /**
      * 工作相關方法  像是 派幾個人去採 木頭 / 鋼鐵
      */
-    public void assignWork(int numOfCitizensToAssign, Main.Command workType) {
+    public void assignWork(int numOfCitizensToAssign, OldMain.Command workType) {
         citizens.assignCitizenToWork(numOfCitizensToAssign, workType);
     }
 
