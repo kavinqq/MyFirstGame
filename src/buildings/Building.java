@@ -1,6 +1,6 @@
 package buildings;
 
-import main.Resource;
+import oldMain.Resource;
 
 public abstract class Building {
     /**

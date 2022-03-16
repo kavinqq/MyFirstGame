@@ -1,7 +1,5 @@
 package buildings;
 
-import main.City;
-
 /**
  * 軍營
  */

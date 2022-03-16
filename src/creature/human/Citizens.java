@@ -1,6 +1,6 @@
 package creature.human;
 
-import main.OldMain;
+import oldMain.OldMain;
 
 import java.util.LinkedList;
 import java.util.List;

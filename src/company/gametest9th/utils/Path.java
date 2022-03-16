@@ -41,51 +41,51 @@ public class Path {
             public String enemy() {
                 return this + "/enemy1.png";
             }
-
-            public String batman() {
-                return this + "/batman.png";
-            }
-
-            public String joker() {
-                return this + "/joker.png";
-            }
         }
 
         public static class Objs extends Flow {
+
             private Objs(Flow flow) {
                 super(flow, "/objs");
+
             }
 
             public String boom() {
                 return this + "/boom.png";
+
             }
 
             public String boom2() {
                 return this + "/boom2.png";
+
             }
 
-            public String batmanDart() {
-                return this + "/batmanDart.png";
-            }
         }
 
         public static class Background extends Flow {
             private Background(Flow flow) {
                 super(flow, "/backgrounds");
             }
+
+            public String background(){
+                return this + "/background.jpg";
+            }
         }
 
         public Actors actors() {
             return new Actors(this);
+
         }
 
         public Objs objs() {
             return new Objs(this);
+
         }
 
         public Background background() {
             return new Background(this);
         }
+
     }
 
     public static class Sound extends Flow {

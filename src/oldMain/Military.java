@@ -1,4 +1,4 @@
-package main;
+package oldMain;
 
 import creature.human.AirForceSoldier;
 import creature.human.ArmySoldier;

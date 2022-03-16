@@ -1,4 +1,4 @@
-package main;
+package oldMain;
 
 /**
  * 控管所有物資 並不是單一物資屬性  因此用static

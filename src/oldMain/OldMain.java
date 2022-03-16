@@ -1,13 +1,13 @@
-package main;
+package oldMain;
 
 import buildings.Building;
 
 import java.util.*;
 
-import static main.BuildingSystem.*;
-import static main.BuildingSystem.BuildingType.*;
+import static oldMain.BuildingSystem.*;
+import static oldMain.BuildingSystem.BuildingType.*;
 
-import main.BuildingSystem.BuildingNode;
+import oldMain.BuildingSystem.BuildingNode;
 
 public class OldMain {
 

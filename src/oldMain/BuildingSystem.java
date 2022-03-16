@@ -1,4 +1,4 @@
-package main;
+package oldMain;
 
 import buildings.*;
 
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import static main.BuildingSystem.BuildingType.*;
+import static oldMain.BuildingSystem.BuildingType.*;
 
 /**
  * 城市中的建築運作系統

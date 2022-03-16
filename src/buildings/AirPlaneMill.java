@@ -1,7 +1,5 @@
 package buildings;
 
-import main.City;
-
 /**
  * @author 飛機工場
  * @Date 2022/3/7

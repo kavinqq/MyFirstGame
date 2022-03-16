@@ -1,13 +1,13 @@
-package main;
+package oldMain;
 
 import buildings.*;
 import creature.human.*;
 import creature.Zombies.*;
-import main.BuildingSystem.*;
+import oldMain.BuildingSystem.*;
 
 import java.util.ArrayList;
 
-import static main.BuildingSystem.BuildingType.*;
+import static oldMain.BuildingSystem.BuildingType.*;
 
 public class City {
     /**
