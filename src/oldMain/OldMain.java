@@ -30,6 +30,7 @@ public class OldMain {
         }
 
         public static Command getCommandByInt(int option) {
+
             for (Command command : values()) {    //Command[] values()
                 if (command.value == option) {
                     return command;

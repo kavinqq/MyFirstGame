@@ -2,10 +2,13 @@ package company.scene;
 
 import company.Global;
 import company.controllers.SceneController;
+import company.gameObj.MenuChoice;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 
 /**
@@ -14,11 +17,40 @@ import java.awt.*;
 
 public class StartScene extends Scene{
 
+    // 背景圖片
     private Image img;
+
+    // 選單設定值
+    private final int MENU_WIDTH = 350;
+    private final int MENU_HEIGHT = 450;
+
+    // 選項設定值
+    private final int CHOICE_WIDTH =  150;
+    private final int CHOICE_HEIGHT = 50;
+    private final int CHOICE_GAP = 100;
+    private final int CHOICE_Y_DEFAULT = Global.SCREEN_Y / 2 - MENU_HEIGHT / 2;
+    private final Color CHOICE_FILL_COLOR  = Color.PINK;
+    private final Color CHOICE_HOVER_COLOR = Color.GREEN;
+
+    // 選項
+    private final ArrayList<MenuChoice> choices = new ArrayList<>();
+
+
 
     @Override
     public void sceneBegin() {
+        // 載入背景圖
         img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().background());
+
+        int choiceCnt = 1;
+
+        choices.add(new MenuChoice(Global.SCREEN_X / 2 - CHOICE_WIDTH / 2,  CHOICE_Y_DEFAULT + (CHOICE_GAP + CHOICE_HEIGHT) * choiceCnt - CHOICE_HEIGHT
+                                    , CHOICE_WIDTH, CHOICE_HEIGHT, "開始遊戲", CHOICE_FILL_COLOR, CHOICE_HOVER_COLOR,MenuChoice.Option.START));
+        choiceCnt++;
+
+        choices.add(new MenuChoice(Global.SCREEN_X / 2 - CHOICE_WIDTH / 2,  CHOICE_Y_DEFAULT + (CHOICE_GAP + CHOICE_HEIGHT) * choiceCnt - CHOICE_HEIGHT
+                                    , CHOICE_WIDTH, CHOICE_HEIGHT, "離開遊戲", CHOICE_FILL_COLOR, CHOICE_HOVER_COLOR, MenuChoice.Option.EXIT));
+        choiceCnt++;
     }
 
     @Override
@@ -28,13 +60,15 @@ public class StartScene extends Scene{
 
     @Override
     public void paint(Graphics g) {
-        g.drawImage(img, 0,0,Global.SCREEN_X, Global.SCREEN_Y,
-                0,0,img.getWidth(null), img.getHeight(null), null);
 
+        // start menu
+        g.setColor(Color.blue);
+        g.fill3DRect(Global.SCREEN_X / 2 - MENU_WIDTH / 2, Global.SCREEN_Y / 2 - MENU_HEIGHT / 2, MENU_WIDTH, MENU_HEIGHT, false);
 
-
-        g.setFont(new Font("楷體", Font.PLAIN, 20));
-        g.drawString("遊戲開始", Global.SCREEN_X / 2 - 50, Global.SCREEN_Y / 2);
+        //Choices
+        for(MenuChoice choice: choices){
+            choice.paint(g);
+        }
     }
 
     @Override
@@ -44,7 +78,36 @@ public class StartScene extends Scene{
 
     @Override
     public CommandSolver.MouseCommandListener mouseListener() {
-        return null;
+
+       return new CommandSolver.MouseCommandListener() {
+           @Override
+           public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+
+               // 滑鼠點擊
+               if (state == CommandSolver.MouseState.CLICKED) {
+
+                   // 尋訪一次choices ArrayList
+                   for (MenuChoice choice : choices) {
+                       System.out.println(choice.getOption());
+                       // 如果 滑鼠的 x,y 在 某個選項裡面
+                       if (e.getX() >= choice.collider().left() && e.getX() <= choice.collider().right()
+                               && e.getY() >= choice.collider().top() && e.getY() <= choice.collider().bottom()) {
+                           // 如果 該選項的 option值 為 START => 進入主畫面
+                           if(choice.getOption() == MenuChoice.Option.START){
+                               SceneController.getInstance().change(new MainScene());
+                               break;
+                           }
+
+                           // 如果 該選項的 option值 為 EXIT => 離開遊戲
+                           if(choice.getOption() == MenuChoice.Option.EXIT){
+                               System.exit(0);
+                               break;
+                           }
+                       }
+                   }
+               }
+           }
+       };
     }
 
     @Override

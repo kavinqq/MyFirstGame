@@ -29,7 +29,10 @@ public class GameCenter implements GameKernel.GameInterface, CommandSolver.Mouse
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+        // 滑鼠監聽
         CommandSolver.MouseCommandListener listener = SceneController.getInstance().mouseListener();
+
+        // 如果監聽有實例
         if (listener != null) {
             listener.mouseTrig(e, state, trigTime);
         }

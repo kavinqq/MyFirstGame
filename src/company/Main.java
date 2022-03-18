@@ -14,11 +14,6 @@ public class Main {
         frame.setSize(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //NONE(4),
-        //        UP(3),
-        //        DOWN(0),
-        //        LEFT(1),
-        //        RIGHT(2);
         int[][] commands = {
                 {KeyEvent.VK_LEFT, Global.LEFT},
                 {KeyEvent.VK_RIGHT, Global.RIGHT},

@@ -21,13 +21,21 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CommandSolver extends Thread {
 
     public enum MouseState {
+        // 點擊
         CLICKED,
+        // 按住
         PRESSED,
+        // 放開
         RELEASED,
+        // 移動上面
         ENTERED,
+        // 離開
         EXITED,
+        // 滾輪
         WHEEL_MOVED,
+        // 拖曳
         DRAGGED,
+        // 移動
         MOVED
     }
 
