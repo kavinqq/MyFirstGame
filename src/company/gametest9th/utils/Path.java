@@ -67,6 +67,9 @@ public class Path {
 
             }
 
+            public String start() { return this + "/start.png";};
+
+            public String exit() { return this + "/exit.png";};
         }
 
 

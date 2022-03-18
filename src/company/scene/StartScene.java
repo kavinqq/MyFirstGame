@@ -25,9 +25,9 @@ public class StartScene extends Scene{
     private final int MENU_HEIGHT = 450;
 
     // 選項設定值
-    private final int CHOICE_WIDTH =  150;
+    private final int CHOICE_WIDTH =  200;
     private final int CHOICE_HEIGHT = 50;
-    private final int CHOICE_GAP = 100;
+    private final int CHOICE_GAP = 50;
     private final int CHOICE_Y_DEFAULT = Global.SCREEN_Y / 2 - MENU_HEIGHT / 2;
     private final Color CHOICE_FILL_COLOR  = Color.PINK;
     private final Color CHOICE_HOVER_COLOR = Color.GREEN;
@@ -44,11 +44,11 @@ public class StartScene extends Scene{
 
         int choiceCnt = 1;
 
-        choices.add(new MenuChoice(Global.SCREEN_X / 2 - CHOICE_WIDTH / 2,  CHOICE_Y_DEFAULT + (CHOICE_GAP + CHOICE_HEIGHT) * choiceCnt - CHOICE_HEIGHT
+        choices.add(new MenuChoice(Global.SCREEN_X / 2 - CHOICE_WIDTH / 2,  CHOICE_Y_DEFAULT + (CHOICE_GAP + CHOICE_HEIGHT) * choiceCnt - CHOICE_HEIGHT + 100
                                     , CHOICE_WIDTH, CHOICE_HEIGHT, "開始遊戲", CHOICE_FILL_COLOR, CHOICE_HOVER_COLOR,MenuChoice.Option.START));
         choiceCnt++;
 
-        choices.add(new MenuChoice(Global.SCREEN_X / 2 - CHOICE_WIDTH / 2,  CHOICE_Y_DEFAULT + (CHOICE_GAP + CHOICE_HEIGHT) * choiceCnt - CHOICE_HEIGHT
+        choices.add(new MenuChoice(Global.SCREEN_X / 2 - CHOICE_WIDTH / 2,  CHOICE_Y_DEFAULT + (CHOICE_GAP + CHOICE_HEIGHT) * choiceCnt - CHOICE_HEIGHT + 100
                                     , CHOICE_WIDTH, CHOICE_HEIGHT, "離開遊戲", CHOICE_FILL_COLOR, CHOICE_HOVER_COLOR, MenuChoice.Option.EXIT));
         choiceCnt++;
     }
