@@ -1,7 +1,8 @@
-package company.gameObj;
+package company.gameObj.building;
 
 import company.Global;
 import company.controllers.SceneController;
+import company.gameObj.GameObject;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 
@@ -9,13 +10,13 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.EventListener;
 
-public class RockFactory extends  GameObject implements CommandSolver.MouseCommandListener {
+public class RockFactory extends GameObject implements CommandSolver.MouseCommandListener {
 
     private Image img;
 
     public RockFactory(int x, int y, int width, int height) {
         super(x, y, width, height);
-        img = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().RockFactory());
+        img = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().RockFactory());
     }
 
     @Override

@@ -2,16 +2,24 @@ package company;
 
 public class Global {
 
-
-
     public enum Direction {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT
+        UP(3),
+        DOWN(0),
+        LEFT(1),
+        RIGHT(2);
+
+        private int value;
+
+        Direction(int value){
+            this.value = value;
+        }
+
+        public int getValue(){
+            return value;
+        }
     }
 
-    public static final boolean IS_DEBUG = false;
+    public static final boolean IS_DEBUG = true;
 
     public static final int UPDATE_TIMES_PER_SEC = 60;
     public static final int NANOSECOUND_PER_UPDATE = 1000000000 / UPDATE_TIMES_PER_SEC;

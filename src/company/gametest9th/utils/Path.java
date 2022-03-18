@@ -39,22 +39,23 @@ public class Path {
 
     public static class Img extends Flow {
 
-        //
+        // Resource => img
         private Img() {
             super(new Resources(), "/img");
         }
 
+
+        // Resource => img => Actors
         public static class Actors extends Flow {
             private Actors(Flow flow) {
                 super(flow, "/actors");
             }
 
-/*             留一個當範例看
-             public String aircraft() {
-                return this + "/airplane1.png";
-            }
-*/
 
+            // Resource => img => Actors => Actor2.png
+            public String Actor2() {
+                return this + "/Actor2.png";
+            }
 
         }
 
@@ -71,8 +72,28 @@ public class Path {
 
             public String exit() { return this + "/exit.png";};
 
-            public String RockFactory() { return this + "/SteelMill.png";};
         }
+
+        public static class Building extends Flow {
+
+            private Building(Flow flow) {
+                super(flow, "/Building");
+
+            }
+
+            public String RockFactory() { return this + "/SteelMill.png";};
+
+            public String Base() { return this + "/Base.png";};
+
+            public String Lab() { return this + "/Library.png";};
+
+            public String Barracks() { return this + "/Barracks.png";};
+
+            public String House() { return this + "/house.png";};
+
+        }
+
+
 
 
         // Resource => img => background
@@ -82,7 +103,7 @@ public class Path {
             }
 
             public String background(){
-                return this + "/background.jpg";
+                return this + "/bg4.jpg";
             }
 
             public String grassBG() { return this + "/grassBG.png";}
@@ -100,6 +121,10 @@ public class Path {
         public Objs objs() {
             return new Objs(this);
 
+        }
+
+        public Building building(){
+            return new Building(this);
         }
 
         public Background background() {
