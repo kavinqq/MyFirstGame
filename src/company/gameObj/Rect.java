@@ -32,10 +32,10 @@ public class Rect {
     }
 
     public final Rect offset(int x, int y) {
-        this.x += x;
-        this.y += y;
+        setCenter(x,y);
         return this;
     }
+
 
     public final Rect translate(int x, int y) {
         this.x += x;

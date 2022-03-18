@@ -2,11 +2,14 @@ package company.gameObj;
 
 import company.Global;
 import company.controllers.SceneController;
+import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.EventListener;
 
-public class RockFactory extends  GameObject{
+public class RockFactory extends  GameObject implements CommandSolver.MouseCommandListener {
 
     private Image img;
 
@@ -24,4 +27,12 @@ public class RockFactory extends  GameObject{
     public void update() {
 
     }
+
+    @Override
+    public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+        if(state== CommandSolver.MouseState.DRAGGED){
+            painter().offset(e.getX(),e.getY());
+        }
+    }
+
 }

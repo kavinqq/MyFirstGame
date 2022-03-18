@@ -6,9 +6,11 @@ import company.gameObj.Foundation;
 import company.gameObj.Road;
 import company.gameObj.RockFactory;
 import company.gametest9th.utils.CommandSolver;
+import company.gametest9th.utils.GameKernel;
 import company.gametest9th.utils.Path;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 
 /**
  * 遊戲主場景
@@ -54,14 +56,30 @@ public class MainScene extends Scene {
     @Override
     public void update() {
     }
-
+    private boolean isCatchrockFactory=true;
     @Override
     public CommandSolver.MouseCommandListener mouseListener() {
-        return null;
+        return (e, state, trigTime) -> {
+            if(state==CommandSolver.MouseState.CLICKED){
+                isCatchrockFactory=rockFactory.isClicked(e.getX(), e.getY());
+            }
+            if (state == CommandSolver.MouseState.DRAGGED) {
+                if (isCatchrockFactory) {
+                    rockFactory.mouseTrig(e, state, trigTime);
+                }
+            }
+            if(state==CommandSolver.MouseState.RELEASED){
+                isCatchrockFactory=false;
+            }
+            System.out.println("asas");
+
+        };
     }
+
 
     @Override
     public CommandSolver.KeyListener keyListener() {
         return null;
     }
+
 }

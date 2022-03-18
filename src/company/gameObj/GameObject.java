@@ -32,6 +32,11 @@ public abstract class GameObject implements GameKernel.GameInterface {
     private Rect collider;
     private Rect painter;
 
+    public final void offset(int x, int y) {
+        collider.offset(x, y);
+        painter.offset(x, y);
+    }
+
     public final void translate(int x, int y) {
         collider.translate(x, y);
         painter.translate(x, y);
@@ -49,6 +54,13 @@ public abstract class GameObject implements GameKernel.GameInterface {
 
     public boolean isCollision(GameObject object) {
         return collider.overlap(object.collider);
+    }
+
+    public final boolean isClicked(int x, int y) {
+        if (painter.left() < x && painter.right() > x && painter.top() < y && painter.bottom() > y) {
+            return true;
+        }
+        return false;
     }
 
     public final Rect collider() {
