@@ -7,6 +7,11 @@ import company.gametest9th.utils.Path;
 
 import java.awt.*;
 
+
+/**
+ * 一開始的選單
+ */
+
 public class StartScene extends Scene{
 
     private Image img;
