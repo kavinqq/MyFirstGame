@@ -70,6 +70,8 @@ public class Path {
             public String start() { return this + "/start.png";};
 
             public String exit() { return this + "/exit.png";};
+
+            public String RockFactory() { return this + "/SteelMill.png";};
         }
 
 
@@ -84,6 +86,10 @@ public class Path {
             }
 
             public String grassBG() { return this + "/grassBG.png";}
+
+            public String foundation(){ return this + "/foundation.png";}
+
+            public String road(){ return this + "/road1.png";}
         }
 
         public Actors actors() {

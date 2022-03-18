@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        frame.setTitle("飛機射擊遊戲");
+        frame.setTitle("城市管理");
         frame.setSize(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

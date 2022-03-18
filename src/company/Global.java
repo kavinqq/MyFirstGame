@@ -18,8 +18,8 @@ public class Global {
     public static final int LIMIT_DELTA_TIME = 1000000000 / FRAME_LIMIT;
 
     //視窗大小
-    public static final int WINDOW_WIDTH = 1280;
-    public static final int WINDOW_HEIGHT = 800;
+    public static final int WINDOW_WIDTH = 1920;
+    public static final int WINDOW_HEIGHT = 1080;
     public static final int SCREEN_X = WINDOW_WIDTH - 8 - 8;
     public static final int SCREEN_Y = WINDOW_HEIGHT - 31 - 8;
 
