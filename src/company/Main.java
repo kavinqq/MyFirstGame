@@ -27,7 +27,7 @@ public class Main {
                 .enableMouseTrack(center)
                 .trackChar()
                 .enableKeyboardTrack(center)
-                .keyTypedMode()
+                .keyCleanMode()
                 .gen();
 
 

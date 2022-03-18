@@ -1,5 +1,6 @@
 package company.scene;
 
+import company.Global;
 import company.controllers.SceneController;
 import company.gameObj.Citizen;
 import company.gameObj.Foundation;
@@ -17,7 +18,7 @@ import static company.Global.*;
 /**
  * 遊戲主場景
  */
-public class MainScene extends Scene {
+public class MainScene extends Scene implements CommandSolver.KeyListener{
 
     private Image img;
 
@@ -52,7 +53,7 @@ public class MainScene extends Scene {
 
         rockFactory = new RockFactory(LAND_X, LAND_Y, BUILDING_WIDTH, BUILDING_HEIGHT);
 
-        citizen = new Citizen(200,250,2, Animator.State.STAND);
+        citizen = new Citizen(200,250,7, Animator.State.WALK);
     }
 
     @Override
@@ -90,13 +91,14 @@ public class MainScene extends Scene {
 
     @Override
     public void update() {
-
+        // 更新 村民狀態
         citizen.update();
     }
 
 
 
     private boolean canCatchRockFactory;
+
     @Override
     public CommandSolver.MouseCommandListener mouseListener() {
         return (e, state, trigTime) -> {
@@ -117,7 +119,23 @@ public class MainScene extends Scene {
 
     @Override
     public CommandSolver.KeyListener keyListener() {
-        return null;
+        return this;
     }
 
+    @Override
+    public void keyPressed(int commandCode, long trigTime) {
+        if(commandCode == Global.UP || commandCode == Global.DOWN || commandCode == Global.LEFT || commandCode == Global.RIGHT){
+            citizen.changeDir(commandCode);
+        }
+    }
+
+    @Override
+    public void keyReleased(int commandCode, long trigTime) {
+
+    }
+
+    @Override
+    public void keyTyped(char c, long trigTime) {
+
+    }
 }

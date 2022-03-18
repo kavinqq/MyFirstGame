@@ -7,26 +7,39 @@ import java.awt.*;
 
 public class HumanAnimator extends Animator{
 
+    // 哪一張人物行走圖
     private Image img;
+    // 哪一個人物
     private int type;
+    // 站立 或 走路的 陣列 index => 用來換 左腳/右腳/站立 的圖片
     private int walkCount;
+    // 延遲
     private Delay delay;
+    // 方向
     private Global.Direction dir;
+    // 人物狀態(站立/行走)
     private State state;
 
     public HumanAnimator(int type, State state) {
 
+        // 初始化是哪個角色
         this.type = type;
 
-        img = SceneController.getInstance().imageController().tryGetImage(new Path().img().actors().Actor2());
-
-        walkCount = 0;
-
+        // 初始化該角色狀態
         this.state = state;
 
-        delay = new Delay(15);
+        // 初始化圖片
+        img = SceneController.getInstance().imageController().tryGetImage(new Path().img().actors().Actor2());
+
+        // 初始化 行走/站立 狀態的陣列index
+        walkCount = 0;
+
+        // 初始化 delay
+        delay = new Delay(state.getSpeed());
+        // 開啟 循環模式
         delay.loop();
 
+        // 初始化方向
         dir = Global.Direction.DOWN;
     }
 

@@ -42,4 +42,31 @@ public class Citizen extends GameObject{
     public void update() {
         animator.update();
     }
+
+    public void changeDir(int dirNum){
+        if(dirNum == Global.UP){
+            dir = Global.Direction.UP;
+            painter().translateY(-4);
+            collider().translateY(-4);
+        }
+
+        if(dirNum == Global.DOWN){
+            dir = Global.Direction.DOWN;
+            painter().translateY(4);
+            collider().translateY(4);
+        }
+
+        if(dirNum == Global.LEFT){
+            dir = Global.Direction.LEFT;
+            painter().translateX(-4);
+            collider().translateX(-4);
+        }
+
+        if(dirNum == Global.RIGHT){
+            dir = Global.Direction.RIGHT;
+            painter().translateX(4);
+            collider().translateX(4);
+        }
+
+    }
 }
