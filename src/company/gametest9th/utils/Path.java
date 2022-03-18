@@ -82,6 +82,8 @@ public class Path {
             public String background(){
                 return this + "/background.jpg";
             }
+
+            public String grassBG() { return this + "/grassBG.png";}
         }
 
         public Actors actors() {

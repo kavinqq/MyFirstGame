@@ -35,12 +35,10 @@ public class StartScene extends Scene{
     // 選項
     private final ArrayList<MenuChoice> choices = new ArrayList<>();
 
-
-
     @Override
     public void sceneBegin() {
         // 載入背景圖
-        img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().background());
+        img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().grassBG());
 
         int choiceCnt = 1;
 
@@ -58,12 +56,14 @@ public class StartScene extends Scene{
 
     }
 
+
     @Override
     public void paint(Graphics g) {
+        g.drawImage(img, 0, 0, Global.SCREEN_X, Global.SCREEN_Y, null);
 
-        // start menu
-        g.setColor(Color.blue);
-        g.fill3DRect(Global.SCREEN_X / 2 - MENU_WIDTH / 2, Global.SCREEN_Y / 2 - MENU_HEIGHT / 2, MENU_WIDTH, MENU_HEIGHT, false);
+//        // start menu
+//        g.setColor(Color.blue);
+//        g.fill3DRect(Global.SCREEN_X / 2 - MENU_WIDTH / 2, Global.SCREEN_Y / 2 - MENU_HEIGHT / 2, MENU_WIDTH, MENU_HEIGHT, false);
 
         //Choices
         for(MenuChoice choice: choices){
