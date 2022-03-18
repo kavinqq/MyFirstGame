@@ -6,6 +6,7 @@ import company.gameObj.Foundation;
 import company.gameObj.Road;
 import company.gameObj.RockFactory;
 import company.gametest9th.utils.CommandSolver;
+import company.gametest9th.utils.Delay;
 import company.gametest9th.utils.GameKernel;
 import company.gametest9th.utils.Path;
 
@@ -56,12 +57,12 @@ public class MainScene extends Scene {
     @Override
     public void update() {
     }
-    private boolean isCatchrockFactory=true;
+    private boolean isCatchrockFactory=false;
     @Override
     public CommandSolver.MouseCommandListener mouseListener() {
         return (e, state, trigTime) -> {
-            if(state==CommandSolver.MouseState.CLICKED){
-                isCatchrockFactory=rockFactory.isClicked(e.getX(), e.getY());
+            if(state==CommandSolver.MouseState.MOVED){
+                isCatchrockFactory=rockFactory.isClicked(e.getX(),e.getY());
             }
             if (state == CommandSolver.MouseState.DRAGGED) {
                 if (isCatchrockFactory) {
@@ -71,8 +72,6 @@ public class MainScene extends Scene {
             if(state==CommandSolver.MouseState.RELEASED){
                 isCatchrockFactory=false;
             }
-            System.out.println("asas");
-
         };
     }
 
