@@ -44,6 +44,73 @@ public class Path {
             super(new Resources(), "/img");
         }
 
+        public class Humans extends Flow {
+            private Humans(Flow flow) {
+                super(flow, "/humans");
+            }
+
+
+            public String armySoldier() {
+                return this + "/armySoldier.png";
+            }
+
+            //TODO
+            public String airForceSoldier() {
+                return this + "/armySoldier.png";
+            }
+            //TODO
+            public String citizen() {
+                return this + "/citizen.png";
+            }
+
+            //Or we can also use this method
+            /*
+            public Flow aircraft() {
+                return new Flow("/airplane1.png"){};
+            }
+            */
+        }
+        public static class Zombies extends Flow {
+            private Zombies(Flow flow) {
+                super(flow, "/zombies");
+            }
+
+            //TODO
+            public String zombieNormal(){
+                return this + "/";
+            }
+
+            public String zombieBig(){
+                return this + "/";
+            }
+
+            public String zombieTypeI(){
+                return this + "/";
+            }
+
+            public String zombieTypeII() {
+                return this + "/";
+            }
+
+            public String zombieKing(){
+                return this + "/";
+            }
+
+            public String zombieWitch(){
+                return this + "/";
+            }
+
+            public String zombieFlying(){
+                return this + "/";
+            }
+
+            public String zombieFlyingBig(){
+                return this + "/";
+            }
+        }
+
+
+
 
         // Resource => img => Actors
         public static class Actors extends Flow {
@@ -116,6 +183,14 @@ public class Path {
         public Actors actors() {
             return new Actors(this);
 
+        }
+
+        public Humans humans() {
+            return new Humans(this);
+        }
+
+        public Zombies zombies() {
+            return new Zombies(this);
         }
 
         public Objs objs() {

@@ -68,7 +68,7 @@ public class Citizens {
                 i--;
             } else {
                 //平民存活，扣血
-                citizen.setValue(citizen.getValue() - value);
+                citizen.getAttacked(value);
                 value = 0;
             }
         }

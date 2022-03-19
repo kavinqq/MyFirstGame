@@ -3,6 +3,11 @@ package creature.human;
 import creature.Creature;
 
 public abstract class Human extends Creature {
+    public Human(int value, String img, FLY_ABILITY flyAbility, HUMAN_TYPE humanType) {
+        super(value, img, flyAbility);
+        this.setType(humanType);
+    }
+
     public enum HUMAN_TYPE {
         CITIZEN, SOLDIER;
     }

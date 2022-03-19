@@ -1,5 +1,7 @@
 package creature.human;
 
+import company.gametest9th.utils.Path;
+
 public class Citizen extends Human {   //市民
     private STATUS status;
     private int value;
@@ -10,10 +12,7 @@ public class Citizen extends Human {   //市民
      * 建構子 預設市民數值為1 , 不能打架 , 初始設定為閒人
      */
     public Citizen(){
-        this.value = 1;
-        this.setType(HUMAN_TYPE.CITIZEN);
-        this.status = STATUS.FREE; //建立時 同時設定狀態為 Free
-        this.setFlyability(FLYABILITY.CANNOT_FLY);
+        super(1, new Path().img().humans().citizen(), FLY_ABILITY.CANNOT_FLY, HUMAN_TYPE.CITIZEN);
     }
     /**
      * 派遣村民去採木頭

@@ -23,22 +23,22 @@ public class ZombieKingdom {
     /**
      * 各種殭屍
      */
-    private final ZombieBigger zombieBigger = new ZombieBigger();
+    private final ZombieBig zombieBig = new ZombieBig();
     private final ZombieKing zombieKing = new ZombieKing();
-    private final ZombieLichKing zombieLichKing = new ZombieLichKing();
+    private final ZombieWitch zombieWitch = new ZombieWitch();
     private final ZombieNormal zombieNormal = new ZombieNormal();
     private final ZombieTypeI zombieTypeI = new ZombieTypeI();
     private final ZombieTypeII zombieTypeII = new ZombieTypeII();
     private final ZombieFlying zombieFlying = new ZombieFlying();
-    private final ZombieFlyingBigger zombieFlyingBigger = new ZombieFlyingBigger();
+    private final ZombieFlyingBig zombieFlyingBigger = new ZombieFlyingBig();
 
     public ZombieKingdom() {
         this.zombieTime = 0;
         this.attackRound = 0;
         zombies = new HashMap<>();
-        this.zombies.put(zombieBigger, 0);
+        this.zombies.put(zombieBig, 0);
         this.zombies.put(zombieKing, 0);
-        this.zombies.put(zombieLichKing, 0);
+        this.zombies.put(zombieWitch, 0);
         this.zombies.put(zombieNormal, 0);
         this.zombies.put(zombieTypeI, 0);
         this.zombies.put(zombieTypeII, 0);
@@ -56,12 +56,12 @@ public class ZombieKingdom {
             //該殭屍種類數量增加
             int currentNum = currentType.currentRoundCount(this.attackRound);
             //更新殭屍數量
-            if (currentType instanceof ZombieBigger) {
-                zombies.put(zombieBigger, currentNum);
+            if (currentType instanceof ZombieBig) {
+                zombies.put(zombieBig, currentNum);
             } else if (currentType instanceof ZombieKing) {
                 zombies.put(zombieKing, currentNum);
-            } else if (currentType instanceof ZombieLichKing) {
-                zombies.put(zombieLichKing, currentNum);
+            } else if (currentType instanceof ZombieWitch) {
+                zombies.put(zombieWitch, currentNum);
             } else if (currentType instanceof ZombieNormal) {
                 zombies.put(zombieNormal, currentNum);
             } else if (currentType instanceof ZombieTypeI) {
@@ -70,7 +70,7 @@ public class ZombieKingdom {
                 zombies.put(zombieTypeII, currentNum);
             } else if (currentType instanceof ZombieFlying) {
                 zombies.put(zombieFlying, currentNum);
-            } else if (currentType instanceof ZombieFlyingBigger) {
+            } else if (currentType instanceof ZombieFlyingBig) {
                 zombies.put(zombieFlyingBigger, currentNum);
             }
         }
@@ -130,9 +130,9 @@ public class ZombieKingdom {
                 zombieGenre = entry.getKey();
                 number = entry.getValue();
                 if (zombieGenre.isFlyable()) {
-                    this.airAttack += (number * zombieGenre.getAttack());
+                    this.airAttack += (number * zombieGenre.getValue());
                 } else {
-                    this.landAttack += (number * zombieGenre.getAttack());
+                    this.landAttack += (number * zombieGenre.getValue());
                 }
             }
         }

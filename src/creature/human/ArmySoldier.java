@@ -1,13 +1,13 @@
 package creature.human;
 
+import company.gametest9th.utils.Path;
+
 public class ArmySoldier extends Soldier  {  //士兵
     /**
      * 建構子 預設士兵數值為2 ,等級為1
      */
     public ArmySoldier(int level){
-        this.setValue(2 + 3*level);
-        this.setSoldierType(SOLDIER_TYPE.ARMY);
-        this.setFlyability(FLYABILITY.CANNOT_FLY);
+        super(2 + 3*level, new Path().img().humans().armySoldier(), FLY_ABILITY.CANNOT_FLY, SOLDIER_TYPE.ARMY);
     }
 }
 
