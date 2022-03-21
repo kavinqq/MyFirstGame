@@ -1,6 +1,5 @@
 package creature;
 
-import com.sun.org.apache.xerces.internal.util.Status;
 import company.controllers.SceneController;
 
 import java.awt.*;
