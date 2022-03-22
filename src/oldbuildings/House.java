@@ -1,7 +1,7 @@
-package buildings;
+package oldbuildings;
 
 
-public class House extends Building {
+public class House extends BuildingsOld {
     public House() {
         super(1, "房屋",  1, 30, 0, 1, 2, 10,
                 10, 0, 30, 15,0,0);

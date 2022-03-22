@@ -1,11 +1,11 @@
-package buildings;
+package oldbuildings;
 
 /**
  * @author 飛機工場
  * @Date 2022/3/7
  * @Description
  */
-public class AirPlaneMill extends Building {
+public class AirPlaneMill extends BuildingsOld {
 
     /**
      * 父類建構子

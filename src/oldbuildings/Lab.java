@@ -1,9 +1,9 @@
-package buildings;
+package oldbuildings;
 
 /**
  * 研究所
  */
-public class Lab extends Building {
+public class Lab extends BuildingsOld {
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工廠)

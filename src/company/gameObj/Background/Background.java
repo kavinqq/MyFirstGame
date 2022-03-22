@@ -37,5 +37,5 @@ public class Background extends GameObject implements CommandSolver.MouseCommand
 //        }
 
     }
-    
+
 }

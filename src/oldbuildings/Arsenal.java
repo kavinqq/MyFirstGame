@@ -1,9 +1,10 @@
-package buildings;
+package oldbuildings;
 
 /**
- * 軍營
+ * 兵工廠
  */
-public class Barracks extends Building {
+public class Arsenal extends BuildingsOld {
+
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工場)
@@ -17,27 +18,22 @@ public class Barracks extends Building {
      * steelCostCreate 創建所需要的鋼鐵量
      * woodCostLevelUp 升級所需要的木頭量
      * steelCostLevelUp 升級所需要的鋼鐵量
+     *
+     * PS: 兵工廠的等級 → 決定士兵的攻擊力
+     * 兵工廠升級  → 呼叫 Human類別 的 levelUp()方法
+     * levelUp() → City類別的 第 347行 使用
      */
-    public Barracks() {
-        super(3, "軍營",  2, 30, 0, 1, 2,30,
-                20, 10, 30, 15,0,0);
+    public Arsenal(){
+        super(6,"兵工廠",3,48,0,2,2,30,
+                30,10,70,40,0,0);
     }
 
-    /**
-     * 增加的士兵數
-     * @return 增加的士兵數
-     */
-    public int produceSoldier(){
-        return getLevel()*2-1;
-
-    }
     @Override
     public String toString() {
-        return "軍營:每3小時消耗2木材2鋼鐵產生1位士兵(每房屋等級+2人)";
+        return "兵工廠:可以升級士兵";
     }
-
     public String buildingDetail(int level){
-        return "軍營：每3小時消耗2木材、2鋼鐵生產" + (super.getLevel() * 2 + 1) + "位士兵";
+        return "";
     }
 
 }

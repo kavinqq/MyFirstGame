@@ -1,4 +1,4 @@
 package company.gameObj.building;
 
-public class house {
+public class House {
 }

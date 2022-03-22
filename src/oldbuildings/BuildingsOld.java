@@ -1,8 +1,8 @@
-package buildings;
+package oldbuildings;
 
 import oldMain.Resource;
 
-public abstract class Building {
+public abstract class BuildingsOld {
     /**
      * 編號
      */
@@ -112,10 +112,10 @@ public abstract class Building {
      * @param gasCostCreate        創建所需要的瓦斯量
      * @param gasCostLevelUp       升級所需要的瓦斯量
      */
-    public Building(int id, String name, int buildTime, int upgradeTime,
-                    int level, int techLevelNeedBuild, int techLevelNeedUpgrade, int hp,
-                    int woodCostCreate, int steelCostCreate, int woodCostLevelUp,
-                    int steelCostLevelUp, int gasCostCreate, int gasCostLevelUp) {
+    public BuildingsOld(int id, String name, int buildTime, int upgradeTime,
+                        int level, int techLevelNeedBuild, int techLevelNeedUpgrade, int hp,
+                        int woodCostCreate, int steelCostCreate, int woodCostLevelUp,
+                        int steelCostLevelUp, int gasCostCreate, int gasCostLevelUp) {
         //建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠)
         this.id = id;
         //建築物名稱

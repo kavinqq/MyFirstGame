@@ -1,12 +1,11 @@
-package buildings;
+package oldbuildings;
 
 /**
- * @author 飛機工場
+ * @author 瓦斯場
  * @Date 2022/3/7
  * @Description
  */
-public class AirPlaneMill extends Building {
-
+public class GasMill extends BuildingsOld {
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工場)
@@ -25,28 +24,26 @@ public class AirPlaneMill extends Building {
      * gasCostCreate 創建所需要的瓦斯量
      * gasCostLevelUp 升級所需要的瓦斯量
      */
-
-    public AirPlaneMill() {
-        super(8, "飛機工廠",  2, 30, 0, 2, 2, 50,
-                15, 5, 30, 15,5,5);
+    public GasMill() {
+        super(7, "瓦斯場",  1, 30, 0, 2, 3, 20,
+                15, 5, 40, 20,0,0);
     }
 
     /**
-     * 生產的飛機數
-     * @return 生產的飛機數(含升級)
+     * 生產的瓦斯量
+     * @return 瓦斯場整體產生的瓦斯量(含升級效果)
      */
-    public int produceAirPlane(){
-        return getLevel()+1;
+    public int getProduceGasNum(){
+        return (getLevel())+5;
     }
 
     @Override
     public String toString(){
-        return "飛機工廠:每3小時花費5瓦斯產生1台戰鬥機(每等級可以使工作量+1)";
+        return "瓦斯廠:每小時生產5瓦斯(每房屋等級+1)";
     }
 
-    @Override
     public String buildingDetail(int level){
-        return "飛機工廠：每3小時花費" + super.getLevel() *5 + "瓦斯生產" + (super.getLevel()+1) + "台戰鬥機";
+        return String.format("瓦斯廠：每小時生產%d瓦斯",getLevel()+5);
     }
 
 

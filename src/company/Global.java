@@ -2,6 +2,8 @@ package company;
 
 public class Global {
 
+
+
     public enum Direction {
         UP(3),
         DOWN(0),
@@ -42,10 +44,12 @@ public class Global {
     public static final int SCREEN_Y = WINDOW_HEIGHT - 31 - 8;
 
     //選單大小
-    public static final int BUILDING_OPTION_WIDTH=240;
+    public static final int BUILDING_OPTION_WIDTH=150;
+    public static final int OPTION_GAP = 10;
     public static final int BUILDING_OPTION_HEIGHT=SCREEN_Y;
     public static final int BUILDING_OPTION_X=WINDOW_WIDTH-BUILDING_OPTION_WIDTH;
-    public static final int BUILDING_OPTION_Y=0;
+    public static final int BUILDING_OPTION_Y=STATUS_BAR_HEIGHT;
+
 
 
     //領地大小
@@ -55,20 +59,20 @@ public class Global {
     public static final int LAND_Y=SCREEN_Y/2-LAND_HEIGHT/2;
 
     //建築物大小
-    public static final int BUILDING_WIDTH=110;
-    public static final int BUILDING_HEIGHT=130;
+    public static final int BUILDING_WIDTH=96;
+    public static final int BUILDING_HEIGHT=96;
 
     //基座大小
-    public static final int FOUNDATION_WIDTH=120;
-    public static final int FOUNDATION_HEIGHT=120;
-    public static final int FOUNDATION_DISTANCE_X=120;
-    public static final int FOUNDATION_DISTANCE_Y=120;
+    public static final int FOUNDATION_WIDTH=100;
+    public static final int FOUNDATION_HEIGHT=100;
+    public static final int FOUNDATION_DISTANCE_X=100;
+    public static final int FOUNDATION_DISTANCE_Y=100;
 
 
     //建築
     public final static int BUILDING_AMOUNT_X=LAND_WIDTH/FOUNDATION_WIDTH/2;
     public final static int BUILDING_AMOUNT_Y=LAND_HEIGHT/FOUNDATION_HEIGHT/2;
-
+    public final static int BuildingTypeNum=8;
     /**
      * 操作指令
      */
