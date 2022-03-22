@@ -9,8 +9,11 @@ import company.gameObj.building.Building;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
 import company.gametest9th.utils.Path;
+import oldbuildings.*;
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.util.LinkedList;
 
 import static company.Global.*;
 
@@ -20,14 +23,15 @@ public class BuildingOption implements GameKernel.GameInterface {
     Image[] imgs=new Image[Global.BuildingTypeNum];
     Image foundation_img;
     public BuildingOption() {
-        imgs[0]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().RockFactory());
-        imgs[1]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().RockFactory());
-        imgs[2]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().RockFactory());
-        imgs[3]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().RockFactory());
-        imgs[4]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().RockFactory());
-        imgs[5]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().RockFactory());
-        imgs[6]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().RockFactory());
-        imgs[7]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().RockFactory());
+        imgs[0]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().House());
+        imgs[1]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Lab());
+        imgs[2]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Sawmill());
+        imgs[3]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Steelmill());
+        imgs[4]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Barracks());
+        imgs[5]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Gasmill());
+        imgs[6]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Arsenal());
+        imgs[7]= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().AirplanemIll());
+
 
         buildings[0]=new Base(80,80,100,100);
 
@@ -42,9 +46,9 @@ public class BuildingOption implements GameKernel.GameInterface {
     public void paint(Graphics g) {
         //paintComponent(g);
         for (int i = 0; i < 8; i++) {
-            g.drawImage(foundation_img,BUILDING_OPTION_X,BUILDING_OPTION_Y+(FOUNDATION_HEIGHT+OPTION_GAP)*i
+            g.drawImage(foundation_img,BUILDING_OPTION_X+OPTION_GAP_X,BUILDING_OPTION_Y+(FOUNDATION_HEIGHT+OPTION_GAP_Y)*i
                     ,FOUNDATION_WIDTH,FOUNDATION_HEIGHT,null);
-            g.drawImage(imgs[i], BUILDING_OPTION_X, BUILDING_OPTION_Y+(FOUNDATION_HEIGHT+OPTION_GAP)*i
+            g.drawImage(imgs[i], BUILDING_OPTION_X+OPTION_GAP_X, BUILDING_OPTION_Y+(FOUNDATION_HEIGHT+OPTION_GAP_Y)*i
                     ,BUILDING_WIDTH,BUILDING_HEIGHT,null);
         }
 

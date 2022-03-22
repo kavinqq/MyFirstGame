@@ -43,9 +43,15 @@ public class Global {
     public static final int SCREEN_X = WINDOW_WIDTH - 8 - 8;
     public static final int SCREEN_Y = WINDOW_HEIGHT - 31 - 8;
 
+    //基座大小
+    public static final int FOUNDATION_WIDTH=100;
+    public static final int FOUNDATION_HEIGHT=100;
+
+
     //選單大小
     public static final int BUILDING_OPTION_WIDTH=150;
-    public static final int OPTION_GAP = 10;
+    public static final int OPTION_GAP_Y = 10;
+    public static final int OPTION_GAP_X =(BUILDING_OPTION_WIDTH-FOUNDATION_WIDTH)/2;
     public static final int BUILDING_OPTION_HEIGHT=SCREEN_Y;
     public static final int BUILDING_OPTION_X=WINDOW_WIDTH-BUILDING_OPTION_WIDTH;
     public static final int BUILDING_OPTION_Y=STATUS_BAR_HEIGHT;
@@ -62,11 +68,9 @@ public class Global {
     public static final int BUILDING_WIDTH=96;
     public static final int BUILDING_HEIGHT=96;
 
-    //基座大小
-    public static final int FOUNDATION_WIDTH=100;
-    public static final int FOUNDATION_HEIGHT=100;
-    public static final int FOUNDATION_DISTANCE_X=100;
-    public static final int FOUNDATION_DISTANCE_Y=100;
+
+
+
 
 
     //建築
