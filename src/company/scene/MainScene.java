@@ -1,7 +1,7 @@
 package company.scene;
 
+import company.gameObj.Background.Background;
 import company.Global;
-import company.controllers.SceneController;
 import company.gameObj.Citizen;
 import company.gameObj.Foundation;
 import company.gameObj.Road;
@@ -9,7 +9,6 @@ import company.gameObj.building.Base;
 import company.gameObj.building.RockFactory;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.CommandSolver;
-import company.gametest9th.utils.Path;
 
 import java.awt.*;
 
@@ -20,12 +19,11 @@ import static company.Global.*;
  */
 public class MainScene extends Scene implements CommandSolver.KeyListener{
 
-    private Image img;
 
     private RockFactory rockFactory;
 
     private Base base;
-
+    private Background background;
     private Citizen citizen;
     private Citizen currentCitizen;
     private boolean canControlCitizen;
@@ -39,7 +37,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
 
     @Override
     public void sceneBegin() {
-        img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().background());
+        background=new Background(0,0, SCREEN_X, SCREEN_Y);
 
         for (int i = 0; i < BUILDING_AMOUNT_X; i++) {
 
@@ -70,7 +68,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
     @Override
     public void paint(Graphics g) {
         // 背景
-        g.drawImage(img, 0, 0, SCREEN_X, SCREEN_Y, null);
+        background.paint(g);
 
         //狀態攔
         g.drawRect(STATUS_BAR_X, STATUS_BAR_Y, STATUS_BAR_WEIGHT, STATUS_BAR_HEIGHT);

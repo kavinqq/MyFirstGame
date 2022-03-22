@@ -32,7 +32,7 @@ public class RockFactory extends GameObject implements CommandSolver.MouseComman
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
         if(state== CommandSolver.MouseState.DRAGGED){
-            painter().offset(e.getX(),e.getY());
+            offset(e.getX(),e.getY());
         }
     }
 
