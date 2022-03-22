@@ -1,7 +1,7 @@
 package oldMain;
 
-import creature.human.AirForceSoldier;
-import creature.human.ArmySoldier;
+import company.gameObj.creature.human.AirForceSoldier;
+import company.gameObj.creature.human.ArmySoldier;
 
 import java.util.LinkedList;
 import java.util.List;

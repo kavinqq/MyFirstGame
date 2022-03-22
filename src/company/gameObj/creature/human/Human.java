@@ -1,6 +1,6 @@
-package creature.human;
+package company.gameObj.creature.human;
 
-import creature.Creature;
+import company.gameObj.creature.Creature;
 
 public abstract class Human extends Creature {
     public Human(int value, String img, FLY_ABILITY flyAbility, HUMAN_TYPE humanType) {

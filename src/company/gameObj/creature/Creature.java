@@ -1,4 +1,4 @@
-package creature;
+package company.gameObj.creature;
 
 import company.controllers.SceneController;
 

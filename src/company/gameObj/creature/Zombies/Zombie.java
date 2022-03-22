@@ -1,6 +1,6 @@
-package creature.Zombies;
+package company.gameObj.creature.Zombies;
 
-import creature.Creature;
+import company.gameObj.creature.Creature;
 
 public abstract class Zombie extends Creature {
     /**

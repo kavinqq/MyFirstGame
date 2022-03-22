@@ -1,4 +1,4 @@
-package creature.human;
+package company.gameObj.creature.human;
 
 import company.gametest9th.utils.Path;
 
