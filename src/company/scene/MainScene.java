@@ -125,6 +125,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
 
                         canControlCitizen = true;
                     }
+
+
+
+
                     break;
                 }
 
@@ -135,7 +139,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
                 }
 
                 case DRAGGED: {
-                    System.out.println("DRAGGED");
+//                    System.out.println("DRAGGED");
 
                     if (canCatchRockFactory) {
                         rockFactory.mouseTrig(e, state, trigTime);
@@ -144,7 +148,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
                 }
 
                 case RELEASED: {
-                    System.out.println("RELEASED");
+//                    System.out.println("RELEASED");
 
                     canCatchRockFactory = false;
                     break;
@@ -155,8 +159,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
 
                     if(canControlCitizen){
                         currentCitizen.setTarget(e.getX(), e.getY());
-                        canControlCitizen = false;
                     }
+
+
                     break;
                 }
 

@@ -20,6 +20,7 @@ public class Citizen extends GameObject{
     private int targetX;
     private int targetY;
     private boolean canMove;
+    private boolean hasMove;
 
     private HumanAnimator animator;
 
@@ -43,6 +44,7 @@ public class Citizen extends GameObject{
         targetY = painter().centerY();
 
         canMove = false;
+        hasMove = false;
     }
 
     @Override
@@ -93,6 +95,10 @@ public class Citizen extends GameObject{
     }
 
     public void mouseToMove() {
+
+        hasMove = false;
+
+
         if(!canMove){
             return;
         }
@@ -107,34 +113,43 @@ public class Citizen extends GameObject{
 
             painter().translateX(speed);
             collider().translateX(speed);
+
+            hasMove = true;
         }
 
-        if(targetX < painter().centerX()){
+        if(targetX < painter().centerX() && !hasMove){
             dir = Global.Direction.LEFT;
 
             painter().translateX(speed * -1);
             collider().translateX(speed * -1);
+
+            hasMove = true;
         }
 
         speed = 4;
+
         // 處理Y
 
         if(Math.abs(targetY - painter().centerY()) < speed){
             speed = Math.abs(targetY - painter().centerY());
         }
 
-        if(targetY > painter().centerY()){
+        if(targetY > painter().centerY() && !hasMove){
             dir = Global.Direction.DOWN;
 
             painter().translateY(speed);
             collider().translateY(speed);
+
+            hasMove = true;
         }
 
-        if(targetY < painter().centerY()){
+        if(targetY < painter().centerY() &&!hasMove){
             dir = Global.Direction.UP;
 
             painter().translateY(speed * -1);
             collider().translateY(speed * -1);
+
+            hasMove = true;
         }
 
         speed = 4;
@@ -142,6 +157,10 @@ public class Citizen extends GameObject{
         if(targetX == painter().centerX() && targetY == painter().centerY()){
             canMove = false;
         }
+
+        hasMove = false;
     }
+
+
 
 }
