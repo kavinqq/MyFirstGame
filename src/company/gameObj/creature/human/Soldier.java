@@ -10,8 +10,8 @@ public abstract class Soldier extends Human{
         ARMY, AIR_FORCE;
     }
     private SOLDIER_TYPE soldierType;
-    public Soldier(int value, String img, FLY_ABILITY flyAbility, SOLDIER_TYPE soldierType){
-        super(value, img, flyAbility, HUMAN_TYPE.SOLDIER);
+    public Soldier(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight,int value, String img, FLY_ABILITY flyAbility, SOLDIER_TYPE soldierType){
+        super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight, value, img, flyAbility, HUMAN_TYPE.SOLDIER);
         this.setType(HUMAN_TYPE.SOLDIER);
     }
     public void setSoldierType(SOLDIER_TYPE soldierType){

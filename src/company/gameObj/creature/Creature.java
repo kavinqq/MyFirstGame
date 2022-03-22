@@ -1,18 +1,21 @@
 package company.gameObj.creature;
 
 import company.controllers.SceneController;
+import company.gameObj.GameObject;
 
 import java.awt.*;
 
-public abstract class Creature {
-    public Creature(int value, String img, FLY_ABILITY flyAbility) {
+public abstract class Creature extends GameObject{
+    public Creature(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight ,int value, String img, FLY_ABILITY flyAbility) {
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight);
         this.value = value;
         this.img = SceneController.getInstance().imageController().tryGetImage(img);
         this.setFlyAbility(flyAbility);
+        this.status = STATUS.STOPPING;
     }
 
-    public enum Status{
-        FIGHTING, WALKING;
+    public enum STATUS {
+        FIGHTING, WALKING, STOPPING;
     }
 
 
@@ -23,9 +26,10 @@ public abstract class Creature {
      * 生物 的初始數值(也就是攻擊力)
      */
     private int value;
-    private FLY_ABILITY flyAbility;
-    private Status status;
     private Image img;
+    private FLY_ABILITY flyAbility;
+    private STATUS status;
+    private GameObject attackTarget;
 
 
     /**
@@ -44,8 +48,12 @@ public abstract class Creature {
         this.flyAbility = flyAbility;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(STATUS status) {
         this.status = status;
+    }
+
+    public STATUS getStatus() {
+        return status;
     }
 
     public boolean isAlive(){
@@ -57,7 +65,18 @@ public abstract class Creature {
     }
 
     public boolean isFighting(){
-        return (this.status==Status.FIGHTING);
+        return (this.status== STATUS.FIGHTING);
     }
 
+    public void setAttackTarget(GameObject attackTarget) {
+        this.attackTarget = attackTarget;
+    }
+
+    public GameObject getAttackTarget() {
+        return attackTarget;
+    }
+
+    public Image getImg(){
+        return this.img;
+    }
 }

@@ -1,5 +1,6 @@
 package oldMain;
 
+import company.Global;
 import company.gameObj.creature.human.AirForceSoldier;
 import company.gameObj.creature.human.ArmySoldier;
 
@@ -35,7 +36,7 @@ public class Military {
     public void addArmy(int num){
         ArmySoldier armySoldier;
         for(int i=0; i<num; i++){
-            armySoldier = new ArmySoldier(this.armyLevel);
+            armySoldier = new ArmySoldier( Global.SCREEN_X/2, Global.SCREEN_Y/2, this.armyLevel);
             this.armyValue += armySoldier.getValue();
             this.army.add(armySoldier);
         }
@@ -48,7 +49,7 @@ public class Military {
     public void addAirForce(int num){
         AirForceSoldier airForceSoldier;
         for(int i=0; i<num; i++){
-            airForceSoldier = new AirForceSoldier(this.airForceLevel);
+            airForceSoldier = new AirForceSoldier(Global.SCREEN_X/2, Global.SCREEN_Y/2, this.airForceLevel);//TODO: use the correct x and y
             this.airForceValue += airForceSoldier.getValue();
             this.airForce.add(airForceSoldier);
         }

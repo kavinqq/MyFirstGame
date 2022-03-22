@@ -1,5 +1,6 @@
 package company.gameObj.creature.human;
 
+import company.Global;
 import oldMain.OldMain;
 
 import java.util.LinkedList;
@@ -43,7 +44,7 @@ public class Citizens {
         Citizen citizen;
         this.numOfFreeCitizens += num;
         for (int i = 0; i < num; i++) {
-            citizen = new Citizen();
+            citizen = new Citizen(Global.SCREEN_X/2, Global.SCREEN_Y/2);//TODO: set the correct x and y
             this.valueOfCitizens += citizen.getValue();
             this.citizens.add(citizen);
         }

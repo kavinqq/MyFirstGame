@@ -3,8 +3,8 @@ package company.gameObj.creature.human;
 import company.gameObj.creature.Creature;
 
 public abstract class Human extends Creature {
-    public Human(int value, String img, FLY_ABILITY flyAbility, HUMAN_TYPE humanType) {
-        super(value, img, flyAbility);
+    public Human(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, String img, FLY_ABILITY flyAbility, HUMAN_TYPE humanType) {
+        super(x,y,painterWidth, painterHeight, colliderWidth, colliderHeight, value, img, flyAbility);
         this.setType(humanType);
     }
 

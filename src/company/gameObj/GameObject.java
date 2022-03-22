@@ -18,6 +18,13 @@ public abstract class GameObject implements GameKernel.GameInterface {
         painter.setCenter(collider.centerX(), collider.centerY());
     }
 
+    public GameObject(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight){
+        painter = new Rect(x,y,painterWidth, painterHeight);
+        painter.setCenter(x,y);
+        collider = new Rect(x,y, colliderWidth, colliderHeight);
+        collider.setCenter(x,y);
+    }
+
     public GameObject(Rect rect) {
         painter = rect.clone();
         collider = rect.clone();
@@ -99,5 +106,5 @@ public abstract class GameObject implements GameKernel.GameInterface {
         }
     }
 
-    public abstract void paintComponent(Graphics g);
+    public abstract void paintComponent(Graphics g);//TODO: can we change this into non-abstract??
 }
