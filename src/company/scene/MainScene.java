@@ -1,5 +1,6 @@
 package company.scene;
 
+import company.controllers.SceneController;
 import company.gameobj.background.Background;
 import company.Global;
 import company.gameobj.background.component.*;
@@ -8,6 +9,7 @@ import company.gameobj.Road;
 import company.gameobj.buildings.Base;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.CommandSolver;
+import company.gametest9th.utils.Path;
 
 import java.awt.*;
 
@@ -25,7 +27,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private Citizen citizen;
     private Citizen currentCitizen;
     private boolean canControlCitizen;
-
+    private Image gray;
     // 框選
     private boolean isBoxSelect;
     private int boxSelectStartX;
@@ -39,11 +41,15 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     @Override
     public void sceneBegin() {
         //背景
-        background=new Background(0,0, SCREEN_X, SCREEN_Y);
+        background = new Background(0, 0, SCREEN_X, SCREEN_Y);
         //建築物選單
-        buildingOption=new BuildingOption();
+        buildingOption = new BuildingOption();
         //
         //buildingController=new MouseController(new Building(50,50));
+
+        //半透明
+        gray=SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().gray());
+
 
         base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y / 2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
 
@@ -80,8 +86,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         base.paint(g);
 
         //建築物選單範圍測試
-        g.drawRect(BUILDING_OPTION_X, BUILDING_OPTION_Y,BUILDING_OPTION_WIDTH,BUILDING_OPTION_HEIGHT);
-
+        g.drawRect(BUILDING_OPTION_X, BUILDING_OPTION_Y, BUILDING_OPTION_WIDTH, BUILDING_OPTION_HEIGHT);
 
 
         g.setColor(Color.black);
@@ -90,8 +95,15 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //test人物
         citizen.paint(g);
 
+
+
+
         if (isBoxSelect) {
             g.setColor(Color.PINK);
+            int a=boxSelectEndX-boxSelectStartX;
+            int b=boxSelectEndY - boxSelectStartY;
+            System.out.println("X:" + (a) + " Y:" + (b));
+
             g.fillRect(boxSelectStartX, boxSelectStartY, boxSelectEndX - boxSelectStartX, boxSelectEndY - boxSelectStartY);
             g.setColor(Color.black);
         }
@@ -120,7 +132,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
 
             //選單控制
-            buildingOption.mouseTrig(e,state,trigTime);
+            buildingOption.mouseTrig(e, state, trigTime);
 
 
             switch (state) {

@@ -37,7 +37,7 @@ public class Rect {
     }
 
     public final Rect centerOffset(int x, int y) {
-        //左上
+        //中心
         setCenter(x,y);
         return this;
     }

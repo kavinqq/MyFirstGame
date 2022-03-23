@@ -1,5 +1,6 @@
 package oldMain;
 
+import oldbuildings.Barracks;
 import oldbuildings.BuildingsOld;
 
 import java.util.*;
@@ -10,6 +11,8 @@ import static oldMain.BuildingSystem.BuildingType.*;
 import oldMain.BuildingSystem.BuildingNode;
 
 public class OldMain {
+    Barracks b=new Barracks();
+    BuildingsOld b1=new Barracks();
 
     public final static Scanner SCANNER = new Scanner(System.in);
 
