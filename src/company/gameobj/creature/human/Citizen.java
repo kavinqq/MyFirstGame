@@ -23,7 +23,6 @@ public class Citizen extends Human {   //市民
     private static final int colliderHeight = 64;
     private Delay toolDelay;
 
-    private static final int type = 6;// 村民是 第幾號人物
     private Animator.State state;
     private boolean canMove;
     private boolean hasMove;
@@ -39,7 +38,8 @@ public class Citizen extends Human {   //市民
         super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, CITIZEN_INITIAL_VALUE, CITIZEN_INITIAL_SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY, HUMAN_TYPE.CITIZEN);
         toolDelay = new Delay(30);
 
-        animator = new HumanAnimator(type, state);
+        setCharacterType(6);
+        animator = new HumanAnimator(getCharacterType(), state);
 
         canMove = false;
         hasMove = false;
@@ -56,8 +56,9 @@ public class Citizen extends Human {   //市民
         // 人物自己記錄一下狀態
         this.state = state;
 
-        // 村民的
-        animator = new HumanAnimator(type, this.state);
+        // 村民的圖片
+        setCharacterType(6);
+        animator = new HumanAnimator(getCharacterType(), this.state);
 
 
         canMove = false;

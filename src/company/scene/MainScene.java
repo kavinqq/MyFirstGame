@@ -1,17 +1,22 @@
 package company.scene;
 
-import company.Global;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import company.controllers.SceneController;
 import company.gameobj.Box;
 import company.gameobj.GameObject;
 import company.gameobj.background.Background;
 import company.gameobj.background.component.*;
-//import company.gameobj.Citizen;
 import company.gameobj.creature.human.Citizen;
 import company.gameobj.Road;
 import company.gameobj.buildings.Base;
 import company.gameobj.creature.human.Citizens;
+import company.gameobj.creature.human.Human;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.CommandSolver;
+import company.gametest9th.utils.Path;
 
 import java.awt.*;
 
@@ -22,6 +27,14 @@ import static company.Global.*;
  */
 public class MainScene extends Scene implements CommandSolver.KeyListener {
 
+    private Image verticalBar;
+    private Image horizontalBar;
+
+    private List<Human> currentObjs;
+    private int mouseX;
+    private int mouseY;
+    private int boxTargetX;
+    private int boxTargetY;
 
     private Base base;
     private Background background;
@@ -35,12 +48,19 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private Box box;
     private boolean isBoxSelectionMode;
     private boolean canDrawBox;
+    private boolean isBoxVisible;
 
     private Road road;
 
 
     @Override
     public void sceneBegin() {
+
+        currentObjs = new ArrayList<>();
+
+        horizontalBar = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().horizontalBar());
+        verticalBar = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().verticalBar());
+
         //背景
         background = new Background(0, 0, SCREEN_X, SCREEN_Y);
         //建築物選單
@@ -68,6 +88,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         isBoxSelectionMode = false;
         // 預設可以畫出框選模式的框框 off
         canDrawBox = false;
+        // 是否能看到框框
+        isBoxVisible = false;
 
     }
 
@@ -84,12 +106,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         buildingOption.paint(g);
 
         //狀態攔範圍測試
-        g.drawRect(STATUS_BAR_X, STATUS_BAR_Y, STATUS_BAR_WEIGHT, STATUS_BAR_HEIGHT);
+        g.drawImage(horizontalBar, -50, 50, 1400, 10, null);
+        g.drawRect(STATUS_BAR_X, STATUS_BAR_Y, STATUS_BAR_WIDTH, STATUS_BAR_HEIGHT);
 
         // 主堡
         base.paint(g);
 
         //建築物選單範圍測試
+
         g.drawRect(BUILDING_OPTION_X, BUILDING_OPTION_Y, BUILDING_OPTION_WIDTH, BUILDING_OPTION_HEIGHT);
 
 
@@ -100,9 +124,25 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 畫出每一個村民
         citizens.paintAll(g);
 
-        //如果 框選模式on 而且 也可以畫出框
-        if (isBoxSelectionMode && canDrawBox) {
+        // 如果 框選模式on 而且 也可以畫出框
+        if (isBoxSelectionMode && canDrawBox && isBoxVisible) {
             box.paint(g);
+        }
+
+        // 用血量條來判斷操控哪個人物
+        if (currentObj != null) {
+            g.setColor(Color.GREEN);
+            g.fillRect(currentObj.painter().left(), currentObj.painter().bottom() + 3, currentObj.painter().width(), 10);
+            g.setColor(Color.black);
+        }
+
+        // 如果現在框選的遊戲物件列表有東西 而且 也沒有單一操控某個物件時
+        if(!currentObjs.isEmpty() && currentObj == null){
+            for(GameObject gameObject: currentObjs){
+                g.setColor(Color.GREEN);
+                g.fillRect(gameObject.painter().left(), gameObject.painter().bottom() + 3, gameObject.painter().width(), 10);
+                g.setColor(Color.black);
+            }
         }
 
     }
@@ -111,11 +151,19 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     public void update() {
         // 更新所有村民狀態
         citizens.updateAll();
+
+        if(isBoxSelectionMode && canDrawBox && isBoxVisible){
+            box.update();
+            currentObjs = citizens.getBoxCitizens(box);
+        }
+
+        // 如果現在框選的遊戲物件列表有角色 而且 也沒有單一操控某個角色時
+        if(!currentObjs.isEmpty() && currentObj == null && !isBoxVisible){
+            for(Human human: currentObjs) {
+                human.setTarget(mouseX, mouseY);
+            }
+        }
     }
-
-
-    private boolean canCatchRockFactory;
-
 
     @Override
     public CommandSolver.MouseCommandListener mouseListener() {
@@ -147,14 +195,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                 case DRAGGED: {
 
-                    System.out.println("Drag");
+//                    System.out.println("Drag");
 
                     // 如果現在 框選模式On
                     if (isBoxSelectionMode) {
                         box.setEndXY(e.getX(), e.getY());
                         // 可以畫出位置
                         canDrawBox = true;
-
+                        isBoxVisible = true;
                     }
 
                     break;
@@ -169,10 +217,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                         isBoxSelectionMode = false;
                         canDrawBox = false;
-
-                        // 避免莫名其妙又畫出框框 把框選完之後的兩點值設定在看不到的地方
-                        box.setStartXY(9999, 9999);
-                        box.setEndXY(9999, 9999);
+                        isBoxVisible = false;
                     }
 
                     break;
@@ -180,8 +225,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
                 case PRESSED: {
-
                     System.out.println("PRESSED");
+
+                    mouseX = e.getX();
+                    mouseY = e.getY();
+
 
                     // 如果點到可控單位
                     if (isControlObjNow && currentObj != null) {
@@ -238,6 +286,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     public void keyPressed(int commandCode, long trigTime) {
         if (commandCode == ESC) {
             currentObj = null;
+            currentObjs.clear();
         }
     }
 

@@ -34,7 +34,7 @@ public class Global {
     //狀態攔
     public static final int STATUS_BAR_X = 0;
     public static final int STATUS_BAR_Y = 0;
-    public static final int STATUS_BAR_WEIGHT = WINDOW_WIDTH;
+    public static final int STATUS_BAR_WIDTH = WINDOW_WIDTH;
     public static final int STATUS_BAR_HEIGHT = 60;
 
     //遊戲視窗大小

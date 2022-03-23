@@ -22,13 +22,23 @@ public class Box extends GameObject {
 
     @Override
     public void paintComponent(Graphics g) {
-        if(startX != -1 && startY != -1) {
-            g.drawImage(img, startX, startY, endX, endY, 0, 0, img.getWidth(null), img.getHeight(null), null);
-        }
+        // 畫出框選的框框
+        g.drawImage(img, startX, startY, endX, endY, 0, 0, img.getWidth(null), img.getHeight(null), null);
     }
 
     @Override
     public void update() {
+
+        //因為碰撞體都是從左上往右下畫,所以 起點X,Y 一錠都是比較小的那個
+        int topLeftX = (startX < endX)? startX : endX;
+        int topLeftY = (startY < endY)? startY : endY;
+
+        //設定左上角那個點
+        offset(topLeftX, topLeftY);
+
+        painter().scaleX(Math.abs(endX - startX));
+        painter().scaleY(Math.abs(endY - startY));
+
 
     }
 
