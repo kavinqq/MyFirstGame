@@ -3,6 +3,7 @@ package company.gameobj.background.component;
 import company.Global;
 import company.gameobj.GameObject;
 import company.gameobj.buildings.Building;
+import company.gameobj.buildings.SawMill;
 import company.gametest9th.utils.CommandSolver;
 
 import java.awt.*;
@@ -20,9 +21,12 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         ox=x;
         oy=y;
         canDragged=false;
+
         canBuild=true;//Fixme_待做
         //img= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Arsenal());
     }
+
+
 
     @Override
     public void paintComponent(Graphics g) {
@@ -41,7 +45,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
 
     public Building build(int x,int y){
         //System.out.println("Building_Success");
-        return new Building(x,y);
+        return new SawMill(x,y);
     }
 
     //回到原位

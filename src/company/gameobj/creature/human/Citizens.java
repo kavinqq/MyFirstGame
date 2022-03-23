@@ -1,14 +1,18 @@
 package company.gameobj.creature.human;
 
 import company.Global;
+import company.gameobj.GameObject;
 import oldMain.OldMain;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Citizens {
     private List<Citizen> citizens = new LinkedList<>();
+
+    private List<Human> citizensInBox;
 
     /**
      * 最大村民數量
@@ -48,6 +52,8 @@ public class Citizens {
 
         maxCitizen = 100;
         count = 0;
+
+        citizensInBox = new ArrayList<>();
     }
 
     /**
@@ -218,11 +224,19 @@ public class Citizens {
                 return citizen;
             }
         }
-
         return null;
     }
 
-    public List<Citizen> getCitizens(){
-        return this.citizens;
+    public List<Human> getBoxCitizens(GameObject gameObject){
+        System.out.println(gameObject.painter().left());
+        System.out.println(gameObject.painter().top());
+        for(Citizen citizen: citizens){
+            if(citizen.painter().overlap(gameObject.painter())){
+                citizensInBox.add(citizen);
+            }
+        }
+
+        return citizensInBox;
+
     }
 }

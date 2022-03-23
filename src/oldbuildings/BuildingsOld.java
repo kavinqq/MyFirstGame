@@ -7,7 +7,7 @@ public abstract class BuildingsOld {
     /**
      * 編號
      */
-    private final int id;
+    private int id;
     /**
      * 建築名稱
      */
@@ -113,6 +113,7 @@ public abstract class BuildingsOld {
      * @param gasCostCreate        創建所需要的瓦斯量
      * @param gasCostLevelUp       升級所需要的瓦斯量
      */
+
     public BuildingsOld(int id, String name, int buildTime, int upgradeTime,
                         int level, int techLevelNeedBuild, int techLevelNeedUpgrade, int hp,
                         int woodCostCreate, int steelCostCreate, int woodCostLevelUp,

@@ -28,13 +28,13 @@ public class Global {
     public static final int LIMIT_DELTA_TIME = 1000000000 / FRAME_LIMIT;
 
     //整個視窗大小
-    public static final int WINDOW_WIDTH = 1200; //1960
-    public static final int WINDOW_HEIGHT = 800; //1080
+    public static final int WINDOW_WIDTH = 1920; //1920
+    public static final int WINDOW_HEIGHT = 1080; //1080
 
     //狀態攔
     public static final int STATUS_BAR_X = 0;
     public static final int STATUS_BAR_Y = 0;
-    public static final int STATUS_BAR_WEIGHT = WINDOW_WIDTH;
+    public static final int STATUS_BAR_WIDTH = WINDOW_WIDTH;
     public static final int STATUS_BAR_HEIGHT = 60;
 
     //遊戲視窗大小
