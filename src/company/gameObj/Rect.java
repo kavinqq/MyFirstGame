@@ -32,6 +32,14 @@ public class Rect {
     }
 
     public final Rect offset(int x, int y) {
+        //左上
+        this.x=x;
+        this.y=y;
+        return this;
+    }
+
+    public final Rect centerOffset(int x, int y) {
+        //左上
         setCenter(x,y);
         return this;
     }

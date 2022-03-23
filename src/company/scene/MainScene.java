@@ -1,5 +1,6 @@
 package company.scene;
 
+import company.controllers.SceneController;
 import company.gameObj.Background.Background;
 import company.Global;
 import company.gameObj.Background.BackgroundComponent.*;
@@ -32,8 +33,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
     private Road road;
 
 
-
-
     @Override
     public void sceneBegin() {
         //背景
@@ -43,10 +42,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
         //
         buildingController=new MouseController(new Building(50,50,50,50));
 
+
         base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y /2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
 
 
         citizen = new Citizen(200,250,7, Animator.State.WALK);
+
 
         currentCitizen = citizen;
         canControlCitizen = false;
@@ -60,16 +61,17 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
     public void paint(Graphics g) {
         // 背景
         background.paint(g);
+
         //建築物選單
         buildingOption.paint(g);
-        //狀態攔
+
+        //狀態攔範圍測試
         g.drawRect(STATUS_BAR_X, STATUS_BAR_Y, STATUS_BAR_WEIGHT, STATUS_BAR_HEIGHT);
 
         // 主堡
         base.paint(g);
 
-
-        //建築物選單
+        //建築物選單範圍測試
         g.drawRect(BUILDING_OPTION_X, BUILDING_OPTION_Y,BUILDING_OPTION_WIDTH,BUILDING_OPTION_HEIGHT);
 
 
@@ -99,56 +101,57 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
             if(state == null) {
                 return;
             }
+
             //選單控制
-            //buildingOption.mouseTrig(e,state,trigTime);
+            buildingOption.mouseTrig(e,state,trigTime);
 
 
             switch (state) {
+                case ENTERED: {
+                    System.out.println("ENTERED");
+                    System.out.println("x:"+e.getX()+" y:"+e.getY());
+                    break;
+
+                }
+
                 case CLICKED: {
 //                    System.out.println("CLICKED");
-
                     if(e.getX() > currentCitizen.painter().left() && e.getX() < currentCitizen.painter().right()
                             && e.getY() > currentCitizen.painter().top() && e.getY() < currentCitizen.painter().bottom()){
                         canControlCitizen = true;
                     }
 
-
-
-
                     break;
                 }
 
 
-                case MOVED: {
-
-                    break;
-                }
+//                case MOVED: {
+//
+//                    break;
+//                }
 
                 case DRAGGED: {
                     //System.out.println("DRAGGED");
-
                     break;
                 }
 
                 case RELEASED: {
-                    System.out.println("RELEASED");
-
+                 //   System.out.println("RELEASED");
                     break;
                 }
 
                 case PRESSED: {
 //                    System.out.println("PRESSED");
-
                     if(canControlCitizen){
                         currentCitizen.setTarget(e.getX(), e.getY());
                     }
-
-
                     break;
                 }
 
-                case ENTERED: {
-                    System.out.println("ENTERED");
+
+
+                case EXITED: {
+                    System.out.println("EXITED");
                     break;
                 }
             }

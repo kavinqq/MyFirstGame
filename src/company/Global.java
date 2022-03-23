@@ -30,8 +30,8 @@ public class Global {
     public static final int LIMIT_DELTA_TIME = 1000000000 / FRAME_LIMIT;
 
     //整個視窗大小
-    public static final int WINDOW_WIDTH = 1920;
-    public static final int WINDOW_HEIGHT = 1080;
+    public static final int WINDOW_WIDTH = 1200; //1960
+    public static final int WINDOW_HEIGHT = 800; //1080
 
     //狀態攔
     public static final int STATUS_BAR_X=0;
@@ -50,7 +50,7 @@ public class Global {
 
     //選單大小
     public static final int BUILDING_OPTION_WIDTH=150;
-    public static final int OPTION_GAP_Y = 10;
+    public static final int OPTION_GAP_Y = 12;
     public static final int OPTION_GAP_X =(BUILDING_OPTION_WIDTH-FOUNDATION_WIDTH)/2;
     public static final int BUILDING_OPTION_HEIGHT=SCREEN_Y;
     public static final int BUILDING_OPTION_X=WINDOW_WIDTH-BUILDING_OPTION_WIDTH;
@@ -59,7 +59,7 @@ public class Global {
 
 
     //領地大小
-    public static final int LAND_WIDTH=1320;
+    public static final int LAND_WIDTH=1600;
     public static final int LAND_HEIGHT=840;
     public static final int LAND_X=(SCREEN_X-LAND_WIDTH-BUILDING_OPTION_WIDTH)/2;
     public static final int LAND_Y=SCREEN_Y/2-LAND_HEIGHT/2;
@@ -68,14 +68,7 @@ public class Global {
     public static final int BUILDING_WIDTH=96;
     public static final int BUILDING_HEIGHT=96;
 
-
-
-
-
-
     //建築
-    public final static int BUILDING_AMOUNT_X=LAND_WIDTH/FOUNDATION_WIDTH/2;
-    public final static int BUILDING_AMOUNT_Y=LAND_HEIGHT/FOUNDATION_HEIGHT/2;
     public final static int BuildingTypeNum=8;
     /**
      * 操作指令

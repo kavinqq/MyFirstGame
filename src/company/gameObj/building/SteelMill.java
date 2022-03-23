@@ -2,7 +2,7 @@ package company.gameObj.building;
 
 public class SteelMill extends Building{
 
-    public SteelMill(int x, int y, int width, int height) {
-        super(x, y, width, height);
+    public SteelMill(int x, int y) {
+        super(x, y);
     }
 }

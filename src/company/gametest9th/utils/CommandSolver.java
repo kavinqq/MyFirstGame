@@ -325,6 +325,16 @@ public class CommandSolver extends Thread {
         public void bind(Component c) {
             MouseAdapter mouseAdapter = new MouseAdapter() {
                 @Override
+                public void mouseEntered(MouseEvent e) {
+                    trig(e, MouseState.ENTERED);
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    trig(e, MouseState.EXITED);
+                }
+
+                @Override
                 public void mouseClicked(MouseEvent e) {
                     trig(e, MouseState.CLICKED);
                 }
@@ -337,16 +347,6 @@ public class CommandSolver extends Thread {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     trig(e, MouseState.RELEASED);
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    trig(e, MouseState.ENTERED);
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    trig(e, MouseState.EXITED);
                 }
 
                 @Override

@@ -3,6 +3,7 @@ package company.gameObj.Background;
 import company.controllers.SceneController;
 import company.gameObj.GameObject;
 import company.gametest9th.utils.CommandSolver;
+import company.gametest9th.utils.GameKernel;
 import company.gametest9th.utils.Path;
 
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.awt.event.MouseEvent;
 import static company.Global.SCREEN_X;
 import static company.Global.SCREEN_Y;
 
-public class Background extends GameObject implements CommandSolver.MouseCommandListener  {
+public class Background extends GameObject implements GameKernel.GameInterface,CommandSolver.MouseCommandListener  {
 
     private Image bg_img;
 

@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class AirplaneMill extends Building {
 
-    public AirplaneMill(int x, int y, int width, int height) {
-        super(x, y, width, height);
+    public AirplaneMill(int x, int y) {
+        super(x, y);
     }
 }
