@@ -18,7 +18,7 @@ import static company.Global.*;
 /**
  * 遊戲主場景
  */
-public class MainScene extends Scene implements CommandSolver.KeyListener{
+public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     private Image img;
 
@@ -30,11 +30,15 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
     private Citizen currentCitizen;
     private boolean canControlCitizen;
 
-    private Foundation[][] foundation=new Foundation[BUILDING_AMOUNT_X][BUILDING_AMOUNT_Y];
+    private boolean isBoxSelect;
+    private int boxSelectStartX;
+    private int boxSelectStartY;
+    private int boxSelectEndX;
+    private int boxSelectEndY;
+
+    private Foundation[][] foundation = new Foundation[BUILDING_AMOUNT_X][BUILDING_AMOUNT_Y];
 
     private Road road;
-
-
 
 
     @Override
@@ -45,22 +49,28 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
 
             for (int j = 0; j < BUILDING_AMOUNT_Y; j++) {
                 foundation[i][j] = new Foundation(
-                        FOUNDATION_WIDTH+ LAND_X + i * FOUNDATION_WIDTH * 2,
+                        FOUNDATION_WIDTH + LAND_X + i * FOUNDATION_WIDTH * 2,
                         FOUNDATION_HEIGHT + LAND_Y + j * FOUNDATION_HEIGHT * 2,
                         FOUNDATION_WIDTH,
-                        FOUNDATION_HEIGHT );
+                        FOUNDATION_HEIGHT);
             }
 
         }
 
-        base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y /2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
+        base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y / 2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
 
         rockFactory = new RockFactory(LAND_X, LAND_Y, BUILDING_WIDTH, BUILDING_HEIGHT);
 
-        citizen = new Citizen(200,250,7, Animator.State.WALK);
+        citizen = new Citizen(200, 250, 7, Animator.State.WALK);
 
         currentCitizen = citizen;
         canControlCitizen = false;
+
+        isBoxSelect = false;
+        boxSelectStartX = 0;
+        boxSelectStartY = 0;
+        boxSelectEndX = 0;
+        boxSelectEndY = 0;
     }
 
     @Override
@@ -84,7 +94,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
         base.paint(g);
 
         //建築物選單
-        g.drawRect(BUILDING_OPTION_X, BUILDING_OPTION_Y,BUILDING_OPTION_WIDTH,BUILDING_OPTION_HEIGHT);
+        g.drawRect(BUILDING_OPTION_X, BUILDING_OPTION_Y, BUILDING_OPTION_WIDTH, BUILDING_OPTION_HEIGHT);
 
         //採石場
         rockFactory.paint(g);
@@ -94,6 +104,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
 
         //test人物
         citizen.paint(g);
+
+        if (isBoxSelect) {
+            g.setColor(Color.PINK);
+            g.fillRect(boxSelectStartX, boxSelectStartY, boxSelectEndX - boxSelectStartX, boxSelectEndY - boxSelectStartY);
+            g.setColor(Color.black);
+        }
     }
 
     @Override
@@ -105,28 +121,29 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
     }
 
 
-
     private boolean canCatchRockFactory;
+
 
     @Override
     public CommandSolver.MouseCommandListener mouseListener() {
 
         return (e, state, trigTime) -> {
-            if(state == null) {
+
+
+            if (state == null) {
                 return;
             }
 
             switch (state) {
+
                 case CLICKED: {
 //                    System.out.println("CLICKED");
 
-                    if(e.getX() > currentCitizen.painter().left() && e.getX() < currentCitizen.painter().right()
-                            && e.getY() > currentCitizen.painter().top() && e.getY() < currentCitizen.painter().bottom()){
+                    if (e.getX() > currentCitizen.painter().left() && e.getX() < currentCitizen.painter().right()
+                            && e.getY() > currentCitizen.painter().top() && e.getY() < currentCitizen.painter().bottom()) {
 
                         canControlCitizen = true;
                     }
-
-
 
 
                     break;
@@ -134,7 +151,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
 
 
                 case MOVED: {
+
                     canCatchRockFactory = rockFactory.isClicked(e.getX(), e.getY());
+
                     break;
                 }
 
@@ -144,6 +163,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
                     if (canCatchRockFactory) {
                         rockFactory.mouseTrig(e, state, trigTime);
                     }
+
+                    if (isBoxSelect) {
+                        boxSelectEndX = e.getX();
+                        boxSelectEndY = e.getY();
+                    }
+
                     break;
                 }
 
@@ -151,14 +176,26 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
 //                    System.out.println("RELEASED");
 
                     canCatchRockFactory = false;
+                    isBoxSelect = false;
+                    boxSelectEndX = 0;
+                    boxSelectEndY = 0;
                     break;
                 }
 
                 case PRESSED: {
 //                    System.out.println("PRESSED");
 
-                    if(canControlCitizen){
+                    if (canControlCitizen) {
                         currentCitizen.setTarget(e.getX(), e.getY());
+                    }
+
+                    //
+                    if (!(e.getX() > currentCitizen.painter().left() && e.getX() < currentCitizen.painter().right()
+                            && e.getY() > currentCitizen.painter().top() && e.getY() < currentCitizen.painter().bottom())) {
+
+                        isBoxSelect = true;
+                        boxSelectStartX = e.getX();
+                        boxSelectStartY = e.getY();
                     }
 
 
@@ -166,6 +203,17 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
                 }
 
                 case ENTERED: {
+                    System.out.println("ENTER");
+                    break;
+                }
+
+                case EXITED: {
+                    System.out.println("EXIT");
+                    break;
+                }
+
+                case WHEEL_MOVED: {
+                    System.out.println("WHEEL_MOVED");
                     break;
                 }
             }
@@ -180,7 +228,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
 
     @Override
     public void keyPressed(int commandCode, long trigTime) {
-        if(commandCode == Global.UP || commandCode == Global.DOWN || commandCode == Global.LEFT || commandCode == Global.RIGHT){
+        if (commandCode == Global.UP || commandCode == Global.DOWN || commandCode == Global.LEFT || commandCode == Global.RIGHT) {
             citizen.keyToMove(commandCode);
         }
     }

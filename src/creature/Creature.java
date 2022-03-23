@@ -5,6 +5,7 @@ import company.controllers.SceneController;
 import java.awt.*;
 
 public abstract class Creature {
+
     public Creature(int value, String img, FLY_ABILITY flyAbility) {
         this.value = value;
         this.img = SceneController.getInstance().imageController().tryGetImage(img);
@@ -19,9 +20,11 @@ public abstract class Creature {
     public enum FLY_ABILITY {
         CAN_FLY, CANNOT_FLY;
     }
+
     /**
      * 生物 的初始數值(也就是攻擊力)
      */
+
     private int value;
     private FLY_ABILITY flyAbility;
     private Status status;
