@@ -76,11 +76,10 @@ public class Citizens {
      * @param citizen 新村民
      */
     public void add(Citizen citizen) {
-        // 閒人 ++
-        this.numOfFreeCitizens += 1;
-
         // 如果村民數量未達上限
         if(count < maxCitizen){
+            // 閒人 ++
+            this.numOfFreeCitizens += 1;
             valueOfCitizens += citizen.getValue();
             citizens.add(citizen);
         }
@@ -238,5 +237,6 @@ public class Citizens {
         }
 
         return citizensInBox;
+
     }
 }
