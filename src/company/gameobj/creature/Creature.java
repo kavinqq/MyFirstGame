@@ -37,6 +37,10 @@ public abstract class Creature extends GameObject{
     private GameObject attackTarget;
     private int targetX = Global.SCREEN_X/2;
     private int targetY = Global.SCREEN_Y/2;
+    private boolean isAbleToGoRight = true;
+    private boolean isAbleToGoLeft = true;
+    private boolean isAbleToGoUp = true;
+    private boolean isAbleToGoDown = true;
 
 
     private Global.Direction dir;
@@ -131,5 +135,37 @@ public abstract class Creature extends GameObject{
 
     public void setDir(Global.Direction dir) {
         this.dir = dir;
+    }
+
+    public boolean isAbleToGoRight() {
+        return isAbleToGoRight;
+    }
+
+    public boolean isAbleToGoLeft() {
+        return isAbleToGoLeft;
+    }
+
+    public boolean isAbleToGoUp() {
+        return isAbleToGoUp;
+    }
+
+    public boolean isAbleToGoDown() {
+        return isAbleToGoDown;
+    }
+
+    public void setAbleToGoRight(boolean ableToGoRight) {
+        isAbleToGoRight = ableToGoRight;
+    }
+
+    public void setAbleToGoLeft(boolean ableToGoLeft) {
+        isAbleToGoLeft = ableToGoLeft;
+    }
+
+    public void setAbleToGoUp(boolean ableToGoUp) {
+        isAbleToGoUp = ableToGoUp;
+    }
+
+    public void setAbleToGoDown(boolean ableToGoDown) {
+        isAbleToGoDown = ableToGoDown;
     }
 }
