@@ -23,15 +23,35 @@ public class Lab extends Building {
                 .setName("研究所")
                 .setBuildTime(3)
                 .setUpgradeTime(24)
-                .setLevel(0)
+                .setLevelC(0)
                 .setTechLevel(1)
                 .setTechLevelNeedUpgrade(1)
                 .setHp(30)
                 .setWoodCostCreate(10)
                 .setSteelCostCreate(5)
                 .setGasCostCreate(0)
-                .setWoodCostLevelUp(50)
-                .setSteelCostLevelUp(20)
+                .setWoodCostLevelUpC(50)
+                .setSteelCostLevelUpC(20)
+                .setGasCostLevelup(0);
+    }
+
+
+
+    public Lab() {
+        super(90,90);
+        setId(2)
+                .setName("研究所")
+                .setBuildTime(3)
+                .setUpgradeTime(24)
+                .setLevelC(0)
+                .setTechLevel(1)
+                .setTechLevelNeedUpgrade(1)
+                .setHp(30)
+                .setWoodCostCreate(10)
+                .setSteelCostCreate(5)
+                .setGasCostCreate(0)
+                .setWoodCostLevelUpC(50)
+                .setSteelCostLevelUpC(20)
                 .setGasCostLevelup(0);
     }
     @Override

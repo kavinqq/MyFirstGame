@@ -25,15 +25,32 @@ public class GasMill extends Building{
                 .setName("瓦斯場")
                 .setBuildTime(1)
                 .setUpgradeTime(30)
-                .setLevel(0)
+                .setLevelC(0)
                 .setTechLevel(2)
                 .setTechLevelNeedUpgrade(3)
                 .setHp(20)
                 .setWoodCostCreate(15)
                 .setSteelCostCreate(5)
                 .setGasCostCreate(0)
-                .setWoodCostLevelUp(40)
-                .setSteelCostLevelUp(20)
+                .setWoodCostLevelUpC(40)
+                .setSteelCostLevelUpC(20)
+                .setGasCostLevelup(0);
+    }
+    public GasMill() {
+        super(500, 500);
+        setId(7)
+                .setName("瓦斯場")
+                .setBuildTime(1)
+                .setUpgradeTime(30)
+                .setLevelC(0)
+                .setTechLevel(2)
+                .setTechLevelNeedUpgrade(3)
+                .setHp(20)
+                .setWoodCostCreate(15)
+                .setSteelCostCreate(5)
+                .setGasCostCreate(0)
+                .setWoodCostLevelUpC(40)
+                .setSteelCostLevelUpC(20)
                 .setGasCostLevelup(0);
     }
     /**

@@ -10,15 +10,33 @@ public class SawMill extends Building{
                 .setName("伐木場")
                 .setBuildTime(1)
                 .setUpgradeTime(30)
-                .setLevel(0)
+                .setLevelC(0)
                 .setTechLevel(1)
                 .setTechLevelNeedUpgrade(2)
                 .setHp(10)
                 .setWoodCostCreate(15)
                 .setSteelCostCreate(0)
                 .setGasCostCreate(0)
-                .setWoodCostLevelUp(30)
-                .setSteelCostLevelUp(15)
+                .setWoodCostLevelUpC(30)
+                .setSteelCostLevelUpC(15)
+                .setGasCostLevelup(0);
+    }
+
+    public SawMill() {
+        super(50,50);
+        setId(4)
+                .setName("伐木場")
+                .setBuildTime(1)
+                .setUpgradeTime(30)
+                .setLevelC(0)
+                .setTechLevel(1)
+                .setTechLevelNeedUpgrade(2)
+                .setHp(10)
+                .setWoodCostCreate(15)
+                .setSteelCostCreate(0)
+                .setGasCostCreate(0)
+                .setWoodCostLevelUpC(30)
+                .setSteelCostLevelUpC(15)
                 .setGasCostLevelup(0);
     }
     /**

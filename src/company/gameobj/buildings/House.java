@@ -1,21 +1,39 @@
 package company.gameobj.buildings;
 
-public class house extends Building{
-    public house(int x, int y) {
+public class House extends Building{
+    public House(int x, int y) {
         super(x, y);
                 setId(1)
                 .setName("房屋")
                 .setBuildTime(1)
                 .setUpgradeTime(30)
-                .setLevel(0)
+                .setLevelC(0)
                 .setTechLevel(1)
                 .setTechLevelNeedUpgrade(2)
                 .setHp(10)
                 .setWoodCostCreate(10)
                 .setSteelCostCreate(0)
                 .setGasCostCreate(0)
-                .setWoodCostLevelUp(30)
-                .setSteelCostLevelUp(15)
+                .setWoodCostLevelUpC(30)
+                .setSteelCostLevelUpC(15)
+                .setGasCostLevelup(0);
+    }
+
+    public House() {
+        super(600,600);
+        setId(1)
+                .setName("房屋")
+                .setBuildTime(1)
+                .setUpgradeTime(30)
+                .setLevelC(0)
+                .setTechLevel(1)
+                .setTechLevelNeedUpgrade(2)
+                .setHp(10)
+                .setWoodCostCreate(10)
+                .setSteelCostCreate(0)
+                .setGasCostCreate(0)
+                .setWoodCostLevelUpC(30)
+                .setSteelCostLevelUpC(15)
                 .setGasCostLevelup(0);
     }
     /**

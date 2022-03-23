@@ -1,6 +1,7 @@
 package company.gameobj.buildings;
 
-public class AirplaneMill extends Building {
+
+public class Arsenal extends Building {
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工場)
@@ -19,24 +20,41 @@ public class AirplaneMill extends Building {
      * 兵工廠升級  → 呼叫 Human類別 的 levelUp()方法
      * levelUp() → City類別的 第 347行 使用
      */
-    public AirplaneMill(int x, int y) {
+    public Arsenal(int x, int y) {
         super(x, y);
-                setId(8)
-                .setName("飛機工廠")
-                .setBuildTime(2)
-                .setUpgradeTime(30)
-                .setLevel(0)
+        setId(6)
+                .setName("兵工廠")
+                .setBuildTime(3)
+                .setUpgradeTime(48)
+                .setLevelC(0)
                 .setTechLevel(2)
                 .setTechLevelNeedUpgrade(2)
-                .setHp(50)
-                .setWoodCostCreate(15)
-                .setSteelCostCreate(5)
-                .setGasCostCreate(5)
-                .setWoodCostLevelUp(30)
-                .setSteelCostLevelUp(15)
-                .setGasCostLevelup(5);
+                .setHp(30)
+                .setWoodCostCreate(30)
+                .setSteelCostCreate(10)
+                .setGasCostCreate(0)
+                .setWoodCostLevelUpC(70)
+                .setSteelCostLevelUpC(40)
+                .setGasCostLevelup(0);
     }
 
+    public Arsenal() {
+        super(200,200);
+        setId(6)
+                .setName("兵工廠")
+                .setBuildTime(3)
+                .setUpgradeTime(48)
+                .setLevelC(0)
+                .setTechLevel(2)
+                .setTechLevelNeedUpgrade(2)
+                .setHp(30)
+                .setWoodCostCreate(30)
+                .setSteelCostCreate(10)
+                .setGasCostCreate(0)
+                .setWoodCostLevelUpC(70)
+                .setSteelCostLevelUpC(40)
+                .setGasCostLevelup(0);
+    }
     @Override
     public String toString() {
         return "兵工廠:可以升級士兵";
@@ -44,4 +62,5 @@ public class AirplaneMill extends Building {
     public String buildingDetail(int level){
         return "";
     }
+
 }

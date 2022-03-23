@@ -14,11 +14,19 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     private Image img;
 
-
-
-
     public Building(int x, int y) {
         super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
+        //建築物是否在建築，建築中 -> true
+        this.readyToUpgrade = true;
+        //建築物是否在運轉
+        this.isWorking = false;
+        //建築物 剛建造完的時間 (那一個moment)，用來計算建築生產(和buildTime gameTime去做計算)
+        this.createTime = -1;
+        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
+    }
+
+    public Building() {
+        super(90, 90, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
         //建築物是否在建築，建築中 -> true
         this.readyToUpgrade = true;
         //建築物是否在運轉
@@ -176,8 +184,8 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         Building.this.techLevelNeedUpgrade=needTechLevel;
         return this;
     }
-
-    protected Building setLevel(int level){
+    //給子類用
+    protected Building setLevelC(int level){
         Building.this.level=level;
         return this;
     }
@@ -186,6 +194,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         Building.this.techLevelNeedUpgrade=techLevelNeedUpgrade;
         return this;
     }
+
 
     protected Building setHp(int hp){
         Building.this.hp=hp;
@@ -202,12 +211,12 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         return this;
     }
 
-    protected Building setWoodCostLevelUp(int woodCostLevelUp){
+    protected Building setWoodCostLevelUpC(int woodCostLevelUp){
         Building.this.woodCostLevelUp=woodCostLevelUp;
         return this;
     }
 
-    protected Building setSteelCostLevelUp(int steelCostLevelUp){
+    protected Building setSteelCostLevelUpC(int steelCostLevelUp){
         Building.this.steelCostLevelUp=steelCostLevelUp;
         return this;
     }
@@ -446,17 +455,17 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         }
     }
 
-//    public void setLevel(int level) {
-//        this.level = level;
-//    }
-//
-//    public void setWoodCostLevelUp(int woodCostLevelUp) {
-//        this.woodCostLevelUp = woodCostLevelUp;
-//    }
-//
-//    public void setSteelCostLevelUp(int steelCostLevelUp) {
-//        this.steelCostLevelUp = steelCostLevelUp;
-//    }
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setWoodCostLevelUp(int woodCostLevelUp) {
+        this.woodCostLevelUp = woodCostLevelUp;
+    }
+
+    public void setSteelCostLevelUp(int steelCostLevelUp) {
+        this.steelCostLevelUp = steelCostLevelUp;
+    }
 
     /**
      * 建築的效果說明

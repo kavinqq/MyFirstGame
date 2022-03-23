@@ -1,5 +1,7 @@
 package company.gameobj.buildings;
 
+import oldMain.Resource;
+
 public class SteelMill extends Building{
     /**
      * 父類建構子
@@ -19,39 +21,39 @@ public class SteelMill extends Building{
      * gasCostCreate 創建所需要的瓦斯量
      * gasCostLevelUp 升級所需要的瓦斯量
      */
-    public SteelMill(int x, int y) {
+    public SteelMill() {
 
-        super(x, y);
+        super(90,90);
                 setId(5)
                 .setName("煉鋼廠")
                 .setBuildTime(1)
                 .setUpgradeTime(30)
                 .setTechLevelNeedUpgrade(2)
-                .setLevel(0)
+                .setLevelC(0)
                 .setTechLevel(1)
                 .setHp(10)
                 .setWoodCostCreate(15)
                 .setSteelCostCreate(5)
                 .setGasCostCreate(0)
-                .setWoodCostLevelUp(30)
-                .setSteelCostLevelUp(15)
+                .setWoodCostLevelUpC(30)
+                .setSteelCostLevelUpC(15)
                 .setGasCostLevelup(0);
     }
+
     /**
-     * 生產的飛機數
-     * @return 生產的飛機數(含升級)
+     * 生產鋼鐵
      */
-    public int produceAirPlane(){
+    public int steelSpeed(){
         return getLevel()+1;
     }
 
     @Override
-    public String toString(){
-        return "飛機工廠:每3小時花費5瓦斯產生1台戰鬥機(每等級可以使工作量+1)";
+    public String toString() {
+        return "煉鋼廠:每小時採集量+1(每房屋等級+2)";
     }
 
-    @Override
     public String buildingDetail(int level){
-        return "飛機工廠：每3小時花費" + super.getLevel() *5 + "瓦斯生產" + (super.getLevel()+1) + "台戰鬥機";
+        return "煉鋼廠：市民每小時鋼鐵採集量提升至" + (Resource.DEFAULT_STEEL_SPEED + 1 + super.getLevel()) + "單位鋼鐵";
+
     }
 }

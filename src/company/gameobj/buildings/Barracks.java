@@ -21,15 +21,33 @@ public class Barracks extends Building{
                 .setName("軍營")
                 .setBuildTime(2)
                 .setUpgradeTime(30)
-                .setLevel(0)
+                .setLevelC(0)
                 .setTechLevel(1)
                 .setTechLevelNeedUpgrade(2)
                 .setHp(30)
                 .setWoodCostCreate(20)
                 .setSteelCostCreate(10)
                 .setGasCostCreate(0)
-                .setWoodCostLevelUp(30)
-                .setSteelCostLevelUp(15)
+                .setWoodCostLevelUpC(30)
+                .setSteelCostLevelUpC(15)
+                .setGasCostLevelup(0);
+    }
+
+    public Barracks() {
+        super(100, 100);
+        setId(3)
+                .setName("軍營")
+                .setBuildTime(2)
+                .setUpgradeTime(30)
+                .setLevelC(0)
+                .setTechLevel(1)
+                .setTechLevelNeedUpgrade(2)
+                .setHp(30)
+                .setWoodCostCreate(20)
+                .setSteelCostCreate(10)
+                .setGasCostCreate(0)
+                .setWoodCostLevelUpC(30)
+                .setSteelCostLevelUpC(15)
                 .setGasCostLevelup(0);
     }
     /**
