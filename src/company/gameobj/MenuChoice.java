@@ -35,11 +35,11 @@ public class MenuChoice extends GameObject{
     public void paintComponent(Graphics g) {
 
         if(option == Option.START){
-            g.drawImage(imgStart, collider().left(),  collider().top(), collider().width(), collider().height(),  null );
+            g.drawImage(imgStart, detectRange().left(),  detectRange().top(), detectRange().width(), detectRange().height(),  null );
         }
 
         if(option == Option.EXIT){
-            g.drawImage(imgExit, collider().left(),  collider().top(), collider().width(), collider().height(),  null );
+            g.drawImage(imgExit, detectRange().left(),  detectRange().top(), detectRange().width(), detectRange().height(),  null );
         }
     }
 

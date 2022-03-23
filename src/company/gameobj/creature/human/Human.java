@@ -3,8 +3,8 @@ package company.gameobj.creature.human;
 import company.gameobj.creature.Creature;
 
 public abstract class Human extends Creature {
-    public Human(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, String img, FLY_ABILITY flyAbility, HUMAN_TYPE humanType) {
-        super(x,y,painterWidth, painterHeight, colliderWidth, colliderHeight, value, img, flyAbility);
+    public Human(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility, HUMAN_TYPE humanType) {
+        super(x,y,painterWidth, painterHeight, colliderWidth, colliderHeight, value, speed, img, flyAbility);
         this.setType(humanType);
     }
 
@@ -64,6 +64,13 @@ public abstract class Human extends Creature {
 
     public void getAttacked(int value){
         this.setValue(this.getValue()-value);
+    }
+
+    @Override
+    public void walk(){
+        if(this.isHavingNoTarget()){
+
+        }
     }
 }
 

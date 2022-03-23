@@ -8,8 +8,11 @@ public abstract class Zombie extends Creature {
      *
      * @param value 該殭屍的預設攻擊力
      */
+    //TODO: allow each type of zombie to set their own speed
+
+    private static final int SPEED = 4;
     public Zombie(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, String img, FLY_ABILITY flyAbility) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, value, img, flyAbility);
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, value, SPEED, img, flyAbility);
     }
 
     /**
@@ -20,5 +23,8 @@ public abstract class Zombie extends Creature {
      */
     public abstract int currentRoundCount(int round);
 
+    @Override
+    public void walk(){
 
+    }
 }

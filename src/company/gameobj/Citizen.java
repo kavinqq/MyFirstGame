@@ -62,25 +62,25 @@ public class Citizen extends GameObject{
         if(dirNum == Global.UP){
             dir = Global.Direction.UP;
             painter().translateY(speed * -1);
-            collider().translateY(speed * -1);
+            detectRange().translateY(speed * -1);
         }
 
         if(dirNum == Global.DOWN){
             dir = Global.Direction.DOWN;
             painter().translateY(speed);
-            collider().translateY(speed);
+            detectRange().translateY(speed);
         }
 
         if(dirNum == Global.LEFT){
             dir = Global.Direction.LEFT;
             painter().translateX(speed * -1);
-            collider().translateX(speed * -1);
+            detectRange().translateX(speed * -1);
         }
 
         if(dirNum == Global.RIGHT){
             dir = Global.Direction.RIGHT;
             painter().translateX(speed);
-            collider().translateX(speed);
+            detectRange().translateX(speed);
         }
 
     }
@@ -112,7 +112,7 @@ public class Citizen extends GameObject{
             dir = Global.Direction.RIGHT;
 
             painter().translateX(speed);
-            collider().translateX(speed);
+            detectRange().translateX(speed);
 
             hasMove = true;
         }
@@ -121,7 +121,7 @@ public class Citizen extends GameObject{
             dir = Global.Direction.LEFT;
 
             painter().translateX(speed * -1);
-            collider().translateX(speed * -1);
+            detectRange().translateX(speed * -1);
 
             hasMove = true;
         }
@@ -138,7 +138,7 @@ public class Citizen extends GameObject{
             dir = Global.Direction.DOWN;
 
             painter().translateY(speed);
-            collider().translateY(speed);
+            detectRange().translateY(speed);
 
             hasMove = true;
         }
@@ -147,7 +147,7 @@ public class Citizen extends GameObject{
             dir = Global.Direction.UP;
 
             painter().translateY(speed * -1);
-            collider().translateY(speed * -1);
+            detectRange().translateY(speed * -1);
 
             hasMove = true;
         }
@@ -160,7 +160,4 @@ public class Citizen extends GameObject{
 
         hasMove = false;
     }
-
-
-
 }

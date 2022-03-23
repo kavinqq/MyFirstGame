@@ -9,11 +9,12 @@ public class ArmySoldier extends Soldier  {  //士兵
     private static final int painterHeight = 50;
     private static final int colliderWidth = 50;
     private static final int colliderHeight = 50;
+    private static final int SPEED = 4;
     /**
      * 建構子 預設士兵數值為2 ,等級為1
      */
     public ArmySoldier(int x, int y, int level){
-        super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight, 2 + 3*level, new Path().img().humans().armySoldier(), FLY_ABILITY.CANNOT_FLY, SOLDIER_TYPE.ARMY);
+        super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight, 2 + 3*level, SPEED, new Path().img().humans().armySoldier(), FLY_ABILITY.CANNOT_FLY, SOLDIER_TYPE.ARMY);
     }
 
     @Override

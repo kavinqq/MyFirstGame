@@ -3,7 +3,8 @@ package company.scene;
 import company.gameobj.background.Background;
 import company.Global;
 import company.gameobj.background.component.*;
-import company.gameobj.Citizen;
+//import company.gameobj.Citizen;
+import company.gameobj.creature.human.Citizen;
 import company.gameobj.Road;
 import company.gameobj.buildings.Base;
 import company.gametest9th.utils.Animator;
@@ -48,7 +49,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y / 2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
 
 
-        citizen = new Citizen(200, 250, 7, Animator.State.WALK);
+        //citizen = new Citizen(200, 250, 7, Animator.State.WALK);
+        citizen = new Citizen(200, 250, Animator.State.WALK);
 
 
         currentCitizen = citizen;
