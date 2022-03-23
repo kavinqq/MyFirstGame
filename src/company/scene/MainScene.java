@@ -1,5 +1,6 @@
 package company.scene;
 
+import company.gameobj.Box;
 import company.gameobj.background.Background;
 import company.Global;
 import company.gameobj.background.component.*;
@@ -28,11 +29,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private boolean canControlCitizen;
 
     // 框選
-    private boolean isBoxSelect;
-    private int boxSelectStartX;
-    private int boxSelectStartY;
-    private int boxSelectEndX;
-    private int boxSelectEndY;
+    private Box box;
+    private boolean isBoxSelectionMode;
+    private boolean canDrawBox;
 
     private Road road;
 
@@ -40,9 +39,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     @Override
     public void sceneBegin() {
         //背景
-        background=new Background(0,0, SCREEN_X, SCREEN_Y);
+        background = new Background(0, 0, SCREEN_X, SCREEN_Y);
         //建築物選單
-        buildingOption=new BuildingOption();
+        buildingOption = new BuildingOption();
         //
         //buildingController=new MouseController(new Building(50,50));
 
@@ -56,11 +55,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         currentCitizen = citizen;
         canControlCitizen = false;
 
-        isBoxSelect = false;
-        boxSelectStartX = 0;
-        boxSelectStartY = 0;
-        boxSelectEndX = 0;
-        boxSelectEndY = 0;
+        box = new Box();
+        isBoxSelectionMode = false;
+        canDrawBox = false;
+
     }
 
     @Override
@@ -82,8 +80,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         base.paint(g);
 
         //建築物選單範圍測試
-        g.drawRect(BUILDING_OPTION_X, BUILDING_OPTION_Y,BUILDING_OPTION_WIDTH,BUILDING_OPTION_HEIGHT);
-
+        g.drawRect(BUILDING_OPTION_X, BUILDING_OPTION_Y, BUILDING_OPTION_WIDTH, BUILDING_OPTION_HEIGHT);
 
 
         g.setColor(Color.black);
@@ -92,11 +89,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //test人物
         citizen.paint(g);
 
-        if (isBoxSelect) {
-            g.setColor(Color.PINK);
-            g.fillRect(boxSelectStartX, boxSelectStartY, boxSelectEndX - boxSelectStartX, boxSelectEndY - boxSelectStartY);
-            g.setColor(Color.black);
+        if (isBoxSelectionMode && canDrawBox) {
+            box.paint(g);
         }
+
     }
 
     @Override
@@ -116,13 +112,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         return (e, state, trigTime) -> {
 
-
             if (state == null) {
                 return;
             }
 
             //選單控制
-            buildingOption.mouseTrig(e,state,trigTime);
+            buildingOption.mouseTrig(e, state, trigTime);
 
 
             switch (state) {
@@ -131,20 +126,22 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 case CLICKED: {
                     System.out.println("CLICKED");
 
-                    if (e.getX() > currentCitizen.painter().left() && e.getX() < currentCitizen.painter().right()
-                            && e.getY() > currentCitizen.painter().top() && e.getY() < currentCitizen.painter().bottom()) {
+                    if (currentCitizen.isClicked(e.getX(), e.getY())) {
 
                         canControlCitizen = true;
+                    }
+
+                    if(isBoxSelectionMode){
+                        isBoxSelectionMode = false;
                     }
 
                     break;
                 }
 
                 case DRAGGED: {
-
-                    if (isBoxSelect) {
-                        boxSelectEndX = e.getX();
-                        boxSelectEndY = e.getY();
+                    if(isBoxSelectionMode){
+                        canDrawBox = true;
+                        box.setEndXY(e.getX(), e.getY());
                     }
 
                     break;
@@ -152,31 +149,33 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
                 case RELEASED: {
+                    System.out.println("RELEASED");
 
-//                    System.out.println("RELEASED");
+                    if(isBoxSelectionMode) {
+                        System.out.println("TURN OFF");
+                        isBoxSelectionMode = false;
+                        canDrawBox = false;
+                        box.setStartXY(-1, -1);
+                        box.setEndXY(-1, -1);
+                    }
 
-                    isBoxSelect = false;
-                    boxSelectEndX = 0;
-                    boxSelectEndY = 0;
                     break;
                 }
 
 
                 case PRESSED: {
-//                    System.out.println("PRESSED");
+                    System.out.println("PRESSED");
 
-
+                    // 如果點到可控單位
                     if (canControlCitizen) {
                         currentCitizen.setTarget(e.getX(), e.getY());
                     }
 
-                    //
-                    if (!(e.getX() > currentCitizen.painter().left() && e.getX() < currentCitizen.painter().right()
-                            && e.getY() > currentCitizen.painter().top() && e.getY() < currentCitizen.painter().bottom())) {
-
-                        isBoxSelect = true;
-                        boxSelectStartX = e.getX();
-                        boxSelectStartY = e.getY();
+                    // 如果沒點到可控單位
+                    if (!currentCitizen.isClicked(e.getX(), e.getY())) {
+                        // 如果框選模式on
+                        isBoxSelectionMode = true;
+                        box.setStartXY(e.getX(), e.getY());
                     }
 
                     break;
@@ -196,6 +195,13 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     System.out.println("WHEEL_MOVED");
 
                     break;
+                }
+
+                case MOVED: {
+                    // 如果點太快 沒有released
+                    if(isBoxSelectionMode){
+                        isBoxSelectionMode = false;
+                    }
                 }
 
             }
