@@ -1,6 +1,6 @@
 package oldMain;
 
-import buildings.Building;
+import oldBuildings.Building;
 
 import java.util.*;
 

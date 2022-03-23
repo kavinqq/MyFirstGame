@@ -1,6 +1,6 @@
 package oldMain;
 
-import buildings.*;
+import oldBuildings.*;
 import company.gameObj.creature.human.*;
 import company.gameObj.creature.Zombies.*;
 import oldMain.BuildingSystem.*;

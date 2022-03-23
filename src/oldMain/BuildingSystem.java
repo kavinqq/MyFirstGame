@@ -1,6 +1,6 @@
 package oldMain;
 
-import buildings.*;
+import oldBuildings.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

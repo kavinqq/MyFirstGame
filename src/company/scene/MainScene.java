@@ -5,8 +5,8 @@ import company.Global;
 import company.gameObj.Citizen;
 import company.gameObj.Foundation;
 import company.gameObj.Road;
-import company.gameObj.building.Base;
-import company.gameObj.building.RockFactory;
+import company.gameObj.buildings.Base;
+import company.gameObj.buildings.RockFactory;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.CommandSolver;
 
