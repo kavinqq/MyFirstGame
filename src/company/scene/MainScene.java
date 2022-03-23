@@ -137,23 +137,24 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     System.out.println("CLICKED");
 
                     if (citizens.getCitizen(e.getX(), e.getY()) != null) {
-                        System.out.println("I am here");
                         currentObj = citizens.getCitizen(e.getX(), e.getY());
                         isControlObjNow = true;
                     }
 
-                    if (isBoxSelectionMode) {
-                        isBoxSelectionMode = false;
-                    }
 
                     break;
                 }
 
                 case DRAGGED: {
 
+                    System.out.println("Drag");
+
+                    // 如果現在 框選模式On
                     if (isBoxSelectionMode) {
-                        canDrawBox = true;
                         box.setEndXY(e.getX(), e.getY());
+                        // 可以畫出位置
+                        canDrawBox = true;
+
                     }
 
                     break;
@@ -184,12 +185,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                     // 如果點到可控單位
                     if (isControlObjNow && currentObj != null) {
-                        System.out.println("I am Here!!");
                         currentObj.setTarget(e.getX(), e.getY());
                     }
 
                     // 如果沒點到可控單位
-                    if (currentObj != null && !currentObj.isClicked(e.getX(), e.getY())) {
+                    if (currentObj == null) {
                         // 如果框選模式on
                         isBoxSelectionMode = true;
                         box.setStartXY(e.getX(), e.getY());
