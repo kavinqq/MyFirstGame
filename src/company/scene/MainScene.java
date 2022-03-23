@@ -1,15 +1,13 @@
 package company.scene;
 
+import company.gameobj.background.Background;
 import company.Global;
-import company.controllers.SceneController;
-import company.gameObj.Citizen;
-import company.gameObj.Foundation;
-import company.gameObj.Road;
-import company.gameObj.building.Base;
-import company.gameObj.building.RockFactory;
+import company.gameobj.background.component.*;
+import company.gameobj.Citizen;
+import company.gameobj.Road;
+import company.gameobj.buildings.Base;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.CommandSolver;
-import company.gametest9th.utils.Path;
 
 import java.awt.*;
 
@@ -20,48 +18,38 @@ import static company.Global.*;
  */
 public class MainScene extends Scene implements CommandSolver.KeyListener {
 
-    private Image img;
-
-    private RockFactory rockFactory;
 
     private Base base;
-
+    private Background background;
+    private BuildingOption buildingOption;
     private Citizen citizen;
     private Citizen currentCitizen;
     private boolean canControlCitizen;
 
+    // 框選
     private boolean isBoxSelect;
     private int boxSelectStartX;
     private int boxSelectStartY;
     private int boxSelectEndX;
     private int boxSelectEndY;
 
-    private Foundation[][] foundation = new Foundation[BUILDING_AMOUNT_X][BUILDING_AMOUNT_Y];
-
     private Road road;
 
 
     @Override
     public void sceneBegin() {
-        img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().background());
-
-        for (int i = 0; i < BUILDING_AMOUNT_X; i++) {
-
-            for (int j = 0; j < BUILDING_AMOUNT_Y; j++) {
-                foundation[i][j] = new Foundation(
-                        FOUNDATION_WIDTH + LAND_X + i * FOUNDATION_WIDTH * 2,
-                        FOUNDATION_HEIGHT + LAND_Y + j * FOUNDATION_HEIGHT * 2,
-                        FOUNDATION_WIDTH,
-                        FOUNDATION_HEIGHT);
-            }
-
-        }
+        //背景
+        background=new Background(0,0, SCREEN_X, SCREEN_Y);
+        //建築物選單
+        buildingOption=new BuildingOption();
+        //
+        //buildingController=new MouseController(new Building(50,50));
 
         base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y / 2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
 
-        rockFactory = new RockFactory(LAND_X, LAND_Y, BUILDING_WIDTH, BUILDING_HEIGHT);
 
         citizen = new Citizen(200, 250, 7, Animator.State.WALK);
+
 
         currentCitizen = citizen;
         canControlCitizen = false;
@@ -80,24 +68,21 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     @Override
     public void paint(Graphics g) {
         // 背景
-        g.drawImage(img, 0, 0, SCREEN_X, SCREEN_Y, null);
+        background.paint(g);
 
-        //狀態攔
+        //建築物選單
+        buildingOption.paint(g);
+
+        //狀態攔範圍測試
         g.drawRect(STATUS_BAR_X, STATUS_BAR_Y, STATUS_BAR_WEIGHT, STATUS_BAR_HEIGHT);
-        for (int i = 0; i < BUILDING_AMOUNT_X; i++) {
-            for (int j = 0; j < BUILDING_AMOUNT_Y; j++) {
-                foundation[i][j].paint(g);
-            }
-        }
 
         // 主堡
         base.paint(g);
 
-        //建築物選單
-        g.drawRect(BUILDING_OPTION_X, BUILDING_OPTION_Y, BUILDING_OPTION_WIDTH, BUILDING_OPTION_HEIGHT);
+        //建築物選單範圍測試
+        g.drawRect(BUILDING_OPTION_X, BUILDING_OPTION_Y,BUILDING_OPTION_WIDTH,BUILDING_OPTION_HEIGHT);
 
-        //採石場
-        rockFactory.paint(g);
+
 
         g.setColor(Color.black);
         g.drawRect(LAND_X, LAND_Y, LAND_WIDTH, LAND_HEIGHT);
@@ -134,10 +119,15 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 return;
             }
 
+            //選單控制
+            buildingOption.mouseTrig(e,state,trigTime);
+
+
             switch (state) {
 
+
                 case CLICKED: {
-//                    System.out.println("CLICKED");
+                    System.out.println("CLICKED");
 
                     if (e.getX() > currentCitizen.painter().left() && e.getX() < currentCitizen.painter().right()
                             && e.getY() > currentCitizen.painter().top() && e.getY() < currentCitizen.painter().bottom()) {
@@ -145,24 +135,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         canControlCitizen = true;
                     }
 
-
-                    break;
-                }
-
-
-                case MOVED: {
-
-                    canCatchRockFactory = rockFactory.isClicked(e.getX(), e.getY());
-
                     break;
                 }
 
                 case DRAGGED: {
-//                    System.out.println("DRAGGED");
-
-                    if (canCatchRockFactory) {
-                        rockFactory.mouseTrig(e, state, trigTime);
-                    }
 
                     if (isBoxSelect) {
                         boxSelectEndX = e.getX();
@@ -172,18 +148,21 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     break;
                 }
 
+
                 case RELEASED: {
+
 //                    System.out.println("RELEASED");
 
-                    canCatchRockFactory = false;
                     isBoxSelect = false;
                     boxSelectEndX = 0;
                     boxSelectEndY = 0;
                     break;
                 }
 
+
                 case PRESSED: {
 //                    System.out.println("PRESSED");
+
 
                     if (canControlCitizen) {
                         currentCitizen.setTarget(e.getX(), e.getY());
@@ -197,7 +176,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         boxSelectStartX = e.getX();
                         boxSelectStartY = e.getY();
                     }
-
 
                     break;
                 }
@@ -214,8 +192,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                 case WHEEL_MOVED: {
                     System.out.println("WHEEL_MOVED");
+
                     break;
                 }
+
             }
         };
     }

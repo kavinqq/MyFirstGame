@@ -148,16 +148,29 @@ public class Path {
 
             }
 
-            public String RockFactory() { return this + "/SteelMill.png";};
+            public String House() { return this + "/96x96_house.png";}
+
+            public String Lab() { return this + "/96x96_lab.png";}
+
+            public String Sawmill() { return this + "/96x96_sawmill.png";}
+
+            public String Steelmill() { return this + "/96x96_steelmill.png";};
+
+            public String Barracks() { return this + "/96x96_barracks.png";};
+
+
+
+
+
+
+
+            public String Gasmill() { return this + "/96x96_gasmill.png";}
+
+            public String AirplanemIll() { return this + "/96x96_airplanemIll.png";}
 
             public String Base() { return this + "/Base.png";};
 
-            public String Lab() { return this + "/Library.png";};
-
-            public String Barracks() { return this + "/Barracks.png";};
-
-            public String House() { return this + "/house.png";};
-
+            public String Arsenal(){ return this + "/96x96_arsenal.png";}
         }
 
 

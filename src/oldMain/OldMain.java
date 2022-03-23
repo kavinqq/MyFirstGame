@@ -1,6 +1,6 @@
 package oldMain;
 
-import buildings.Building;
+import oldbuildings.BuildingsOld;
 
 import java.util.*;
 
@@ -229,7 +229,7 @@ public class OldMain {
                             }
                             System.out.println("目前停止運轉的建築：");
                             for (int i = 0; i < notWorkingBuildingList.size(); i++) {
-                                Building building = notWorkingBuildingList.get(i).getBuilding();
+                                BuildingsOld building = notWorkingBuildingList.get(i).getBuilding();
                                 System.out.println((i + 1) + ". " + building.buildingDetail(building.getLevel()));
                             }
                             choose = inputInt("輸入-1取消", 1, notWorkingBuildingList.size());
@@ -248,7 +248,7 @@ public class OldMain {
                             }
                             System.out.println("目前可關閉的建築：");
                             for (int i = 0; i < workingBuildingList.size(); i++) {
-                                Building building = workingBuildingList.get(i).getBuilding();
+                                BuildingsOld building = workingBuildingList.get(i).getBuilding();
                                 System.out.println((i + 1) + ". " + building.buildingDetail(building.getLevel()));
                             }
                             choose = inputInt("輸入-1取消", 1, workingBuildingList.size());

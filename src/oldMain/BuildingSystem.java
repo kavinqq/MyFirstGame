@@ -1,6 +1,6 @@
 package oldMain;
 
-import buildings.*;
+import oldbuildings.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +54,7 @@ public class BuildingSystem {
     /**
      * 紀錄此波攻擊被炸毀的建築
      */
-    private ArrayList<Building> damageBuilding;
+    private ArrayList<BuildingsOld> damageBuilding;
 
     /**
      * 建築的種類和實體與儲存鏈表
@@ -69,10 +69,10 @@ public class BuildingSystem {
         GAS_MILL(new GasMill(), new LinkedList<>()),
         AIRPLANE_MILL(new AirPlaneMill(), new LinkedList<>());
 
-        private Building instance;
+        private BuildingsOld instance;
         private LinkedList<BuildingNode> list;
 
-        BuildingType(Building building, LinkedList<BuildingNode> list) {
+        BuildingType(BuildingsOld building, LinkedList<BuildingNode> list) {
             instance = building;
             this.list = list;
         }
@@ -92,7 +92,7 @@ public class BuildingSystem {
             return null;
         }
 
-        public Building instance() {
+        public BuildingsOld instance() {
             return instance;
         }
     }
@@ -104,7 +104,7 @@ public class BuildingSystem {
         /**
          * 建築本身
          */
-        private Building building;
+        private BuildingsOld building;
         /**
          * 建造開始的時間
          */
@@ -126,7 +126,7 @@ public class BuildingSystem {
          */
         int updateStartTime;
 
-        public BuildingNode(Building building) {
+        public BuildingNode(BuildingsOld building) {
             this.building = building;
         }
 
@@ -135,7 +135,7 @@ public class BuildingSystem {
          *
          * @return 建築實體
          */
-        public Building getBuilding() {
+        public BuildingsOld getBuilding() {
             return building;
         }
     }
@@ -1024,7 +1024,7 @@ public class BuildingSystem {
      * @param damage 傷害值
      */
     public void getDamage(int damage) {
-        ArrayList<Building> hpZeroBuilding = new ArrayList<>();
+        ArrayList<BuildingsOld> hpZeroBuilding = new ArrayList<>();
 
         //走訪每個BuildingType
         for (int i = 0; i < values().length; i++) {
@@ -1033,7 +1033,7 @@ public class BuildingSystem {
             if (type.list.size() != 0) {
                 //走訪建築類別的鏈表
                 for (int k = 0; k < type.list.size(); k++) {
-                    Building building = type.list.get(k).building;
+                    BuildingsOld building = type.list.get(k).building;
                     //讓建築受到傷害
                     building.getDamage(damage);
                     //建築hp為0就從鏈表刪除
@@ -1060,7 +1060,7 @@ public class BuildingSystem {
         Map<BuildingType, Integer> sum = new HashMap<>();
         //走訪列表
         for (int i = 0; i < damageBuilding.size(); i++) {
-            Building building = damageBuilding.get(i);
+            BuildingsOld building = damageBuilding.get(i);
             //比對此建築是哪一個分類
             for (int k = 0; k < values().length; k++) {
                 if (building.getId() == values()[k].instance().getId()) {

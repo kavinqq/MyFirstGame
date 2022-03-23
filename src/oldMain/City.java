@@ -1,8 +1,9 @@
 package oldMain;
 
-import buildings.*;
-import creature.human.*;
-import creature.Zombies.*;
+import oldbuildings.*;
+
+import company.gameobj.creature.human.*;
+import company.gameobj.creature.zombies.*;
 import oldMain.BuildingSystem.*;
 
 import java.util.ArrayList;
@@ -197,7 +198,7 @@ public class City {
      * @param building 建築
      * @return 建造需求字串
      */
-    private String buildingSelectString(Building building) {
+    private String buildingSelectString(BuildingsOld building) {
         return (building.getId() + ". " + building +
                 "\n\t資源需求： 木材：" + building.getWoodCostCreate() + " 鋼鐵：" + building.getSteelCostCreate() + " 瓦斯：" + building.getGasCostCreate() +
                 " 科技等級需求： " + building.getTechLevelNeedBuild() + "\n");
