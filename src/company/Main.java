@@ -18,7 +18,9 @@ public class Main {
                 {KeyEvent.VK_RIGHT, Global.RIGHT},
                 {KeyEvent.VK_UP, Global.UP},
                 {KeyEvent.VK_DOWN, Global.DOWN},
-                {KeyEvent.VK_SPACE, Global.SPACE}
+                {KeyEvent.VK_SPACE, Global.SPACE},
+                {KeyEvent.VK_ESCAPE, Global.ESC}
+
         };
 
         GameCenter center = new GameCenter();

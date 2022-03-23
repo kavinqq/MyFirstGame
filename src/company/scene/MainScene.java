@@ -1,13 +1,15 @@
 package company.scene;
 
-import company.gameobj.Box;
-import company.gameobj.background.Background;
 import company.Global;
+import company.gameobj.Box;
+import company.gameobj.GameObject;
+import company.gameobj.background.Background;
 import company.gameobj.background.component.*;
 //import company.gameobj.Citizen;
 import company.gameobj.creature.human.Citizen;
 import company.gameobj.Road;
 import company.gameobj.buildings.Base;
+import company.gameobj.creature.human.Citizens;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.CommandSolver;
 
@@ -24,9 +26,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private Base base;
     private Background background;
     private BuildingOption buildingOption;
-    private Citizen citizen;
-    private Citizen currentCitizen;
-    private boolean canControlCitizen;
+    private Citizen currentObj; // 當前操控的物件
+    private boolean isControlObjNow; // 現在是否有在操控一個物件
+    private Citizens citizens;// 所有村民類別
+
 
     // 框選
     private Box box;
@@ -47,16 +50,23 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y / 2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
 
+        // 測試: 預設有3個 村民
+        citizens = new Citizens(3);
 
-        //citizen = new Citizen(200, 250, 7, Animator.State.WALK);
-        citizen = new Citizen(200, 250, Animator.State.WALK);
+        for (int i = 0; i < 3; i++) {
+            citizens.add(new Citizen(200, 250 + (i * 100), Animator.State.STAND));
+        }
 
+        // 當前操控的物件
+        currentObj = null;
+        // 正在操控某個物件
+        isControlObjNow = false;
 
-        currentCitizen = citizen;
-        canControlCitizen = false;
-
+        // 框選的 框框
         box = new Box();
+        // 預設框選模式off
         isBoxSelectionMode = false;
+        // 預設可以畫出框選模式的框框 off
         canDrawBox = false;
 
     }
@@ -86,9 +96,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         g.setColor(Color.black);
         g.drawRect(LAND_X, LAND_Y, LAND_WIDTH, LAND_HEIGHT);
 
-        //test人物
-        citizen.paint(g);
 
+        // 畫出每一個村民
+        citizens.paintAll(g);
+
+        //如果 框選模式on 而且 也可以畫出框
         if (isBoxSelectionMode && canDrawBox) {
             box.paint(g);
         }
@@ -97,10 +109,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void update() {
-        // 更新 村民狀態
-        citizen.update();
-
-        currentCitizen.mouseToMove();
+        // 更新所有村民狀態
+        citizens.updateAll();
     }
 
 
@@ -122,16 +132,17 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             switch (state) {
 
-
                 case CLICKED: {
+
                     System.out.println("CLICKED");
 
-                    if (currentCitizen.isClicked(e.getX(), e.getY())) {
-
-                        canControlCitizen = true;
+                    if (citizens.getCitizen(e.getX(), e.getY()) != null) {
+                        System.out.println("I am here");
+                        currentObj = citizens.getCitizen(e.getX(), e.getY());
+                        isControlObjNow = true;
                     }
 
-                    if(isBoxSelectionMode){
+                    if (isBoxSelectionMode) {
                         isBoxSelectionMode = false;
                     }
 
@@ -139,7 +150,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
 
                 case DRAGGED: {
-                    if(isBoxSelectionMode){
+
+                    if (isBoxSelectionMode) {
                         canDrawBox = true;
                         box.setEndXY(e.getX(), e.getY());
                     }
@@ -149,14 +161,17 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
                 case RELEASED: {
+
                     System.out.println("RELEASED");
 
-                    if(isBoxSelectionMode) {
-                        System.out.println("TURN OFF");
+                    if (isBoxSelectionMode) {
+
                         isBoxSelectionMode = false;
                         canDrawBox = false;
-                        box.setStartXY(-1, -1);
-                        box.setEndXY(-1, -1);
+
+                        // 避免莫名其妙又畫出框框 把框選完之後的兩點值設定在看不到的地方
+                        box.setStartXY(9999, 9999);
+                        box.setEndXY(9999, 9999);
                     }
 
                     break;
@@ -164,15 +179,17 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
                 case PRESSED: {
+
                     System.out.println("PRESSED");
 
                     // 如果點到可控單位
-                    if (canControlCitizen) {
-                        currentCitizen.setTarget(e.getX(), e.getY());
+                    if (isControlObjNow && currentObj != null) {
+                        System.out.println("I am Here!!");
+                        currentObj.setTarget(e.getX(), e.getY());
                     }
 
                     // 如果沒點到可控單位
-                    if (!currentCitizen.isClicked(e.getX(), e.getY())) {
+                    if (currentObj != null && !currentObj.isClicked(e.getX(), e.getY())) {
                         // 如果框選模式on
                         isBoxSelectionMode = true;
                         box.setStartXY(e.getX(), e.getY());
@@ -182,16 +199,19 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
 
                 case ENTERED: {
+
                     System.out.println("ENTER");
                     break;
                 }
 
                 case EXITED: {
+
                     System.out.println("EXIT");
                     break;
                 }
 
                 case WHEEL_MOVED: {
+
                     System.out.println("WHEEL_MOVED");
 
                     break;
@@ -199,7 +219,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                 case MOVED: {
                     // 如果點太快 沒有released
-                    if(isBoxSelectionMode){
+                    if (isBoxSelectionMode) {
                         isBoxSelectionMode = false;
                     }
                 }
@@ -216,8 +236,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void keyPressed(int commandCode, long trigTime) {
-        if (commandCode == Global.UP || commandCode == Global.DOWN || commandCode == Global.LEFT || commandCode == Global.RIGHT) {
-            citizen.keyToMove(commandCode);
+        if (commandCode == ESC) {
+            currentObj = null;
         }
     }
 

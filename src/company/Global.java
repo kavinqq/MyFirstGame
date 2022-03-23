@@ -42,32 +42,32 @@ public class Global {
     public static final int SCREEN_Y = WINDOW_HEIGHT - 31 - 8;
 
     //基座大小
-    public static final int FOUNDATION_WIDTH=100;
-    public static final int FOUNDATION_HEIGHT=100;
+    public static final int FOUNDATION_WIDTH = 100;
+    public static final int FOUNDATION_HEIGHT = 100;
 
 
     //選單大小
 
-    public static final int BUILDING_OPTION_WIDTH=150;
+    public static final int BUILDING_OPTION_WIDTH = 150;
     public static final int OPTION_GAP_Y = 12;
-    public static final int OPTION_GAP_X =(BUILDING_OPTION_WIDTH-FOUNDATION_WIDTH)/2;
-    public static final int BUILDING_OPTION_HEIGHT=SCREEN_Y;
-    public static final int BUILDING_OPTION_X=WINDOW_WIDTH-BUILDING_OPTION_WIDTH;
-    public static final int BUILDING_OPTION_Y=STATUS_BAR_HEIGHT;
+    public static final int OPTION_GAP_X = (BUILDING_OPTION_WIDTH - FOUNDATION_WIDTH) / 2;
+    public static final int BUILDING_OPTION_HEIGHT = SCREEN_Y;
+    public static final int BUILDING_OPTION_X = WINDOW_WIDTH - BUILDING_OPTION_WIDTH;
+    public static final int BUILDING_OPTION_Y = STATUS_BAR_HEIGHT;
 
 
     //領地大小
-    public static final int LAND_WIDTH=1600;
-    public static final int LAND_HEIGHT=840;
-    public static final int LAND_X=(SCREEN_X-LAND_WIDTH-BUILDING_OPTION_WIDTH)/2;
-    public static final int LAND_Y=SCREEN_Y/2-LAND_HEIGHT/2;
+    public static final int LAND_WIDTH = 1600;
+    public static final int LAND_HEIGHT = 840;
+    public static final int LAND_X = (SCREEN_X - LAND_WIDTH - BUILDING_OPTION_WIDTH) / 2;
+    public static final int LAND_Y = SCREEN_Y / 2 - LAND_HEIGHT / 2;
 
     //建築物大小
-    public static final int BUILDING_WIDTH=96;
-    public static final int BUILDING_HEIGHT=96;
+    public static final int BUILDING_WIDTH = 96;
+    public static final int BUILDING_HEIGHT = 96;
 
     //建築
-    public final static int BuildingTypeNum=8;
+    public final static int BuildingTypeNum = 8;
 
     /**
      * 操作指令
@@ -77,6 +77,7 @@ public class Global {
     public static final int UP = 3;
     public static final int DOWN = 4;
     public static final int SPACE = 5;
+    public static final int ESC = 6;
 
     /**
      * 輸出範圍內的隨機數字
