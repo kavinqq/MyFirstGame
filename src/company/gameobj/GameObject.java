@@ -8,75 +8,76 @@ import java.awt.*;
 public abstract class GameObject implements GameKernel.GameInterface {
 
     public GameObject(int x, int y, int width, int height) {
-        collider = new Rect(x, y, width, height);
+        detectRange = new Rect(x, y, width, height);
         painter = new Rect(x, y, width, height);
     }
 
     public GameObject(int x, int y, int width, int height, int x2, int y2, int width2, int height2) {
-        collider = new Rect(x, y, width, height);
+        detectRange = new Rect(x, y, width, height);
         painter = new Rect(x2, y2, width2, height2);
-        painter.setCenter(collider.centerX(), collider.centerY());
+        painter.setCenter(detectRange.centerX(), detectRange.centerY());
     }
 
     public GameObject(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight){
         painter = new Rect(x,y,painterWidth, painterHeight);
         painter.setCenter(x,y);
-        collider = new Rect(x,y, colliderWidth, colliderHeight);
-        collider.setCenter(x,y);
+        detectRange = new Rect(x,y, colliderWidth, colliderHeight);
+        detectRange.setCenter(x,y);
     }
 
     public GameObject(Rect rect) {
         painter = rect.clone();
-        collider = rect.clone();
+        detectRange = rect.clone();
     }
 
     public GameObject(Rect rect, Rect rect2) {
         painter = rect.clone();
-        collider = rect2.clone();
-        painter.setCenter(collider.centerX(), collider.centerY());
+        detectRange = rect2.clone();
+        painter.setCenter(detectRange.centerX(), detectRange.centerY());
     }
 
-    private Rect collider;
+    private Rect detectRange;
     private Rect painter;
 
     public final void offset(int x, int y) {
-        collider.offset(x, y);
+        detectRange.offset(x, y);
         painter.offset(x, y);
     }
 
     public final void centerOffset(int x, int y) {
-        collider.centerOffset(x, y);
+        detectRange.centerOffset(x, y);
         painter.centerOffset(x, y);
     }
 
     public final void translate(int x, int y) {
-        collider.translate(x, y);
+        detectRange.translate(x, y);
         painter.translate(x, y);
     }
 
     public final void translateX(int x) {
-        collider.translateX(x);
+        detectRange.translateX(x);
         painter.translateX(x);
     }
 
     public final void translateY(int y) {
-        collider.translateY(y);
+        detectRange.translateY(y);
         painter.translateY(y);
     }
 
     public boolean isCollision(GameObject object) {
-        return collider.overlap(object.collider);
+        //return collider.overlap(object.collider);
+        return painter.overlap(object.painter);
     }
 
     public final boolean isClicked(int x, int y) {
-        if (collider.left() < x && collider.right() > x && collider.top() < y && collider.bottom() > y) {
+        if (detectRange.left() < x && detectRange.right() > x && detectRange.top() < y && detectRange.bottom() > y) {
             return true;
         }
         return false;
     }
 
-    public final Rect collider() {
-        return collider;
+    public final Rect detectRange() {
+        return detectRange;
     }
 
     public final Rect painter() {
@@ -84,19 +85,19 @@ public abstract class GameObject implements GameKernel.GameInterface {
     }
 
     public boolean touchTop() {
-        return collider.top() <= 0;
+        return detectRange.top() <= 0;
     }
 
     public boolean touchBottom() {
-        return collider.bottom() >= Global.SCREEN_Y;
+        return detectRange.bottom() >= Global.SCREEN_Y;
     }
 
     public boolean touchLeft() {
-        return collider.left() <= 0;
+        return detectRange.left() <= 0;
     }
 
     public boolean touchRight() {
-        return collider.right() >= Global.SCREEN_X;
+        return detectRange.right() >= Global.SCREEN_X;
     }
 
     @Override
@@ -105,7 +106,7 @@ public abstract class GameObject implements GameKernel.GameInterface {
 
         if (Global.IS_DEBUG) {
             g.setColor(Color.RED);
-            collider.paint(g);
+            detectRange.paint(g);
             g.setColor(Color.GREEN);
             painter.paint(g);
             g.setColor(Color.black);

@@ -139,7 +139,15 @@ public class Path {
 
             public String exit() { return this + "/exit.png";};
 
+<<<<<<< HEAD
             public String gray() { return this + "/gray_translcent.png";};
+=======
+            public String box() { return this + "/box.png";}
+
+            public String horizontalBar() { return this + "/H_bar.png";}
+
+            public String verticalBar() { return this + "/V_bar.png";}
+>>>>>>> 196db71530780242446692b4fd5120118a50ff34
 
         }
 

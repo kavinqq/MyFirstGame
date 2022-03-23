@@ -90,8 +90,8 @@ public class StartScene extends Scene{
                    for (MenuChoice choice : choices) {
                        System.out.println(choice.getOption());
                        // 如果 滑鼠的 x,y 在 某個選項裡面
-                       if (e.getX() >= choice.collider().left() && e.getX() <= choice.collider().right()
-                               && e.getY() >= choice.collider().top() && e.getY() <= choice.collider().bottom()) {
+                       if (e.getX() >= choice.detectRange().left() && e.getX() <= choice.detectRange().right()
+                               && e.getY() >= choice.detectRange().top() && e.getY() <= choice.detectRange().bottom()) {
                            // 如果 該選項的 option值 為 START => 進入主畫面
                            if(choice.getOption() == MenuChoice.Option.START){
                                SceneController.getInstance().change(new MainScene());

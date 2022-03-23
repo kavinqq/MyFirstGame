@@ -1,15 +1,16 @@
 package company.gameobj.creature;
 
+import company.Global;
 import company.controllers.SceneController;
 import company.gameobj.GameObject;
 
 import java.awt.*;
 
 public abstract class Creature extends GameObject{
-    public Creature(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight ,int value, String img, FLY_ABILITY flyAbility) {
+    public Creature(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight ,int value, int speed, String img, FLY_ABILITY flyAbility) {
         super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight);
-
         this.value = value;
+        this.speed = speed;
         this.img = SceneController.getInstance().imageController().tryGetImage(img);
         this.setFlyAbility(flyAbility);
         this.status = STATUS.STOPPING;
@@ -29,10 +30,20 @@ public abstract class Creature extends GameObject{
      */
 
     private int value;
+    private int speed;
     private Image img;
     private FLY_ABILITY flyAbility;
     private STATUS status;
     private GameObject attackTarget;
+    private int targetX = Global.SCREEN_X/2;
+    private int targetY = Global.SCREEN_Y/2;
+    private boolean isAbleToGoRight = true;
+    private boolean isAbleToGoLeft = true;
+    private boolean isAbleToGoUp = true;
+    private boolean isAbleToGoDown = true;
+
+
+    private Global.Direction dir;
 
 
     /**
@@ -79,7 +90,82 @@ public abstract class Creature extends GameObject{
         return attackTarget;
     }
 
+    public boolean isHavingNoTarget(){
+        return (this.attackTarget == null);
+    }
+
     public Image getImg(){
         return this.img;
+    }
+
+    public void setTargetXY(int x, int y){
+        setTargetX(x);
+        setTargetY(y);
+    }
+
+    public void setTargetX(int targetX) {
+        this.targetX = targetX;
+    }
+
+    public void setTargetY(int targetY) {
+        this.targetY = targetY;
+    }
+
+    public int targetX() {
+        return targetX;
+    }
+
+    public int targetY() {
+        return targetY;
+    }
+
+    public boolean isSeeing(GameObject gameObject){
+        return this.detectRange().overlap(gameObject.painter());
+    }
+
+    public abstract void walk();
+
+    public int speed() {
+        return speed;
+    }
+
+    public Global.Direction getDir() {
+        return dir;
+    }
+
+    public void setDir(Global.Direction dir) {
+        this.dir = dir;
+    }
+
+    public boolean isAbleToGoRight() {
+        return isAbleToGoRight;
+    }
+
+    public boolean isAbleToGoLeft() {
+        return isAbleToGoLeft;
+    }
+
+    public boolean isAbleToGoUp() {
+        return isAbleToGoUp;
+    }
+
+    public boolean isAbleToGoDown() {
+        return isAbleToGoDown;
+    }
+
+    public void setAbleToGoRight(boolean ableToGoRight) {
+        isAbleToGoRight = ableToGoRight;
+    }
+
+    public void setAbleToGoLeft(boolean ableToGoLeft) {
+        isAbleToGoLeft = ableToGoLeft;
+    }
+
+    public void setAbleToGoUp(boolean ableToGoUp) {
+        isAbleToGoUp = ableToGoUp;
+    }
+
+    public void setAbleToGoDown(boolean ableToGoDown) {
+        isAbleToGoDown = ableToGoDown;
     }
 }
