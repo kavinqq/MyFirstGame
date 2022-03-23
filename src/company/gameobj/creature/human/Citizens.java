@@ -3,11 +3,22 @@ package company.gameobj.creature.human;
 import company.Global;
 import oldMain.OldMain;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Citizens {
     private List<Citizen> citizens = new LinkedList<>();
+
+    /**
+     * 最大村民數量
+     */
+    private int maxCitizen;
+    /**
+     * 村民計數器
+     */
+    private int count;
+
     private int valueOfCitizens;
     /**
      * 目前的閒人(可指派工作之村民總共有幾個)
@@ -22,6 +33,7 @@ public class Citizens {
      */
     private int numOfMiningCitizens;
 
+
     /**
      * 創建新的居民群體並將size設成城市所傳入的預設值
      *
@@ -32,7 +44,10 @@ public class Citizens {
         this.numOfFreeCitizens = 0;
         this.numOfLoggingCitizens = 0;
         this.numOfMiningCitizens = 0;
-        this.add(defaultNumOfCitizens);
+//        this.add(defaultNumOfCitizens); // 暫時先註解掉一下 我測試東西而已
+
+        maxCitizen = 100;
+        count = 0;
     }
 
     /**
@@ -49,6 +64,22 @@ public class Citizens {
             this.citizens.add(citizen);
         }
     }
+
+    /**
+     * 直接加入一個村民
+     * @param citizen 新村民
+     */
+    public void add(Citizen citizen) {
+        // 閒人 ++
+        this.numOfFreeCitizens += 1;
+
+        // 如果村民數量未達上限
+        if(count < maxCitizen){
+            valueOfCitizens += citizen.getValue();
+            citizens.add(citizen);
+        }
+    }
+
 
     /**
      * 居民群體受到傷害
@@ -167,5 +198,28 @@ public class Citizens {
      */
     public int getNumOfCitizens() {
         return this.citizens.size();
+    }
+
+    public void paintAll(Graphics g){
+        for(Citizen citizen: citizens){
+            citizen.paint(g);
+        }
+    }
+
+    public void updateAll(){
+
+        for(Citizen citizen: citizens){
+            citizen.update();
+        }
+    }
+
+    public Citizen getCitizen(int x, int y){
+        for(Citizen citizen: citizens){
+            if(citizen.isClicked(x, y)){
+                return citizen;
+            }
+        }
+
+        return null;
     }
 }

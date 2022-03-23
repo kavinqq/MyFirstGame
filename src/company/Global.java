@@ -77,6 +77,7 @@ public class Global {
     public static final int UP = 3;
     public static final int DOWN = 4;
     public static final int SPACE = 5;
+    public static final int ESC = 6;
 
     /**
      * 輸出範圍內的隨機數字

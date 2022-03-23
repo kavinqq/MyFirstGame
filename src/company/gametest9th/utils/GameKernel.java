@@ -143,6 +143,7 @@ public class GameKernel extends Canvas {
                 if (isDebug) {
                     System.out.println("FPS: " + paintTimes);
                 }
+
                 paintTimes = 0;
                 timer = currentTime;
             }

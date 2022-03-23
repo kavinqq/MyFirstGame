@@ -7,9 +7,6 @@ import company.controllers.SceneController;
 import java.awt.*;
 
 
-
-
-
 public class HumanAnimator extends Animator {
 
     // 哪一張人物行走圖

@@ -23,8 +23,7 @@ public class Citizen extends Human {   //市民
     private static final int colliderHeight = 64;
     private Delay toolDelay;
 
-
-    private int type;
+    private static final int type = 6;// 村民是 第幾號人物
     private Animator.State state;
     private boolean canMove;
     private boolean hasMove;
@@ -39,15 +38,28 @@ public class Citizen extends Human {   //市民
     public Citizen(int x, int y) {
         super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, CITIZEN_INITIAL_VALUE, CITIZEN_INITIAL_SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY, HUMAN_TYPE.CITIZEN);
         toolDelay = new Delay(30);
+
         animator = new HumanAnimator(type, state);
+
         canMove = false;
         hasMove = false;
+
     }
     public Citizen(int x, int y, Animator.State state) {
         super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, CITIZEN_INITIAL_VALUE, CITIZEN_INITIAL_SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY, HUMAN_TYPE.CITIZEN);
+
+        // 預設人物出生方向朝下
         setDir(Global.Direction.DOWN);
+
         toolDelay = new Delay(30);
-        animator = new HumanAnimator(type, state);
+
+        // 人物自己記錄一下狀態
+        this.state = state;
+
+        // 村民的
+        animator = new HumanAnimator(type, this.state);
+
+
         canMove = false;
         hasMove = false;
     }
@@ -96,7 +108,10 @@ public class Citizen extends Human {   //市民
 
     @Override
     public void update() {
+
+        mouseToMove();
         animator.update();
+
         //TODO
         if (workStatus == WORK_STATUS.FREE) {
             //randomWalk();
