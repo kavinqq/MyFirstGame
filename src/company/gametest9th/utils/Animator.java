@@ -50,6 +50,8 @@ abstract public class Animator {
 
     public Animator(){}
 
+    abstract public void setState(State state);
+
     abstract public void paint(Global.Direction dir, int left, int top, int right, int bottom, Graphics g);
 
     abstract public void update();

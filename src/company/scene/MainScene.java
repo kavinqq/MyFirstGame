@@ -49,7 +49,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
         //citizen = new Citizen(200, 250, 7, Animator.State.WALK);
-        citizen = new Citizen(200, 250, Animator.State.WALK);
+        citizen = new Citizen(200, 250, Animator.State.STAND);
 
 
         currentCitizen = citizen;
@@ -216,9 +216,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void keyPressed(int commandCode, long trigTime) {
-        if (commandCode == Global.UP || commandCode == Global.DOWN || commandCode == Global.LEFT || commandCode == Global.RIGHT) {
-            citizen.keyToMove(commandCode);
-        }
+
     }
 
     @Override
