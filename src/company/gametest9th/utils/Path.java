@@ -139,6 +139,8 @@ public class Path {
 
             public String exit() { return this + "/exit.png";};
 
+            public String box() { return this + "/box.png";}
+
         }
 
         public static class Building extends Flow {
