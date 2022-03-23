@@ -2,7 +2,7 @@ package company.scene;
 
 import company.Global;
 import company.controllers.SceneController;
-import company.gameObj.MenuChoice;
+import company.gameobj.MenuChoice;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 

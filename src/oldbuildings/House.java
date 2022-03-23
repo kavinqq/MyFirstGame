@@ -1,5 +1,5 @@
-package oldbuildings;
 
+package oldbuildings;
 
 public class House extends BuildingsOld {
     public House() {

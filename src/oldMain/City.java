@@ -1,8 +1,9 @@
 package oldMain;
 
 import oldbuildings.*;
-import company.gameObj.creature.human.*;
-import company.gameObj.creature.Zombies.*;
+
+import company.gameobj.creature.human.*;
+import company.gameobj.creature.Zombies.*;
 import oldMain.BuildingSystem.*;
 
 import java.util.ArrayList;

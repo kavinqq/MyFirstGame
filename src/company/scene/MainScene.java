@@ -1,14 +1,16 @@
 package company.scene;
 
-import company.controllers.SceneController;
-import company.gameObj.Background.Background;
+import company.gameobj.background.Background;
 import company.Global;
-import company.gameObj.Background.BackgroundComponent.*;
-import company.gameObj.Citizen;
-import company.gameObj.Road;
-import company.gameObj.building.Base;
-import company.gameObj.building.Building;
-import company.gameObj.building.MouseController;
+import company.gameobj.background.component.*;
+import company.gameobj.Citizen;
+import company.gameobj.Road;
+
+
+import company.gameobj.buildings.MouseController;
+
+import company.gameobj.buildings.Base;
+import company.gameobj.buildings.Building;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.CommandSolver;
 
@@ -40,7 +42,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener{
         //建築物選單
         buildingOption=new BuildingOption();
         //
-        buildingController=new MouseController(new Building(50,50,50,50));
+        //buildingController=new MouseController(new Building(50,50));
 
 
         base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y /2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
