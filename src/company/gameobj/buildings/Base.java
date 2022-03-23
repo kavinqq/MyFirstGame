@@ -8,21 +8,17 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class Base extends Building {
-    private Image img;
+    public static final int BASE_WIDTH = 120;
+    public static final int BASE_HEIGHT = 120;
 
-    public Base(int x, int y, int width, int height) {
-
-        super(x, y, width, height);
-        //System.out.println(painter().left());
-        this.img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
+    public Base(int x, int y) {
+        super(x,y,BASE_WIDTH, BASE_HEIGHT, new Path().img().building().Base());
     }
 
-
-    @Override
-    public void paintComponent(Graphics g) {
-        g.drawImage(img, painter().left(), painter().top(), painter().width(), painter().height(), null);
-
-    }
+//    public Base(int x, int y, int j, int k) {
+//        super(x,y,BASE_WIDTH, BASE_HEIGHT, new Path().img().building().Base());
+//    }
+//
 
     @Override
     public void update() {

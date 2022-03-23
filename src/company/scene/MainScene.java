@@ -48,7 +48,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //
         //buildingController=new MouseController(new Building(50,50));
 
-        base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y / 2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
+        //base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y / 2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
+        base = new Base(SCREEN_X/2, SCREEN_Y/2);
 
         // 測試: 預設有3個 村民
         citizens = new Citizens(3);

@@ -12,15 +12,42 @@ import java.awt.event.MouseEvent;
 public class Building extends GameObject implements CommandSolver.MouseCommandListener {
 
     private Image img;
+    private int woodRequired;
+    private int steelRequired;
+    private int gasRequired;
 
-    public Building(int x, int y) {
-        super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
+    public Building(){
+        super(-1000, -1000, 1,1);
+        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
+    }
+    //TODO: delete
+    public Building(int x, int y){
+        super(x,y, 1,1);
         img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
     }
 
-    public Building(int x, int y,int width,int height) {
-        super(x, y, width, height);
+    //for non-base buildings
+    public Building(int x, int y, String imgPath) {
+        super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
+        img=SceneController.getInstance().imageController().tryGetImage(imgPath);
+    }
+
+    //for base building only
+    public Building(int x, int y, int width, int height, String imgPath) {
+        super(Global.SCREEN_X/2, Global.SCREEN_Y/2, Global.BASE_WIDTH, Global.BASE_HEIGHT);
         img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
+    }
+
+    public int getWoodRequired() {
+        return woodRequired;
+    }
+
+    public int getSteelRequired() {
+        return steelRequired;
+    }
+
+    public int getGasRequired() {
+        return gasRequired;
     }
 
     @Override

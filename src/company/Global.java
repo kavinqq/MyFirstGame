@@ -65,6 +65,8 @@ public class Global {
     //建築物大小
     public static final int BUILDING_WIDTH = 96;
     public static final int BUILDING_HEIGHT = 96;
+    public static final int BASE_WIDTH = 120;
+    public static final int BASE_HEIGHT = 120;
 
     //建築
     public final static int BuildingTypeNum = 8;

@@ -86,7 +86,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 originPosition();
                 break;
             }
-
         }
     }
 }

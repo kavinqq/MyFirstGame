@@ -154,9 +154,9 @@ public class Path {
 
             public String Lab() { return this + "/96x96_lab.png";}
 
-            public String Sawmill() { return this + "/96x96_sawmill.png";}
+            public String SawMill() { return this + "/96x96_sawmill.png";}
 
-            public String Steelmill() { return this + "/96x96_steelmill.png";};
+            public String SteelMill() { return this + "/96x96_steelmill.png";};
 
             public String Barracks() { return this + "/96x96_barracks.png";};
 
@@ -166,7 +166,7 @@ public class Path {
 
 
 
-            public String Gasmill() { return this + "/96x96_gasmill.png";}
+            public String GasMill() { return this + "/96x96_gasmill.png";}
 
             public String AirplanemIll() { return this + "/96x96_airplanemIll.png";}
 
