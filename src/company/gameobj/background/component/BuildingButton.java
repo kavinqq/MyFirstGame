@@ -55,7 +55,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     private void originPosition(){
         //System.out.println("回到原位");
         //System.out.println("ox:"+ox+" oy:"+oy);
-        offset(ox,oy);
+        moveToPoint(ox,oy);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
             //System.out.println("x:"+e.getX()+" y:"+e.getY());
                 if(isEntered(previousX, previousY)){
                     //System.out.println("BUTTON_DRAGGED");
-                    centerOffset(e.getX(),e.getY());
+                    moveToCenterPoint(e.getX(),e.getY());
                 }
                 break;
             }

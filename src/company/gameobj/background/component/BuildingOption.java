@@ -77,9 +77,6 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-        if (state == CommandSolver.MouseState.ENTERED) {
-            //System.out.println("testEnter");
-        }
         for (int i = 0; i < BuildingTypeNum; i++) {
             buildingButtons[i].mouseTrig(e, state, trigTime);
         }

@@ -38,15 +38,16 @@ public abstract class GameObject implements GameKernel.GameInterface {
 
     private Rect detectRange;
     private Rect painter;
+    private Rect tmpDetectRange;
 
-    public final void offset(int x, int y) {
-        detectRange.offset(x, y);
-        painter.offset(x, y);
+    public final void moveToPoint(int x, int y) {
+        detectRange.moveToPoint(x, y);
+        painter.moveToPoint(x, y);
     }
 
-    public final void centerOffset(int x, int y) {
-        detectRange.centerOffset(x, y);
-        painter.centerOffset(x, y);
+    public final void moveToCenterPoint(int x, int y) {
+        detectRange.moveToCenterPoint(x, y);
+        painter.moveToCenterPoint(x, y);
     }
 
     public final void translate(int x, int y) {
@@ -98,6 +99,15 @@ public abstract class GameObject implements GameKernel.GameInterface {
 
     public boolean touchRight() {
         return detectRange.right() >= Global.SCREEN_X;
+    }
+
+    public void shutDetectRange(){
+        tmpDetectRange=detectRange.clone();
+        detectRange=new Rect(0,0,0,0);
+    }
+
+    public void openDetectRange(){
+        detectRange=tmpDetectRange.clone();
     }
 
     @Override

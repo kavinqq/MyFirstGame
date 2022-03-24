@@ -23,54 +23,41 @@ public class Arsenal extends Building {
      * levelUp() → City類別的 第 347行 使用
      */
     public Arsenal(int x, int y) {
-<<<<<<< HEAD
-        super(x, y, new Path().img().building().Arsenal());
-    }
-
-    public Arsenal() {
-        super();
-=======
         super(x, y);
-        setId(6)
-                .setName("兵工廠")
-                .setBuildTime(3)
-                .setUpgradeTime(48)
-                .setLevelC(0)
-                .setTechLevel(2)
-                .setTechLevelNeedUpgrade(2)
-                .setHp(30)
-                .setWoodCostCreate(30)
-                .setSteelCostCreate(10)
-                .setGasCostCreate(0)
-                .setWoodCostLevelUpC(70)
-                .setSteelCostLevelUpC(40)
-                .setGasCostLevelup(0);
->>>>>>> 407a217de5dd5b2a569fa9da541c7a9d1f420125
+        init();
     }
 
     public Arsenal() {
         super(200,200);
-        setId(6)
-                .setName("兵工廠")
-                .setBuildTime(3)
-                .setUpgradeTime(48)
-                .setLevelC(0)
-                .setTechLevel(2)
-                .setTechLevelNeedUpgrade(2)
-                .setHp(30)
-                .setWoodCostCreate(30)
-                .setSteelCostCreate(10)
-                .setGasCostCreate(0)
-                .setWoodCostLevelUpC(70)
-                .setSteelCostLevelUpC(40)
-                .setGasCostLevelup(0);
+        init();
     }
+
     @Override
     public String toString() {
         return "兵工廠:可以升級士兵";
     }
     public String buildingDetail(int level){
         return "";
+    }
+
+    @Override
+    protected void init() {
+        setId(6)
+                .setName("兵工廠")
+                .setBuildTime(3)
+                .setUpgradeTime(48)
+                .setLevelC(0)
+                .setTechLevel(2)
+                .setTechLevelNeedUpgrade(2)
+                .setHp(30)
+                .setWoodCostCreate(30)
+                .setSteelCostCreate(10)
+                .setGasCostCreate(0)
+                .setWoodCostLevelUpC(70)
+                .setSteelCostLevelUpC(40)
+                .setGasCostLevelup(0)
+                .setImgPath(new Path().img().building().Arsenal());
+        imgInit();
     }
 
 }

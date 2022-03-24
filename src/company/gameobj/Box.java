@@ -34,7 +34,7 @@ public class Box extends GameObject {
         int topLeftY = (startY < endY)? startY : endY;
 
         //設定左上角那個點
-        offset(topLeftX, topLeftY);
+        moveToPoint(topLeftX, topLeftY);
 
         painter().scaleX(Math.abs(endX - startX));
         painter().scaleY(Math.abs(endY - startY));

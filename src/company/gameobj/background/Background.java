@@ -19,6 +19,7 @@ public class Background extends GameObject implements GameKernel.GameInterface,C
     public Background(int x, int y, int width, int height) {
         super(x, y, width, height);
         bg_img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().background());
+        shutDetectRange();
     }
 
     @Override

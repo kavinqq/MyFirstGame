@@ -1,17 +1,8 @@
 package company.gameobj.buildings;
 
-<<<<<<< HEAD
+
 import company.gametest9th.utils.Path;
 
-public class Barracks extends Building{
-    public Barracks(int x, int y) {
-        super(x, y, new Path().img().building().Barracks());
-    }
-
-    public Barracks() {
-        super();
-    }
-=======
 public class Barracks extends Building{
     /**
      * 父類建構子
@@ -29,38 +20,12 @@ public class Barracks extends Building{
      */
     public Barracks(int x, int y) {
         super(x, y);
-        setId(3)
-                .setName("軍營")
-                .setBuildTime(2)
-                .setUpgradeTime(30)
-                .setLevelC(0)
-                .setTechLevel(1)
-                .setTechLevelNeedUpgrade(2)
-                .setHp(30)
-                .setWoodCostCreate(20)
-                .setSteelCostCreate(10)
-                .setGasCostCreate(0)
-                .setWoodCostLevelUpC(30)
-                .setSteelCostLevelUpC(15)
-                .setGasCostLevelup(0);
+        init();
     }
 
     public Barracks() {
         super(100, 100);
-        setId(3)
-                .setName("軍營")
-                .setBuildTime(2)
-                .setUpgradeTime(30)
-                .setLevelC(0)
-                .setTechLevel(1)
-                .setTechLevelNeedUpgrade(2)
-                .setHp(30)
-                .setWoodCostCreate(20)
-                .setSteelCostCreate(10)
-                .setGasCostCreate(0)
-                .setWoodCostLevelUpC(30)
-                .setSteelCostLevelUpC(15)
-                .setGasCostLevelup(0);
+        init();
     }
     /**
      * 增加的士兵數
@@ -79,5 +44,24 @@ public class Barracks extends Building{
         return "軍營：每3小時消耗2木材、2鋼鐵生產" + (super.getLevel() * 2 + 1) + "位士兵";
     }
 
->>>>>>> 407a217de5dd5b2a569fa9da541c7a9d1f420125
+    @Override
+    protected void init() {
+        setId(3)
+                .setName("軍營")
+                .setBuildTime(2)
+                .setUpgradeTime(30)
+                .setLevelC(0)
+                .setTechLevel(1)
+                .setTechLevelNeedUpgrade(2)
+                .setHp(30)
+                .setWoodCostCreate(20)
+                .setSteelCostCreate(10)
+                .setGasCostCreate(0)
+                .setWoodCostLevelUpC(30)
+                .setSteelCostLevelUpC(15)
+                .setGasCostLevelup(0)
+                .setImgPath(new Path().img().building().Barracks());
+        imgInit();
+    }
+
 }

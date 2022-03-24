@@ -46,7 +46,7 @@ public class Base extends Building {
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
         switch (state){
             case DRAGGED: {
-                offset(e.getX(),e.getY());
+                moveToPoint(e.getX(),e.getY());
                 break;
             }
         }

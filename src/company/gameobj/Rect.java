@@ -29,14 +29,14 @@ public class Rect {
         this.y = y - height / 2;
     }
 
-    public final Rect offset(int x, int y) {
+    public final Rect moveToPoint(int x, int y) {
         //左上
         this.x=x;
         this.y=y;
         return this;
     }
 
-    public final Rect centerOffset(int x, int y) {
+    public final Rect moveToCenterPoint(int x, int y) {
         //中心
         setCenter(x,y);
         return this;
@@ -122,4 +122,5 @@ public class Rect {
     public final Rect clone() {
         return new Rect(left(), right(), width(), height());
     }
+
 }
