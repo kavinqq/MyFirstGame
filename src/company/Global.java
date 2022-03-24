@@ -65,9 +65,11 @@ public class Global {
     //建築物大小
     public static final int BUILDING_WIDTH = 96;
     public static final int BUILDING_HEIGHT = 96;
+
     //基座與建築物差
     public static final int DIV_GAP_X=(FOUNDATION_WIDTH -BUILDING_WIDTH)/2;
     public static final int DIV_GAP_Y=(FOUNDATION_HEIGHT -BUILDING_HEIGHT)/2;
+
     //建築
     public final static int BuildingTypeNum = 8;
 

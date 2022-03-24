@@ -1,4 +1,5 @@
 package company.gameobj.buildings;
+import company.gametest9th.utils.Path;
 
 import company.gameobj.GameObject;
 
@@ -19,26 +20,17 @@ public class Lab extends Building {
      */
     public Lab(int x, int y) {
         super(x, y);
-        setId(2)
-                .setName("研究所")
-                .setBuildTime(3)
-                .setUpgradeTime(24)
-                .setLevelC(0)
-                .setTechLevel(1)
-                .setTechLevelNeedUpgrade(1)
-                .setHp(30)
-                .setWoodCostCreate(10)
-                .setSteelCostCreate(5)
-                .setGasCostCreate(0)
-                .setWoodCostLevelUpC(50)
-                .setSteelCostLevelUpC(20)
-                .setGasCostLevelup(0);
+        init();
     }
 
 
 
     public Lab() {
         super(90,90);
+        init();
+    }
+    //初始化
+    protected void init(){
         setId(2)
                 .setName("研究所")
                 .setBuildTime(3)
@@ -52,7 +44,9 @@ public class Lab extends Building {
                 .setGasCostCreate(0)
                 .setWoodCostLevelUpC(50)
                 .setSteelCostLevelUpC(20)
-                .setGasCostLevelup(0);
+                .setGasCostLevelup(0)
+                .setImgPath(new Path().img().building().Lab());
+        imgInit();
     }
     @Override
     public String toString() {

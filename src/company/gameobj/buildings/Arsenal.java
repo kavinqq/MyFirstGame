@@ -1,6 +1,8 @@
 package company.gameobj.buildings;
 
 
+import company.gametest9th.utils.Path;
+
 public class Arsenal extends Building {
     /**
      * 父類建構子
@@ -21,6 +23,13 @@ public class Arsenal extends Building {
      * levelUp() → City類別的 第 347行 使用
      */
     public Arsenal(int x, int y) {
+<<<<<<< HEAD
+        super(x, y, new Path().img().building().Arsenal());
+    }
+
+    public Arsenal() {
+        super();
+=======
         super(x, y);
         setId(6)
                 .setName("兵工廠")
@@ -36,6 +45,7 @@ public class Arsenal extends Building {
                 .setWoodCostLevelUpC(70)
                 .setSteelCostLevelUpC(40)
                 .setGasCostLevelup(0);
+>>>>>>> 407a217de5dd5b2a569fa9da541c7a9d1f420125
     }
 
     public Arsenal() {

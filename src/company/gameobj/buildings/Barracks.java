@@ -1,5 +1,17 @@
 package company.gameobj.buildings;
 
+<<<<<<< HEAD
+import company.gametest9th.utils.Path;
+
+public class Barracks extends Building{
+    public Barracks(int x, int y) {
+        super(x, y, new Path().img().building().Barracks());
+    }
+
+    public Barracks() {
+        super();
+    }
+=======
 public class Barracks extends Building{
     /**
      * 父類建構子
@@ -67,4 +79,5 @@ public class Barracks extends Building{
         return "軍營：每3小時消耗2木材、2鋼鐵生產" + (super.getLevel() * 2 + 1) + "位士兵";
     }
 
+>>>>>>> 407a217de5dd5b2a569fa9da541c7a9d1f420125
 }

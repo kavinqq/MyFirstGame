@@ -1,18 +1,16 @@
 package company.scene;
 
-<<<<<<< HEAD
 import company.controllers.SceneController;
-=======
 
 import java.util.List;
 import java.util.ArrayList;
-
-import company.controllers.SceneController;
 import company.gameobj.Box;
 import company.gameobj.GameObject;
->>>>>>> 196db71530780242446692b4fd5120118a50ff34
 import company.gameobj.background.Background;
 import company.gameobj.background.component.*;
+import company.gameobj.buildings.Building;
+import company.gameobj.buildings.SawMill;
+import company.gameobj.buildings.SteelMill;
 import company.gameobj.creature.human.Citizen;
 import company.gameobj.Road;
 import company.gameobj.buildings.Base;
@@ -43,18 +41,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private Base base;
     private Background background;
     private BuildingOption buildingOption;
-<<<<<<< HEAD
-    private Citizen citizen;
-    private Citizen currentCitizen;
-    private boolean canControlCitizen;
-    private Image gray;
-=======
+
     private Citizen currentObj; // 當前操控的物件
     private boolean isControlObjNow; // 現在是否有在操控一個物件
     private Citizens citizens;// 所有村民類別
 
 
->>>>>>> 196db71530780242446692b4fd5120118a50ff34
     // 框選
     private Box box;
     private boolean isBoxSelectionMode;
@@ -63,6 +55,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     private Road road;
 
+    //測試: 建築物
+    private Building building1;
+    private Building building2;
 
     @Override
     public void sceneBegin() {
@@ -74,16 +69,20 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //背景
         background = new Background(0, 0, SCREEN_X, SCREEN_Y);
+
+
         //建築物選單
         buildingOption = new BuildingOption();
-        //
-        //buildingController=new MouseController(new Building(50,50));
-
-        //半透明
-        gray=SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().gray());
 
 
-        base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y / 2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
+        //測試:建築物
+        building1=new SawMill(500,500);
+        building2=new SteelMill(1200,500);
+
+
+        //base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y / 2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
+        base = new Base(SCREEN_X/2, SCREEN_Y/2);
+
 
         // 測試: 預設有3個 村民
         citizens = new Citizens(3);
@@ -124,14 +123,15 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         g.drawImage(horizontalBar, -50, 50, 1400, 10, null);
         g.drawRect(STATUS_BAR_X, STATUS_BAR_Y, STATUS_BAR_WIDTH, STATUS_BAR_HEIGHT);
 
+        //測試 建築
+        building1.paint(g);
+        building2.paint(g);
+
         // 主堡
         base.paint(g);
 
         //建築物選單範圍測試
-<<<<<<< HEAD
-=======
 
->>>>>>> 196db71530780242446692b4fd5120118a50ff34
         g.drawRect(BUILDING_OPTION_X, BUILDING_OPTION_Y, BUILDING_OPTION_WIDTH, BUILDING_OPTION_HEIGHT);
 
 
@@ -139,18 +139,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         g.drawRect(LAND_X, LAND_Y, LAND_WIDTH, LAND_HEIGHT);
 
 
-<<<<<<< HEAD
 
-
-
-        if (isBoxSelect) {
-            g.setColor(Color.PINK);
-            int a=boxSelectEndX-boxSelectStartX;
-            int b=boxSelectEndY - boxSelectStartY;
-            System.out.println("X:" + (a) + " Y:" + (b));
-
-            g.fillRect(boxSelectStartX, boxSelectStartY, boxSelectEndX - boxSelectStartX, boxSelectEndY - boxSelectStartY);
-=======
         // 畫出每一個村民
         citizens.paintAll(g);
 
@@ -163,7 +152,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         if (currentObj != null) {
             g.setColor(Color.GREEN);
             g.fillRect(currentObj.painter().left(), currentObj.painter().bottom() + 3, currentObj.painter().width(), 10);
->>>>>>> 196db71530780242446692b4fd5120118a50ff34
             g.setColor(Color.black);
         }
 

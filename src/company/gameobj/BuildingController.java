@@ -1,3 +1,4 @@
+
 package company.gameobj;
 
 import company.gameobj.buildings.Building;
@@ -71,7 +72,7 @@ public class BuildingController {
         SAW_MILL(new SawMill(), new LinkedList<>()),
         STEEL_MILL(new SteelMill(), new LinkedList<>()),
         GAS_MILL(new GasMill(), new LinkedList<>()),
-        AIRPLANE_MILL(new AirPlaneMill(), new LinkedList<>());
+        AIRPLANE_MILL(new AirplaneMill(), new LinkedList<>());
 
         private Building instance;
         private LinkedList<BuildingNode> list;
@@ -215,7 +216,7 @@ public class BuildingController {
                 break;
             }
             case AIRPLANE_MILL: {
-                newBuilding = new BuildingController.BuildingNode(new AirPlaneMill());
+                newBuilding = new BuildingController.BuildingNode(new AirplaneMill());
                 break;
             }
             default: {
@@ -697,7 +698,7 @@ public class BuildingController {
             //如果建築在運作
             if (buildingNode.building.isWorking() && buildingNode.building instanceof House) {
                 if ((City.getGameTime() - buildingNode.updateStartTime) % 3 == 0) {
-                    AirPlaneMill airPlaneMill = (AirPlaneMill) buildingNode.building;
+                    AirplaneMill airPlaneMill = (AirplaneMill) buildingNode.building;
                     newPlaneCount += airPlaneMill.produceAirPlane();
                     if (!buildingNode.building.isEnoughProduction(resource)) {
                         buildingNode.building.setWorking(false); //將建築關閉

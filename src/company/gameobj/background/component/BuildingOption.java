@@ -28,10 +28,10 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         buildingButtons= new BuildingButton[BuildingTypeNum];
         imgs[0] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().House());
         imgs[1] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Lab());
-        imgs[2] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Sawmill());
-        imgs[3] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Steelmill());
+        imgs[2] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().SawMill());
+        imgs[3] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().SteelMill());
         imgs[4] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Barracks());
-        imgs[5] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Gasmill());
+        imgs[5] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().GasMill());
         imgs[6] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Arsenal());
         imgs[7] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().AirplanemIll());
 
@@ -48,7 +48,7 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
 
         //以後放在buildingSystem
-        buildings[0] = new Base(80, 80, 100, 100);
+        //buildings[0] = new Base(80, 80, 100, 100);
 
 
         foundation_img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().foundation());

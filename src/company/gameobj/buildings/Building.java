@@ -13,6 +13,14 @@ import java.awt.event.MouseEvent;
 public abstract class Building extends GameObject implements CommandSolver.MouseCommandListener {
 
     private Image img;
+
+    private int woodRequired;
+    private int steelRequired;
+    private int gasRequired;
+
+    private boolean canCatchBuilding;
+    //圖片路徑
+    private String imgPath;
     /**
      * 編號
      */
@@ -106,32 +114,31 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     public Building(int x, int y,int width,int height) {
         super(x, y, width, height);
-        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
+        buildingInit();
     }
-
 
     public Building(int x, int y) {
         super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
-        //建築物是否在建築，建築中 -> true
-        this.readyToUpgrade = true;
-        //建築物是否在運轉
-        this.isWorking = false;
-        //建築物 剛建造完的時間 (那一個moment)，用來計算建築生產(和buildTime gameTime去做計算)
-        this.createTime = -1;
-        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
+        buildingInit();
     }
 
     public Building() {
         super(90, 90, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
+        buildingInit();
+    }
+
+    //建築物初始化(){
+    protected void buildingInit(){
         //建築物是否在建築，建築中 -> true
         this.readyToUpgrade = true;
         //建築物是否在運轉
         this.isWorking = false;
         //建築物 剛建造完的時間 (那一個moment)，用來計算建築生產(和buildTime gameTime去做計算)
         this.createTime = -1;
-        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
     }
-
+    protected void imgInit(){
+        img=SceneController.getInstance().imageController().tryGetImage(imgPath);
+    }
     /**
      * set給子類建構用
      * @param id
@@ -205,6 +212,11 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     protected Building setGasCostLevelup(int gasCostLevelup){
         Building.this.gasCostLevelUp=gasCostLevelUp;
+        return this;
+    }
+
+    protected Building setImgPath(String path){
+        Building.this.imgPath=path;
         return this;
     }
     /**
@@ -287,6 +299,19 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     public int getGasCostLevelUp() {
         return gasCostLevelUp;
     }
+    //取得木頭所需物資
+    public int getWoodRequired() {
+        return woodRequired;
+    }
+    //取得鋼鐵所需物資
+    public int getSteelRequired() {
+        return steelRequired;
+    }
+    //取得瓦斯所需物資
+    public int getGasRequired() {
+        return gasRequired;
+    }
+
 
     /**
      * 是否有足夠的資源建造
@@ -463,8 +488,9 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     public void update() {
 
     }
+    //子類初始化
+    protected abstract void init();
 
-    private boolean canCatchBuilding;
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
 

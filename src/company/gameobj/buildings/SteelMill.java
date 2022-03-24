@@ -1,5 +1,6 @@
 package company.gameobj.buildings;
 
+import company.gametest9th.utils.Path;
 import oldMain.Resource;
 
 public class SteelMill extends Building{
@@ -22,9 +23,18 @@ public class SteelMill extends Building{
      * gasCostLevelUp 升級所需要的瓦斯量
      */
     public SteelMill() {
-
         super(90,90);
-                setId(5)
+        init();
+    }
+
+    public SteelMill(int x,int y) {
+        super(x,y);
+        init();
+    }
+
+    protected void init(){
+
+        setId(5)
                 .setName("煉鋼廠")
                 .setBuildTime(1)
                 .setUpgradeTime(30)
@@ -37,9 +47,10 @@ public class SteelMill extends Building{
                 .setGasCostCreate(0)
                 .setWoodCostLevelUpC(30)
                 .setSteelCostLevelUpC(15)
-                .setGasCostLevelup(0);
+                .setGasCostLevelup(0)
+                .setImgPath(new Path().img().building().SteelMill());
+        imgInit();
     }
-
     /**
      * 生產鋼鐵
      */
@@ -52,8 +63,8 @@ public class SteelMill extends Building{
         return "煉鋼廠:每小時採集量+1(每房屋等級+2)";
     }
 
-    public String buildingDetail(int level){
+    public String buildingDetail(int level) {
         return "煉鋼廠：市民每小時鋼鐵採集量提升至" + (Resource.DEFAULT_STEEL_SPEED + 1 + super.getLevel()) + "單位鋼鐵";
-
     }
+
 }

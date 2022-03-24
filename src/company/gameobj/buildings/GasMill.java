@@ -1,5 +1,7 @@
 package company.gameobj.buildings;
 
+import company.gametest9th.utils.Path;
+
 public class GasMill extends Building{
     /**
      * 父類建構子
@@ -19,25 +21,17 @@ public class GasMill extends Building{
      * gasCostCreate 創建所需要的瓦斯量
      * gasCostLevelUp 升級所需要的瓦斯量
      */
-    public GasMill(int x, int y) {
-        super(x, y);
-        setId(7)
-                .setName("瓦斯場")
-                .setBuildTime(1)
-                .setUpgradeTime(30)
-                .setLevelC(0)
-                .setTechLevel(2)
-                .setTechLevelNeedUpgrade(3)
-                .setHp(20)
-                .setWoodCostCreate(15)
-                .setSteelCostCreate(5)
-                .setGasCostCreate(0)
-                .setWoodCostLevelUpC(40)
-                .setSteelCostLevelUpC(20)
-                .setGasCostLevelup(0);
+
+    public GasMill(int x,int y) {
+        super(x,y);
+        init();
     }
     public GasMill() {
         super(500, 500);
+        init();
+    }
+    //初始化
+    public void init(){
         setId(7)
                 .setName("瓦斯場")
                 .setBuildTime(1)
@@ -51,7 +45,9 @@ public class GasMill extends Building{
                 .setGasCostCreate(0)
                 .setWoodCostLevelUpC(40)
                 .setSteelCostLevelUpC(20)
-                .setGasCostLevelup(0);
+                .setGasCostLevelup(0)
+                .setImgPath(new Path().img().building().GasMill());
+        imgInit();
     }
     /**
      * 生產的瓦斯量

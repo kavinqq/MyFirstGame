@@ -139,15 +139,12 @@ public class Path {
 
             public String exit() { return this + "/exit.png";};
 
-<<<<<<< HEAD
-            public String gray() { return this + "/gray_translcent.png";};
-=======
             public String box() { return this + "/box.png";}
 
             public String horizontalBar() { return this + "/H_bar.png";}
 
             public String verticalBar() { return this + "/V_bar.png";}
->>>>>>> 196db71530780242446692b4fd5120118a50ff34
+
 
         }
 
@@ -162,9 +159,9 @@ public class Path {
 
             public String Lab() { return this + "/96x96_lab.png";}
 
-            public String Sawmill() { return this + "/96x96_sawmill.png";}
+            public String SawMill() { return this + "/96x96_sawmill.png";}
 
-            public String Steelmill() { return this + "/96x96_steelmill.png";};
+            public String SteelMill() { return this + "/96x96_steelmill.png";};
 
             public String Barracks() { return this + "/96x96_barracks.png";};
 
@@ -174,7 +171,7 @@ public class Path {
 
 
 
-            public String Gasmill() { return this + "/96x96_gasmill.png";}
+            public String GasMill() { return this + "/96x96_gasmill.png";}
 
             public String AirplanemIll() { return this + "/96x96_airplanemIll.png";}
 
