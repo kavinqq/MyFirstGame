@@ -91,20 +91,10 @@ public abstract class Human extends Creature {
         }
         //is not blocked by any buildings
         if(this.getBlockedDir()==null){
-            //如果XY方向都還沒達到目標的點
-//            if (targetX() != painter().centerX() && targetY() != painter().centerY()) {
-//                Global.Direction[] arr = new Global.Direction[2];
-//                arr[0] = (targetX() > painter().centerX()) ? Global.Direction.RIGHT : Global.Direction.LEFT;
-//                arr[1] = (targetY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP;
-//                this.setWalkingDir(arr[Global.random(0,1)]);
-//            }
-//            else
             if (targetX() == painter().centerX()){
-                System.out.println("reached X");
                 this.setWalkingDir((targetY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP);
             }
             else if (targetY() == painter().centerY()){
-                System.out.println("reached Y");
                 this.setWalkingDir((targetX() > painter().centerX()) ? Global.Direction.RIGHT: Global.Direction.LEFT);
             }
         }
@@ -113,12 +103,26 @@ public abstract class Human extends Creature {
                 switch (this.getBlockedDir()){
                     case LEFT:
                     case RIGHT:{
-                        this.setWalkingDir((Global.random(0,1)==0) ? Global.Direction.UP : Global.Direction.DOWN);
+                        //當在往上或往下的時候撞到障礙物且已經來到目標的Ｘ做標時隨機選擇一個方向去走
+                        if(this.painter().centerY()==targetY()){
+                            this.setWalkingDir((Global.random(0,1)==0) ? Global.Direction.UP : Global.Direction.DOWN);
+                        }
+                        //當在往上或往下的時候撞到障礙物且尚未來到目標的Ｘ做標時選擇會靠近目標的方向去走
+                        else{
+                            this.setWalkingDir((targetY()>this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
+                        }
                         break;
                     }
                     case UP:
                     case DOWN:{
-                        this.setWalkingDir((Global.random(0,1)==0) ? Global.Direction.LEFT : Global.Direction.RIGHT);
+                        //當在往上或往下的時候撞到障礙物且已經來到目標的Ｘ做標時隨機選擇一個方向去走
+                        if(this.painter().centerX()==this.painter().centerX()){
+                            this.setWalkingDir((Global.random(0,1)==0) ? Global.Direction.LEFT : Global.Direction.RIGHT);
+                        }
+                        //當在往上或往下的時候撞到障礙物且尚未來到目標的Ｘ做標時選擇會靠近目標的方向去走
+                        else{
+                            this.setWalkingDir((targetX()<this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
+                        }
                         break;
                     }
                 }
