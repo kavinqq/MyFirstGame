@@ -3,11 +3,12 @@ package company.gameobj.creature;
 import company.Global;
 import company.controllers.SceneController;
 import company.gameobj.GameObject;
+import company.gametest9th.utils.Animator;
 
 import java.awt.*;
 
 public abstract class Creature extends GameObject{
-    public Creature(int x, int y, int targetX, int targetY, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight ,int value, int speed, String img, FLY_ABILITY flyAbility) {
+    public Creature(int x, int y, int targetX, int targetY, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight ,int value, int speed, String img, FLY_ABILITY flyAbility, Animator.State moveStatus) {
         super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight);
         this.targetX = targetX;
         this.targetY = targetY;
@@ -15,11 +16,12 @@ public abstract class Creature extends GameObject{
         this.speed = speed;
         this.img = SceneController.getInstance().imageController().tryGetImage(img);
         this.setFlyAbility(flyAbility);
-        this.status = STATUS.STOPPING;
+        this.fightingStatus = FIGHTING_STATUS.NOT_FIGHTING;
+        this.moveStatus = moveStatus;
     }
 
-    public enum STATUS {
-        FIGHTING, WALKING, STOPPING;
+    public enum FIGHTING_STATUS {
+        FIGHTING, NOT_FIGHTING;
     }
 
 
@@ -35,7 +37,8 @@ public abstract class Creature extends GameObject{
     private int speed;
     private Image img;
     private FLY_ABILITY flyAbility;
-    private STATUS status;
+    private FIGHTING_STATUS fightingStatus;
+    private Animator.State moveStatus;
     private GameObject attackTarget;
     private int targetX;
     private int targetY;
@@ -66,12 +69,20 @@ public abstract class Creature extends GameObject{
         this.flyAbility = flyAbility;
     }
 
-    public void setStatus(STATUS status) {
-        this.status = status;
+    public void setFightingStatus(FIGHTING_STATUS fightingStatus) {
+        this.fightingStatus = fightingStatus;
     }
 
-    public STATUS getStatus() {
-        return status;
+    public FIGHTING_STATUS getFightingStatus() {
+        return fightingStatus;
+    }
+
+    public void setMoveStatus(Animator.State walkingStatus) {
+        this.moveStatus = walkingStatus;
+    }
+
+    public Animator.State getMoveStatus() {
+        return moveStatus;
     }
 
     public boolean isAlive(){
@@ -83,7 +94,7 @@ public abstract class Creature extends GameObject{
     }
 
     public boolean isFighting(){
-        return (this.status== STATUS.FIGHTING);
+        return (this.fightingStatus == FIGHTING_STATUS.FIGHTING);
     }
 
     public void setAttackTarget(GameObject attackTarget) {
@@ -103,15 +114,23 @@ public abstract class Creature extends GameObject{
     }
 
     public void setTargetXY(int x, int y){
-        setTargetX(x);
-        setTargetY(y);
+        if(!this.isAt(x,y)){
+            setTargetX(x);
+            setTargetY(y);
+            if (x != painter().centerX() && y != painter().centerY()) {
+                Global.Direction[] arr = new Global.Direction[2];
+                arr[0] = (targetX() > painter().centerX()) ? Global.Direction.RIGHT : Global.Direction.LEFT;
+                arr[1] = (targetY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP;
+                this.setWalkingDir(arr[Global.random(0,1)]);
+            }
+        }
     }
 
-    public void setTargetX(int targetX) {
+    private void setTargetX(int targetX) {
         this.targetX = targetX;
     }
 
-    public void setTargetY(int targetY) {
+    private void setTargetY(int targetY) {
         this.targetY = targetY;
     }
 
@@ -186,4 +205,11 @@ public abstract class Creature extends GameObject{
         return blockedDir;
     }
 
+    public boolean isAt(int x, int y){
+        return (this.painter().centerX()==x && this.painter().centerY()==y);
+    }
+
+    public boolean isAtTarget(){
+        return (this.painter().centerX()==targetX && this.painter().centerY()==targetY);
+    }
 }

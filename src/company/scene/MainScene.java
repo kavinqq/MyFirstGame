@@ -89,7 +89,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 村民出生位置現在都是測試
         for (int i = 0; i < 3; i++) {
-            citizens.add(new Citizen(200, 250 + (i * 100), Animator.State.STAND));
+            citizens.add(new Citizen(200, 250 + (i * 100)));
         }
 
         // 當前操控的物件
@@ -169,9 +169,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void update() {
-        // 更新所有村民狀態
-        citizens.updateAll();
-
 
         // 框選Box狀態on
         if (canUseBoxSelection) {
@@ -215,6 +212,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             hasSetTarget = false;
         }
 
+        // 更新所有村民狀態
+        citizens.updateAll();
     }
 
     @Override

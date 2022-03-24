@@ -36,13 +36,6 @@ public class Citizen extends Human {   //市民
      */
     public Citizen(int x, int y) {
         super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, CITIZEN_INITIAL_VALUE, CITIZEN_INITIAL_SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY, HUMAN_TYPE.CITIZEN);
-        toolDelay = new Delay(30);
-
-        setCharacterType(6);
-        animator = new HumanAnimator(getCharacterType(), state);
-    }
-    public Citizen(int x, int y, Animator.State state) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, CITIZEN_INITIAL_VALUE, CITIZEN_INITIAL_SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY, HUMAN_TYPE.CITIZEN);
 
         // 預設人物出生方向朝下
         setWalkingDir(Global.Direction.DOWN);
@@ -50,10 +43,11 @@ public class Citizen extends Human {   //市民
         toolDelay = new Delay(30);
 
         // 人物自己記錄一下狀態
-        this.state = state;
+        this.state = Animator.State.STAND;
 
         // 村民的圖片
         setCharacterType(6);
+
         animator = new HumanAnimator(getCharacterType(), this.state);
 
 
@@ -107,7 +101,9 @@ public class Citizen extends Human {   //市民
     public void update() {
 
         //mouseToMove();
-        walk();
+        if(getMoveStatus()==Animator.State.WALK){
+            walk();
+        }
         animator.update();
 
         //TODO
@@ -124,7 +120,10 @@ public class Citizen extends Human {   //市民
     public void setTarget(int x, int y){
 
         // 設定目的地X Y
-        this.setTargetXY(x,y);
+        if(!this.isAt(x,y)){
+            this.setTargetXY(x,y);
+            this.setMoveStatus(Animator.State.WALK);
+        }
     }
 
     /**
