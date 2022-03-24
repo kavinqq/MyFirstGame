@@ -7,8 +7,10 @@ import company.gameobj.GameObject;
 import java.awt.*;
 
 public abstract class Creature extends GameObject{
-    public Creature(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight ,int value, int speed, String img, FLY_ABILITY flyAbility) {
+    public Creature(int x, int y, int targetX, int targetY, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight ,int value, int speed, String img, FLY_ABILITY flyAbility) {
         super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight);
+        this.targetX = targetX;
+        this.targetY = targetY;
         this.value = value;
         this.speed = speed;
         this.img = SceneController.getInstance().imageController().tryGetImage(img);
@@ -35,15 +37,17 @@ public abstract class Creature extends GameObject{
     private FLY_ABILITY flyAbility;
     private STATUS status;
     private GameObject attackTarget;
-    private int targetX = Global.SCREEN_X/2;
-    private int targetY = Global.SCREEN_Y/2;
+    private int targetX;
+    private int targetY;
     private boolean isAbleToGoRight = true;
     private boolean isAbleToGoLeft = true;
     private boolean isAbleToGoUp = true;
     private boolean isAbleToGoDown = true;
 
 
-    private Global.Direction dir;
+    private Global.Direction walkingDir;
+    private Global.Direction blockedDir;
+
 
 
     /**
@@ -129,14 +133,6 @@ public abstract class Creature extends GameObject{
         return speed;
     }
 
-    public Global.Direction getDir() {
-        return dir;
-    }
-
-    public void setDir(Global.Direction dir) {
-        this.dir = dir;
-    }
-
     public boolean isAbleToGoRight() {
         return isAbleToGoRight;
     }
@@ -168,4 +164,26 @@ public abstract class Creature extends GameObject{
     public void setAbleToGoDown(boolean ableToGoDown) {
         isAbleToGoDown = ableToGoDown;
     }
+
+
+    public void setWalkingDir(Global.Direction walkingDir) {
+        this.walkingDir = walkingDir;
+    }
+
+    public Global.Direction getWalkingDir() {
+        return walkingDir;
+    }
+
+    public void setBlockedDir(Global.Direction blockedDir) {
+        this.blockedDir = blockedDir;
+    }
+
+    public void setNoBlockedDir(){
+        this.blockedDir = null;
+    }
+
+    public Global.Direction getBlockedDir() {
+        return blockedDir;
+    }
+
 }
