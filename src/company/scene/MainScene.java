@@ -145,7 +145,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         citizens.paintAll(g);
 
         if (canUseBoxSelection) {
-            boxSelection.getBox().paint(g);
+            boxSelection.paint(g);
         }
 
 
@@ -177,7 +177,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         if (canUseBoxSelection) {
 
             // 更新box的狀態
-            boxSelection.getBox().update();
+            boxSelection.update();
 
             // 把框到的市民 加入到 tmpCurrentObjs
             List<Human> tmpCurrentObjs = citizens.getBoxCitizens(boxSelection.getBox());
