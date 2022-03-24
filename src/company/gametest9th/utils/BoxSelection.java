@@ -43,7 +43,6 @@ public class BoxSelection implements CommandSolver.MouseCommandListener {
 
                 // 如果還沒設定過起點
                 if(!hasSetStart){
-                    if(e.getX() < )
                     // 設定起點
                     box.setStart(e.getX(), e.getY());
                     hasSetStart = true;

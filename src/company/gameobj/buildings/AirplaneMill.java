@@ -1,9 +1,6 @@
 package company.gameobj.buildings;
 
-import company.controllers.SceneController;
-import company.gametest9th.utils.Path;
-
-public class AirplaneMill extends Building {
+public class AirPlaneMill extends Building {
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工場)
@@ -22,14 +19,40 @@ public class AirplaneMill extends Building {
      * 兵工廠升級  → 呼叫 Human類別 的 levelUp()方法
      * levelUp() → City類別的 第 347行 使用
      */
-    public AirplaneMill(int x, int y) {
+    public AirPlaneMill(int x, int y) {
         super(x, y);
-        init();
+                setId(8)
+                .setName("飛機工廠")
+                .setBuildTime(2)
+                .setUpgradeTime(30)
+                .setLevelC(0)
+                .setTechLevel(2)
+                .setTechLevelNeedUpgrade(2)
+                .setHp(50)
+                .setWoodCostCreate(15)
+                .setSteelCostCreate(5)
+                .setGasCostCreate(5)
+                .setWoodCostLevelUpC(30)
+                .setSteelCostLevelUpC(15)
+                .setGasCostLevelup(5);
     }
 
-    public AirplaneMill() {
+    public AirPlaneMill() {
         super(200, 200);
-        init();
+                    setId(8)
+                .setName("飛機工廠")
+                .setBuildTime(2)
+                .setUpgradeTime(30)
+                .setLevelC(0)
+                .setTechLevel(2)
+                .setTechLevelNeedUpgrade(2)
+                .setHp(50)
+                .setWoodCostCreate(15)
+                .setSteelCostCreate(5)
+                .setGasCostCreate(5)
+                .setWoodCostLevelUpC(30)
+                .setSteelCostLevelUpC(15)
+                .setGasCostLevelup(5);
     }
 
     /**
@@ -48,26 +71,6 @@ public class AirplaneMill extends Building {
     @Override
     public String buildingDetail(int level){
         return "飛機工廠：每3小時花費" + super.getLevel() *5 + "瓦斯生產" + (super.getLevel()+1) + "台戰鬥機";
-    }
-
-    @Override
-    protected void init() {
-        setId(8)
-                .setName("飛機工廠")
-                .setBuildTime(2)
-                .setUpgradeTime(30)
-                .setLevelC(0)
-                .setTechLevel(2)
-                .setTechLevelNeedUpgrade(2)
-                .setHp(50)
-                .setWoodCostCreate(15)
-                .setSteelCostCreate(5)
-                .setGasCostCreate(5)
-                .setWoodCostLevelUpC(30)
-                .setSteelCostLevelUpC(15)
-                .setGasCostLevelup(5)
-                .setImgPath(new Path().img().building().AirplanemIll());
-                imgInit();
     }
 
 }
