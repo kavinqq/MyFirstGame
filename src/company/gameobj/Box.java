@@ -7,21 +7,49 @@ import java.awt.*;
 
 public class Box extends GameObject {
 
-    private int startX;
-    private int startY;
-    private int endX;
-    private int endY;
-    private Image img;
+    private Image img;  // Box圖片
+    private int startX; // 起點X
+    private int startY; // 起點Y
+    private int endX;   // 終點X
+    private int endY;   // 終點Y
 
     public Box() {
 
-        super(0, 0, 0, 0);
+        super(0, 0, 0, 0);// 預設畫不出來 都是0
 
-        img = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().box());
+        img = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().box());// 載入圖片
     }
+
+
+    /**
+     * 設定起點
+     * @param startX 起點X
+     * @param startY 起點Y
+     */
+
+    public void setStart(int startX, int startY) {
+        this.startX = startX;
+        this.startY = startY;
+    }
+
+
+    /**
+     * 這定終點
+     * @param endX 終點X
+     * @param endY 終點Y
+     */
+
+    public void setEnd(int endX, int endY) {
+        this.endX = endX;
+        this.endY = endY;
+    }
+
+
+
 
     @Override
     public void paintComponent(Graphics g) {
+
         // 畫出框選的框框
         g.drawImage(img, startX, startY, endX, endY, 0, 0, img.getWidth(null), img.getHeight(null), null);
     }
@@ -30,25 +58,13 @@ public class Box extends GameObject {
     public void update() {
 
         //因為碰撞體都是從左上往右下畫,所以 起點X,Y 一定都是比較小的那個
-        int topLeftX = (startX < endX)? startX : endX;
-        int topLeftY = (startY < endY)? startY : endY;
+        int topLeftX = Math.min(startX, endX);
+        int topLeftY = Math.min(startY, endY);
 
         //設定左上角那個點
-        moveToPoint(topLeftX, topLeftY);
+        setPainterStartFromTopLeft(topLeftX, topLeftY);
 
-        painter().scaleX(Math.abs(endX - startX));
-        painter().scaleY(Math.abs(endY - startY));
-
-
-    }
-
-    public void setStartXY(int x, int y) {
-        startX = x;
-        startY = y;
-    }
-
-    public void setEndXY(int x, int y) {
-        endX = x;
-        endY = y;
+        //painter 的長寬
+        painter().scale(Math.abs(endX - startX), Math.abs(endY - startY));
     }
 }

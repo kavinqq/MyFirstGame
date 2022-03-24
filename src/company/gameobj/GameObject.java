@@ -40,7 +40,7 @@ public abstract class GameObject implements GameKernel.GameInterface {
     private Rect painter;
     private Rect tmpDetectRange;
 
-    public final void moveToPoint(int x, int y) {
+    public final void setPainterStartFromTopLeft(int x, int y) {
         detectRange.moveToPoint(x, y);
         painter.moveToPoint(x, y);
     }

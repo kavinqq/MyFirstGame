@@ -1,10 +1,8 @@
 package company.gameobj.buildings;
 
-import company.controllers.SceneController;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 
-import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class Base extends Building {
@@ -46,7 +44,7 @@ public class Base extends Building {
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
         switch (state){
             case DRAGGED: {
-                moveToPoint(e.getX(),e.getY());
+                setPainterStartFromTopLeft(e.getX(),e.getY());
                 break;
             }
         }

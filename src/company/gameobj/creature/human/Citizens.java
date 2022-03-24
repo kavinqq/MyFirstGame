@@ -10,9 +10,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Citizens {
+
     private List<Citizen> citizens = new LinkedList<>();
 
-    private List<Human> citizensInBox;
+    private List<Human> citizensInBox; // 把目前村民 傳進來的box Obj 有碰撞的存進去&& 傳出去
 
     /**
      * 最大村民數量
@@ -218,25 +219,42 @@ public class Citizens {
         }
     }
 
+
+    /**
+     * 取個一個村民 => 參數(x,y) 在村民的painter()內
+     * @param x X座標
+     * @param y Y座標
+     * @return 一個村民
+     */
     public Citizen getCitizen(int x, int y){
+
+        // 尋訪每一個村民
         for(Citizen citizen: citizens){
+
+            // 如果(x, y) 在這個村民的painter範圍內
             if(citizen.isEntered(x, y)){
                 return citizen;
             }
         }
+
+        // 沒有村民在這個範圍內
         return null;
     }
 
-    public List<Human> getBoxCitizens(GameObject gameObject){
-//        System.out.println(gameObject.painter().left());
-//        System.out.println(gameObject.painter().top());
+    public List<Human> getBoxCitizens(GameObject box){
+
+        // 如果 上次框選的村民還在 清空他
+        if(!citizensInBox.isEmpty()){
+            citizensInBox.clear();
+        }
+
+        // 檢查 所有村民 和 傳進的的box 有沒有碰撞
         for(Citizen citizen: citizens){
-            if(citizen.painter().overlap(gameObject.painter())){
+            if(citizen.painter().overlap(box.painter())){
                 citizensInBox.add(citizen);
             }
         }
 
         return citizensInBox;
-
     }
 }

@@ -55,7 +55,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     private void originPosition(){
         //System.out.println("回到原位");
         //System.out.println("ox:"+ox+" oy:"+oy);
-        moveToPoint(ox,oy);
+        setPainterStartFromTopLeft(ox,oy);
     }
 
     @Override
