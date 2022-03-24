@@ -11,17 +11,20 @@ import java.awt.event.MouseEvent;
 
 public class BuildingButton extends GameObject implements CommandSolver.MouseCommandListener {
 
-    private boolean canDragged;
     private boolean canBuild; //可否建造，
     private Image img;
+    //原點x
     private int ox;
+    //原點y
     private int oy;
+    //上一次座標X
+    private int previousX;
+    //上一次座標Y
+    private int previousY;
     public BuildingButton(int x, int y) {
-        super(x, y, Global.FOUNDATION_HEIGHT, Global.FOUNDATION_WIDTH);
+        super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
         ox=x;
         oy=y;
-        canDragged=false;
-
         canBuild=true;//Fixme_待做
         //img= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Arsenal());
     }
@@ -30,7 +33,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
 
     @Override
     public void paintComponent(Graphics g) {
-        g.drawImage(img,painter().left(),painter().top(),painter().width(), painter().height(), null);
+        g.drawImage(img,+painter().left(),painter().top(),painter().width(), painter().height(), null);
     }
 
     public void setImg(Image img){
@@ -45,7 +48,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
 
     public Building build(int x,int y){
         //System.out.println("Building_Success");
-        return new SawMill(x,y);
+        return new SawMill(x, y); //待修
     }
 
     //回到原位
@@ -54,7 +57,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         //System.out.println("ox:"+ox+" oy:"+oy);
         offset(ox,oy);
     }
-
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
@@ -65,17 +67,12 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         switch (state){
             case MOVED:{
                 //System.out.println("MoveButtonTest");
-                if(isClicked(e.getX(),e.getY())){
-                    canDragged=true;
-                }else{
-                    canDragged=false;
-                }
                 originPosition();
                 break;
             }
-
             case DRAGGED:{
-                if(canDragged){
+            //System.out.println("x:"+e.getX()+" y:"+e.getY());
+                if(isEntered(previousX, previousY)){
                     //System.out.println("BUTTON_DRAGGED");
                     centerOffset(e.getX(),e.getY());
                 }
@@ -83,14 +80,14 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
             }
             case RELEASED:{
                 //System.out.println("Button_Release");
-                if(canDragged && canBuild){
+                if(canBuild){
                     build(e.getX(),e.getY());
                 }
-                //System.out.println("BUTTON_RELEASED");
                 originPosition();
                 break;
             }
-
         }
+        previousX =e.getX();
+        previousY =e.getY();
     }
 }

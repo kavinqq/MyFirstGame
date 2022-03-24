@@ -29,7 +29,7 @@ public class Box extends GameObject {
     @Override
     public void update() {
 
-        //因為碰撞體都是從左上往右下畫,所以 起點X,Y 一錠都是比較小的那個
+        //因為碰撞體都是從左上往右下畫,所以 起點X,Y 一定都是比較小的那個
         int topLeftX = (startX < endX)? startX : endX;
         int topLeftY = (startY < endY)? startY : endY;
 

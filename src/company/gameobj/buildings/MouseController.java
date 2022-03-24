@@ -19,7 +19,7 @@ public class MouseController implements CommandSolver.MouseCommandListener {
         switch (state){
             case MOVED:{
                 System.out.println(canCatchBuilding);
-                canCatchBuilding = building.isClicked(e.getX(), e.getY());
+                canCatchBuilding = building.isEntered(e.getX(), e.getY());
             }
             case DRAGGED:{
                 //System.out.println("BuildingOption_DRAGGER");

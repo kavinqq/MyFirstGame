@@ -220,7 +220,7 @@ public class Citizens {
 
     public Citizen getCitizen(int x, int y){
         for(Citizen citizen: citizens){
-            if(citizen.isClicked(x, y)){
+            if(citizen.isEntered(x, y)){
                 return citizen;
             }
         }
@@ -228,8 +228,8 @@ public class Citizens {
     }
 
     public List<Human> getBoxCitizens(GameObject gameObject){
-        System.out.println(gameObject.painter().left());
-        System.out.println(gameObject.painter().top());
+//        System.out.println(gameObject.painter().left());
+//        System.out.println(gameObject.painter().top());
         for(Citizen citizen: citizens){
             if(citizen.painter().overlap(gameObject.painter())){
                 citizensInBox.add(citizen);

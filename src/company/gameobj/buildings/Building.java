@@ -13,57 +13,6 @@ import java.awt.event.MouseEvent;
 public abstract class Building extends GameObject implements CommandSolver.MouseCommandListener {
 
     private Image img;
-
-    public Building(int x, int y) {
-        super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
-        //建築物是否在建築，建築中 -> true
-        this.readyToUpgrade = true;
-        //建築物是否在運轉
-        this.isWorking = false;
-        //建築物 剛建造完的時間 (那一個moment)，用來計算建築生產(和buildTime gameTime去做計算)
-        this.createTime = -1;
-        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
-    }
-
-    public Building() {
-        super(90, 90, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
-        //建築物是否在建築，建築中 -> true
-        this.readyToUpgrade = true;
-        //建築物是否在運轉
-        this.isWorking = false;
-        //建築物 剛建造完的時間 (那一個moment)，用來計算建築生產(和buildTime gameTime去做計算)
-        this.createTime = -1;
-        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
-    }
-
-//    public BuildingsOld(int id, String name, int buildTime, int upgradeTime,
-//                        int level, int techLevelNeedBuild, int techLevelNeedUpgrade, int hp,
-//                        int woodCostCreate, int steelCostCreate, int woodCostLevelUp,
-//                        int steelCostLevelUp, int gasCostCreate, int gasCostLevelUp) {
-
-
-    public Building(int x, int y,int width,int height) {
-        super(x, y, width, height);
-        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
-    }
-
-    @Override
-    public void paintComponent(Graphics g) {
-
-        g.drawImage(img, painter().left() , painter().top(),  painter().width(), painter().height(), null);
-    }
-
-    @Override
-    public void update() {
-
-    }
-
-    private boolean canCatchBuilding;
-    @Override
-    public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-
-    }
-
     /**
      * 編號
      */
@@ -154,6 +103,34 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     private int woodGot;
     private int steelGot;
     private int gasGot;
+
+    public Building(int x, int y,int width,int height) {
+        super(x, y, width, height);
+        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
+    }
+
+
+    public Building(int x, int y) {
+        super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
+        //建築物是否在建築，建築中 -> true
+        this.readyToUpgrade = true;
+        //建築物是否在運轉
+        this.isWorking = false;
+        //建築物 剛建造完的時間 (那一個moment)，用來計算建築生產(和buildTime gameTime去做計算)
+        this.createTime = -1;
+        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
+    }
+
+    public Building() {
+        super(90, 90, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
+        //建築物是否在建築，建築中 -> true
+        this.readyToUpgrade = true;
+        //建築物是否在運轉
+        this.isWorking = false;
+        //建築物 剛建造完的時間 (那一個moment)，用來計算建築生產(和buildTime gameTime去做計算)
+        this.createTime = -1;
+        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Base());
+    }
 
     /**
      * set給子類建構用
@@ -475,4 +452,21 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
      */
     public abstract String buildingDetail(int level);
 
+
+    @Override
+    public void paintComponent(Graphics g) {
+
+        g.drawImage(img, painter().left() , painter().top(),  painter().width(), painter().height(), null);
+    }
+
+    @Override
+    public void update() {
+
+    }
+
+    private boolean canCatchBuilding;
+    @Override
+    public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+
+    }
 }

@@ -2,7 +2,6 @@ package company.gameobj.buildings;
 
 
 public class Arsenal extends Building {
-<<<<<<< HEAD
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工場)
@@ -64,9 +63,4 @@ public class Arsenal extends Building {
         return "";
     }
 
-=======
-    public Arsenal(int x, int y) {
-        super(x, y);
-    }
->>>>>>> 196db71530780242446692b4fd5120118a50ff34
 }

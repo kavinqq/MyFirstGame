@@ -1,6 +1,5 @@
 package company.gameobj.buildings;
 
-<<<<<<< HEAD
 public class House extends Building{
     public House(int x, int y) {
         super(x, y);
@@ -55,8 +54,5 @@ public class House extends Building{
     public String buildingDetail(int level) {
         return String.format("房子：每24小時消耗%d木頭產生%d位市民", 1, getLevel() * 2 - 1);
     }
-
-=======
-public class House {
->>>>>>> 196db71530780242446692b4fd5120118a50ff34
+    
 }

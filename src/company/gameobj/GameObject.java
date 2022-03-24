@@ -69,7 +69,7 @@ public abstract class GameObject implements GameKernel.GameInterface {
         return painter.overlap(object.painter);
     }
 
-    public final boolean isClicked(int x, int y) {
+    public final boolean isEntered(int x, int y) {
         if (detectRange.left() < x && detectRange.right() > x && detectRange.top() < y && detectRange.bottom() > y) {
             return true;
         }

@@ -16,7 +16,7 @@ import static company.Global.*;
 public class BuildingOption implements GameKernel.GameInterface, CommandSolver.MouseCommandListener {
     private boolean canCatchBuilding;
 
-    private BuildingButton[] buildingButtons = new BuildingButton[BuildingTypeNum];
+    private BuildingButton[] buildingButtons ;
 
     Building[] buildings = new Building[BuildingTypeNum]; //以後放在buildingSystem
 
@@ -25,6 +25,7 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     Image foundation_img;
 
     public BuildingOption() {
+        buildingButtons= new BuildingButton[BuildingTypeNum];
         imgs[0] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().House());
         imgs[1] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Lab());
         imgs[2] = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Sawmill());
@@ -41,7 +42,7 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
         //新增按鈕元件、給予按鈕圖片
         for (int i = 0; i < BuildingTypeNum; i++) {
-            buildingButtons[i] = new BuildingButton(BUILDING_OPTION_X + OPTION_GAP_X, BUILDING_OPTION_Y + OPTION_GAP_Y + (FOUNDATION_HEIGHT + OPTION_GAP_Y) * i);
+            buildingButtons[i] = new BuildingButton(BUILDING_OPTION_X +DIV_GAP_X, BUILDING_OPTION_Y + DIV_GAP_Y + (FOUNDATION_HEIGHT + OPTION_GAP_Y) * i);
             buildingButtons[i].setImg(imgs[i]);
         }
 
@@ -59,7 +60,7 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         //paintComponent(g);
         for (int i = 0; i < BuildingTypeNum; i++) {
             //畫基地
-            g.drawImage(foundation_img, BUILDING_OPTION_X + OPTION_GAP_X, BUILDING_OPTION_Y + OPTION_GAP_Y + (FOUNDATION_HEIGHT + OPTION_GAP_Y) * i
+            g.drawImage(foundation_img, BUILDING_OPTION_X, BUILDING_OPTION_Y  + (FOUNDATION_HEIGHT + OPTION_GAP_Y) * i
                     , FOUNDATION_WIDTH, FOUNDATION_HEIGHT, null);
 
             //畫按鈕
@@ -77,7 +78,7 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
         if (state == CommandSolver.MouseState.ENTERED) {
-            System.out.println("testEnter");
+            //System.out.println("testEnter");
         }
         for (int i = 0; i < BuildingTypeNum; i++) {
             buildingButtons[i].mouseTrig(e, state, trigTime);
