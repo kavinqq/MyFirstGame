@@ -106,6 +106,12 @@ public abstract class Human extends Creature {
         }
     }
 
+    /**
+     * 新增方法 stop() => 按下s的同時停止動作
+     */
+    abstract public void stop();
+
+
     public void mouseToMove() {
         // 如果現在不能移動 那下面都不用跑
         if (!canMove) {

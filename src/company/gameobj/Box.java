@@ -1,7 +1,9 @@
 package company.gameobj;
 
+import company.Global;
 import company.controllers.SceneController;
 import company.gametest9th.utils.Path;
+import static company.Global.*;
 
 import java.awt.*;
 
@@ -40,6 +42,13 @@ public class Box extends GameObject {
      */
 
     public void setEnd(int endX, int endY) {
+
+        endX = Math.max(endX, 0);
+        endX = Math.min(endX, WINDOW_WIDTH - BUILDING_OPTION_WIDTH);
+
+        endY = Math.max(endY, STATUS_BAR_HEIGHT);
+        endY = Math.min(endY, WINDOW_HEIGHT);
+
         this.endX = endX;
         this.endY = endY;
     }

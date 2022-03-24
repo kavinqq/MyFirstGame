@@ -48,6 +48,7 @@ public class BoxSelection implements CommandSolver.MouseCommandListener {
                     hasSetStart = true;
                 }
 
+
                 // 設定終點
                 box.setEnd(e.getX(), e.getY());
 

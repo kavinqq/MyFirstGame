@@ -123,6 +123,7 @@ public class Citizen extends Human {   //市民
         }
     }
 
+
     public void setTarget(int x, int y){
 
         // 設定目的地X Y
@@ -132,6 +133,14 @@ public class Citizen extends Human {   //市民
         if(targetX() != painter().centerX() && targetY() != painter().centerY()) {
             canMove = true;
         }
+    }
+
+    /**
+     * 停止移動 目的地 直接 =  現在位置(就是直接讓他到目的地的意思)
+     */
+    @Override
+    public void stop() {
+        setTarget(painter().centerX(), painter().centerY());
     }
 
     public void mouseToMove() {

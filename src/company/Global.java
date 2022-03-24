@@ -45,7 +45,6 @@ public class Global {
     public static final int FOUNDATION_WIDTH = 118;
     public static final int FOUNDATION_HEIGHT = 117;
 
-
     //選單大小
 
     public static final int BUILDING_OPTION_WIDTH = 150;
@@ -92,5 +91,10 @@ public class Global {
      */
     public static int random(int min, int max) {
         return (int) (Math.random() * (max - min + 1) + min);
+    }
+
+    public static boolean canCommand(int x, int y){
+
+        return x > 0 && x < WINDOW_WIDTH - BUILDING_OPTION_WIDTH && y > STATUS_BAR_HEIGHT && y < WINDOW_HEIGHT - STATUS_BAR_HEIGHT;
     }
 }
