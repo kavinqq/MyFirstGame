@@ -46,17 +46,17 @@ public class Path {
 
         public class Humans extends Flow {
             private Humans(Flow flow) {
-                super(flow, "/humans");
+                super(flow, "/actors");
             }
 
 
             public String armySoldier() {
-                return this + "/armySoldier.png";
+                return this + "/Solider.png";
             }
 
             //TODO
             public String airForceSoldier() {
-                return this + "/armySoldier.png";
+                return this + "/Solider.png";
             }
             //TODO
             public String citizen() {
@@ -72,40 +72,40 @@ public class Path {
         }
         public static class Zombies extends Flow {
             private Zombies(Flow flow) {
-                super(flow, "/zombies");
+                super(flow, "/Zombie");
             }
 
             //TODO
             public String zombieNormal(){
-                return this + "/";
+                return this + "/monster3.png";
             }
 
             public String zombieBig(){
-                return this + "/";
+                return this + "/monster3.png";
             }
 
             public String zombieTypeI(){
-                return this + "/";
+                return this + "/monster3.png";
             }
 
             public String zombieTypeII() {
-                return this + "/";
+                return this + "/monster3.png";
             }
 
             public String zombieKing(){
-                return this + "/";
+                return this + "/monster3.png";
             }
 
             public String zombieWitch(){
-                return this + "/";
+                return this + "/monster3.png";
             }
 
             public String zombieFlying(){
-                return this + "/";
+                return this + "/monster3.png";
             }
 
             public String zombieFlyingBig(){
-                return this + "/";
+                return this + "/monster3.png";
             }
         }
 

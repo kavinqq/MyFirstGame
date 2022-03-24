@@ -20,6 +20,7 @@ import company.gameobj.creature.human.Human;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
+import oldMain.City;
 
 import java.awt.*;
 
@@ -55,9 +56,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private int mouseX;
     private int mouseY;
 
+    //城市
+    City city;
     @Override
     public void sceneBegin() {
-
+        city=new City();
         currentObjs = new ArrayList<>(); // 目前的框選單位列表
 
         horizontalBar = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().horizontalBar());
