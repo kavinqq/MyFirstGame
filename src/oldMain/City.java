@@ -1,16 +1,22 @@
 package oldMain;
 
-import oldbuildings.*;
+import company.gameobj.BuildingController;
+import company.gameobj.buildings.Building;
+import company.gametest9th.utils.GameKernel;
 
 import company.gameobj.creature.human.*;
 import company.gameobj.creature.zombies.*;
-import oldMain.BuildingSystem.*;
+import company.gametest9th.utils.Path;
+import company.gameobj.BuildingController.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 
-import static oldMain.BuildingSystem.BuildingType.*;
+import static company.gameobj.BuildingController.BuildingType.*;
+import static company.gameobj.BuildingController.BuildingNode.*;
+import static company.gameobj.BuildingController.*;
 
-public class City {
+public class City implements GameKernel.GameInterface {
     /**
      * 預設一個城市有幾個人民
      * 預設一個城市有幾個市民
@@ -24,7 +30,7 @@ public class City {
     /**
      * 遊戲的建築物
      */
-    private BuildingSystem buildings;
+    private BuildingController buildings;
     /**
      * 由於整個遊戲 只有一個文明等級 所以設定在 City全域變數
      */
@@ -56,7 +62,7 @@ public class City {
      */
     public City() {
         resource = new Resource();
-        buildings = new BuildingSystem();
+        buildings = new BuildingController();
         zombies = new ZombieKingdom();
         citizens = new Citizens(DEFAULT_CITIZEN);
         military = new Military();
@@ -198,7 +204,7 @@ public class City {
      * @param building 建築
      * @return 建造需求字串
      */
-    private String buildingSelectString(BuildingsOld building) {
+    private String buildingSelectString(Building building) {
         return (building.getId() + ". " + building +
                 "\n\t資源需求： 木材：" + building.getWoodCostCreate() + " 鋼鐵：" + building.getSteelCostCreate() + " 瓦斯：" + building.getGasCostCreate() +
                 " 科技等級需求： " + building.getTechLevelNeedBuild() + "\n");
@@ -249,7 +255,7 @@ public class City {
      * 若選擇升級建築，但沒有閒置的研究所 -> null
      * 若選擇升級軍力，但沒有閒置的兵工廠 -> null
      */
-    public ArrayList<BuildingNode> showAndGetCanUpgradeTypeDetail(BuildingSystem.BuildingType type) {
+    public ArrayList<BuildingNode> showAndGetCanUpgradeTypeDetail(BuildingType type) {
         return buildings.showAndGetCanUpgradeTypeDetail(type);
     }
 
@@ -506,4 +512,13 @@ public class City {
         return buildings.isNoArsenal();
     }
 
+    @Override
+    public void paint(Graphics g) {
+
+    }
+
+    @Override
+    public void update() {
+
+    }
 }

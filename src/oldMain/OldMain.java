@@ -1,18 +1,13 @@
 package oldMain;
 
-import oldbuildings.Barracks;
-import oldbuildings.BuildingsOld;
-
 import java.util.*;
 
-import static oldMain.BuildingSystem.*;
-import static oldMain.BuildingSystem.BuildingType.*;
-
-import oldMain.BuildingSystem.BuildingNode;
+import company.gameobj.buildings.Building;
+import company.gameobj.BuildingController.BuildingNode;
+import static company.gameobj.BuildingController.BuildingType.*;
+import static company.gameobj.BuildingController.*;
 
 public class OldMain {
-    Barracks b=new Barracks();
-    BuildingsOld b1=new Barracks();
 
     public final static Scanner SCANNER = new Scanner(System.in);
 
@@ -232,7 +227,7 @@ public class OldMain {
                             }
                             System.out.println("目前停止運轉的建築：");
                             for (int i = 0; i < notWorkingBuildingList.size(); i++) {
-                                BuildingsOld building = notWorkingBuildingList.get(i).getBuilding();
+                                Building building = notWorkingBuildingList.get(i).getBuilding();
                                 System.out.println((i + 1) + ". " + building.buildingDetail(building.getLevel()));
                             }
                             choose = inputInt("輸入-1取消", 1, notWorkingBuildingList.size());
@@ -251,7 +246,7 @@ public class OldMain {
                             }
                             System.out.println("目前可關閉的建築：");
                             for (int i = 0; i < workingBuildingList.size(); i++) {
-                                BuildingsOld building = workingBuildingList.get(i).getBuilding();
+                                Building building = workingBuildingList.get(i).getBuilding();
                                 System.out.println((i + 1) + ". " + building.buildingDetail(building.getLevel()));
                             }
                             choose = inputInt("輸入-1取消", 1, workingBuildingList.size());
