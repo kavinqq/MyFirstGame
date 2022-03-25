@@ -126,14 +126,6 @@ public class Citizen extends Human {   //市民
         }
     }
 
-    /**
-     * 停止移動 目的地 直接 =  現在位置(就是直接讓他到目的地的意思)
-     */
-    @Override
-    public void stop() {
-        setTarget(painter().centerX(), painter().centerY());
-    }
-
     public void mouseToMove() {
         // 如果現在不能移動 那下面都不用跑
 //        if(!canMove){

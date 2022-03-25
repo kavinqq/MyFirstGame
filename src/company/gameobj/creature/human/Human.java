@@ -180,11 +180,13 @@ public abstract class Human extends Creature {
         }
     }
 
-
     /**
-     * 新增方法 stop() => 按下s的同時停止動作
+     * 停止移動 目的地 直接 =  現在位置(就是直接讓他到目的地的意思)
      */
-    abstract public void stop();
+    public void stop() {
+        setTarget(painter().centerX(), painter().centerY());
+        setMoveStatus(Animator.State.STAND);
+    }
 
     /*
     public void mouseToMove() {

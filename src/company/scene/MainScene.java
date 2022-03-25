@@ -230,27 +230,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //hintDialog.setHintMessage(message);
 
 
-
-
-
-
-
-
-
-
-
-
-
         //時間
         if(delay.count()){
             city.showInfo();
             thisRoundTimePass = 1;
             city.doCityWorkAndTimePass(thisRoundTimePass);
         }
-
-
-
-
 
         // 框選Box狀態on
         if (canUseBoxSelection) {
@@ -297,6 +282,106 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 更新所有村民狀態
         citizens.updateAll();
+
+        for(Citizen citizen : citizens.getAllCitizens()){
+            if(citizen.painter().overlap(base.painter())){
+                switch (citizen.getWalkingDir()){
+                    case RIGHT:{
+                        if(citizen.touchLeftOf(base)){
+                            citizen.translateX(-1*(citizen.painter().right()-base.painter().left()));
+                            citizen.setBlockedDir(Direction.RIGHT);
+                        }
+                        break;
+                    }
+                    case LEFT:{
+                        if(citizen.touchRightOf(base)){
+                            citizen.translateX(base.painter().right()-citizen.painter().left());
+                            citizen.setBlockedDir(Direction.LEFT);
+                        }
+                        break;
+                    }
+                    case UP:{
+                        if(citizen.touchBottomOf(base)){
+                            citizen.translateY(citizen.painter().top()-base.painter().bottom());
+                            citizen.setBlockedDir(Direction.UP);
+                        }
+                        break;
+                    }
+                    case DOWN:{
+                        if(citizen.touchTopOf(base)){
+                            citizen.translateY(-1*(citizen.painter().bottom()-base.painter().top()));
+                            citizen.setBlockedDir(Direction.DOWN);
+                        }
+                        break;
+                    }
+                }
+            }
+            else{
+                if(citizen.getBlockedDir()!=null){
+                    System.out.println("out");
+                    System.out.println(citizen.getBlockedDir());
+                    switch (citizen.getBlockedDir()){
+                        case LEFT:{
+                            if(!citizen.touchRightOf(base)){
+                                citizen.setNoBlockedDir();
+                                citizen.setWalkingDir(Direction.LEFT);
+                            }
+                            break;
+                        }
+                        case RIGHT:{
+                            if(!citizen.touchLeftOf(base)){
+                                citizen.setNoBlockedDir();
+                                citizen.setWalkingDir(Direction.RIGHT);
+                            }
+                            break;
+                        }
+                        case UP:{
+                            if(!citizen.touchBottomOf(base)){
+                                citizen.setNoBlockedDir();
+                                citizen.setWalkingDir(Direction.UP);
+                            }
+                            break;
+                        }
+                        case DOWN:{
+                            if(!citizen.touchTopOf(base)){
+                                citizen.setNoBlockedDir();
+                                citizen.setWalkingDir(Direction.DOWN);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+            switch (citizen.getWalkingDir()){
+                case RIGHT:{
+                   if(citizen.touchRight()){
+                       citizen.stop();
+                   }
+                    break;
+                }
+                case LEFT:{
+                    if(citizen.touchLeft()){
+                        citizen.stop();
+                    }
+                    break;
+                }
+                case UP:{
+                    if(citizen.touchTop()){
+                        citizen.stop();
+                    }
+                    break;
+                }
+                case DOWN:{
+                    if(citizen.touchBottom()){
+                        citizen.stop();
+                    }
+                    break;
+                }
+            }
+        }
+
+
 
         if(!city.isAlive()){
             StartScene startScene=new StartScene(); //還沒有結束畫面已此充當結束遊戲
