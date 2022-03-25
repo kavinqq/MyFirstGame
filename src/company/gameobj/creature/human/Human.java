@@ -89,7 +89,8 @@ public abstract class Human extends Creature {
         if(this.getMoveStatus() == Animator.State.STAND){
             return;
         }
-        //is not blocked by any buildings
+        int speed = speed();
+        //沒有任何方向是被擋住的時候
         if(this.getBlockedDir()==null){
             if (targetX() == painter().centerX()){
                 this.setWalkingDir((targetY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP);
@@ -97,17 +98,25 @@ public abstract class Human extends Creature {
             else if (targetY() == painter().centerY()){
                 this.setWalkingDir((targetX() > painter().centerX()) ? Global.Direction.RIGHT: Global.Direction.LEFT);
             }
+
+            if(this.getWalkingDir()== Global.Direction.LEFT || this.getWalkingDir()== Global.Direction.RIGHT){
+                speed = Math.min(speed, Math.abs(targetX() - painter().centerX()));
+            }
+            else if(this.getWalkingDir()== Global.Direction.UP || this.getWalkingDir()== Global.Direction.DOWN){
+                speed = Math.min(speed, Math.abs(targetY() - painter().centerY()));
+            }
         }
+        //如果有被擋住某個方向的時候
         else if(this.getBlockedDir()!=null){
             if(this.getWalkingDir()==this.getBlockedDir()){
                 switch (this.getBlockedDir()){
                     case LEFT:
                     case RIGHT:{
-                        //當在往上或往下的時候撞到障礙物且已經來到目標的Ｘ做標時隨機選擇一個方向去走
+                        //當在往左或往右的時候撞到障礙物且已經來到目標的Ｙ做標時隨機選擇一個方向去走
                         if(this.painter().centerY()==targetY()){
                             this.setWalkingDir((Global.random(0,1)==0) ? Global.Direction.UP : Global.Direction.DOWN);
                         }
-                        //當在往上或往下的時候撞到障礙物且尚未來到目標的Ｘ做標時選擇會靠近目標的方向去走
+                        //當在往左或往右的時候撞到障礙物且尚未來到目標的Ｙ做標時選擇會靠近目標的方向去走
                         else{
                             this.setWalkingDir((targetY()>this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
                         }
@@ -128,15 +137,7 @@ public abstract class Human extends Creature {
                 }
             }
         }
-        int speed = speed();
-        if(this.getBlockedDir()==null){
-            if(this.getWalkingDir()== Global.Direction.LEFT || this.getWalkingDir()== Global.Direction.RIGHT){
-                speed = Math.min(speed, Math.abs(targetX() - painter().centerX()));
-            }
-            else if(this.getWalkingDir()== Global.Direction.UP || this.getWalkingDir()== Global.Direction.DOWN){
-                speed = Math.min(speed, Math.abs(targetY() - painter().centerY()));
-            }
-        }
+
         switch (this.getWalkingDir()){
             case LEFT:{
                 this.translateX(-1*speed);

@@ -107,7 +107,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         citizens = new Citizens(3);
 
         // 村民出生位置現在都是測試
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 1; i++) {
             citizens.add(new Citizen(200, 250 + (i * 100)));
         }
 
@@ -200,9 +200,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void update() {
-            buildingOption.update();
+        buildingOption.update();
 
-//建築物相關測試
+        //建築物相關測試
         type = BuildingType.getBuildingTypeByInt(buildingOption.getCurrentIdByButton());
         buildingOption.setCurrentIdByButton(0); //fix 取過後強制設成0
         //city.getBuildingsNum()
@@ -231,11 +231,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
         //時間
-        if(delay.count()){
-            city.showInfo();
-            thisRoundTimePass = 1;
-            city.doCityWorkAndTimePass(thisRoundTimePass);
-        }
+//        if(delay.count()){
+//            city.showInfo();
+//            thisRoundTimePass = 1;
+//            city.doCityWorkAndTimePass(thisRoundTimePass);
+//        }
 
         // 框選Box狀態on
         if (canUseBoxSelection) {
@@ -284,6 +284,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         citizens.updateAll();
 
         for(Citizen citizen : citizens.getAllCitizens()){
+            //如果人物走到與建築重疊了，將其拉回剛好接觸但不重疊的位置並且讓人物知道這個方向被擋住了，換個方向
             if(citizen.painter().overlap(base.painter())){
                 switch (citizen.getWalkingDir()){
                     case RIGHT:{
@@ -318,8 +319,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
             else{
                 if(citizen.getBlockedDir()!=null){
-                    System.out.println("out");
-                    System.out.println(citizen.getBlockedDir());
                     switch (citizen.getBlockedDir()){
                         case LEFT:{
                             if(!citizen.touchRightOf(base)){
@@ -356,24 +355,28 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             switch (citizen.getWalkingDir()){
                 case RIGHT:{
                    if(citizen.touchRight()){
+                       citizen.translateX(-1*(citizen.painter().right()-SCREEN_X));
                        citizen.stop();
                    }
                     break;
                 }
                 case LEFT:{
                     if(citizen.touchLeft()){
+                        citizen.translateX(-1 * citizen.painter().left());
                         citizen.stop();
                     }
                     break;
                 }
                 case UP:{
                     if(citizen.touchTop()){
+                        citizen.translateY(-1 * citizen.painter().top());
                         citizen.stop();
                     }
                     break;
                 }
                 case DOWN:{
                     if(citizen.touchBottom()){
+                        citizen.translateY(-1*(citizen.painter().bottom()- SCREEN_Y));
                         citizen.stop();
                     }
                     break;
@@ -383,11 +386,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
 
-        if(!city.isAlive()){
-            StartScene startScene=new StartScene(); //還沒有結束畫面已此充當結束遊戲
-            SceneController.getInstance().change(startScene);
-
-        }
+//        if(!city.isAlive()){
+//            StartScene startScene=new StartScene(); //還沒有結束畫面已此充當結束遊戲
+//            SceneController.getInstance().change(startScene);
+//
+//        }
     }
 
 

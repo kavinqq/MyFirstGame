@@ -71,10 +71,7 @@ public abstract class GameObject implements GameKernel.GameInterface {
     }
 
     public final boolean isEntered(int x, int y) {
-        if (detectRange.left() < x && detectRange.right() > x && detectRange.top() < y && detectRange.bottom() > y) {
-            return true;
-        }
-        return false;
+        return (detectRange.left() < x && detectRange.right() > x && detectRange.top() < y && detectRange.bottom() > y);
     }
 
     public final Rect detectRange() {
@@ -125,44 +122,31 @@ public abstract class GameObject implements GameKernel.GameInterface {
 
     public abstract void paintComponent(Graphics g);//TODO: can we change this into non-abstract??
 
+    //檢查是否碰到某物件的左邊
     public boolean touchLeftOf(GameObject gameObject){
-        return (this.painter.right()>=gameObject.painter().left() && this.painter.left()<gameObject.painter().left() && this.isHorizontalParallel(gameObject));
+        return (this.painter.right()>=gameObject.painter().left() && this.painter.left()<gameObject.painter().left() && this.isHorizontalParallelTo(gameObject));
     }
-
+    //檢查是否碰到某物件的右邊
     public boolean touchRightOf(GameObject gameObject){
-        return (this.painter.left()<=gameObject.painter().right() && this.painter.right()>gameObject.painter().right() && this.isHorizontalParallel(gameObject));
+        return (this.painter.left()<=gameObject.painter().right() && this.painter.right()>gameObject.painter().right() && this.isHorizontalParallelTo(gameObject));
     }
-
+    //檢查是否碰到某物件的上方
     public boolean touchTopOf(GameObject gameObject){
         return (this.painter().bottom()>=gameObject.painter().top() && this.painter().top()<gameObject.painter().top() && this.isVerticalParallel(gameObject));
     }
-
+    //檢查是否碰到某物件的下方
     public boolean touchBottomOf(GameObject gameObject){
         return (this.painter().top()<=gameObject.painter.bottom() && this.painter().bottom()>gameObject.painter().bottom() && this.isVerticalParallel(gameObject));
     }
 
-    private boolean isHorizontalParallel(GameObject gameObject){
-        if(this.painter().top()>gameObject.painter().bottom() && this.painter().top()<=gameObject.painter().top()){
-            return true;
-        }
-        else if(this.painter().bottom()>gameObject.painter().top() && this.painter().bottom()<=gameObject.painter().bottom()){
-            return true;
-        }
-        else {
-            return false;
-        }
+    //檢查是否在水平方向上有重疊
+    public boolean isHorizontalParallelTo(GameObject gameObject){
+        return (this.painter().top()<gameObject.painter().bottom() && this.painter().bottom()>gameObject.painter().top());
     }
 
+    //檢查是否在垂直方向上有重疊
     private boolean isVerticalParallel(GameObject gameObject){
-        if(this.painter().left()>=gameObject.painter().left() && this.painter().left()<gameObject.painter().right()){
-            return true;
-        }
-        else if(this.painter().right()>gameObject.painter().left() && this.painter().right()<=gameObject.painter().right()){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return (this.painter().left()<gameObject.painter().right() && this.painter().right()>gameObject.painter().left());
     }
 
 }
