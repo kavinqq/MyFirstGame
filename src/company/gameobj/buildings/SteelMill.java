@@ -23,7 +23,6 @@ public class SteelMill extends Building{
      * gasCostLevelUp 升級所需要的瓦斯量
      */
     public SteelMill() {
-        super(90,90);
         init();
     }
 

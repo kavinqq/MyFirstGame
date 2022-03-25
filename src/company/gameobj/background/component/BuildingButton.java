@@ -1,16 +1,18 @@
 package company.gameobj.background.component;
 
 import company.Global;
+import company.controllers.SceneController;
 import company.gameobj.GameObject;
 import company.gametest9th.utils.CommandSolver;
+import company.gametest9th.utils.Path;
 import static company.gameobj.BuildingController.*;
+import static company.gameobj.BuildingController.BuildingType.HOUSE;
+import static company.gameobj.BuildingController.BuildingType.getBuildingTypeByInt;
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class BuildingButton extends GameObject implements CommandSolver.MouseCommandListener {
-
-
-
     public interface ButtonInterface{
         public void entered(BuildingButton bb);
     }
@@ -32,17 +34,23 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     private int previousY;
     //按鈕id
     private final int id;
-    //此按鈕可否使用
+
+    //此滑鼠是否在按鈕上
     private boolean isMoveOnButton;
-
+    //是否按到
     private boolean isPressed;
-
+    //點擊次數
+    private int count;
+    //半透明灰色圖
+    private Image grayOpacity;
     public BuildingButton(int x, int y,int id) {
         super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
         this.id=id;
+        grayOpacity=SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().whiteGrayOpacity());
         ox=x;
         oy=y;
         isMoveOnButton =false;
+        count=0;
         canBuild=true;//Fixme_待做
     }
 
@@ -63,9 +71,20 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     }
 
 
+
+
     @Override
     public void paintComponent(Graphics g) {
+        //畫出建造中建築物
         g.drawImage(img,+painter().left(),painter().top(),painter().width(), painter().height(), null);
+        //數量
+        g.setColor(Color.white);
+        g.setFont(new Font("Dialog", Font.BOLD, 40));
+        //int buildingNum=getBuildingTypeByInt(id).list().size();
+        if(count>0){
+            g.drawImage(grayOpacity,painter().left(),painter().top(),painter().width(), painter().height(),null);
+            g.drawString(String.valueOf(count),painter().left(),painter().top()+30);
+        }
     }
 
     public void setImg(Image img){
@@ -119,6 +138,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
             }
             case PRESSED:{
                 if(this.isEntered(e.getX(), e.getY())){
+                    count++;
                     isPressed=true;
                 }
                 break;

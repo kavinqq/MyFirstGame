@@ -145,7 +145,11 @@ public class Path {
 
             public String verticalBar() { return this + "/VBar.png";}
 
+            public String whiteGrayOpacity() { return this + "/whiteGrayOpacitySeventy.png";}
 
+            public String greenOpacity() { return this + "/greenOpacitySixty.png";}
+
+            public String redOpacity() { return this + "/redOpacityFifty.png";}
         }
 
         public static class Building extends Flow {

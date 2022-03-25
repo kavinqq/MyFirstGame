@@ -14,7 +14,6 @@ public class SawMill extends Building{
     }
 
     public SawMill() {
-        super(50,50);
         init();
     }
     /**

@@ -28,7 +28,6 @@ public class Arsenal extends Building {
     }
 
     public Arsenal() {
-        super(200,200);
         init();
     }
 

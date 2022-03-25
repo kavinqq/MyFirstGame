@@ -112,7 +112,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
         //時間速度
-        timeSpeed=300;
+        timeSpeed=120;
         delay=new Delay(timeSpeed);
         delay.loop();
         // 當前操控的物件
@@ -205,6 +205,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 //建築物相關測試
         type = BuildingType.getBuildingTypeByInt(buildingOption.getCurrentIdByButton());
         buildingOption.setCurrentIdByButton(0); //fix 取過後強制設成0
+        //city.getBuildingsNum()
         //建造成功與否
         if(type!= null){
             if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
@@ -227,6 +228,17 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
         //提示框
         //hintDialog.setHintMessage(message);
+
+
+
+
+
+
+
+
+
+
+
 
 
         //時間
@@ -285,6 +297,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 更新所有村民狀態
         citizens.updateAll();
+
+        if(!city.isAlive()){
+            StartScene startScene=new StartScene(); //還沒有結束畫面已此充當結束遊戲
+            SceneController.getInstance().change(startScene);
+
+        }
     }
 
 

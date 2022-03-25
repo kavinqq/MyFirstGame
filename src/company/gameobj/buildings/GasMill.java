@@ -27,7 +27,6 @@ public class GasMill extends Building{
         init();
     }
     public GasMill() {
-        super(500, 500);
         init();
     }
     //初始化

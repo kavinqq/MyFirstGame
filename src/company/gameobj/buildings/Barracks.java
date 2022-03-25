@@ -24,7 +24,6 @@ public class Barracks extends Building{
     }
 
     public Barracks() {
-        super(100, 100);
         init();
     }
     /**

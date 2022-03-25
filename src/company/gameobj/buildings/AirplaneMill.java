@@ -27,7 +27,6 @@ public class AirplaneMill extends Building {
     }
 
     public AirplaneMill() {
-        super(200, 200);
         init();
     }
 

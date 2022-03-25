@@ -26,7 +26,6 @@ public class Lab extends Building {
 
 
     public Lab() {
-        super(90,90);
         init();
     }
     //初始化

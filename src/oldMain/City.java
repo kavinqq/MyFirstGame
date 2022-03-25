@@ -399,7 +399,9 @@ public class City implements GameKernel.GameInterface {
         return this.citizens.getNumOfCitizens();
     }
 
-
+    public int getBuildingsNum(int id){
+        return buildings.countBuildingNum(id);
+    }
     /**
      * 城市中的建築數量
      *

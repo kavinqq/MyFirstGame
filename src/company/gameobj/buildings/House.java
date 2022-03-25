@@ -10,7 +10,6 @@ public class House extends Building {
     }
 
     public House() {
-        super(600, 600);
         init();
     }
 

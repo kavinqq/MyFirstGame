@@ -88,8 +88,8 @@ public class BuildingController {
          * @param option 數字選擇
          * @return BuildingType
          */
-        public static BuildingController.BuildingType getBuildingTypeByInt(int option) {
-            for (BuildingController.BuildingType type : values()) {
+        public static BuildingType getBuildingTypeByInt(int option) {
+            for (BuildingType type : values()) {
                 if (type.instance.getId() == option) {
                     return type;
                 }
@@ -99,6 +99,9 @@ public class BuildingController {
 
         public Building instance() {
             return instance;
+        }
+        public LinkedList<BuildingNode> list() {
+            return list;
         }
     }
 
@@ -845,6 +848,16 @@ public class BuildingController {
     private int countBuildingNum(LinkedList<BuildingController.BuildingNode> list) {
         int sum = 0;
         for (BuildingController.BuildingNode node : list) {
+            if (node.building.getLevel() != 0) {
+                sum++;
+            }
+        }
+        return sum;
+    }
+
+    public int countBuildingNum(int id) {
+        int sum = 0;
+        for (BuildingController.BuildingNode node : getBuildingTypeByInt(id).list) {
             if (node.building.getLevel() != 0) {
                 sum++;
             }

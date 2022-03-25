@@ -253,6 +253,7 @@ public class OldMain {
                             if (choose == LEAVE) {
                                 break;
                             }
+
                             city.setStop(workingBuildingList.get(choose - 1));
                             System.out.println("關閉成功");
                             break;
