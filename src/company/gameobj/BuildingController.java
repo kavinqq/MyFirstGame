@@ -188,7 +188,7 @@ public class BuildingController {
      * @param resource 城市資源
      */
     public void build(BuildingType type, Resource resource) {
-        BuildingController.BuildingNode newBuilding;
+        BuildingNode newBuilding;
         switch (type) {
             case ARSENAL: {
                 newBuilding = new BuildingController.BuildingNode(new Arsenal());
@@ -443,7 +443,7 @@ public class BuildingController {
      * @param node     指定要升級的建築
      * @param resource 城市資源
      */
-    public void upgrade(BuildingController.BuildingNode node, Resource resource) {
+    public void upgrade(BuildingNode node, Resource resource) {
         node.building.takeResourceUpgrade(resource);
         node.upgradeStartTime = City.getGameTime();
         node.upgradeEndTime = City.getGameTime() + node.building.getUpgradeTime();
@@ -544,7 +544,7 @@ public class BuildingController {
      * @param list 該類建築的鏈表
      * @return 回傳有幾間完成升級
      */
-    private int finishUpgradeBuilding(LinkedList<BuildingController.BuildingNode> list) {
+    private int finishUpgradeBuilding(LinkedList<BuildingNode> list) {
         int sum = 0;
         for (BuildingController.BuildingNode node : list) {
             //若建築的升級完成時間==當前時間->升級完成
@@ -1095,7 +1095,7 @@ public class BuildingController {
 
         StringBuilder builder = new StringBuilder();
         //轉成字串
-        for (Map.Entry<BuildingController.BuildingType, Integer> entry : sum.entrySet()) {
+        for (Map.Entry<BuildingType, Integer> entry : sum.entrySet()) {
             switch (entry.getKey()) {
                 case HOUSE: {
                     builder.append("房屋");
