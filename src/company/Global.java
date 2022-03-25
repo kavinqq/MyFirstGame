@@ -29,7 +29,7 @@ public class Global {
 
     //整個視窗大小
     public static final int WINDOW_WIDTH = 1920; //1920
-    public static final int WINDOW_HEIGHT = 1080; //1080
+    public static final int WINDOW_HEIGHT = 800; //1080
 
     //狀態攔
     public static final int STATUS_BAR_X = 0;

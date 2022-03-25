@@ -31,9 +31,8 @@ public class SteelMill extends Building{
         super(x,y);
         init();
     }
-
+    //初始化
     protected void init(){
-
         setId(5)
                 .setName("煉鋼廠")
                 .setBuildTime(1)

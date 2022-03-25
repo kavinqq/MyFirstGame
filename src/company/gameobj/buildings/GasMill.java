@@ -31,6 +31,7 @@ public class GasMill extends Building{
         init();
     }
     //初始化
+    @Override
     public void init(){
         setId(7)
                 .setName("瓦斯場")

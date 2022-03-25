@@ -1,5 +1,7 @@
 package company.gameobj.buildings;
 
+import company.gametest9th.utils.Path;
+
 public class AirplaneMill extends Building {
     /**
      * 父類建構子
@@ -46,7 +48,7 @@ public class AirplaneMill extends Building {
     public String buildingDetail(int level){
         return "飛機工廠：每3小時花費" + super.getLevel() *5 + "瓦斯生產" + (super.getLevel()+1) + "台戰鬥機";
     }
-
+    //初始化
     @Override
     protected void init() {
         setId(8)
@@ -62,7 +64,8 @@ public class AirplaneMill extends Building {
                 .setGasCostCreate(5)
                 .setWoodCostLevelUpC(30)
                 .setSteelCostLevelUpC(15)
-                .setGasCostLevelup(5);
+                .setGasCostLevelup(5)
+                .setImgPath(new Path().img().building().AirplanemIll());
         imgInit();
     }
 

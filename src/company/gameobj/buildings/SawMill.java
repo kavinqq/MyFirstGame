@@ -33,7 +33,7 @@ public class SawMill extends Building{
     public String buildingDetail(int level){
         return "伐木廠：市民每小時木材採集量提升至" + (Resource.DEFAULT_WOOD_SPEED + 1 + super.getLevel()) + "單位木材";
     }
-
+    //初始化
     @Override
     protected void init() {
         setId(4)

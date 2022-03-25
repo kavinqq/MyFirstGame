@@ -32,7 +32,7 @@ public class House extends Building {
     public String buildingDetail(int level) {
         return String.format("房子：每24小時消耗%d木頭產生%d位市民", 1, getLevel() * 2 - 1);
     }
-
+    //初始化
     @Override
     protected void init() {
         setId(1)

@@ -6,6 +6,9 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.ArrayList;
 
+import static company.gameobj.BuildingController.*;
+
+import company.gameobj.background.HintDialog;
 import company.gametest9th.utils.BoxSelection;
 import company.gameobj.GameObject;
 import company.gameobj.background.Background;
@@ -56,8 +59,18 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private int mouseX;
     private int mouseY;
 
+//與建築相關
     //城市
     City city;
+    BuildingType type;
+
+    //提示調
+    private String message;
+    private HintDialog hintDialog;
+
+    //當前滑鼠位置
+    private int currentMouseX;
+    private int currentMouseY;
     @Override
     public void sceneBegin() {
         city=new City();
@@ -82,6 +95,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y / 2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
         base = new Base(SCREEN_X / 2, SCREEN_Y / 2);
 
+
+        //提示框:
+        hintDialog=HintDialog.instance();
+        message="";
 
         // 測試: 預設有3個 村民
         citizens = new Citizens(3);
@@ -112,6 +129,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     public void sceneEnd() {
     }
 
+
+
     @Override
     public void paint(Graphics g) {
         // 背景
@@ -119,6 +138,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //建築物選單
         buildingOption.paint(g);
+        g.setColor(Color.red);
+
+
+        //提示框
+        hintDialog.paint(g);
+
 
         //狀態攔範圍測試
         g.drawImage(horizontalBar, -50, 50, 1400, 10, null);
@@ -168,13 +193,44 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void update() {
+
+//建築物相關測試
+        type = BuildingType.getBuildingTypeByInt(BuildingButton.buttonId);
+        //建造成功與否
+        if(type!= null){
+            if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
+                city.build(type);
+                System.out.println(type.instance().getName() + "建造中");
+            } else {
+                if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
+                    message ="a建築物已蓋滿";
+                    //System.out.println("你的城市 經過多年風風雨雨 鐵與血的灌溉\n如今 從杳無人煙之地 成了 充斥著滿滿的高樓大廈 人車馬龍的繁華之地\n你的城市 已沒有地方可以建造新的建築了");
+                }
+                if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
+                    message ="b科技等級不足";
+                    //System.out.println("科技等級不足");
+                }
+                if (!type.instance().isEnoughBuild(city.getResource())) {
+                    message ="c物資不足";
+                    //System.out.println("物資不足");
+                }
+            }
+        }
+        //提示框
+        //hintDialog.setHintMessage(message);
+
+
+
+
+
+
+
         // 更新所有村民狀態
         citizens.updateAll();
 
         // 框選Box狀態
         if (canUseBoxSelection) {
             boxSelection.getBox().update();
-
             currentObjs = citizens.getBoxCitizens(boxSelection.getBox());
         }
 
@@ -189,9 +245,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 human.setTarget(mouseX, mouseY);
             }
         }
-
-
     }
+
+
+
+
 
     @Override
     public CommandSolver.MouseCommandListener mouseListener() {
@@ -212,6 +270,13 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             // 選單控制
             buildingOption.mouseTrig(e, state, trigTime);
+
+            //當前滑鼠位置
+            currentMouseX =e.getX();
+            currentMouseY =e.getY();
+
+            hintDialog.setCuurentXY(currentMouseX,currentMouseY);
+
 
             // 如果現在可以使用框選系統
             if (canUseBoxSelection) {
@@ -242,7 +307,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 // 滑鼠放開瞬間觸發
                 case RELEASED: {
 
-                    System.out.println("RELEASED");
+ //                   System.out.println("RELEASED");
 
                     // 如果現在能用Box框選模式的話
                     if (canUseBoxSelection) {
@@ -255,7 +320,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                 // 按下去就觸發
                 case PRESSED: {
-                    System.out.println("PRESSED");
+ //                   System.out.println("PRESSED");
 
                     if(currentObj == null) {
                         // 把座標丟給citizens 讓他 判斷有沒有村民 符合條件
@@ -280,13 +345,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                 case EXITED: {
 
-                    System.out.println("EXIT");
+  //                  System.out.println("EXIT");
                     break;
                 }
 
                 case WHEEL_MOVED: {
-
-                    System.out.println("WHEEL_MOVED");
+//             System.out.println("WHEEL_MOVED");
 
                     break;
                 }
