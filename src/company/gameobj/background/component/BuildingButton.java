@@ -8,6 +8,9 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class BuildingButton extends GameObject implements CommandSolver.MouseCommandListener {
+
+
+
     public interface ButtonInterface{
         public void entered(BuildingButton bb);
     }
@@ -32,7 +35,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     //此按鈕可否使用
     private boolean isMoveOnButton;
 
-    private boolean isClickButton;
+    private boolean isPressed;
 
     public BuildingButton(int x, int y,int id) {
         super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
@@ -41,9 +44,11 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         oy=y;
         isMoveOnButton =false;
         canBuild=true;//Fixme_待做
-        //img= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Arsenal());
     }
 
+    public boolean isPressed(){
+        return isPressed;
+    }
 
     //外面改變Button
     public void changeButtonInterface(){
@@ -79,15 +84,16 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
 
     //回到原位
     private void originPosition(){
-        //System.out.println("回到原位");
         setPainterStartFromTopLeft(ox,oy);
     }
+
     //可否使用button
     public boolean isMoveOnButton(){
         return isMoveOnButton;
     }
-    public boolean isClickButton(){
-        return isClickButton;
+
+    public void setPressed(boolean bool) {
+        isPressed=bool;
     }
 
     @Override
@@ -105,17 +111,19 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                         changeButtonInterface();
                     }
                     isMoveOnButton =true;
-                    //System.out.println("在物件上面");
                 }else{
                     isMoveOnButton =false;
                 }
                 originPosition();
                 break;
             }
-            case CLICKED:{
-                isClickButton=true;
+            case PRESSED:{
+                if(this.isEntered(e.getX(), e.getY())){
+                    isPressed=true;
+                }
                 break;
             }
+
             case DRAGGED:{
                 if(isEntered(previousX, previousY)){
                     moveToCenterPoint(e.getX(),e.getY());
@@ -123,7 +131,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 break;
             }
             case RELEASED:{
-                isClickButton=false;
                 if(canBuild){
                     build(e.getX(),e.getY());
                 }

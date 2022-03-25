@@ -22,10 +22,11 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
     Image foundation_img;
 
-    private int currentId;
-
     //為靜態類別，可取得Building相關訊息
     BuildingType type;
+
+    private int currentIdByButton;
+
 
     public BuildingOption() {
         buildingButtons= new BuildingButton[BuildingTypeNum];//建立所有建築物按鈕
@@ -48,6 +49,20 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     }
 
 
+    public int getCurrentIdByButton(){
+        return currentIdByButton;
+    }
+
+    //是否所有Button都false
+    public boolean checkMouseOnButtons(){
+        isMouseOnButtons =false;
+        for (int i=0;i<BuildingTypeNum;i++){
+            isMouseOnButtons |=buildingButtons[i].isMoveOnButton();
+        }
+        return isMouseOnButtons;
+    }
+
+
     @Override
     public void paint(Graphics g) {
         for (int i = 0; i < BuildingTypeNum; i++) {
@@ -60,23 +75,16 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     }
 
 
-    public int getCurrentIdByButton(){
-        return currentId;
-    }
-
-    //是否所有Button都false
-    public boolean checkMouseOnButtons(){
-        isMouseOnButtons =false;
-        for (int i=0;i<BuildingTypeNum;i++){
-            isMouseOnButtons |=buildingButtons[i].isMoveOnButton();
-        }
-        return isMouseOnButtons;
-    }
-
     @Override
     public void update() {
-
-
+        for (int i = 0; i < BuildingTypeNum; i++) {
+            if(buildingButtons[i].isPressed()){
+                currentIdByButton=buildingButtons[i].getId();
+                System.out.println(currentIdByButton);
+                buildingButtons[i].setPressed(false);
+                break;
+            }
+        }
     }
 
 
@@ -89,7 +97,6 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         //呼叫所有建築物按鈕
 
         for (int i = 0; i < BuildingTypeNum; i++) {
-
             //得到建築物Id
             type = BuildingType.getBuildingTypeByInt(buildingButtons[i].getId());
 
@@ -103,5 +110,9 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
             //呼叫按鈕的滑鼠功能(傳入現在的滑鼠監聽)
             buildingButtons[i].mouseTrig(e, state, trigTime);
         }
+    }
+
+    public void setCurrentIdByButton(int id) {
+        currentIdByButton=id;
     }
 }
