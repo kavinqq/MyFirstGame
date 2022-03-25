@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import static company.gameobj.BuildingController.*;
 
 import company.gameobj.background.HintDialog;
-import company.gametest9th.utils.BoxSelection;
+import company.gametest9th.utils.*;
 import company.gameobj.GameObject;
 import company.gameobj.background.Background;
 import company.gameobj.background.component.*;
@@ -21,9 +21,6 @@ import company.gameobj.creature.human.Citizen;
 import company.gameobj.buildings.Base;
 import company.gameobj.creature.human.Citizens;
 import company.gameobj.creature.human.Human;
-import company.gametest9th.utils.Animator;
-import company.gametest9th.utils.CommandSolver;
-import company.gametest9th.utils.Path;
 import oldMain.City;
 
 import java.awt.*;
@@ -60,6 +57,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private int mouseX;
     private int mouseY;
 
+    //時間
+    Delay delay;
+    private int timeSpeed; //時間的速度
+    int thisRoundTimePass; //要跳過的時間
 //與建築相關
     //城市
     City city;
@@ -74,6 +75,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private int currentMouseY;
     @Override
     public void sceneBegin() {
+
         city=new City();
         currentObjs = new ArrayList<>(); // 目前的框選單位列表
 
@@ -109,6 +111,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             citizens.add(new Citizen(200, 250 + (i * 100)));
         }
 
+        //時間速度
+        timeSpeed=300;
+        delay=new Delay(timeSpeed);
+        delay.loop();
         // 當前操控的物件
         currentObj = null;
 
@@ -194,10 +200,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void update() {
-
+            buildingOption.update();
 
 //建築物相關測試
-        type = BuildingType.getBuildingTypeByInt(buildingOption.getCurrentIdByButton());//BuildingOption s
+        type = BuildingType.getBuildingTypeByInt(buildingOption.getCurrentIdByButton());
+        buildingOption.setCurrentIdByButton(0); //fix 取過後強制設成0
         //建造成功與否
         if(type!= null){
             if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
@@ -206,22 +213,28 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             } else {
                 if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
                     message ="a建築物已蓋滿";
-                    //System.out.println("你的城市 經過多年風風雨雨 鐵與血的灌溉\n如今 從杳無人煙之地 成了 充斥著滿滿的高樓大廈 人車馬龍的繁華之地\n你的城市 已沒有地方可以建造新的建築了");
+                    System.out.println("你的城市 經過多年風風雨雨 鐵與血的灌溉\n如今 從杳無人煙之地 成了 充斥著滿滿的高樓大廈 人車馬龍的繁華之地\n你的城市 已沒有地方可以建造新的建築了");
                 }
                 if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
                     message ="b科技等級不足";
-                    //System.out.println("科技等級不足");
+                    System.out.println("科技等級不足");
                 }
                 if (!type.instance().isEnoughBuild(city.getResource())) {
                     message ="c物資不足";
-                    //System.out.println("物資不足");
+                    System.out.println("物資不足");
                 }
             }
         }
         //提示框
         //hintDialog.setHintMessage(message);
-        ;
 
+
+        //時間
+        if(delay.count()){
+            city.showInfo();
+            thisRoundTimePass = 1;
+            city.doCityWorkAndTimePass(thisRoundTimePass);
+        }
 
 
 
@@ -314,7 +327,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                 case CLICKED: {
 
-                    System.out.println("CLICKED");
+                    //System.out.println("CLICKED");
 
                     if(e.getButton() == MouseEvent.BUTTON2) {
                         System.out.println("X: " + e.getX());
