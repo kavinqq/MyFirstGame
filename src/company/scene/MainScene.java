@@ -202,7 +202,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         if(type!= null){
             if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
                 city.build(type);
-                System.out.println(type.instance().getName() + "建造中");
+                //System.out.println(type.instance().getName() + "建造中");
             } else {
                 if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
                     message ="a建築物已蓋滿";
