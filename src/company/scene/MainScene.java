@@ -288,15 +288,21 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 return;
             }
 
-            // 選單控制
-            buildingOption.mouseTrig(e, state, trigTime, canUseBoxSelection);
+            //如果現在沒有框選
+            if(!canUseBoxSelection) {
 
-            //當前滑鼠位置
-            currentMouseX =e.getX();
-            currentMouseY =e.getY();
+                // 選單控制
+                buildingOption.mouseTrig(e, state, trigTime);
 
-            hintDialog.setCuurentXY(currentMouseX,currentMouseY);
 
+                //當前滑鼠位置
+                currentMouseX = e.getX();
+                currentMouseY = e.getY();
+
+                hintDialog.setCuurentXY(currentMouseX, currentMouseY);
+            }else{
+                hintDialog.setHintMessage("");
+            }
 
             // 如果現在可以使用框選系統
             if (canUseBoxSelection) {

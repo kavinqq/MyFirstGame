@@ -30,12 +30,15 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     private int previousY;
     //按鈕id
     private int id;
+    private boolean canUseButton;
+
     //當前buttonId
     public static int buttonId;
     public BuildingButton(int x, int y) {
         super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
         ox=x;
         oy=y;
+        canUseButton=false;
         canBuild=true;//Fixme_待做
         //img= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Arsenal());
     }
@@ -52,6 +55,8 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         //HintDialog.instance().setHintMessage("");
         bni=null;
     }
+
+
     @Override
     public void paintComponent(Graphics g) {
         g.drawImage(img,+painter().left(),painter().top(),painter().width(), painter().height(), null);
@@ -76,6 +81,10 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         //System.out.println("回到原位");
         setPainterStartFromTopLeft(ox,oy);
     }
+    //可否使用button
+    public boolean isCanUseButton(){
+        return canUseButton;
+    }
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
@@ -85,18 +94,18 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         }
 
         switch (state){
-
             case MOVED:{
                 //移動至上方顯示資訊
                 if(this.isEntered(e.getX(), e.getY())){
                     if(bni!=null) {
                         changeButtonInterface();
                     }
+                    canUseButton=true;
                     //System.out.println("在物件上面");
                 }else{
-                    //clearInterface();
-                    //System.out.println("不在物件上面");
+                    canUseButton=false;
                 }
+
                 originPosition();
                 break;
             }
