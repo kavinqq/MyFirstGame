@@ -2,7 +2,6 @@ package company.gameobj.background.component;
 
 import company.Global;
 import company.gameobj.GameObject;
-import company.gameobj.background.HintDialog;
 import company.gametest9th.utils.CommandSolver;
 import static company.gameobj.BuildingController.*;
 import java.awt.*;
@@ -10,7 +9,7 @@ import java.awt.event.MouseEvent;
 
 public class BuildingButton extends GameObject implements CommandSolver.MouseCommandListener {
     public interface ButtonInterface{
-        public int entered(BuildingButton bb);
+        public void entered(BuildingButton bb);
     }
 
     public ButtonInterface bni;
@@ -29,16 +28,16 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     //上一次座標Y
     private int previousY;
     //按鈕id
-    private int id;
-    private boolean canUseButton;
+    private final int id;
+    //此按鈕可否使用
+    private boolean isMoveOnButton;
 
-    //當前buttonId
-    public static int buttonId;
-    public BuildingButton(int x, int y) {
+    public BuildingButton(int x, int y,int id) {
         super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
+        this.id=id;
         ox=x;
         oy=y;
-        canUseButton=false;
+        isMoveOnButton =false;
         canBuild=true;//Fixme_待做
         //img= SceneController.getInstance().imageController().tryGetImage(new Path().img().building().Arsenal());
     }
@@ -82,8 +81,8 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         setPainterStartFromTopLeft(ox,oy);
     }
     //可否使用button
-    public boolean isCanUseButton(){
-        return canUseButton;
+    public boolean isMoveOnButton(){
+        return isMoveOnButton;
     }
 
     @Override
@@ -100,17 +99,16 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                     if(bni!=null) {
                         changeButtonInterface();
                     }
-                    canUseButton=true;
+                    isMoveOnButton =true;
                     //System.out.println("在物件上面");
                 }else{
-                    canUseButton=false;
+                    isMoveOnButton =false;
                 }
 
                 originPosition();
                 break;
             }
             case CLICKED:{
-                buttonId=id;
                 break;
             }
             case DRAGGED:{
@@ -120,8 +118,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 break;
             }
             case RELEASED:{
-                buttonId=0;
-
                 if(canBuild){
                     build(e.getX(),e.getY());
                 }
@@ -134,9 +130,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         previousY =e.getY();
     }
 
-    public void setId(int id) {
-        this.id=id;
-    }
 
     public int getId(){
         return this.id;

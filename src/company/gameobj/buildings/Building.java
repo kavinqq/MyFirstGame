@@ -495,4 +495,8 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
 
     }
+
+    public String getImgPath() {
+        return imgPath;
+    }
 }

@@ -197,7 +197,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
 //建築物相關測試
-        type = BuildingType.getBuildingTypeByInt(BuildingButton.buttonId);
+        type = BuildingType.getBuildingTypeByInt(1);//BuildingOption s
         //建造成功與否
         if(type!= null){
             if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
@@ -220,7 +220,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
         //提示框
         //hintDialog.setHintMessage(message);
-
 
 
 
