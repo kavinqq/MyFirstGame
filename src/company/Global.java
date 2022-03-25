@@ -29,13 +29,13 @@ public class Global {
 
     //整個視窗大小
     public static final int WINDOW_WIDTH = 1920; //1920
-    public static final int WINDOW_HEIGHT = 800; //1080
+    public static final int WINDOW_HEIGHT = 1080; //1080
 
     //狀態攔
     public static final int STATUS_BAR_X = 0;
     public static final int STATUS_BAR_Y = 0;
     public static final int STATUS_BAR_WIDTH = WINDOW_WIDTH;
-    public static final int STATUS_BAR_HEIGHT = 60;
+    public static final int STATUS_BAR_HEIGHT = 80;
 
     //遊戲視窗大小
     public static final int SCREEN_X = WINDOW_WIDTH - 8 - 8;
