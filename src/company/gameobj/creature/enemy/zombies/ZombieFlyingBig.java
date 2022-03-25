@@ -1,4 +1,4 @@
-package company.gameobj.creature.zombies;
+package company.gameobj.creature.enemy.zombies;
 
 import company.gametest9th.utils.Path;
 

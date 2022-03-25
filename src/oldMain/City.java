@@ -5,15 +5,13 @@ import company.gameobj.buildings.Building;
 import company.gametest9th.utils.GameKernel;
 
 import company.gameobj.creature.human.*;
-import company.gameobj.creature.zombies.*;
-import company.gametest9th.utils.Path;
+import company.gameobj.creature.enemy.zombies.*;
 import company.gameobj.BuildingController.*;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 import static company.gameobj.BuildingController.BuildingType.*;
-import static company.gameobj.BuildingController.BuildingNode.*;
 import static company.gameobj.BuildingController.*;
 
 public class City implements GameKernel.GameInterface {
