@@ -3,7 +3,6 @@ package company.gameobj.creature.human;
 import company.Global;
 import company.gameobj.GameObject;
 import oldMain.OldMain;
-import sun.awt.image.ImageWatched;
 
 import java.awt.*;
 import java.util.ArrayList;
