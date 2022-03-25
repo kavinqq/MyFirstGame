@@ -36,6 +36,22 @@ public class Rect {
         return this;
     }
 
+    //方形涵蓋傳入的方形
+    public final boolean cover(Rect object){
+        if(right()> object.right() && left()<object.left() && top()<object.top() && bottom()>object.bottom()){
+            return true;
+        }
+        return false;
+    }
+
+    //方形被涵蓋傳入的方形
+    public final boolean covered(Rect object){
+        if(right()< object.right() && left()>object.left() && top()<object.top() && bottom()>object.bottom()){
+            return true;
+        }
+        return false;
+    }
+
     public final Rect moveToCenterPoint(int x, int y) {
         //中心
         setCenter(x,y);

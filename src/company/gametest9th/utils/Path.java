@@ -202,6 +202,10 @@ public class Path {
             public String foundation(){ return this + "/foundation.png";}
 
             public String road(){ return this + "/road1.png";}
+
+            public String area(){return this +"/area.jpg";}
+
+            public String darkBackground(){return this +"/darkbj4.png";}
         }
 
         public Actors actors() {
