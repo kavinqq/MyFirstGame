@@ -100,5 +100,14 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         }
     }
 
+    public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime, boolean isBoxSelectionMode) {
+        if(isBoxSelectionMode){
+            return;
+        }
+        for (int i = 0; i < BuildingTypeNum; i++) {
+            buildingButtons[i].mouseTrig(e, state, trigTime);
+        }
+    }
+
     //public abstract void paintComponent(Graphics g);
 }

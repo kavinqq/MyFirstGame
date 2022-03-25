@@ -1,5 +1,6 @@
 package company.scene;
 
+import company.Global;
 import company.controllers.SceneController;
 
 import java.awt.event.MouseEvent;
@@ -105,7 +106,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 村民出生位置現在都是測試
         for (int i = 0; i < 3; i++) {
-            citizens.add(new Citizen(200, 250 + (i * 100), Animator.State.STAND));
+            citizens.add(new Citizen(200, 250 + (i * 100)));
         }
 
         // 當前操控的物件
@@ -169,7 +170,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         citizens.paintAll(g);
 
         if (canUseBoxSelection) {
-            boxSelection.getBox().paint(g);
+            boxSelection.paint(g);
         }
 
 
@@ -181,7 +182,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
         // 如果現在框選的遊戲物件列表有東西 而且 也沒有單一操控某個物件時
-        if (!currentObjs.isEmpty() && currentObj == null) {
+        if (!currentObjs.isEmpty()) {
             for (GameObject gameObject : currentObjs) {
                 g.setColor(Color.GREEN);
                 g.fillRect(gameObject.painter().left(), gameObject.painter().bottom() + 3, gameObject.painter().width(), 10);
@@ -193,6 +194,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void update() {
+
 
 //建築物相關測試
         type = BuildingType.getBuildingTypeByInt(BuildingButton.buttonId);
@@ -225,26 +227,52 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
 
-        // 更新所有村民狀態
-        citizens.updateAll();
 
-        // 框選Box狀態
+        // 框選Box狀態on
         if (canUseBoxSelection) {
-            boxSelection.getBox().update();
-            currentObjs = citizens.getBoxCitizens(boxSelection.getBox());
+
+            // 更新box的狀態
+            boxSelection.update();
+
+            // 把框到的市民 加入到 tmpCurrentObjs
+            List<Human> tmpCurrentObjs = citizens.getBoxCitizens(boxSelection.getBox());
+
+            if(!tmpCurrentObjs.isEmpty()){
+                currentObjs = new ArrayList<>(tmpCurrentObjs);
+            }
         }
 
-
+        // 如果 現在有操控單位 單選 && 有設定要前往的目標
         if(currentObj != null && hasSetTarget){
+            // 走過去
             currentObj.setTarget(mouseX, mouseY);
+
+            // reset boolean
+            hasSetTarget = false;
         }
 
         // 如果存有當前框選的所有物件的陣列 有東西
         if (!currentObjs.isEmpty() && hasSetTarget) {
+            int count = 0;
             for(Human human: currentObjs) {
+                if(count != 0){
+                    if(Global.random(0,2) == 1){
+                        mouseX += 74;
+                    } else {
+                        mouseY += 74;
+                    }
+                }
                 human.setTarget(mouseX, mouseY);
+                count++;
             }
+
+            // reset boolean
+            hasSetTarget = false;
         }
+
+
+        // 更新所有村民狀態
+        citizens.updateAll();
     }
 
 
@@ -260,16 +288,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 return;
             }
 
-            // record previous mouse state
-            preState = state;
-
-            // fix: 框選按超快 會有一個Pressed Lose掉 直接assign兩個 released
-            if (preState == CommandSolver.MouseState.RELEASED) {
-                state = CommandSolver.MouseState.PRESSED;
-            }
-
             // 選單控制
-            buildingOption.mouseTrig(e, state, trigTime);
+            buildingOption.mouseTrig(e, state, trigTime, canUseBoxSelection);
 
             //當前滑鼠位置
             currentMouseX =e.getX();
@@ -322,22 +342,24 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 case PRESSED: {
  //                   System.out.println("PRESSED");
 
-                    if(currentObj == null) {
-                        // 把座標丟給citizens 讓他 判斷有沒有村民 符合條件
+
+                    // 把座標丟給citizens 讓他 判斷有沒有村民 符合條件
+                    if(e.getButton() == MouseEvent.BUTTON1) {
                         currentObj = citizens.getCitizen(e.getX(), e.getY());
                     }
 
+
                     // 什麼時候開啟框選模式?? => 當你沒點到一個可控單位時
-                    if (currentObj == null && currentObjs.isEmpty()) {
+                    if (canCommand(e.getX(), e.getY())) {
                         canUseBoxSelection = true;
-                    } else {
-                        // 如我現在有能操控的單位 (單選 或 框選)
-                        // 按下右鍵 => 設定要前往的(x,y)
-                        if(e.getButton() == MouseEvent.BUTTON3) {
-                            mouseX = e.getX();
-                            mouseY = e.getY();
-                            hasSetTarget = true;
-                        }
+                    }
+
+                    // 如我現在有能操控的單位 (單選 或 框選)
+                    // 按下右鍵 => 設定要前往的(x,y)
+                    if((currentObj != null || !currentObjs.isEmpty()) && e.getButton() == MouseEvent.BUTTON3) {
+                        mouseX = e.getX();
+                        mouseY = e.getY();
+                        hasSetTarget = true;
                     }
 
                     break;
@@ -387,6 +409,17 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void keyTyped(char c, long trigTime) {
+        // 按下s的同時 所有操控單位停止移動
+        if(c == 's' || c == 'S'){
+            if(currentObj != null ) {
+                currentObj.stop();
+            }
 
+            if(currentObjs != null) {
+                for(Human human: currentObjs) {
+                    human.stop();
+                }
+            }
+        }
     }
 }

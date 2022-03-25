@@ -9,14 +9,14 @@ public abstract class Human extends Creature {
 
     private int characterType;
     private Animator.State state;
-    private boolean canMove;
-    private boolean hasMove;
+//    private boolean canMove;
+//    private boolean hasMove;
 
     private HumanAnimator animator;
 
 
     public Human(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility, HUMAN_TYPE humanType) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, value, speed, img, flyAbility);
+        super(x, y, x, y,painterWidth, painterHeight, colliderWidth, colliderHeight, value, speed, img, flyAbility, Animator.State.STAND);
         this.setType(humanType);
     }
 
@@ -81,8 +81,78 @@ public abstract class Human extends Creature {
 
     @Override
     public void walk() {
-        if (this.isHavingNoTarget()) {
+        //        if (this.isHavingNoTarget()) {
+//
+//        }
 
+        //quit walk if the human is not moving
+        if(this.getMoveStatus() == Animator.State.STAND){
+            return;
+        }
+        //is not blocked by any buildings
+        if(this.getBlockedDir()==null){
+            //如果XY方向都還沒達到目標的點
+//            if (targetX() != painter().centerX() && targetY() != painter().centerY()) {
+//                Global.Direction[] arr = new Global.Direction[2];
+//                arr[0] = (targetX() > painter().centerX()) ? Global.Direction.RIGHT : Global.Direction.LEFT;
+//                arr[1] = (targetY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP;
+//                this.setWalkingDir(arr[Global.random(0,1)]);
+//            }
+//            else
+            if (targetX() == painter().centerX()){
+                System.out.println("reached X");
+                this.setWalkingDir((targetY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP);
+            }
+            else if (targetY() == painter().centerY()){
+                System.out.println("reached Y");
+                this.setWalkingDir((targetX() > painter().centerX()) ? Global.Direction.RIGHT: Global.Direction.LEFT);
+            }
+        }
+        else if(this.getBlockedDir()!=null){
+            if(this.getWalkingDir()==this.getBlockedDir()){
+                switch (this.getBlockedDir()){
+                    case LEFT:
+                    case RIGHT:{
+                        this.setWalkingDir((Global.random(0,1)==0) ? Global.Direction.UP : Global.Direction.DOWN);
+                        break;
+                    }
+                    case UP:
+                    case DOWN:{
+                        this.setWalkingDir((Global.random(0,1)==0) ? Global.Direction.LEFT : Global.Direction.RIGHT);
+                        break;
+                    }
+                }
+            }
+        }
+        int speed = speed();
+        if(this.getBlockedDir()==null){
+            if(this.getWalkingDir()== Global.Direction.LEFT || this.getWalkingDir()== Global.Direction.RIGHT){
+                speed = Math.min(speed, Math.abs(targetX() - painter().centerX()));
+            }
+            else if(this.getWalkingDir()== Global.Direction.UP || this.getWalkingDir()== Global.Direction.DOWN){
+                speed = Math.min(speed, Math.abs(targetY() - painter().centerY()));
+            }
+        }
+        switch (this.getWalkingDir()){
+            case LEFT:{
+                this.translateX(-1*speed);
+                break;
+            }
+            case RIGHT:{
+                this.translateX(speed);
+                break;
+            }
+            case UP:{
+                this.translateY(-1*speed);
+                break;
+            }
+            case DOWN:{
+                this.translateY(speed);
+                break;
+            }
+        }
+        if(this.isAtTarget()){
+            this.setMoveStatus(Animator.State.STAND);
         }
     }
 
@@ -96,16 +166,23 @@ public abstract class Human extends Creature {
 
 
     public void setTarget(int x, int y) {
-
         // 設定目的地X Y
-        this.setTargetXY(x, y);
-
-        // 如果該 目的地XY 需要走動才能到達 開啟行走
-        if (targetX() != painter().centerX() && targetY() != painter().centerY()) {
-            canMove = true;
+        if(this.isAt(x,y)){
+            return;
+        }
+        else{
+            this.setMoveStatus(Animator.State.WALK);
+            this.setTargetXY(x, y);
         }
     }
 
+
+    /**
+     * 新增方法 stop() => 按下s的同時停止動作
+     */
+    abstract public void stop();
+
+    /*
     public void mouseToMove() {
         // 如果現在不能移動 那下面都不用跑
         if (!canMove) {
@@ -125,19 +202,18 @@ public abstract class Human extends Creature {
         // 如果當前X還沒走到目的地X
         if (targetX() != painter().centerX()) {
             // 如果剩下的距離 < 一步 那麼 一步距離 = 剩下的距離
-            if (Math.abs(targetX() - painter().centerX()) < speed()) {
-                speed = Math.abs(targetX() - painter().centerX());
-            }
+            speed = Math.min(speed, Math.abs(targetX() - painter().centerX()));
+
 
             // 如果 目的地在角色 右邊 往右走
             if (targetX() > painter().centerX() && !hasMove) {
-                setDir(Global.Direction.RIGHT);
+                setWalkingDir(Global.Direction.RIGHT);
                 this.translateX(speed);
                 hasMove = true;
             }
             // 如果 目的地在角色 左邊 往左走
             if (targetX() < painter().centerX() && !hasMove) {
-                setDir(Global.Direction.LEFT);
+                setWalkingDir(Global.Direction.LEFT);
                 this.translateX(-1 * speed);
                 hasMove = true;
             }
@@ -149,20 +225,19 @@ public abstract class Human extends Creature {
         if (targetY() != painter().centerY()) {
 
             // 如果剩下的距離 < 一步 那麼 一步距離 = 剩下的距離
-            if (Math.abs(targetY() - painter().centerY()) < speed()) {
-                speed = Math.abs(targetY() - painter().centerY());
-            }
+            speed = Math.min(speed ,Math.abs(targetY() - painter().centerY()));
+
 
             // 如果 目的地在角色 下面 往下走
             if (targetY() > painter().centerY() && !hasMove) {
-                setDir(Global.Direction.DOWN);
+                setWalkingDir(Global.Direction.DOWN);
                 this.translateY(speed);
                 hasMove = true;
             }
 
             // 如果 目的地在角色 上面 往上走
             if (targetY() < painter().centerY() && !hasMove) {
-                setDir(Global.Direction.UP);
+                setWalkingDir(Global.Direction.UP);
                 this.translateY(-1 * speed);
             }
         }
@@ -173,5 +248,6 @@ public abstract class Human extends Creature {
             canMove = false;
         }
     }
+     */
 }
 

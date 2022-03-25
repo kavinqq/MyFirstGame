@@ -29,4 +29,9 @@ public class AirForceSoldier extends Soldier{
     public void update() {
         //TODO:???
     }
+
+    @Override
+    public void stop() {
+
+    }
 }

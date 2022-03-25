@@ -26,5 +26,10 @@ public class ArmySoldier extends Soldier  {  //士兵
     public void update() {
         //TODO:???
     }
+
+    @Override
+    public void stop() {
+
+    }
 }
 

@@ -24,8 +24,8 @@ public class Citizen extends Human {   //市民
     private Delay toolDelay;
 
     private Animator.State state;
-    private boolean canMove;
-    private boolean hasMove;
+//    private boolean canMove;
+//    private boolean hasMove;
 
     private HumanAnimator animator;
 
@@ -36,33 +36,23 @@ public class Citizen extends Human {   //市民
      */
     public Citizen(int x, int y) {
         super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, CITIZEN_INITIAL_VALUE, CITIZEN_INITIAL_SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY, HUMAN_TYPE.CITIZEN);
-        toolDelay = new Delay(30);
-
-        setCharacterType(6);
-        animator = new HumanAnimator(getCharacterType(), state);
-
-        canMove = false;
-        hasMove = false;
-
-    }
-    public Citizen(int x, int y, Animator.State state) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, CITIZEN_INITIAL_VALUE, CITIZEN_INITIAL_SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY, HUMAN_TYPE.CITIZEN);
 
         // 預設人物出生方向朝下
-        setDir(Global.Direction.DOWN);
+        setWalkingDir(Global.Direction.DOWN);
 
         toolDelay = new Delay(30);
 
         // 人物自己記錄一下狀態
-        this.state = state;
+        this.state = Animator.State.STAND;
 
         // 村民的圖片
         setCharacterType(6);
+
         animator = new HumanAnimator(getCharacterType(), this.state);
 
 
-        canMove = false;
-        hasMove = false;
+//        canMove = false;
+//        hasMove = false;
     }
 
     /**
@@ -104,13 +94,16 @@ public class Citizen extends Human {   //市民
     @Override
     public void paintComponent(Graphics g) {
         //g.drawImage(getImg(), this.painter().left(), this.painter().top(), null);
-        animator.paint(getDir(), painter().left(), painter().top(), painter().right(), painter().bottom(), g);
+        animator.paint(getWalkingDir(), painter().left(), painter().top(), painter().right(), painter().bottom(), g);
     }
 
     @Override
     public void update() {
 
-        mouseToMove();
+        //mouseToMove();
+        if(getMoveStatus()==Animator.State.WALK){
+            walk();
+        }
         animator.update();
 
         //TODO
@@ -123,28 +116,32 @@ public class Citizen extends Human {   //市民
         }
     }
 
+
     public void setTarget(int x, int y){
 
         // 設定目的地X Y
-        this.setTargetXY(x,y);
-
-        // 如果該 目的地XY 需要走動才能到達 開啟行走
-        if(targetX() != painter().centerX() && targetY() != painter().centerY()) {
-            canMove = true;
+        if(!this.isAt(x,y)){
+            this.setTargetXY(x,y);
+            this.setMoveStatus(Animator.State.WALK);
         }
+    }
+
+    /**
+     * 停止移動 目的地 直接 =  現在位置(就是直接讓他到目的地的意思)
+     */
+    @Override
+    public void stop() {
+        setTarget(painter().centerX(), painter().centerY());
     }
 
     public void mouseToMove() {
         // 如果現在不能移動 那下面都不用跑
-        if(!canMove){
-            return;
-        }
+//        if(!canMove){
+//            return;
+//        }
 
         // 確定能走了, 把狀態改為walk
         animator.setState(Animator.State.WALK);
-
-        // 這次update 移動過了沒
-        hasMove = false;
 
         // 速度(一步的距離) = 初始速度
         int speed = speed();
@@ -158,16 +155,14 @@ public class Citizen extends Human {   //市民
             }
 
             // 如果 目的地在角色 右邊 往右走
-            if(targetX() > painter().centerX() && !hasMove){
-                setDir(Global.Direction.RIGHT);
+            if(targetX() > painter().centerX()){
+                setWalkingDir(Global.Direction.RIGHT);
                 this.translateX(speed);
-                hasMove = true;
             }
             // 如果 目的地在角色 左邊 往左走
-            if(targetX() < painter().centerX() && !hasMove){
-                setDir(Global.Direction.LEFT);
+            if(targetX() < painter().centerX()){
+                setWalkingDir(Global.Direction.LEFT);
                 this.translateX(-1*speed);
-                hasMove = true;
             }
         }
 
@@ -182,15 +177,15 @@ public class Citizen extends Human {   //市民
             }
 
             // 如果 目的地在角色 下面 往下走
-            if(targetY() > painter().centerY() && !hasMove){
-                setDir(Global.Direction.DOWN);
+            if(targetY() > painter().centerY()){// && !hasMove){
+                setWalkingDir(Global.Direction.DOWN);
                 this.translateY(speed);
-                hasMove = true;
+                //hasMove = true;
             }
 
             // 如果 目的地在角色 上面 往上走
-            if(targetY() < painter().centerY() && !hasMove){
-                setDir(Global.Direction.UP);
+            if(targetY() < painter().centerY()){// && !hasMove){
+                setWalkingDir(Global.Direction.UP);
                 this.translateY(-1 * speed);
             }
         }
@@ -198,7 +193,7 @@ public class Citizen extends Human {   //市民
         // 走到了目的地 把能移動關起來
         if(targetX() == painter().centerX() && targetY() == painter().centerY()){
             animator.setState(Animator.State.STAND);
-            canMove = false;
+            //canMove = false;
         }
     }
 
