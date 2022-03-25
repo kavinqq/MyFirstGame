@@ -125,6 +125,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         switch (state){
             case MOVED:{
                 //移動至上方顯示資訊
+
                 if(this.isEntered(e.getX(), e.getY())){
                     if(bni!=null) {
                         changeButtonInterface();
@@ -136,21 +137,28 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 originPosition();
                 break;
             }
+            case CLICKED:{
+                System.out.println("CLICKED");
+                //count++;
+            }
             case PRESSED:{
+                System.out.println("PRESSED");
                 if(this.isEntered(e.getX(), e.getY())){
-                    count++;
                     isPressed=true;
                 }
                 break;
             }
 
             case DRAGGED:{
+                System.out.println("Dragger");
                 if(isEntered(previousX, previousY)){
+                    count++;
                     moveToCenterPoint(e.getX(),e.getY());
                 }
                 break;
             }
             case RELEASED:{
+                System.out.println("RELEASED");
                 if(canBuild){
                     build(e.getX(),e.getY());
                 }
