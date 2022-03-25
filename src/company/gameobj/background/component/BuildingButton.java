@@ -32,6 +32,8 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     //此按鈕可否使用
     private boolean isMoveOnButton;
 
+    private boolean isClickButton;
+
     public BuildingButton(int x, int y,int id) {
         super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
         this.id=id;
@@ -84,6 +86,9 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     public boolean isMoveOnButton(){
         return isMoveOnButton;
     }
+    public boolean isClickButton(){
+        return isClickButton;
+    }
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
@@ -104,11 +109,11 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 }else{
                     isMoveOnButton =false;
                 }
-
                 originPosition();
                 break;
             }
             case CLICKED:{
+                isClickButton=true;
                 break;
             }
             case DRAGGED:{
@@ -118,6 +123,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 break;
             }
             case RELEASED:{
+                isClickButton=false;
                 if(canBuild){
                     build(e.getX(),e.getY());
                 }

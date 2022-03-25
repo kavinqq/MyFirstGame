@@ -22,11 +22,12 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
     Image foundation_img;
 
+    private int currentId;
+
     //為靜態類別，可取得Building相關訊息
     BuildingType type;
 
     public BuildingOption() {
-
         buildingButtons= new BuildingButton[BuildingTypeNum];//建立所有建築物按鈕
 
         imgs = new Image[BuildingTypeNum];
@@ -59,6 +60,10 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     }
 
 
+    public int getCurrentIdByButton(){
+        return currentId;
+    }
+
     //是否所有Button都false
     public boolean checkMouseOnButtons(){
         isMouseOnButtons =false;
@@ -87,12 +92,14 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
             //得到建築物Id
             type = BuildingType.getBuildingTypeByInt(buildingButtons[i].getId());
+
+            //currentId=buildingButtons[i];
+
             //改變按鈕的內容
             buildingButtons[i].bni=(bb)-> {
+
                 HintDialog.instance().setHintMessage(type.instance().getName());
             };
-
-
             //呼叫按鈕的滑鼠功能(傳入現在的滑鼠監聽)
             buildingButtons[i].mouseTrig(e, state, trigTime);
         }

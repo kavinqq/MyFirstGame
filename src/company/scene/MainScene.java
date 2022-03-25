@@ -197,12 +197,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
 //建築物相關測試
-        type = BuildingType.getBuildingTypeByInt(1);//BuildingOption s
+        type = BuildingType.getBuildingTypeByInt(buildingOption.getCurrentIdByButton());//BuildingOption s
         //建造成功與否
         if(type!= null){
             if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
                 city.build(type);
-                //System.out.println(type.instance().getName() + "建造中");
+                System.out.println(type.instance().getName() + "建造中");
             } else {
                 if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
                     message ="a建築物已蓋滿";
@@ -220,7 +220,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
         //提示框
         //hintDialog.setHintMessage(message);
-
+        ;
 
 
 
