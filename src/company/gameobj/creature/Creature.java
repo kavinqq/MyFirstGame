@@ -7,18 +7,7 @@ import company.gametest9th.utils.Animator;
 
 import java.awt.*;
 
-public abstract class Creature extends GameObject{
-    public Creature(int x, int y, int targetX, int targetY, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight ,int value, int speed, String img, FLY_ABILITY flyAbility, Animator.State moveStatus) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight);
-        this.targetX = targetX;
-        this.targetY = targetY;
-        this.value = value;
-        this.speed = speed;
-        this.img = SceneController.getInstance().imageController().tryGetImage(img);
-        this.setFlyAbility(flyAbility);
-        this.fightingStatus = FIGHTING_STATUS.NOT_FIGHTING;
-        this.moveStatus = moveStatus;
-    }
+public abstract class Creature extends GameObject {
 
     public enum FIGHTING_STATUS {
         FIGHTING, NOT_FIGHTING;
@@ -47,22 +36,44 @@ public abstract class Creature extends GameObject{
     private boolean isAbleToGoUp = true;
     private boolean isAbleToGoDown = true;
 
-
     private Global.Direction walkingDir;
     private Global.Direction blockedDir;
 
 
+    public Creature(int x, int y, int targetX, int targetY, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility, Animator.State moveStatus) {
+
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight);
+
+        this.targetX = targetX;
+        this.targetY = targetY;
+
+        this.value = value;
+
+        this.speed = speed;
+
+
+        this.img = SceneController.getInstance().imageController().tryGetImage(img);
+
+        this.setFlyAbility(flyAbility);
+
+        this.fightingStatus = FIGHTING_STATUS.NOT_FIGHTING;
+
+        this.moveStatus = moveStatus;
+    }
+
 
     /**
      * 獲取該人物物件的數值 (也就是每個人物的攻擊力)
+     *
      * @return 每個人物的攻擊力
      */
-    public int getValue(){      //獲取目前數值
+
+    public int getValue() {      //獲取目前數值
         return value;
     }
 
-    public void getAttacked(int value){
-        this.value-=value;
+    public void getAttacked(int value) {
+        this.value -= value;
     }
 
     public void setFlyAbility(FLY_ABILITY flyAbility) {
@@ -77,76 +88,132 @@ public abstract class Creature extends GameObject{
         return fightingStatus;
     }
 
-    public void setMoveStatus(Animator.State walkingStatus) {
-        this.moveStatus = walkingStatus;
+    public boolean isAlive() {
+        return (this.value > 0);
     }
 
-    public Animator.State getMoveStatus() {
-        return moveStatus;
+
+    public boolean isFlyable() {
+        return (this.flyAbility == FLY_ABILITY.CAN_FLY);
     }
 
-    public boolean isAlive(){
-        return (this.value>0);
-    }
 
-    public boolean isFlyable(){
-        return (this.flyAbility== FLY_ABILITY.CAN_FLY);
-    }
-
-    public boolean isFighting(){
+    public boolean isFighting() {
         return (this.fightingStatus == FIGHTING_STATUS.FIGHTING);
     }
+
 
     public void setAttackTarget(GameObject attackTarget) {
         this.attackTarget = attackTarget;
     }
 
+
     public GameObject getAttackTarget() {
         return attackTarget;
     }
 
-    public boolean isHavingNoTarget(){
+    public boolean isHavingNoTarget() {
         return (this.attackTarget == null);
     }
 
-    public Image getImg(){
+
+    /**
+     * 回傳這個生物的圖片
+     * @return 該生物的圖片
+     */
+
+    public Image getImg() {
         return this.img;
     }
 
-    public void setTargetXY(int x, int y){
-        if(!this.isAt(x,y)){
+    /**
+     * 設定行走狀態
+     * @param walkingStatus 新的行走狀態
+     */
+
+    public void setMoveStatus(Animator.State walkingStatus) {
+        this.moveStatus = walkingStatus;
+    }
+
+    /**
+     * 回傳該生物目前的行走狀態 (站立 or 行走)
+     * @return e
+     */
+
+    public Animator.State getMoveStatus() {
+        return moveStatus;
+    }
+
+    /**
+     * 設定目的地 x, y
+     * @param x 目的地X
+     * @param y 目的地Y
+     */
+
+    public void setTargetXY(int x, int y) {
+        if (!this.isAt(x, y)) {
             setTargetX(x);
             setTargetY(y);
             if (x != painter().centerX() && y != painter().centerY()) {
                 Global.Direction[] arr = new Global.Direction[2];
                 arr[0] = (targetX() > painter().centerX()) ? Global.Direction.RIGHT : Global.Direction.LEFT;
                 arr[1] = (targetY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP;
-                this.setWalkingDir(arr[Global.random(0,1)]);
+                this.setWalkingDir(arr[Global.random(0, 1)]);
             }
         }
     }
+
+    /**
+     * 單純設定 目的地X
+     * @param targetX  目的地X
+     */
 
     private void setTargetX(int targetX) {
         this.targetX = targetX;
     }
 
+
+    /**
+     * 單純設定目的地X
+     * @param targetY 目的地X
+     */
+
     private void setTargetY(int targetY) {
         this.targetY = targetY;
     }
+
+    /**
+     * 取得目的地X
+     * @return 目的地X
+     */
 
     public int targetX() {
         return targetX;
     }
 
+    /**
+     * 取得目的地Y
+     * @return 目的地Y
+     */
+
     public int targetY() {
         return targetY;
     }
 
-    public boolean isSeeing(GameObject gameObject){
+    public boolean isSeeing(GameObject gameObject) {
         return this.detectRange().overlap(gameObject.painter());
     }
 
+    /**
+     * 每個生物的行走 (各自實現)
+     */
+
     public abstract void walk();
+
+    /**
+     * 每個生物的移動速度(每一幀)
+     * @return 移動速度
+     */
 
     public int speed() {
         return speed;
@@ -197,7 +264,7 @@ public abstract class Creature extends GameObject{
         this.blockedDir = blockedDir;
     }
 
-    public void setNoBlockedDir(){
+    public void setNoBlockedDir() {
         this.blockedDir = null;
     }
 
@@ -205,11 +272,12 @@ public abstract class Creature extends GameObject{
         return blockedDir;
     }
 
-    public boolean isAt(int x, int y){
-        return (this.painter().centerX()==x && this.painter().centerY()==y);
+    public boolean isAt(int x, int y) {
+        return (this.painter().centerX() == x && this.painter().centerY() == y);
     }
 
-    public boolean isAtTarget(){
-        return (this.painter().centerX()==targetX && this.painter().centerY()==targetY);
+    public boolean isAtTarget() {
+        return (this.painter().centerX() == targetX && this.painter().centerY() == targetY);
     }
+
 }

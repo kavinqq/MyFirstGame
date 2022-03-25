@@ -4,9 +4,6 @@ import company.Global;
 import company.controllers.SceneController;
 
 import java.awt.event.MouseEvent;
-import java.text.FieldPosition;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.util.List;
 import java.util.ArrayList;
 
