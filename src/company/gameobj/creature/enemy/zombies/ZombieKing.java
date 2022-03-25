@@ -1,10 +1,10 @@
-package company.gameobj.creature.zombies;
+package company.gameobj.creature.enemy.zombies;
 
 import company.gametest9th.utils.Path;
 
 import java.awt.*;
 
-public class ZombieWitch extends Zombie {
+public class ZombieKing extends Zombie {
     private static final int painterWidth = 50;
     private static final int painterHeight = 50;
     private static final int colliderWidth = 50;
@@ -13,18 +13,18 @@ public class ZombieWitch extends Zombie {
     /**
      * 這種殭屍的預設攻擊力
      */
-    public ZombieWitch(int x, int y) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 25, new Path().img().zombies().zombieWitch(), FLY_ABILITY.CANNOT_FLY);
+    public ZombieKing(int x, int y) {
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 17, new Path().img().zombies().zombieKing(), FLY_ABILITY.CANNOT_FLY);
     }
 
-    public ZombieWitch() {
-        super(-1000, -1000, painterWidth, painterHeight, colliderWidth, colliderHeight, 25, new Path().img().zombies().zombieWitch(), FLY_ABILITY.CANNOT_FLY);
+    public ZombieKing() {
+        super(-100, -1000, painterWidth, painterHeight, colliderWidth, colliderHeight, 17, new Path().img().zombies().zombieKing(), FLY_ABILITY.CANNOT_FLY);
     }
 
 
     @Override
     public int currentRoundCount(int round) {
-        return round / 10;
+        return (round * 2) / 12;
     }
 
     @Override

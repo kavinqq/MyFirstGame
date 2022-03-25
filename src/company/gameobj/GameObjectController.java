@@ -1,7 +1,7 @@
 package company.gameobj;
 
 import company.gameobj.creature.human.Citizens;
-import company.gameobj.creature.zombies.ZombieKingdom;
+import company.gameobj.creature.enemy.zombies.ZombieKingdom;
 import oldMain.Military;
 
 public class GameObjectController {
