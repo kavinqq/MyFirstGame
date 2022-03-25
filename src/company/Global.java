@@ -69,6 +69,14 @@ public class Global {
     public static final int DIV_GAP_X=(FOUNDATION_WIDTH -BUILDING_WIDTH)/2;
     public static final int DIV_GAP_Y=(FOUNDATION_HEIGHT -BUILDING_HEIGHT)/2;
 
+    //Icon相關設定
+    public static final int ICON_START_X = 2;
+    public static final int ICON_START_Y = 14;
+    public static final int ICON_WIDTH = 60;
+    public static final int ICON_HEIGHT = 50;
+    public static final int ICON_GAP = 300;
+
+
     //建築
     public final static int BuildingTypeNum = 8;
 

@@ -129,7 +129,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
         //時間速度
-        timeSpeed = 120;
+        timeSpeed = 120000;
         delay = new Delay(timeSpeed);
         delay.loop();
         // 當前操控的物件
@@ -180,30 +180,31 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
         //資源欄 UI
+        // (70,0,500,60) => 我只取這個UI來源的 中間黑色部分
         g.drawImage(resourceBarUI, 0, 0, WINDOW_WIDTH, STATUS_BAR_HEIGHT, 70, 0, 500, 60, null);
 
         // 每一組Icon + 搭配的數字 [還沒搭配到的 我先不寫]
         // 樹木資源
-        g.drawImage(treeIcon, 2, 14, 60, 50, null);
+        g.drawImage(treeIcon, ICON_START_X, ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, null);
 
         // 鋼鐵資源
-        g.drawImage(steelIcon, 302, 14, 60, 50, null);
+        g.drawImage(steelIcon, ICON_START_X + ICON_GAP * 1, ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, null);
 
         // 瓦斯資源
-        g.drawImage(gasIcon, 602, 14, 60, 50, null);
+        g.drawImage(gasIcon, ICON_START_X + ICON_GAP * 2, ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, null);
 
         // 市民數量
-        g.drawImage(citizenNumIcon, 902, 14, 60, 50, null);
+        g.drawImage(citizenNumIcon, ICON_START_X + ICON_GAP * 3, ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, null);
 
         //士兵數量
-        g.drawImage(soldierNumIcon, 1202, 14, 60, 50, null);
+        g.drawImage(soldierNumIcon, ICON_START_X + ICON_GAP * 4, ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, null);
 
 
         //遊戲時間
-        g.drawImage(timeIcon, 1502, 14, 60, 50, null);
+        g.drawImage(timeIcon, ICON_START_X + ICON_GAP * 5, ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, null);
         g.setColor(Color.white);
         g.setFont(new Font("TimesRoman", Font.BOLD, 30));
-        g.drawString(outputTimeStr,1602,50);
+        g.drawString(outputTimeStr,ICON_START_X + ICON_GAP * 5 + 100,ICON_HEIGHT);
 
 
         //測試 建築
