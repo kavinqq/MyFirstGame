@@ -147,6 +147,8 @@ public class Path {
 
             public String whiteGrayOpacity() { return this + "/whiteGrayOpacitySeventy.png";}
 
+            public String ingBuild(){return this+"/ingBuild.png";}
+
             public String greenOpacity() { return this + "/greenOpacitySixty.png";}
 
             public String redOpacity() { return this + "/redOpacityFifty.png";}
