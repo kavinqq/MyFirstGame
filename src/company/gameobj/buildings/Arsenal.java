@@ -39,7 +39,7 @@ public class Arsenal extends Building {
     public String buildingDetail(int level){
         return "";
     }
-
+    //初始化
     @Override
     protected void init() {
         setId(6)

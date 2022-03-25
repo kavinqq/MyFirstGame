@@ -19,7 +19,7 @@ public class Base extends Building {
     public void update() {
 
     }
-
+    //初始化
     @Override
     protected void init() {
         setId(9)

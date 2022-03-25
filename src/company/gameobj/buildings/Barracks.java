@@ -43,7 +43,7 @@ public class Barracks extends Building{
     public String buildingDetail(int level){
         return "軍營：每3小時消耗2木材、2鋼鐵生產" + (super.getLevel() * 2 + 1) + "位士兵";
     }
-
+    //初始化
     @Override
     protected void init() {
         setId(3)

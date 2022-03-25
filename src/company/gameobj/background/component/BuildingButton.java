@@ -2,16 +2,23 @@ package company.gameobj.background.component;
 
 import company.Global;
 import company.gameobj.GameObject;
-import company.gameobj.buildings.Building;
-import company.gameobj.buildings.SawMill;
+import company.gameobj.background.HintDialog;
 import company.gametest9th.utils.CommandSolver;
-
+import static company.gameobj.BuildingController.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class BuildingButton extends GameObject implements CommandSolver.MouseCommandListener {
+    public interface ButtonInterface{
+        public int entered(BuildingButton bb);
+    }
 
-    private boolean canBuild; //可否建造，
+    public ButtonInterface bni;
+
+    public BuildingType type;
+    //可否建造，
+    private boolean canBuild;
+
     private Image img;
     //原點x
     private int ox;
@@ -21,6 +28,10 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     private int previousX;
     //上一次座標Y
     private int previousY;
+    //按鈕id
+    private int id;
+    //當前buttonId
+    public static int buttonId;
     public BuildingButton(int x, int y) {
         super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
         ox=x;
@@ -30,7 +41,17 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     }
 
 
+    //外面改變Button
+    public void changeButtonInterface(){
+        type = BuildingType.getBuildingTypeByInt(id);
+        bni.entered(this);
+    }
 
+
+    public void clearInterface(){
+        //HintDialog.instance().setHintMessage("");
+        bni=null;
+    }
     @Override
     public void paintComponent(Graphics g) {
         g.drawImage(img,+painter().left(),painter().top(),painter().width(), painter().height(), null);
@@ -46,15 +67,13 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
 
     }
 
-    public Building build(int x,int y){
-        //System.out.println("Building_Success");
-        return new SawMill(x, y); //待修
+    public int build(int x,int y){
+        return id; //待修
     }
 
     //回到原位
     private void originPosition(){
         //System.out.println("回到原位");
-        //System.out.println("ox:"+ox+" oy:"+oy);
         setPainterStartFromTopLeft(ox,oy);
     }
 
@@ -64,30 +83,53 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         if(state==null){
             return;
         }
+
         switch (state){
+
             case MOVED:{
-                //System.out.println("MoveButtonTest");
+                //移動至上方顯示資訊
+                if(this.isEntered(e.getX(), e.getY())){
+                    if(bni!=null) {
+                        changeButtonInterface();
+                    }
+                    //System.out.println("在物件上面");
+                }else{
+                    //clearInterface();
+                    //System.out.println("不在物件上面");
+                }
                 originPosition();
                 break;
             }
+            case CLICKED:{
+                buttonId=id;
+                break;
+            }
             case DRAGGED:{
-            //System.out.println("x:"+e.getX()+" y:"+e.getY());
                 if(isEntered(previousX, previousY)){
-                    //System.out.println("BUTTON_DRAGGED");
                     moveToCenterPoint(e.getX(),e.getY());
                 }
                 break;
             }
             case RELEASED:{
-                //System.out.println("Button_Release");
+                buttonId=0;
+
                 if(canBuild){
                     build(e.getX(),e.getY());
                 }
                 originPosition();
                 break;
             }
+
         }
         previousX =e.getX();
         previousY =e.getY();
+    }
+
+    public void setId(int id) {
+        this.id=id;
+    }
+
+    public int getId(){
+        return this.id;
     }
 }
