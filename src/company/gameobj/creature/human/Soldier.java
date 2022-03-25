@@ -1,5 +1,7 @@
 package company.gameobj.creature.human;
 
+import company.gametest9th.utils.Animator;
+
 /**
  * @author Lillian
  * @Date 2022/3/7
@@ -16,9 +18,11 @@ public abstract class Soldier extends Human{
 
     private SOLDIER_TYPE soldierType;
     public Soldier(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight,int value, int speed, String img, FLY_ABILITY flyAbility, SOLDIER_TYPE soldierType){
-        super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight, value, speed, img, flyAbility, HUMAN_TYPE.SOLDIER);
-        this.setType(HUMAN_TYPE.SOLDIER);
+        super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight, value, speed, img, flyAbility, Animator.State.STAND);
+        this.setHumanType(HUMAN_TYPE.SOLDIER);
     }
+
+
     public void setSoldierType(SOLDIER_TYPE soldierType){
         this.soldierType = soldierType;
     }
