@@ -91,6 +91,10 @@ public abstract class GameObject implements GameKernel.GameInterface {
         return (detectRange.left() < x && detectRange.right() > x && detectRange.top() < y && detectRange.bottom() > y);
     }
 
+    public final boolean isCovering(int x, int y){
+        return (this.painter().left()<=x && x<=this.painter().right() && this.painter().top()<=y && y<=this.painter().bottom());
+    }
+
     public final Rect detectRange() {
         return detectRange;
     }

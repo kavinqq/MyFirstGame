@@ -160,6 +160,10 @@ public abstract class Creature extends GameObject {
                 arr[1] = (targetY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP;
                 this.setWalkingDir(arr[Global.random(0, 1)]);
             }
+//            if(this.getBlockedDir()==null){
+//            }
+//            else{
+//            }
         }
     }
 
