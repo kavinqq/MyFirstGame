@@ -29,9 +29,7 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
     private BuildingButton currentButton;
 
-    private int buttonPressedCount;
-
-    private Rect mouseRect;
+    private Rect redRect;
     private Rect greenRect;
     private Image greenImg; //不可建造紅背景
     private Image redImg; //可建造綠背景
@@ -75,6 +73,26 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     }
 
 
+    //取得
+    public BuildingButton get(int index){
+        return buildingButtons.get(index);
+    }
+
+    //總長度
+    public int length(){
+        return buildingButtons.size();
+    }
+
+
+
+    public void setGreenRect(Rect Rect) {
+        if(Rect == null){
+            return;
+        }
+        this.greenRect = Rect;
+    }
+
+
     @Override
     public void paint(Graphics g) {
         //基地為背景先畫
@@ -93,12 +111,13 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
             }
         }
         //最後畫
-        if(currentButton!=null && currentButton.getId()-1>=0){
+        if(currentButton!=null && currentButton.getId()-1>=0) {
             if(currentButton.isDragging()){
                 //畫拖曳中的按鈕
-                Rect redRect=currentButton.painter();
+                redRect=currentButton.painter();
                 g.drawImage(redImg,redRect.left(),redRect.top(),redRect.width(),redRect.height(),null);
-                if(greenRect!=null){
+
+                if(greenRect!=null && redRect.overlap(greenRect)){ //綠色區域有與紅色交疊才畫出
                     g.drawImage(greenImg,greenRect.left(),greenRect.top(),greenRect.width(),greenRect.height(),null);
                 }
             }
@@ -116,24 +135,19 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
         for (int i = 0; i < BuildingTypeNum; i++) {
             if(buildingButtons.get(i).isPressed()){
-                currentButton=buildingButtons.get(i);
-
-                buttonPressedCount++;
-               // buildingButtons.get(i).setPressed(false); //有時release關不掉isPressed 有時間再修成interface
+                currentButton=buildingButtons.get(i);//取得當前按鈕
                 break;
             }
-            if(buildingButtons.get(i).isMoveOnButton()){
+
+        }
+        //印出建築物提示文字
+        for (int i = 0; i < BuildingTypeNum; i++) {
+            if(buildingButtons.get(i).isMoveOnButton() && !buildingButtons.get(i).isDragged()) {
                 type = BuildingType.getBuildingTypeByInt(buildingButtons.get(i).getId());
                 HintDialog.instance().setHintMessage(type.instance().getName());
-            }
-            if(buildingButtons.get(i).isDragging()){
-                mouseRect=buildingButtons.get(i).painter();
                 break;
-            }else{
-                greenRect=null; //當放開時清除 綠框
             }
         }
-
     }
 
 
@@ -144,37 +158,5 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
             //呼叫按鈕的滑鼠功能(傳入現在的滑鼠監聽)
             buildingButtons.get(i).mouseTrig(e, state, trigTime);
         }
-    }
-
-    //取得點選次數
-    public int getButtonPressedCount(){
-        return buttonPressedCount;
-    }
-
-    //減少點選次數
-    public void decButtonPressedCount(){
-        buttonPressedCount--;
-    }
-
-    //取得
-    public BuildingButton get(int index){
-        return buildingButtons.get(index);
-    }
-
-    //總長度
-    public int length(){
-        return buildingButtons.size();
-    }
-
-
-    public void clearMouseRect() {
-        mouseRect=null;
-    }
-
-    public void setGreenRect(Rect Rect) {
-        if(Rect == null){
-            return;
-        }
-        this.greenRect = Rect;
     }
 }

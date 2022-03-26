@@ -287,33 +287,30 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             }
         }
-        buildingOption.clearMouseRect();
-
 
 
 
         //city.getBuildingsNum()
         //建造成功與否
-        if (type != null && buildingOption.getButtonPressedCount()==0) {
-            type = BuildingType.getBuildingTypeByInt(buildingOption.getCurrentButton().getId());
-            if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
-                city.build(type);
-                System.out.println(type.instance().getName() + "建造中");
-            } else {
-                if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
-                    message = "a建築物已蓋滿";
-                    System.out.println("你的城市 經過多年風風雨雨 鐵與血的灌溉\n如今 從杳無人煙之地 成了 充斥著滿滿的高樓大廈 人車馬龍的繁華之地\n你的城市 已沒有地方可以建造新的建築了");
-                }
-                if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
-                    message = "b科技等級不足";
-                    System.out.println("科技等級不足");
-                }
-                if (!type.instance().isEnoughBuild(city.getResource())) {
-                    message = "c物資不足";
-                    System.out.println("物資不足");
-                }
-            }
-            buildingOption.decButtonPressedCount();
+        if (type != null) {
+//            type = BuildingType.getBuildingTypeByInt(buildingOption.getCurrentButton().getId());
+//            if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
+//                city.build(type);
+//                System.out.println(type.instance().getName() + "建造中");
+//            } else {
+//                if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
+//                    message = "a建築物已蓋滿";
+//                    System.out.println("你的城市 經過多年風風雨雨 鐵與血的灌溉\n如今 從杳無人煙之地 成了 充斥著滿滿的高樓大廈 人車馬龍的繁華之地\n你的城市 已沒有地方可以建造新的建築了");
+//                }
+//                if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
+//                    message = "b科技等級不足";
+//                    System.out.println("科技等級不足");
+//                }
+//                if (!type.instance().isEnoughBuild(city.getResource())) {
+//                    message = "c物資不足";
+//                    System.out.println("物資不足");
+//                }
+//            }
         }
         //提示框
         //hintDialog.setHintMessage(message);

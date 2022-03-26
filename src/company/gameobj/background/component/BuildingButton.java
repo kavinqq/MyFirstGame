@@ -50,8 +50,12 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     boolean isClick;
     //是否按到 有按下就觸發
     private boolean isPressed;
-    //拖曳  有放開就觸發
+    //拖曳且有物件
     private boolean isDragging;
+    //拖曳
+    private boolean isDragged;
+    //緩衝有些正常感應不夠靈敏
+    private boolean isShuffle;
 
     //半透明灰色圖
     private Image grayOpacity;
@@ -103,6 +107,9 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     public boolean isMoveOnButton(){
         return isMoveOnButton;
     }
+    public boolean isDragged(){
+        return isDragged;
+    }
 
     public boolean isDragging() {
         return isDragging;
@@ -110,6 +117,10 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
 
     public boolean isReleased() {
         return isReleased;
+    }
+
+    public boolean isShuffle(){
+        return isShuffle;
     }
 
     public int getId(){
@@ -128,25 +139,24 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         }
         switch (state){
             case MOVED: {
-                //滑鼠移動時回到原位
-                originPosition();
                 //若移開不能拖曳
                 isDragging = false;
                 //移動至上方顯示資訊
                 if (this.isEntered(e.getX(), e.getY())) {
+                    System.out.println("MOVE");
                     isMoveOnButton = true;
-                    type = BuildingType.getBuildingTypeByInt(id);
-                    //外部控制按鈕
-                    if (be != null) {
-                        be.action(this);
-                    }
+                    isShuffle=true;
                 } else {
+                    isShuffle=false;
                     isMoveOnButton = false;
                 }
+                //滑鼠移動時回到原位
+                originPosition();
                 break;
             }
             case PRESSED:{
                 if(isMoveOnButton){
+                    System.out.println("PRESSED");
                     isMoveOnButton=false;
                     isPressed=true;
                 }else{
@@ -155,20 +165,33 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 break;
             }
             case DRAGGED:{
+                isDragged=true;
                 //要先點擊後拖曳，確保只能拖移一個物件
-                if(isPressed){
-                    if(isEntered(previousX, previousY) && isDragging){
-                        moveToCenterPoint(e.getX(),e.getY());
+                if(isShuffle){ //應該用isPressed但會卡
+                    if(isDragging){
+                        System.out.println("Dragging");
+                        //後面幾偵拖曳
+                        if(isEntered(previousX,previousY)){
+                            moveToCenterPoint(e.getX(),e.getY());
+                        }
                     }else{
+                        System.out.println("firstDragging");
+                        //第一偵拖曳
+                        if(isEntered(e.getX(), e.getY())){
+                            moveToCenterPoint(e.getX(),e.getY());
+                        }
+                        isMoveOnButton=false;
                         isDragging =true;
                     }
                 }
                 break;
             }
+
             case RELEASED:{
                 originPosition();
+                isDragged=false;
                 isClick=false;
-                isPressed=false;
+                isPressed=true;
                 isDragging =false;
                 isReleased=true;
                 isMoveOnButton=false;
