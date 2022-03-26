@@ -69,7 +69,7 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     public boolean checkMouseOnButtons(){
         isMouseOnButtons =false;
         for (int i=0;i<BuildingTypeNum;i++){
-            isMouseOnButtons |=buildingButtons.get(i).isMoveOnButton();
+            isMouseOnButtons |= buildingButtons.get(i).isMoveOnButton();
         }
         return isMouseOnButtons;
     }
@@ -83,7 +83,6 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
             g.drawImage(foundation_img, BUILDING_OPTION_X, BUILDING_OPTION_Y + (FOUNDATION_HEIGHT + OPTION_GAP_Y) * i
                     , FOUNDATION_WIDTH, FOUNDATION_HEIGHT, null);
         }
-
         //建築物後畫
         for (int i = 0; i < BuildingTypeNum; i++) {
             //畫按鈕
@@ -93,13 +92,11 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
                 buildingButtons.get(i).paint(g);
             }
         }
-
         //最後畫
         if(currentButton!=null && currentButton.getId()-1>=0){
-            if(currentButton.isDragged()){
+            if(currentButton.isDragging()){
                 //畫拖曳中的按鈕
-                Rect redRect=currentButton.getMouseRect();
-                //System.out.println("greenRect:"+ greenRect.left());
+                Rect redRect=currentButton.painter();
                 g.drawImage(redImg,redRect.left(),redRect.top(),redRect.width(),redRect.height(),null);
                 if(greenRect!=null){
                     g.drawImage(greenImg,greenRect.left(),greenRect.top(),greenRect.width(),greenRect.height(),null);
@@ -113,40 +110,37 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
     @Override
     public void update() {
+        if(!checkMouseOnButtons()){
+            HintDialog.instance().setHintMessage("");
+        }
+
         for (int i = 0; i < BuildingTypeNum; i++) {
             if(buildingButtons.get(i).isPressed()){
                 currentButton=buildingButtons.get(i);
+
                 buttonPressedCount++;
-                buildingButtons.get(i).setPressed(false); //有時release關不掉isPressed 有時間再修成interface
+               // buildingButtons.get(i).setPressed(false); //有時release關不掉isPressed 有時間再修成interface
                 break;
             }
-            if(buildingButtons.get(i).isDragged()){
-                mouseRect=buildingButtons.get(i).getMouseRect();
+            if(buildingButtons.get(i).isMoveOnButton()){
+                type = BuildingType.getBuildingTypeByInt(buildingButtons.get(i).getId());
+                HintDialog.instance().setHintMessage(type.instance().getName());
+            }
+            if(buildingButtons.get(i).isDragging()){
+                mouseRect=buildingButtons.get(i).painter();
                 break;
             }else{
                 greenRect=null; //當放開時清除 綠框
             }
-
         }
+
     }
 
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-
-        if(checkMouseOnButtons()){
-            HintDialog.instance().setHintMessage("");
-        }
         //呼叫所有建築物按鈕
-
         for (int i = 0; i < BuildingTypeNum; i++) {
-            //得到建築物Id
-            type = BuildingType.getBuildingTypeByInt(buildingButtons.get(i).getId());
-
-            //改變按鈕的內容
-            buildingButtons.get(i).bni=(bb)-> {
-                HintDialog.instance().setHintMessage(type.instance().getName());
-            };
             //呼叫按鈕的滑鼠功能(傳入現在的滑鼠監聽)
             buildingButtons.get(i).mouseTrig(e, state, trigTime);
         }
@@ -172,10 +166,6 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         return buildingButtons.size();
     }
 
-
-    public Rect getMouseRect(){
-        return mouseRect;
-    }
 
     public void clearMouseRect() {
         mouseRect=null;

@@ -278,16 +278,15 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     //取得現在選取的按鈕
                     BuildingButton currentButton=buildingOption.getCurrentButton();
                     //將重疊區域回傳給buildingOption
-                    Rect tmpRect=currentButton.overlapObject(buildingArea.get(i,j));
-                    buildingOption.setGreenRect(tmpRect);
+                    Rect greenRect=currentButton.overlapObject(buildingArea.get(i,j));
+                    buildingOption.setGreenRect(greenRect);
                     //完全在建造區中
                     if(buildingArea.get(i,j).isCover(buildingOption.getCurrentButton())){
-                        //System.out.println("OK");
+
                     }
                 }
             }
         }
-
         buildingOption.clearMouseRect();
 
 
