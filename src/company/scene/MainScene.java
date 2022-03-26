@@ -275,7 +275,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             for (int i = 0; i < buildingArea.lengthY(); i++) {
                 for (int j = 0; j < buildingArea.lengthX(); j++) {
                     if(buildingArea.get(i,j).isCover(buildingOption.getMouseRect())){
-                        System.out.println("OK");
+                        //System.out.println("OK");
                     }
                 }
             }
