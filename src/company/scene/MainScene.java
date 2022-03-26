@@ -270,11 +270,18 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //建築物相關測試
         buildingOption.update();
 
-        //判斷是否進入可建造區
-        if (buildingOption.getMouseRect() != null) {
+        //判斷現在有無選取按鈕
+        if (buildingOption.getCurrentButton() != null) {
+            //判斷是否進入可建造區
             for (int i = 0; i < buildingArea.lengthY(); i++) {
                 for (int j = 0; j < buildingArea.lengthX(); j++) {
-                    if(buildingArea.get(i,j).isCover(buildingOption.getMouseRect())){
+                    //取得現在選取的按鈕
+                    BuildingButton currentButton=buildingOption.getCurrentButton();
+                    //將重疊區域回傳給buildingOption
+                    Rect tmpRect=currentButton.overlapObject(buildingArea.get(i,j));
+                    buildingOption.setGreenRect(tmpRect);
+                    //完全在建造區中
+                    if(buildingArea.get(i,j).isCover(buildingOption.getCurrentButton())){
                         //System.out.println("OK");
                     }
                 }
@@ -284,11 +291,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         buildingOption.clearMouseRect();
 
 
-        type = BuildingType.getBuildingTypeByInt(buildingOption.getCurrentIdByButton());
+
 
         //city.getBuildingsNum()
         //建造成功與否
-        if (type != null) {
+        if (type != null && buildingOption.getButtonPressedCount()==0) {
+            type = BuildingType.getBuildingTypeByInt(buildingOption.getCurrentButton().getId());
             if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
                 city.build(type);
                 System.out.println(type.instance().getName() + "建造中");
@@ -306,10 +314,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     System.out.println("物資不足");
                 }
             }
+            buildingOption.decButtonPressedCount();
         }
         //提示框
         //hintDialog.setHintMessage(message);
-        buildingOption.setCurrentIdByButton(0); //fix 取過後強制設成0
+        //buildingOption.setCurrentIdByButton(0); //fix 取過後強制設成0
 
 
         if(delay.count()){

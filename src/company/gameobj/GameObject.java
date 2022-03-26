@@ -4,6 +4,7 @@ import company.Global;
 import company.gametest9th.utils.GameKernel;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public abstract class GameObject implements GameKernel.GameInterface {
 
@@ -50,6 +51,11 @@ public abstract class GameObject implements GameKernel.GameInterface {
         painter.moveToCenterPoint(x, y);
     }
 
+    public final void offset(int x, int y) {
+        detectRange.offset(x, y);
+        painter.offset(x, y);
+    }
+
     public final void translate(int x, int y) {
         detectRange.translate(x, y);
         painter.translate(x, y);
@@ -65,6 +71,23 @@ public abstract class GameObject implements GameKernel.GameInterface {
         painter.translateY(y);
     }
 
+
+    public Rect overlapObject(GameObject object) {
+        if(painter.overlap(object.painter)){
+            //已確認交疊情況下 排順序下 找到X、Y方向 第2第3為交疊正方形位置
+            int[] intsX={detectRange.left(),object.detectRange.left(),detectRange.right(),object.detectRange.right()};
+            Arrays.sort(intsX);
+            int[] intsY={detectRange.top(),object.detectRange.top(),detectRange.bottom(),object.detectRange.bottom()};
+            Arrays.sort(intsY);
+            return new Rect(intsX[1],intsY[1],intsX[2]-intsX[1],intsY[2]-intsY[1]);
+        }
+        return null;
+    }
+
+
+
+
+
     public boolean isCollision(GameObject object) {
         //return collider.overlap(object.collider);
         return painter.overlap(object.painter);
@@ -76,6 +99,7 @@ public abstract class GameObject implements GameKernel.GameInterface {
         return painter.cover(object.painter);
     }
 
+    //物件是否涵蓋傳入的物件
     public boolean isCover(Rect rect) {
         //return collider.overlap(object.collider);
         return painter.cover(rect);
@@ -127,7 +151,6 @@ public abstract class GameObject implements GameKernel.GameInterface {
     @Override
     public final void paint(Graphics g) {
         paintComponent(g);
-
         if (Global.IS_DEBUG) {
             g.setColor(Color.RED);
             detectRange.paint(g);

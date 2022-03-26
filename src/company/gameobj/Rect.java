@@ -1,6 +1,7 @@
 package company.gameobj;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public class Rect {
 
@@ -58,6 +59,11 @@ public class Rect {
         return this;
     }
 
+    public final Rect offset(int x, int y) {
+        this.x += x;
+        this.y += y;
+        return this;
+    }
 
     public final Rect translate(int x, int y) {
         this.x += x;
@@ -115,6 +121,8 @@ public class Rect {
         return this.height;
     }
 
+
+
     public final boolean overlap(Rect object) {
         if (right() < object.left()) {
             return false;
@@ -129,6 +137,20 @@ public class Rect {
             return false;
         }
         return true;
+    }
+
+    //交疊正方形
+    public final Rect overlapRect(Rect object) {
+        if(overlap(object)){
+            //已確認交疊情況下 排順序下 第2第3為交疊正方形位置
+            int[] intsX={left(),object.left(),right(),object.right()};
+            Arrays.sort(intsX);
+            int[] intsY={left(),object.left(),right(),object.right()};
+            Arrays.sort(intsY);
+            return new Rect(intsX[1], intsY[1], intsX[2] - intsX[1], intsY[2] - intsY[1]) {
+            };
+        }
+        return null;
     }
 
     public final void paint(Graphics g) {

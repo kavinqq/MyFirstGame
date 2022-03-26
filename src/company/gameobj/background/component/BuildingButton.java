@@ -7,8 +7,6 @@ import company.gameobj.Rect;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 import static company.gameobj.BuildingController.*;
-import static company.gameobj.BuildingController.BuildingType.HOUSE;
-import static company.gameobj.BuildingController.BuildingType.getBuildingTypeByInt;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -37,18 +35,20 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     //按鈕id
     private final int id;
 
-    //紀錄拖曳到的正方形
-    public Rect recordRect;
-    //此滑鼠是否在按鈕上
-    private boolean isMoveOnButton;
-    //是否按到
-    private boolean isPressed;
+    //紀錄拖曳到的正方形，隨滑鼠移動
+    private Rect MouseRect;
+
     //點擊次數
     private int count;
-    //拖曳
+
+    //先判斷滑鼠是否在按鈕上
+    private boolean isMoveOnButton;
+    //是否先 點擊為在同一個位置按下後放開
+    boolean isClick;
+    //是否按到 有按下就觸發
+    private boolean isPressed;
+    //拖曳  有放開就觸發
     private boolean isDragged;
-    //上次拖曳
-    private boolean isPreDragged;
 
     //半透明灰色圖
     private Image grayOpacity;
@@ -58,7 +58,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         grayOpacity=SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().whiteGrayOpacity());
         ox=x;
         oy=y;
-        recordRect=new Rect(x,y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
+        MouseRect =new Rect(x,y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
         isMoveOnButton =false;
         count=0;
         canBuild=true;//Fixme_待做
@@ -124,50 +124,61 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         if(state==null){
             return;
         }
-
         switch (state){
             case MOVED:{
+                //若移開不能拖曳
+                isDragged=false;
                 //移動至上方顯示資訊
                 if(this.isEntered(e.getX(), e.getY())){
-                    isDragged=true;
-
+//                    isDragged=true;
+                    //isClick=true;
+                    isMoveOnButton =true;
+                    //外部控制按鈕
                     if(bni!=null) {
                         changeButtonInterface();
                     }
-                    isMoveOnButton =true;
                 }else{
-                    isDragged=false;
+                    //sClick=false;
                     isMoveOnButton =false;
                 }
                 originPosition();
                 break;
             }
             case CLICKED:{
-                System.out.println("CLICKED");
-                //count++;
+                System.out.println("Click");
+                if(isMoveOnButton){
+                    isClick=true;
+                    isPressed=true;
+                }else{
+                    isClick=false;
+                }
             }
             case PRESSED:{
-                System.out.println("PRESSED");
-                if(this.isEntered(e.getX(), e.getY())){
+                System.out.println("Pressed");
+                if(isMoveOnButton){
+                    isClick=true;
                     isPressed=true;
+                }else{
+                    isPressed=false;
                 }
                 break;
             }
             case DRAGGED:{
-
-                if(isDragged){
+                //要先點擊後拖曳
+                if(isClick){
                     if(isEntered(previousX, previousY)){
+                        isDragged=true;
                         moveToCenterPoint(e.getX(),e.getY());
-                        recordRect.setCenter(e.getX(),e.getY());
+                        MouseRect.setCenter(e.getX(),e.getY());
                     }
                 }
                 break;
             }
             case RELEASED:{
-
+                isClick=false;
                 isDragged=false;
                 isReleased=true;
-
+                isMoveOnButton=false;
                 if(canBuild){
                     build(e.getX(),e.getY());
                 }
@@ -193,8 +204,8 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         return isDragged;
     }
     //取得紀錄方塊
-    public Rect getRecordRect(){
-        return recordRect;
+    public Rect getMouseRect(){
+        return MouseRect;
     }
 
 }

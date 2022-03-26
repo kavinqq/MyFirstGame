@@ -145,9 +145,9 @@ public class Path {
 
             public String ingBuild(){return this+"/ingBuild.png";}
 
-            public String greenOpacity() { return this + "/greenOpacitySixty.png";}
+            public String green() { return this + "/green.png";}
 
-            public String redOpacity() { return this + "/redOpacityFifty.png";}
+            public String red() { return this + "/red.png";}
 
             // UI
             public String resourceBarUI() { return this + "/resourceBarUI.png";}
