@@ -3,6 +3,7 @@ package company.gameobj.background.component;
 import company.Global;
 import company.controllers.SceneController;
 import company.gameobj.GameObject;
+import company.gameobj.Rect;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 import static company.gameobj.BuildingController.*;
@@ -13,10 +14,11 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class BuildingButton extends GameObject implements CommandSolver.MouseCommandListener {
+
     public interface ButtonInterface{
         public void entered(BuildingButton bb);
     }
-
+    public boolean isReleased;
     public ButtonInterface bni;
 
     public BuildingType type;
@@ -35,12 +37,19 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     //按鈕id
     private final int id;
 
+    //紀錄拖曳到的正方形
+    public Rect recordRect;
     //此滑鼠是否在按鈕上
     private boolean isMoveOnButton;
     //是否按到
     private boolean isPressed;
     //點擊次數
     private int count;
+    //拖曳
+    private boolean isDragged;
+    //上次拖曳
+    private boolean isPreDragged;
+
     //半透明灰色圖
     private Image grayOpacity;
     public BuildingButton(int x, int y,int id) {
@@ -49,6 +58,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         grayOpacity=SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().whiteGrayOpacity());
         ox=x;
         oy=y;
+        recordRect=new Rect(x,y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
         isMoveOnButton =false;
         count=0;
         canBuild=true;//Fixme_待做
@@ -65,19 +75,12 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     }
 
 
-    public void clearInterface(){
-        //HintDialog.instance().setHintMessage("");
-        bni=null;
-    }
-
-
-
 
     @Override
     public void paintComponent(Graphics g) {
         //畫出建造中建築物
         g.drawImage(img,+painter().left(),painter().top(),painter().width(), painter().height(), null);
-        //數量
+        //計算數量好像不用
         g.setColor(Color.white);
         g.setFont(new Font("Dialog", Font.BOLD, 40));
         //int buildingNum=getBuildingTypeByInt(id).list().size();
@@ -125,13 +128,15 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         switch (state){
             case MOVED:{
                 //移動至上方顯示資訊
-
                 if(this.isEntered(e.getX(), e.getY())){
+                    isDragged=true;
+
                     if(bni!=null) {
                         changeButtonInterface();
                     }
                     isMoveOnButton =true;
                 }else{
+                    isDragged=false;
                     isMoveOnButton =false;
                 }
                 originPosition();
@@ -148,17 +153,21 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 }
                 break;
             }
-
             case DRAGGED:{
-                System.out.println("Dragger");
-                if(isEntered(previousX, previousY)){
-                    count++;
-                    moveToCenterPoint(e.getX(),e.getY());
+
+                if(isDragged){
+                    if(isEntered(previousX, previousY)){
+                        moveToCenterPoint(e.getX(),e.getY());
+                        recordRect.setCenter(e.getX(),e.getY());
+                    }
                 }
                 break;
             }
             case RELEASED:{
-                System.out.println("RELEASED");
+
+                isDragged=false;
+                isReleased=true;
+
                 if(canBuild){
                     build(e.getX(),e.getY());
                 }
@@ -175,4 +184,17 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     public int getId(){
         return this.id;
     }
+
+    public boolean isReleased() {
+        return isReleased;
+    }
+
+    public boolean isDragged() {
+        return isDragged;
+    }
+    //取得紀錄方塊
+    public Rect getRecordRect(){
+        return recordRect;
+    }
+
 }

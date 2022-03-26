@@ -22,6 +22,7 @@ public class HumanAnimator extends Animator {
     // 人物狀態(站立/行走)
     private State state;
 
+
     public HumanAnimator(int type, State state) {
 
         // 初始化是哪個角色
@@ -60,6 +61,7 @@ public class HumanAnimator extends Animator {
         // reset delay limit
         delay.setLimit(state.getSpeed());
     }
+
 
     @Override
     public void paint(Global.Direction dir, int left, int top, int right, int bottom, Graphics g) {

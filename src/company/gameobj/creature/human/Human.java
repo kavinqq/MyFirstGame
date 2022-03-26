@@ -7,43 +7,34 @@ import company.gametest9th.utils.HumanAnimator;
 
 public abstract class Human extends Creature {
 
-    private int characterType;
-    private Animator.State state;
-//    private boolean canMove;
-//    private boolean hasMove;
-
-    private HumanAnimator animator;
-
-
-    public Human(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility, HUMAN_TYPE humanType) {
-        super(x, y, x, y,painterWidth, painterHeight, colliderWidth, colliderHeight, value, speed, img, flyAbility, Animator.State.STAND);
-        this.setType(humanType);
-    }
-
     public enum HUMAN_TYPE {
         CITIZEN, SOLDIER;
     }
 
-    private HUMAN_TYPE type;
+    private int characterType;
 
-    /**
-     * 人物 的初始數值(也就是攻擊力)
-     */
+    private Animator.State state;
+
+    private HumanAnimator animator;
+
+    private HUMAN_TYPE humanType;
+
     private int value;
-    /**
-     *
-     */
+
     private int upgradePoint;
 
-    /**
-     * 該人物 的初始數值(也就是攻擊力)
-     * @param value 攻擊數值
-     * @param type 讓各個subclass決定
-     */
 
-    /**
-     * 升級該物件的等級 (每次升級 等級 + 1 && 數值 + 3)
-     */
+
+    public Human(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility, Animator.State state) {
+        super(x, y, x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, value, speed, img, flyAbility, Animator.State.STAND);
+    }
+
+    public Human(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility, HUMAN_TYPE humanType,Animator.State state) {
+        super(x, y, x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, value, speed, img, flyAbility, Animator.State.STAND);
+        this.humanType = humanType;
+    }
+
+
 
 
     /**
@@ -59,16 +50,16 @@ public abstract class Human extends Creature {
         this.value = value;
     }
 
-    public void setType(HUMAN_TYPE type) {
-        this.type = type;
+    public void setHumanType(HUMAN_TYPE humanType) {
+        this.humanType = humanType;
     }
 
     public boolean isCitizen() {
-        return (this.type == HUMAN_TYPE.CITIZEN);
+        return (this.humanType == HUMAN_TYPE.CITIZEN);
     }
 
     public boolean isSoldier() {
-        return (this.type == HUMAN_TYPE.SOLDIER);
+        return (this.humanType == HUMAN_TYPE.SOLDIER);
     }
 
     public boolean isAlive() {
@@ -81,22 +72,22 @@ public abstract class Human extends Creature {
 
     @Override
     public void walk() {
-        //        if (this.isHavingNoTarget()) {
-//
-//        }
 
         //quit walk if the human is not moving
-        if(this.getMoveStatus() == Animator.State.STAND){
+        if (this.getMoveStatus() == Animator.State.STAND) {
             return;
         }
+
+
         int speed = speed();
         //沒有任何方向是被擋住的時候
         if(this.getBlockedDir()==null){
             if (targetX() == painter().centerX()){
+
                 this.setWalkingDir((targetY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP);
-            }
-            else if (targetY() == painter().centerY()){
-                this.setWalkingDir((targetX() > painter().centerX()) ? Global.Direction.RIGHT: Global.Direction.LEFT);
+            } else if (targetY() == painter().centerY()) {
+
+                this.setWalkingDir((targetX() > painter().centerX()) ? Global.Direction.RIGHT : Global.Direction.LEFT);
             }
 
             if(this.getWalkingDir()== Global.Direction.LEFT || this.getWalkingDir()== Global.Direction.RIGHT){
@@ -106,6 +97,7 @@ public abstract class Human extends Creature {
                 speed = Math.min(speed, Math.abs(targetY() - painter().centerY()));
             }
         }
+
         //如果有被擋住某個方向的時候
         else if(this.getBlockedDir()!=null){
             if(this.getWalkingDir()==this.getBlockedDir()){
@@ -119,18 +111,21 @@ public abstract class Human extends Creature {
                         //當在往左或往右的時候撞到障礙物且尚未來到目標的Ｙ做標時選擇會靠近目標的方向去走
                         else{
                             this.setWalkingDir((targetY()>this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
+
                         }
                         break;
                     }
                     case UP:
-                    case DOWN:{
-                        //當在往上或往下的時候撞到障礙物且已經來到目標的Ｘ做標時隨機選擇一個方向去走
-                        if(this.painter().centerX()==this.painter().centerX()){
-                            this.setWalkingDir((Global.random(0,1)==0) ? Global.Direction.LEFT : Global.Direction.RIGHT);
+                    case DOWN: {
+                        // 當在往上或往下的時候撞到障礙物且已經來到目標的Ｘ做標時隨機選擇一個方向去走
+                        if (this.painter().centerX() == this.painter().centerX()) {
+
+                            this.setWalkingDir((Global.random(0, 1) == 0) ? Global.Direction.LEFT : Global.Direction.RIGHT);
                         }
-                        //當在往上或往下的時候撞到障礙物且尚未來到目標的Ｘ做標時選擇會靠近目標的方向去走
-                        else{
-                            this.setWalkingDir((targetX()<this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
+                        // 當在往上或往下的時候撞到障礙物且尚未來到目標的Ｘ做標時選擇會靠近目標的方向去走
+                        else {
+
+                            this.setWalkingDir((targetX() < this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
                         }
                         break;
                     }
@@ -138,25 +133,26 @@ public abstract class Human extends Creature {
             }
         }
 
+
         switch (this.getWalkingDir()){
             case LEFT:{
                 this.translateX(-1*speed);
                 break;
             }
-            case RIGHT:{
+            case RIGHT: {
                 this.translateX(speed);
                 break;
             }
-            case UP:{
-                this.translateY(-1*speed);
+            case UP: {
+                this.translateY(-1 * speed);
                 break;
             }
-            case DOWN:{
+            case DOWN: {
                 this.translateY(speed);
                 break;
             }
         }
-        if(this.isAtTarget()){
+        if (this.isAtTarget()) {
             this.setMoveStatus(Animator.State.STAND);
         }
     }
@@ -172,10 +168,9 @@ public abstract class Human extends Creature {
 
     public void setTarget(int x, int y) {
         // 設定目的地X Y
-        if(this.isAt(x,y)){
+        if (this.isAt(x, y)) {
             return;
-        }
-        else{
+        } else {
             this.setMoveStatus(Animator.State.WALK);
             this.setTargetXY(x, y);
         }
@@ -189,72 +184,5 @@ public abstract class Human extends Creature {
         setMoveStatus(Animator.State.STAND);
     }
 
-    /*
-    public void mouseToMove() {
-        // 如果現在不能移動 那下面都不用跑
-        if (!canMove) {
-            return;
-        }
-
-        // 確定能走了, 把狀態改為walk
-        animator.setState(Animator.State.WALK);
-
-        // 這次update 移動過了沒
-        hasMove = false;
-
-        // 速度(一步的距離) = 初始速度
-        int speed = speed();
-
-        // 處理X
-        // 如果當前X還沒走到目的地X
-        if (targetX() != painter().centerX()) {
-            // 如果剩下的距離 < 一步 那麼 一步距離 = 剩下的距離
-            speed = Math.min(speed, Math.abs(targetX() - painter().centerX()));
-
-
-            // 如果 目的地在角色 右邊 往右走
-            if (targetX() > painter().centerX() && !hasMove) {
-                setWalkingDir(Global.Direction.RIGHT);
-                this.translateX(speed);
-                hasMove = true;
-            }
-            // 如果 目的地在角色 左邊 往左走
-            if (targetX() < painter().centerX() && !hasMove) {
-                setWalkingDir(Global.Direction.LEFT);
-                this.translateX(-1 * speed);
-                hasMove = true;
-            }
-        }
-
-
-        // 處理Y
-        // 如果當前Y沒走到目的地Y
-        if (targetY() != painter().centerY()) {
-
-            // 如果剩下的距離 < 一步 那麼 一步距離 = 剩下的距離
-            speed = Math.min(speed ,Math.abs(targetY() - painter().centerY()));
-
-
-            // 如果 目的地在角色 下面 往下走
-            if (targetY() > painter().centerY() && !hasMove) {
-                setWalkingDir(Global.Direction.DOWN);
-                this.translateY(speed);
-                hasMove = true;
-            }
-
-            // 如果 目的地在角色 上面 往上走
-            if (targetY() < painter().centerY() && !hasMove) {
-                setWalkingDir(Global.Direction.UP);
-                this.translateY(-1 * speed);
-            }
-        }
-
-        // 走到了目的地 把能移動關起來
-        if (targetX() == painter().centerX() && targetY() == painter().centerY()) {
-            animator.setState(Animator.State.STAND);
-            canMove = false;
-        }
-    }
-     */
 }
 

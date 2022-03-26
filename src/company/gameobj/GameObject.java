@@ -70,6 +70,23 @@ public abstract class GameObject implements GameKernel.GameInterface {
         return painter.overlap(object.painter);
     }
 
+    //物件是否涵蓋傳入的物件
+    public boolean isCover(GameObject object) {
+        //return collider.overlap(object.collider);
+        return painter.cover(object.painter);
+    }
+
+    public boolean isCover(Rect rect) {
+        //return collider.overlap(object.collider);
+        return painter.cover(rect);
+    }
+
+    //物件是否被涵蓋傳入的物件
+    public boolean isCovered(GameObject object) {
+        //return collider.overlap(object.collider);
+        return painter.covered(object.painter);
+    }
+
     public final boolean isEntered(int x, int y) {
         return (detectRange.left() < x && detectRange.right() > x && detectRange.top() < y && detectRange.bottom() > y);
     }
@@ -148,5 +165,4 @@ public abstract class GameObject implements GameKernel.GameInterface {
     private boolean isVerticalParallel(GameObject gameObject){
         return (this.painter().left()<gameObject.painter().right() && this.painter().right()>gameObject.painter().left());
     }
-
 }

@@ -141,10 +141,6 @@ public class Path {
 
             public String box() { return this + "/box.png";}
 
-            public String horizontalBar() { return this + "/HBar.png";}
-
-            public String verticalBar() { return this + "/VBar.png";}
-
             public String whiteGrayOpacity() { return this + "/whiteGrayOpacitySeventy.png";}
 
             public String ingBuild(){return this+"/ingBuild.png";}
@@ -152,6 +148,30 @@ public class Path {
             public String greenOpacity() { return this + "/greenOpacitySixty.png";}
 
             public String redOpacity() { return this + "/redOpacityFifty.png";}
+
+            // UI
+            public String resourceBarUI() { return this + "/resourceBarUI.png";}
+
+
+            // Icon
+            public String treeIcon() { return this + "/TreeIcon.png";}
+
+            public String steelIcon() {return this + "/SteelResourceIcon.png";}
+
+            public String citizenNumIcon() { return this + "/citizenNumIcon.png";}
+
+            public String soldierNumIcon() { return this + "/soldierNumIcon.png";}
+
+            public String gasIcon() { return this + "/gasIcon.png";}
+
+            public String timeIcon() { return this + "/timeIcon.png";}
+
+
+            // 資源圖片
+
+            public String tree() { return this + "/Tree.png";}
+
+            public String specialTree() { return this + "/SpecialTree.png";}
         }
 
         public static class Building extends Flow {
@@ -170,12 +190,6 @@ public class Path {
             public String SteelMill() { return this + "/steelmill.png";};
 
             public String Barracks() { return this + "/barracks.png";};
-
-
-
-
-
-
 
             public String GasMill() { return this + "/gasmill.png";}
 
@@ -204,6 +218,10 @@ public class Path {
             public String foundation(){ return this + "/foundation.png";}
 
             public String road(){ return this + "/road1.png";}
+
+            public String area(){return this +"/area.jpg";}
+
+            public String darkBackground(){return this +"/darkbj4.png";}
         }
 
         public Actors actors() {
