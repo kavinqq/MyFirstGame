@@ -121,7 +121,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 村民出生位置現在都是測試
         for (int i = 0; i < 1; i++) {
-            citizens.add(new Citizen(200, 250 + (i * 100)));
+            citizens.add(new Citizen(906, 602 + (i * 100)));
         }
         //時間速度
         timeSpeed = 120000;
@@ -374,8 +374,15 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
         for(Citizen citizen : citizens.getAllCitizens()){
+//            if(citizen.getMoveStatus()==Animator.State.STAND){
+//                continue;
+//            }
             //如果人物走到與建築重疊了，將其拉回剛好接觸但不重疊的位置並且讓人物知道這個方向被擋住了，換個方向
             if(citizen.painter().overlap(base.painter())){
+                System.out.println("Overlap!!!");
+                if(base.isCovering(citizen.targetX(),citizen.targetY())){
+                    citizen.stop();
+                }
                 switch (citizen.getWalkingDir()){
                     case RIGHT:{
                         if(citizen.touchLeftOf(base)){
@@ -393,7 +400,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     }
                     case UP: {
                         if (citizen.touchBottomOf(base)) {
-                            citizen.translateY(citizen.painter().top() - base.painter().bottom());
+                            citizen.translateY(base.painter().bottom()-citizen.painter().top());
                             citizen.setBlockedDir(Direction.UP);
                         }
                         break;
@@ -409,41 +416,48 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             } else {
                 if (citizen.getBlockedDir() != null) {
-                    System.out.println("out");
-                    System.out.println(citizen.getBlockedDir());
+                    //System.out.println("blocked direction: " + citizen.getBlockedDir());
+//                    if(base.isCovering(citizen.targetX(),citizen.targetY())){
+//                        citizen.stop();
+//                        System.out.println("stop");
+//                        return;
+//                    }
                     switch (citizen.getBlockedDir()) {
                         case LEFT: {
                             if (!citizen.touchRightOf(base)) {
                                 citizen.setNoBlockedDir();
-                                citizen.setWalkingDir(Direction.LEFT);
+//                                citizen.setWalkingDir(Direction.LEFT);
                             }
                             break;
                         }
                         case RIGHT: {
                             if (!citizen.touchLeftOf(base)) {
                                 citizen.setNoBlockedDir();
-                                citizen.setWalkingDir(Direction.RIGHT);
+//                                citizen.setWalkingDir(Direction.RIGHT);
                             }
                             break;
                         }
                         case UP: {
                             if (!citizen.touchBottomOf(base)) {
                                 citizen.setNoBlockedDir();
-                                citizen.setWalkingDir(Direction.UP);
+//                                citizen.setWalkingDir(Direction.UP);
                             }
                             break;
                         }
                         case DOWN: {
                             if (!citizen.touchTopOf(base)) {
                                 citizen.setNoBlockedDir();
-                                citizen.setWalkingDir(Direction.DOWN);
+//                                citizen.setWalkingDir(Direction.DOWN);
                             }
                             break;
                         }
                     }
                 }
+                else {
+                    //System.out.println("No blocked direction");
+                }
             }
-
+            /*
             switch (citizen.getWalkingDir()){
                 case RIGHT:{
                    if(citizen.touchRight()){
@@ -476,6 +490,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     break;
                 }
             }
+             */
         }
         if(!city.isAlive()){
             StartScene startScene=new StartScene(); //還沒有結束畫面已此充當結束遊戲

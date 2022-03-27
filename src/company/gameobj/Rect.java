@@ -124,16 +124,16 @@ public class Rect {
 
 
     public final boolean overlap(Rect object) {
-        if (right() < object.left()) {
+        if (right() <= object.left()) {
             return false;
         }
-        if (left() > object.right()) {
+        if (left() >= object.right()) {
             return false;
         }
-        if (top() > object.bottom()) {
+        if (top() >= object.bottom()) {
             return false;
         }
-        if (bottom() < object.top()) {
+        if (bottom() <= object.top()) {
             return false;
         }
         return true;
