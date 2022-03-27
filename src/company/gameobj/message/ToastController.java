@@ -27,7 +27,6 @@ public class ToastController implements GameKernel.GameInterface {
 
     @Override
     public void paint(Graphics g){
-        System.out.println("Size"+toasts.size());
         for (int i = 0; i < toasts.size(); i++) {
             toasts.get(i).paint(g);
             if( toasts.get(i).isClear()){

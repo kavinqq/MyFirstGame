@@ -33,6 +33,8 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     private Rect greenRect;
     private Image greenImg; //不可建造紅背景
     private Image redImg; //可建造綠背景
+    private int pressCount;
+
     public BuildingOption() {
         buildingButtons= new ArrayList(BuildingTypeNum);//建立所有建築物按鈕
 
@@ -112,18 +114,20 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         }
         //最後畫
         if(currentButton!=null && currentButton.getId()-1>=0) {
-            if(currentButton.isDragging()){
+            if (currentButton.isDragging()) {
                 //畫拖曳中的按鈕
-                redRect=currentButton.painter();
-                g.drawImage(redImg,redRect.left(),redRect.top(),redRect.width(),redRect.height(),null);
+                redRect = currentButton.painter();
+                g.drawImage(redImg, redRect.left(), redRect.top(), redRect.width(), redRect.height(), null);
 
-                if(greenRect!=null && redRect.overlap(greenRect)){ //綠色區域有與紅色交疊才畫出
-                    g.drawImage(greenImg,greenRect.left(),greenRect.top(),greenRect.width(),greenRect.height(),null);
+                //綠色區域有與紅色交疊才畫出
+                if (greenRect != null && redRect.overlap(greenRect)) {
+                    g.drawImage(greenImg, greenRect.left(), greenRect.top(), greenRect.width(), greenRect.height(), null);
                 }
             }
             //畫被點擊的按鈕
-            buildingButtons.get(currentButton.getId()-1).paint(g);
+            buildingButtons.get(currentButton.getId() - 1).paint(g);
         }
+
     }
 
 
@@ -133,9 +137,10 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
             HintDialog.instance().setHintMessage("");
         }
 
+        //取得當前按鈕
         for (int i = 0; i < BuildingTypeNum; i++) {
             if(buildingButtons.get(i).isShuffle()){
-                currentButton=buildingButtons.get(i);//取得當前按鈕
+                currentButton=buildingButtons.get(i);
                 break;
             }
         }

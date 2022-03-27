@@ -3,9 +3,11 @@ package company.gameobj;
 
 import company.gameobj.buildings.Building;
 import company.gameobj.buildings.*;
+import company.gametest9th.utils.GameKernel;
 import oldMain.City;
 import oldMain.Resource;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,7 +19,7 @@ import static company.gameobj.BuildingController.BuildingType.*;
 /**
  * 城市中的建築運作系統
  */
-public class BuildingController {
+public class BuildingController implements GameKernel.GameInterface{
 
     /**
      * 飛機升級時間
@@ -61,6 +63,21 @@ public class BuildingController {
      */
     private ArrayList<Building> damageBuilding;
 
+    @Override
+    public void paint(Graphics g) {
+        for (BuildingType value:values()) {
+            for (int j = 0; j < value.list.size(); j++) {
+                value.list().get(j).paint(g);
+            }
+        }
+    }
+
+    @Override
+    public void update() {
+
+    }
+
+
     /**
      * 建築的種類和實體與儲存鏈表
      */
@@ -100,6 +117,7 @@ public class BuildingController {
         public Building instance() {
             return instance;
         }
+
         public LinkedList<BuildingNode> list() {
             return list;
         }
@@ -133,6 +151,10 @@ public class BuildingController {
          * 上次開起運作的時間
          */
         int updateStartTime;
+
+        public void paint(Graphics g){
+            building.paint(g);
+        }
 
         public BuildingNode(Building building) {
             this.building = building;
@@ -187,43 +209,43 @@ public class BuildingController {
      * @param type     建築種類
      * @param resource 城市資源
      */
-    public void build(BuildingType type, Resource resource) {
+    public void build(BuildingType type, Resource resource,int x,int y) {
         BuildingNode newBuilding;
         switch (type) {
             case ARSENAL: {
-                newBuilding = new BuildingController.BuildingNode(new Arsenal());
+                newBuilding = new BuildingController.BuildingNode(new Arsenal(x,y));
                 break;
             }
             case BARRACKS: {
-                newBuilding = new BuildingController.BuildingNode(new Barracks());
+                newBuilding = new BuildingController.BuildingNode(new Barracks(x,y));
                 break;
             }
             case HOUSE: {
-                newBuilding = new BuildingController.BuildingNode(new House());
+                newBuilding = new BuildingController.BuildingNode(new House(x,y));
                 break;
             }
             case LAB: {
-                newBuilding = new BuildingController.BuildingNode(new Lab());
+                newBuilding = new BuildingController.BuildingNode(new Lab(x,y));
                 break;
             }
             case SAW_MILL: {
-                newBuilding = new BuildingController.BuildingNode(new SawMill());
+                newBuilding = new BuildingController.BuildingNode(new SawMill(x,y));
                 break;
             }
             case STEEL_MILL: {
-                newBuilding = new BuildingController.BuildingNode(new SteelMill());
+                newBuilding = new BuildingController.BuildingNode(new SteelMill(x,y));
                 break;
             }
             case GAS_MILL: {
-                newBuilding = new BuildingController.BuildingNode(new GasMill());
+                newBuilding = new BuildingController.BuildingNode(new GasMill(x,y));
                 break;
             }
             case AIRPLANE_MILL: {
-                newBuilding = new BuildingController.BuildingNode(new AirplaneMill());
+                newBuilding = new BuildingController.BuildingNode(new AirplaneMill(x,y));
                 break;
             }
             default: {
-                newBuilding = new BuildingController.BuildingNode(new House());
+                newBuilding = new BuildingController.BuildingNode(new House(x,y));
             }
         }
         //消耗資源

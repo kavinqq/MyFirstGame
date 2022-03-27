@@ -12,20 +12,20 @@ import java.awt.event.MouseEvent;
 
 public class BuildingButton extends GameObject implements CommandSolver.MouseCommandListener {
 
+
     public interface ButtonEntered{
         public void action(BuildingButton bb);
     }
-    public interface ButtonReleased{
-        public void action(BuildingButton bb);
-    }
-    public interface ButtonDragging{
-        public void draw(BuildingButton bb);
+
+    public interface Draw{
+        public void buttonDragging(BuildingButton bb);
+        public void buttonReleased(BuildingButton bb);
     }
 
     public boolean isReleased;
     public ButtonEntered be;
-    public ButtonReleased br;
-    public ButtonDragging bd;
+    //public ButtonReleased br;
+    public Draw dbd;
 
     public BuildingType type;
     //可否建造，
@@ -43,7 +43,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     //按鈕id
     private final int id;
     //點擊次數
-    private int count;
+    private int countPressed;
     //先判斷滑鼠是否在按鈕上
     private boolean isMoveOnButton;
     //是否先 點擊為在同一個位置按下後放開
@@ -57,41 +57,32 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     //緩衝有些正常感應不夠靈敏
     private boolean isShuffle;
 
-    //半透明灰色圖
-    private Image grayOpacity;
+
+
     public BuildingButton(int x, int y,int id) {
         super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
         this.id=id;
-        grayOpacity=SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().whiteGrayOpacity());
         ox=x;
         oy=y;
         isMoveOnButton =false;
-        count=0;
+        countPressed=0;
         canBuild=true;//Fixme_待做
+    }
+
+    public int getCountPressed() {
+        return countPressed;
+    }
+
+    public void decCountPresed(){
+        countPressed--;
     }
 
     public boolean isPressed(){
         return isPressed;
     }
 
-
-    @Override
-    public void paintComponent(Graphics g) {
-        if(bd!=null){
-            bd.draw(this);
-        }
-        //畫出建造中建築物
-        g.drawImage(img,+painter().left(),painter().top(),painter().width(), painter().height(), null);
-     }
-
     public void setImg(Image img){
         this.img=img;
-    }
-
-
-    @Override
-    public void update() {
-
     }
 
     public int build(int x,int y){
@@ -107,6 +98,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     public boolean isMoveOnButton(){
         return isMoveOnButton;
     }
+
     public boolean isDragged(){
         return isDragged;
     }
@@ -132,6 +124,17 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     }
 
     @Override
+    public void paintComponent(Graphics g) {
+        //畫出建造中建築物
+        g.drawImage(img,+painter().left(),painter().top(),painter().width(), painter().height(), null);
+    }
+
+    @Override
+    public void update() {
+
+    }
+
+    @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
         //System.out.println(canDragged);
         if(state==null){
@@ -140,6 +143,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         switch (state){
             case MOVED: {
                 //若移開不能拖曳
+
                 isDragging = false;
                 //移動至上方顯示資訊
                 if (this.isEntered(e.getX(), e.getY())) {
@@ -154,7 +158,10 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 break;
             }
             case PRESSED:{
+                //isReleased=false;
                 if(isMoveOnButton){
+                    isReleased=false;
+                    countPressed++;
                     isMoveOnButton=false;
                     isPressed=true;
                 }else{
@@ -197,5 +204,4 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         previousX =e.getX();
         previousY =e.getY();
     }
-
 }

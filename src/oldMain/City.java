@@ -223,8 +223,8 @@ public class City implements GameKernel.GameInterface {
      *
      * @param type 要建造的建築種類
      */
-    public void build(BuildingType type) {
-        buildings.build(type, resource);
+    public void build(BuildingType type,int x, int y) {
+        buildings.build(type, resource,x,y);
     }
 
     /**
@@ -514,7 +514,7 @@ public class City implements GameKernel.GameInterface {
 
     @Override
     public void paint(Graphics g) {
-
+        buildings.paint(g);
     }
 
     @Override

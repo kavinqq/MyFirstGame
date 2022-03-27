@@ -60,7 +60,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     //測試: 建築物
     private Building building1;
     private Building building2;
-    private BuildingArea buildingArea;
+
+    //現在位置
+    private int currentX;
+    private int currentY;
+
 
     //前一個滑鼠狀態
     private CommandSolver.MouseState preState;
@@ -77,13 +81,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     City city; //城市
     BuildingType type;
-
+    private BuildingArea buildingArea;
+    private boolean preOnBuildArea;
     // 提示詞
     private String message;
-
-    //當前滑鼠位置
-    private int currentMouseX;
-    private int currentMouseY;
 
     private long startTime;
     private int nowTime;
@@ -207,6 +208,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 主堡
         base.paint(g);
 
+
+
         //建築物選單範圍測試
 
         g.drawRect(BUILDING_OPTION_X, BUILDING_OPTION_Y, BUILDING_OPTION_WIDTH, BUILDING_OPTION_HEIGHT);
@@ -238,11 +241,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 g.setColor(Color.black);
             }
         }
+        city.paint(g);
     }
 
     @Override
     public void update() {
-
         // 把 毫秒 換算回 秒 (1秒 = 10的9次方 * 1毫秒)
         nowTime = Math.round((System.nanoTime() - startTime) / 1000000000) ;
 
@@ -264,26 +267,40 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             //判斷是否進入可建造區
             for (int i = 0; i < buildingArea.lengthY(); i++) {
                 for (int j = 0; j < buildingArea.lengthX(); j++) {
-                    //取得現在選取的按鈕
+                    //取得現在選取的按鈕 及 建築類型
                     BuildingButton currentButton=buildingOption.getCurrentButton();
+                    type=BuildingType.getBuildingTypeByInt(currentButton.getId());
+
                     //將重疊區域回傳給buildingOption
                     Rect greenRect=currentButton.overlapObject(buildingArea.get(i,j));
                     buildingOption.setGreenRect(greenRect);
-                    //完全在建造區中 且放開
-                    if(buildingArea.get(i,j).isCover(buildingOption.getCurrentButton()) && currentButton.isReleased){
 
+                    //完全在建造區中 且放開
+
+//                    System.out.println("RELEASED:"+currentButton.isReleased);
+                    if(preOnBuildArea && currentButton.getCountPressed()>=0 && currentButton.isReleased){//
+                        for (int k = 0; k < currentButton.getCountPressed(); k++) {
+                            ToastController.instance().print("建造成功");
+
+                            city.build(type, currentX- BUILDING_WIDTH/2, currentY-BUILDING_HEIGHT/2);
+
+                            currentButton.decCountPresed();
+                        }
                     }
+                    //判斷可否蓋在建築區上
+                    preOnBuildArea=buildingArea.get(i,j).isCover(currentButton);
                 }
             }
         }
+
 
         //city.getBuildingsNum()
         //建造成功與否
         if (type != null) {
             type = BuildingType.getBuildingTypeByInt(buildingOption.getCurrentButton().getId());
             if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
-                city.build(type);
-                System.out.println(type.instance().getName() + "建造中");
+                //city.build(type,buildingOption.getCurrentButton().painter().left(),buildingOption.getCurrentButton().painter().top());
+                //System.out.println(type.instance().getName() + "建造中");
             } else {
                 if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
                     ToastController.instance().print("a建築物已蓋滿");
@@ -474,9 +491,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         return (e, state, trigTime) -> {
 
+
             if (state == null) {
                 return;
             }
+
+            currentX=e.getX();
+            currentY=e.getY();
+
             HintDialog.instance().mouseTrig(e,state,trigTime);
 
             //如果現在沒有框選
@@ -485,8 +507,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 buildingOption.mouseTrig(e, state, trigTime);
 
 
-            } else {
-                HintDialog.instance().setHintMessage("");
             }
 
             // 如果現在可以使用框選系統

@@ -20,12 +20,16 @@ class Toast implements GameKernel.GameInterface {//每一個toast為獨立 因�
     private int delaySecond;
     //是否可以清除自己
     private boolean isClear;
+    //沒有double 減少數度
+    private int countSpeed;
+    private int count;
 
     public Toast(String string){
         toastMessage = string;
-        delaySecond= Global.FRAME_LIMIT*1;
+        delaySecond= Global.FRAME_LIMIT*2;
         toastDelay = new Delay(delaySecond);
         isClear=false;
+        countSpeed=3;// 速度越大越慢
         toastX = Global.WINDOW_WIDTH/2;
         toastY = Global.WINDOW_HEIGHT / 2 + 200;
         toastDelay.loop();
@@ -41,13 +45,18 @@ class Toast implements GameKernel.GameInterface {//每一個toast為獨立 因�
 
     @Override
     public void paint(Graphics g){
+
         g.setColor(Color.darkGray);
         g.setFont(new Font("Dialog", Font.BOLD, 25));;
         if (toastDelay.count()) {
             isClear=true;
             toastY = Global.WINDOW_HEIGHT / 2 + 200;
         } else {
-            toastMove();
+            if(count%countSpeed==0){
+                count-=countSpeed;
+                toastMove();
+            }
+            count++;
             g.drawString(toastMessage, toastX, toastY);
         }
         g.setColor(Color.black);
