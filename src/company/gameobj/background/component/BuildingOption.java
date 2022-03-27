@@ -86,7 +86,7 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     }
 
 
-
+    //從外部控制綠色方形
     public void setGreenRect(Rect Rect) {
         if(Rect == null){
             return;

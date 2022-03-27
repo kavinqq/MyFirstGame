@@ -82,7 +82,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     City city; //城市
     BuildingType type;
     private BuildingArea buildingArea;
-    private boolean preOnBuildArea;
+    //private boolean preOnBuildArea[][];
+    boolean[][] isOnBuildArea;
     // 提示詞
     private String message;
 
@@ -108,10 +109,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
         //測試:建築物
-        building1 = new SawMill(500, 500);
-        building2 = new SteelMill(1200, 500);
         buildingArea=new BuildingArea();
 
+        isOnBuildArea = new boolean[buildingArea.lengthY()][buildingArea.lengthX()];
 
         //base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y / 2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
         base = new Base(SCREEN_X / 2, SCREEN_Y / 2);
@@ -278,17 +278,16 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     //完全在建造區中 且放開
 
 //                    System.out.println("RELEASED:"+currentButton.isReleased);
-                    if(preOnBuildArea && currentButton.getCountPressed()>=0 && currentButton.isReleased){//
+                    if(isOnBuildArea[i][j] && currentButton.isReleased){//
                         for (int k = 0; k < currentButton.getCountPressed(); k++) {
-                            ToastController.instance().print("建造成功");
-
+                            ToastController.instance().print(type.instance().getName()+"建造成功");
+                            //建造房子
                             city.build(type, currentX- BUILDING_WIDTH/2, currentY-BUILDING_HEIGHT/2);
 
-                            currentButton.decCountPresed();
                         }
                     }
                     //判斷可否蓋在建築區上
-                    preOnBuildArea=buildingArea.get(i,j).isCover(currentButton);
+                    isOnBuildArea[i][j]=buildingArea.get(i,j).isCover(currentButton);
                 }
             }
         }
@@ -317,8 +316,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
         //提示框
-        //hintDialog.setHintMessage(message);
-        //buildingOption.setCurrentIdByButton(0); //fix 取過後強制設成0
+
 
 
         if(delay.count()){
