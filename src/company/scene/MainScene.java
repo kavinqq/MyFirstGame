@@ -200,11 +200,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         g.setFont(new Font("TimesRoman", Font.BOLD, 30));
         g.drawString(outputTimeStr,ICON_START_X + ICON_GAP * 5 + 100,ICON_HEIGHT);
 
-
-        //測試 建築
-        building1.paint(g);
-        building2.paint(g);
-
+        
         // 主堡
         base.paint(g);
 
