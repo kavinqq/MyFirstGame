@@ -183,6 +183,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                         if(isEntered(e.getX(), e.getY())){
                             moveToCenterPoint(e.getX(),e.getY());
                         }
+                        isReleased=false;
                         isMoveOnButton=false;
                         isDragging =true;
                     }
