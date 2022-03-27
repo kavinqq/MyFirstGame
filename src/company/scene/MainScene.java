@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import static company.gameobj.BuildingController.*;
 
 import company.gameobj.Rect;
-import company.gameobj.background.HintDialog;
+import company.gameobj.message.HintDialog;
+import company.gameobj.message.ToastController;
 import company.gametest9th.utils.*;
 import company.gameobj.GameObject;
 import company.gameobj.background.Background;
@@ -79,7 +80,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     // 提示詞
     private String message;
-    private HintDialog hintDialog;
 
     //當前滑鼠位置
     private int currentMouseX;
@@ -89,11 +89,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private int nowTime;
     private String outputTimeStr;
 
+
     @Override
     public void sceneBegin() {
 
         startTime = System.nanoTime();// 進入場景之後紀錄開始時間
-
 
         city = new City();// city本體
         currentObjs = new ArrayList<>(); // 目前的框選單位列表
@@ -115,11 +115,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y / 2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
         base = new Base(SCREEN_X / 2, SCREEN_Y / 2);
 
-
-        //提示框:
-        hintDialog = HintDialog.instance();
-        message = "";
-
         // 測試: 預設有3個 村民
         citizens = new Citizens(3);
 
@@ -127,7 +122,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         for (int i = 0; i < 1; i++) {
             citizens.add(new Citizen(200, 250 + (i * 100)));
         }
-
         //時間速度
         timeSpeed = 120000;
         delay = new Delay(timeSpeed);
@@ -149,7 +143,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // UI 圖片
         resourceBarUI = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().resourceBarUI());
-
         // Icon圖片
         citizenNumIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().citizenNumIcon());
         soldierNumIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().soldierNumIcon());
@@ -157,13 +150,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         steelIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().steelIcon());
         gasIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().gasIcon());
         timeIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().timeIcon());
-
     }
 
     @Override
     public void sceneEnd() {
     }
-
 
     @Override
     public void paint(Graphics g) {
@@ -177,10 +168,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         buildingOption.paint(g);
         g.setColor(Color.red);
 
-
         //提示框
-        hintDialog.paint(g);
-
+        HintDialog.instance().paint(g);
+        ToastController.instance().paint(g);
 
         //資源欄 UI
         // (70,0,500,60) => 我只取這個UI來源的 中間黑色部分
@@ -248,7 +238,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 g.setColor(Color.black);
             }
         }
-
     }
 
     @Override
@@ -280,37 +269,35 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     //將重疊區域回傳給buildingOption
                     Rect greenRect=currentButton.overlapObject(buildingArea.get(i,j));
                     buildingOption.setGreenRect(greenRect);
-                    //完全在建造區中
-                    if(buildingArea.get(i,j).isCover(buildingOption.getCurrentButton())){
+                    //完全在建造區中 且放開
+                    if(buildingArea.get(i,j).isCover(buildingOption.getCurrentButton()) && currentButton.isReleased){
 
                     }
                 }
             }
         }
 
-
-
         //city.getBuildingsNum()
         //建造成功與否
         if (type != null) {
-//            type = BuildingType.getBuildingTypeByInt(buildingOption.getCurrentButton().getId());
-//            if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
-//                city.build(type);
-//                System.out.println(type.instance().getName() + "建造中");
-//            } else {
-//                if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
-//                    message = "a建築物已蓋滿";
-//                    System.out.println("你的城市 經過多年風風雨雨 鐵與血的灌溉\n如今 從杳無人煙之地 成了 充斥著滿滿的高樓大廈 人車馬龍的繁華之地\n你的城市 已沒有地方可以建造新的建築了");
-//                }
-//                if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
-//                    message = "b科技等級不足";
-//                    System.out.println("科技等級不足");
-//                }
-//                if (!type.instance().isEnoughBuild(city.getResource())) {
-//                    message = "c物資不足";
-//                    System.out.println("物資不足");
-//                }
-//            }
+            type = BuildingType.getBuildingTypeByInt(buildingOption.getCurrentButton().getId());
+            if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
+                city.build(type);
+                System.out.println(type.instance().getName() + "建造中");
+            } else {
+                if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
+                    ToastController.instance().print("a建築物已蓋滿");
+                    //System.out.println("你的城市 經過多年風風雨雨 鐵與血的灌溉\n如今 從杳無人煙之地 成了 充斥著滿滿的高樓大廈 人車馬龍的繁華之地\n你的城市 已沒有地方可以建造新的建築了");
+                }
+                if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
+                    ToastController.instance().print("b科技等級不足");
+                    //System.out.println("科技等級不足");
+                }
+                if (!type.instance().isEnoughBuild(city.getResource())) {
+                    ToastController.instance().print("c物資不足");
+                    //System.out.println("物資不足");
+                }
+            }
         }
         //提示框
         //hintDialog.setHintMessage(message);
@@ -475,10 +462,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             }
         }
-
-
-
-
         if(!city.isAlive()){
             StartScene startScene=new StartScene(); //還沒有結束畫面已此充當結束遊戲
             //SceneController.getInstance().change(startScene);
@@ -494,21 +477,16 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             if (state == null) {
                 return;
             }
+            HintDialog.instance().mouseTrig(e,state,trigTime);
 
             //如果現在沒有框選
             if (!canUseBoxSelection) {
-
                 // 選單控制
                 buildingOption.mouseTrig(e, state, trigTime);
 
 
-                //當前滑鼠位置
-                currentMouseX = e.getX();
-                currentMouseY = e.getY();
-
-                hintDialog.setCuurentXY(currentMouseX, currentMouseY);
             } else {
-                hintDialog.setHintMessage("");
+                HintDialog.instance().setHintMessage("");
             }
 
             // 如果現在可以使用框選系統

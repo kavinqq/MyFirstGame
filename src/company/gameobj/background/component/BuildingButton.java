@@ -143,7 +143,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 isDragging = false;
                 //移動至上方顯示資訊
                 if (this.isEntered(e.getX(), e.getY())) {
-                    System.out.println("MOVE");
                     isMoveOnButton = true;
                     isShuffle=true;
                 } else {
@@ -156,7 +155,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
             }
             case PRESSED:{
                 if(isMoveOnButton){
-                    System.out.println("PRESSED");
                     isMoveOnButton=false;
                     isPressed=true;
                 }else{
@@ -169,13 +167,11 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 //要先點擊後拖曳，確保只能拖移一個物件
                 if(isShuffle){ //應該用isPressed但會卡
                     if(isDragging){
-                        System.out.println("Dragging");
                         //後面幾偵拖曳
                         if(isEntered(previousX,previousY)){
                             moveToCenterPoint(e.getX(),e.getY());
                         }
                     }else{
-                        System.out.println("firstDragging");
                         //第一偵拖曳
                         if(isEntered(e.getX(), e.getY())){
                             moveToCenterPoint(e.getX(),e.getY());

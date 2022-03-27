@@ -1,4 +1,4 @@
-package company.gameobj.background;
+package company.gameobj.message;
 
 
 import company.gametest9th.utils.CommandSolver;
@@ -8,24 +8,30 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class HintDialog implements GameKernel.GameInterface, CommandSolver.MouseCommandListener {
+
+
     //提示
     private String message;
     //x座標
-    private int x;
+    private int mouseX;
     //y座標
-    private int y;
+    private int mouseY;
+    //toast的字串
+    private String toastString;
+    //計算外面傳入toast的次數
 
-    private static HintDialog hintDoalog;
+    //在滑鼠碰到處跳出提示
+    private static HintDialog hintDialog;
 
-    public static HintDialog instance(){
-        if(hintDoalog==null){
-            hintDoalog=new HintDialog();
+    public static HintDialog instance() {
+        if (hintDialog == null) {
+            hintDialog = new HintDialog();
         }
-        return hintDoalog;
+        return hintDialog;
     }
 
-    private HintDialog(){
-        message="";
+    private HintDialog() {
+        message = "";
     }
 
     //外面傳入提示
@@ -33,22 +39,17 @@ public class HintDialog implements GameKernel.GameInterface, CommandSolver.Mouse
         message = hintMessage;
     }
 
-    //外面傳入滑鼠座標
-    public void setCuurentXY(int cuurentX,int currentY){
-        this.x=cuurentX;
-        this.y=currentY;
-    }
-
 
     @Override
     public void paint(Graphics g) {
+        //畫滑鼠移到的字
         g.setColor(Color.white);
-        Font font = new Font("Dialog", Font.BOLD, 25);
-        g.setFont(font);
-        if(message==null){
-            message="";
+        g.setFont(new Font("Dialog", Font.BOLD, 25));
+        if (message == null) {
+            message = "";
         }
-        g.drawString(message,x,y);
+        g.drawString(message, mouseX, mouseY);
+        //畫toast;
         g.setColor(Color.black);
     }
 
@@ -58,9 +59,9 @@ public class HintDialog implements GameKernel.GameInterface, CommandSolver.Mouse
     }
 
 
-    //好像不用這個
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-
+        mouseX = e.getX();
+        mouseY = e.getY();
     }
 }

@@ -2,7 +2,7 @@ package company.gameobj.background.component;
 
 import company.controllers.SceneController;
 import company.gameobj.Rect;
-import company.gameobj.background.HintDialog;
+import company.gameobj.message.HintDialog;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
 import company.gametest9th.utils.Path;
@@ -134,12 +134,12 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         }
 
         for (int i = 0; i < BuildingTypeNum; i++) {
-            if(buildingButtons.get(i).isPressed()){
+            if(buildingButtons.get(i).isShuffle()){
                 currentButton=buildingButtons.get(i);//取得當前按鈕
                 break;
             }
-
         }
+
         //印出建築物提示文字
         for (int i = 0; i < BuildingTypeNum; i++) {
             if(buildingButtons.get(i).isMoveOnButton() && !buildingButtons.get(i).isDragged()) {
