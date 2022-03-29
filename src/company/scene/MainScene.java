@@ -93,7 +93,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     // 資源
     private List<GameObject> resources;
-    private Delay collectionDelay;
+    private Delay resourceRemoveDelay;
 
     @Override
     public void sceneBegin() {
@@ -159,7 +159,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         resources.add(new Steel(1200, 400));
 
         // 採資源耗時1秒
-        collectionDelay = new Delay(60);
+        resourceRemoveDelay = new Delay(60);
     }
 
     @Override
@@ -351,7 +351,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
-        // 如果 現在有操控單位 單選 && 有設定要前往的目標
+        // 如果 現在有操控單位(單選) && 有設定要前往的目標
         if (currentObj != null && hasSetTarget) {
 
             if (currentObj instanceof Human) {
@@ -499,33 +499,46 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             } else {
                 // 遍尋一次 資源List
-                for (GameObject gameObject : resources) {
+                for (int i = 0; i < resources.size(); i++) {
+
+                    GameObject resource = resources.get(i);
 
                     //如果和資源碰撞 && 我的目的地就是在資源裡面
-                    if (citizen.isCollision(gameObject) && citizen.isTargetInObj(gameObject)) {
+                    if (citizen.isCollision(resource) && citizen.isTargetInObj(resource) && citizen.getVisible()) {
 
                         // 把資源的位置記起來
-                        citizen.setResourceTargetX(gameObject.painter().centerX());
-                        citizen.setResourceTargetY(gameObject.painter().centerY());
+                        citizen.setResourceTargetX(resource.painter().centerX());
+                        citizen.setResourceTargetY(resource.painter().centerY());
 
                         //開始採集
                         int resourceNum = 0;
                         Citizen.Resource resourceType = null;
 
                         // 幫村民判斷 採了什麼資源 && 一次能採的量
-                        if(gameObject instanceof Tree){
-                            resourceNum = ((Tree)gameObject).eachTimeGet();
+                        if(resource instanceof Tree){
+
+                            resourceNum = ((Tree)resource).eachTimeGet();
                             resourceType = Citizen.Resource.WOOD;
+
+                            // 如果資源採乾了 移除他
+                            if(resource != null && ((Tree)resource).getTotalNum() <= 0){
+                                resources.remove(i);
+                            }
                         }
 
                         // 幫村民判斷 採了什麼資源 && 一次能採的量
-                        if(gameObject instanceof Steel){
-                            resourceNum = ((Steel)gameObject).eachTimeGet();
+                        if(resource instanceof Steel){
+                            resourceNum = ((Steel)resource).eachTimeGet();
                             resourceType = Citizen.Resource.STEEL;
+
+                            // 如果資源採乾了 移除他
+                            if(resource != null && ((Steel)resource).getTotalNum() <= 0){
+                                resources.remove(i);
+                            }
                         }
 
                         // 村民開始採集
-                        citizen.collecting(gameObject, base.painter().left() - 30, base.painter().top() + base.painter().height() / 2, resourceNum, resourceType);
+                        citizen.collecting(resource, base.painter().left() - 30, base.painter().top() + base.painter().height() / 2, resourceNum, resourceType);
 
                     }
                 }
@@ -566,6 +579,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
+        resourceRemoveDelay.count();
 
         if (!city.isAlive()) {
             StartScene startScene = new StartScene(); //還沒有結束畫面已此充當結束遊戲

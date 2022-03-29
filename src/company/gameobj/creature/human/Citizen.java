@@ -50,6 +50,9 @@ public class Citizen extends Human {   //市民
     private int baseX;
     private int baseY;
 
+    private static int count;
+    public int myNum;
+
 
     /**
      * 建構子 預設市民數值為1 , 不能打架 , 初始設定為閒人
@@ -81,6 +84,9 @@ public class Citizen extends Human {   //市民
         // 上一個採集點
         resourceTargetX = 0;
         resourceTargetY = 0;
+
+        count++;
+        myNum = count;
     }
 
     /**
@@ -140,9 +146,13 @@ public class Citizen extends Human {   //市民
     @Override
     public void update() {
 
+        // 隱形時間到
         if(visibleDelay.count()){
+
+            // 現形
             setVisible(true);
 
+            // 回去放資源
             setTarget(baseX, baseY);
         }
 
@@ -201,6 +211,7 @@ public class Citizen extends Human {   //市民
         // 消失ing
         setVisible(false);
 
+        // 這一次的採集種類 && 量
         this.resourceNum = resourceNum;
         this.resourceType = resourceType;
 
