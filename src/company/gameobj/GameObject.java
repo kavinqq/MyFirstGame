@@ -8,6 +8,8 @@ import java.util.Arrays;
 
 public abstract class GameObject implements GameKernel.GameInterface {
 
+    private boolean isVisible;
+
     public GameObject(int x, int y, int width, int height) {
         detectRange = new Rect(x, y, width, height);
         painter = new Rect(x, y, width, height);
@@ -191,5 +193,13 @@ public abstract class GameObject implements GameKernel.GameInterface {
     //檢查是否在垂直方向上有重疊
     private boolean isVerticalParallel(GameObject gameObject){
         return (this.painter().left()<gameObject.painter().right() && this.painter().right()>gameObject.painter().left());
+    }
+
+    public void setVisible(boolean visible){
+        this.isVisible = visible;
+    }
+
+    public boolean getVisible(){
+        return isVisible;
     }
 }

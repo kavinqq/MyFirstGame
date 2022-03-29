@@ -4,6 +4,7 @@ import java.util.*;
 
 import company.gameobj.buildings.Building;
 import company.gameobj.BuildingController.BuildingNode;
+
 import static company.gameobj.BuildingController.BuildingType.*;
 import static company.gameobj.BuildingController.*;
 
@@ -115,7 +116,7 @@ public class OldMain {
                             BuildingType type = BuildingType.getBuildingTypeByInt(choose);
                             //建造成功與否
                             if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
-                               // city.build(type);
+                                // city.build(type);
                                 System.out.println(type.instance().getName() + "建造中");
                             } else {
                                 if (city.getBuildingNum() == city.MAX_CAN_BUILD) {

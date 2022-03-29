@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import static company.gameobj.BuildingController.*;
 
 import company.gameobj.Rect;
+import company.gameobj.Steel;
+import company.gameobj.Tree;
 import company.gameobj.message.HintDialog;
 import company.gameobj.message.ToastController;
 import company.gametest9th.utils.*;
@@ -17,13 +19,12 @@ import company.gameobj.GameObject;
 import company.gameobj.background.Background;
 import company.gameobj.background.component.*;
 import company.gameobj.buildings.Building;
-import company.gameobj.buildings.SawMill;
-import company.gameobj.buildings.SteelMill;
 import company.gameobj.creature.human.Citizen;
 import company.gameobj.buildings.Base;
 import company.gameobj.creature.human.Citizens;
 import company.gameobj.creature.human.Human;
 import oldMain.City;
+import oldMain.OldMain;
 
 import java.awt.*;
 
@@ -45,14 +46,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private Image gasIcon; //   瓦斯數量Icon
     private Image timeIcon; //  時間Icon
 
-    private List<Human> currentObjs; // 測試: 目前的框選單位列表[設定: 只有人類才能被框選 建築物要用點的]
-
     private Base base;  // 主堡
     private Background background; // 背景
     private BuildingOption buildingOption; // 建築物選單
 
-    private Citizen currentObj; // 當前操控的物件
-    private Citizens citizens;// 所有村民類別
+    private GameObject currentObj; // 當前操控的物件
+    private List<Human> controlHumans;
 
     private BoxSelection boxSelection; // 框選模式
     private boolean canUseBoxSelection; // 是否能用框選模式
@@ -87,10 +86,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     // 提示詞
     private String message;
 
+    // 時間
     private long startTime;
     private int nowTime;
     private String outputTimeStr;
 
+    // 資源
+    private List<GameObject> resources;
+    private Delay collectionDelay;
 
     @Override
     public void sceneBegin() {
@@ -98,7 +101,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         startTime = System.nanoTime();// 進入場景之後紀錄開始時間
 
         city = new City();// city本體
-        currentObjs = new ArrayList<>(); // 目前的框選單位列表
+
+        currentObj = null;// 當前操控的物件(單選)
+        controlHumans = new ArrayList<Human>();
 
         //背景
         background = new Background(0, 0, SCREEN_X, SCREEN_Y);
@@ -109,26 +114,21 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
         //測試:建築物
-        buildingArea=new BuildingArea();
+        buildingArea = new BuildingArea();
 
         isOnBuildArea = new boolean[buildingArea.lengthY()][buildingArea.lengthX()];
 
-        //base = new Base(SCREEN_X / 2 - (BUILDING_WIDTH + 120), SCREEN_Y / 2 - (BUILDING_HEIGHT), BUILDING_WIDTH + 100, BUILDING_HEIGHT + 100);
-        base = new Base(SCREEN_X / 2, SCREEN_Y / 2);
+        base = new Base(SCREEN_X / 2 - Base.BASE_WIDTH, SCREEN_Y / 2 - Base.BASE_HEIGHT);
 
-        // 測試: 預設有3個 村民
-        citizens = new Citizens(3);
 
-        // 村民出生位置現在都是測試
-        for (int i = 0; i < 1; i++) {
-            citizens.add(new Citizen(906, 602 + (i * 100)));
-        }
+        // 測試: 預設有 ? 個 村民
+        city.setCitizens(new Citizens(4));
+
+
         //時間速度
-        timeSpeed = 120000;
+        timeSpeed = 120000; // 暫時訂一個超長的 => 不然很快就往生 麻煩
         delay = new Delay(timeSpeed);
         delay.loop();
-        // 當前操控的物件
-        currentObj = null;
 
         // 框選模式
         boxSelection = new BoxSelection();
@@ -151,6 +151,15 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         steelIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().steelIcon());
         gasIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().gasIcon());
         timeIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().timeIcon());
+
+
+        // 資源
+        resources = new ArrayList<>();
+        resources.add(new Tree(350, 400));
+        resources.add(new Steel(1200, 400));
+
+        // 採資源耗時1秒
+        collectionDelay = new Delay(60);
     }
 
     @Override
@@ -198,12 +207,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         g.drawImage(timeIcon, ICON_START_X + ICON_GAP * 5, ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, null);
         g.setColor(Color.white);
         g.setFont(new Font("TimesRoman", Font.BOLD, 30));
-        g.drawString(outputTimeStr,ICON_START_X + ICON_GAP * 5 + 100,ICON_HEIGHT);
+        g.drawString(outputTimeStr, ICON_START_X + ICON_GAP * 5 + 100, ICON_HEIGHT);
 
 
         // 主堡
         base.paint(g);
-
 
 
         //建築物選單範圍測試
@@ -215,44 +223,51 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
         // 畫出每一個村民
-        citizens.paintAll(g);
+        city.getCitizens().paintAll(g);
 
         if (canUseBoxSelection) {
             boxSelection.paint(g);
         }
 
-
         // 用血量條來判斷操控哪個人物
-        if (currentObj != null) {
-            g.setColor(Color.GREEN);
+        if (currentObj != null && currentObj.getVisible()) {
+            g.setColor(Color.RED);
             g.fillRect(currentObj.painter().left(), currentObj.painter().bottom() + 3, currentObj.painter().width(), 10);
             g.setColor(Color.black);
         }
 
         // 如果現在框選的遊戲物件列表有東西 而且 也沒有單一操控某個物件時
-        if (!currentObjs.isEmpty()) {
-            for (GameObject gameObject : currentObjs) {
-                g.setColor(Color.GREEN);
-                g.fillRect(gameObject.painter().left(), gameObject.painter().bottom() + 3, gameObject.painter().width(), 10);
-                g.setColor(Color.black);
+        if (!controlHumans.isEmpty()) {
+            for (Human human : controlHumans) {
+
+                // 如果該物件現在能看的到 才畫他
+                if (human.getVisible()) {
+                    g.setColor(Color.GREEN);
+                    g.fillRect(human.painter().left(), human.painter().bottom() + 3, human.painter().width(), 10);
+                    g.setColor(Color.black);
+                }
             }
         }
+
+        // 畫出可採集的資源
+        for (GameObject resource : resources) {
+            resource.paint(g);
+        }
+
         city.paint(g);
     }
 
     @Override
     public void update() {
         // 把 毫秒 換算回 秒 (1秒 = 10的9次方 * 1毫秒)
-        nowTime = Math.round((System.nanoTime() - startTime) / 1000000000) ;
+        nowTime = Math.round((System.nanoTime() - startTime) / 1000000000);
 
         // 如果 < 60 => 只顯示秒  否則 顯示分&&秒 (應該不可能有人玩一小時吧)
-        if(nowTime < 60){
+        if (nowTime < 60) {
             outputTimeStr = nowTime + " 秒";
         } else {
             outputTimeStr = nowTime / 60 + " 分 " + nowTime % 60 + " 秒";
         }
-
-
 
 
         //建築物相關測試
@@ -264,26 +279,26 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             for (int i = 0; i < buildingArea.lengthY(); i++) {
                 for (int j = 0; j < buildingArea.lengthX(); j++) {
                     //取得現在選取的按鈕 及 建築類型
-                    BuildingButton currentButton=buildingOption.getCurrentButton();
-                    type=BuildingType.getBuildingTypeByInt(currentButton.getId());
+                    BuildingButton currentButton = buildingOption.getCurrentButton();
+                    type = BuildingType.getBuildingTypeByInt(currentButton.getId());
 
                     //將重疊區域回傳給buildingOption
-                    Rect greenRect=currentButton.overlapObject(buildingArea.get(i,j));
+                    Rect greenRect = currentButton.overlapObject(buildingArea.get(i, j));
                     buildingOption.setGreenRect(greenRect);
 
                     //完全在建造區中 且放開
 
 //                    System.out.println("RELEASED:"+currentButton.isReleased);
-                    if(isOnBuildArea[i][j] && currentButton.isReleased){//
+                    if (isOnBuildArea[i][j] && currentButton.isReleased) {//
                         for (int k = 0; k < currentButton.getCountPressed(); k++) {
-                            ToastController.instance().print(type.instance().getName()+"建造成功");
+                            ToastController.instance().print(type.instance().getName() + "建造成功");
                             //建造房子
-                            city.build(type, currentX- BUILDING_WIDTH/2, currentY-BUILDING_HEIGHT/2);
+                            city.build(type, currentX - BUILDING_WIDTH / 2, currentY - BUILDING_HEIGHT / 2);
 
                         }
                     }
                     //判斷可否蓋在建築區上
-                    isOnBuildArea[i][j]=buildingArea.get(i,j).isCover(currentButton);
+                    isOnBuildArea[i][j] = buildingArea.get(i, j).isCover(currentButton);
                 }
             }
         }
@@ -311,11 +326,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             }
         }
-        //提示框
 
-
-
-        if(delay.count()){
+        // 時間自然流動
+        if (delay.count()) {
             //city.showInfo();
             thisRoundTimePass = 1;
             city.doCityWorkAndTimePass(thisRoundTimePass);
@@ -328,27 +341,31 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             // 更新box的狀態
             boxSelection.update();
 
-            // 把框到的市民 加入到 tmpCurrentObjs
-            List<Human> tmpCurrentObjs = citizens.getBoxCitizens(boxSelection.getBox());
+            // 把框到的市民 加入到 tmpControlHumans
+            List<Human> tmpControlHumans = city.getCitizens().getBoxCitizens(boxSelection.getBox());
 
-            if (!tmpCurrentObjs.isEmpty()) {
-                currentObjs = new ArrayList<>(tmpCurrentObjs);
+            if (!tmpControlHumans.isEmpty()) {
+                controlHumans = new ArrayList<>(tmpControlHumans);
             }
         }
 
+
         // 如果 現在有操控單位 單選 && 有設定要前往的目標
         if (currentObj != null && hasSetTarget) {
-            // 走過去
-            currentObj.setTarget(mouseX, mouseY);
+
+            if (currentObj instanceof Human) {
+                ((Human) currentObj).setTarget(mouseX, mouseY);
+            }
 
             // reset boolean
             hasSetTarget = false;
         }
 
         // 如果存有當前框選的所有物件的陣列 有東西
-        if (!currentObjs.isEmpty() && hasSetTarget) {
+        if (!controlHumans.isEmpty() && hasSetTarget) {
             int count = 0;
-            for (Human human : currentObjs) {
+
+            for (Human human : controlHumans) {
                 if (count != 0) {
                     if (Global.random(0, 2) == 1) {
                         mouseX += 74;
@@ -357,6 +374,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     }
                 }
                 human.setTarget(mouseX, mouseY);
+
                 count++;
             }
 
@@ -366,23 +384,39 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
         // 更新所有村民狀態
-        citizens.updateAll();
+        city.getCitizens().updateAll();
 
+        // 走路狀態
+        for (Citizen citizen : city.getCitizens().getAllCitizens()) {
 
-        for(Citizen citizen : citizens.getAllCitizens()){
-//            if(citizen.getMoveStatus()==Animator.State.STAND){
-//                continue;
-//            }
             //如果人物走到與建築重疊了，將其拉回剛好接觸但不重疊的位置並且讓人物知道這個方向被擋住了，換個方向
-            if(citizen.painter().overlap(base.painter())){
-                System.out.println("Overlap!!!");
-                if(base.isCovering(citizen.targetX(),citizen.targetY())){
+            if (citizen.painter().overlap(base.painter())) {
+
+                // 如果村民 是 採集完成的狀態
+                if (citizen.getResourceNum() != 0) {
+
+                    // 呼叫city的方法去實際放資源
+                    city.gainResource(citizen.getResourceNum(), citizen.getResourceType());
+
+                    // reset該位村民的 身上資源狀態
+                    citizen.setResourceNum();
+                    citizen.setResourceType();
+
+                    // 返回採集點
+                    citizen.setTarget(citizen.getResourceTargetX(), citizen.getResourceTargetY());
+
+                    continue;
+                }
+
+                if (base.isCovering(citizen.targetX(), citizen.targetY())) {
                     citizen.stop();
                 }
-                switch (citizen.getWalkingDir()){
-                    case RIGHT:{
-                        if(citizen.touchLeftOf(base)){
-                            citizen.translateX(-1*(citizen.painter().right()-base.painter().left()));
+
+                switch (citizen.getWalkingDir()) {
+
+                    case RIGHT: {
+                        if (citizen.touchLeftOf(base)) {
+                            citizen.translateX(-1 * (citizen.painter().right() - base.painter().left()));
                             citizen.setBlockedDir(Direction.RIGHT);
                         }
                         break;
@@ -395,8 +429,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         break;
                     }
                     case UP: {
+
                         if (citizen.touchBottomOf(base)) {
-                            citizen.translateY(base.painter().bottom()-citizen.painter().top());
+                            citizen.translateY(base.painter().bottom() - citizen.painter().top());
                             citizen.setBlockedDir(Direction.UP);
                         }
                         break;
@@ -409,87 +444,92 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         break;
                     }
                 }
-
+            } else if (citizen.getBlockedDir() != null) {
+                switch (citizen.getBlockedDir()) {
+                    case LEFT: {
+                        if (!citizen.touchRightOf(base)) {
+                            citizen.setNoBlockedDir();
+                        }
+                        break;
+                    }
+                    case RIGHT: {
+                        if (!citizen.touchLeftOf(base)) {
+                            citizen.setNoBlockedDir();
+                        }
+                        break;
+                    }
+                    case UP: {
+                        if (!citizen.touchBottomOf(base)) {
+                            citizen.setNoBlockedDir();
+                        }
+                        break;
+                    }
+                    case DOWN: {
+                        if (!citizen.touchTopOf(base)) {
+                            citizen.setNoBlockedDir();
+                        }
+                        break;
+                    }
+                }
             } else {
-                if (citizen.getBlockedDir() != null) {
-                    //System.out.println("blocked direction: " + citizen.getBlockedDir());
-//                    if(base.isCovering(citizen.targetX(),citizen.targetY())){
-//                        citizen.stop();
-//                        System.out.println("stop");
-//                        return;
-//                    }
-                    switch (citizen.getBlockedDir()) {
-                        case LEFT: {
-                            if (!citizen.touchRightOf(base)) {
-                                citizen.setNoBlockedDir();
-//                                citizen.setWalkingDir(Direction.LEFT);
-                            }
-                            break;
-                        }
-                        case RIGHT: {
-                            if (!citizen.touchLeftOf(base)) {
-                                citizen.setNoBlockedDir();
-//                                citizen.setWalkingDir(Direction.RIGHT);
-                            }
-                            break;
-                        }
-                        case UP: {
-                            if (!citizen.touchBottomOf(base)) {
-                                citizen.setNoBlockedDir();
-//                                citizen.setWalkingDir(Direction.UP);
-                            }
-                            break;
-                        }
-                        case DOWN: {
-                            if (!citizen.touchTopOf(base)) {
-                                citizen.setNoBlockedDir();
-//                                citizen.setWalkingDir(Direction.DOWN);
-                            }
-                            break;
+
+                // 遍尋一次 資源List
+                for (GameObject gameObject : resources) {
+
+                    //如果和資源碰撞 && 我的目的地就是在資源裡面
+                    if (citizen.isCollision(gameObject) && citizen.isTargetInObj(gameObject)) {
+
+                        // 把資源的位置記起來
+                        citizen.setResourceTargetX(gameObject.painter().centerX());
+                        citizen.setResourceTargetY(gameObject.painter().centerY());
+
+                        // 如果村民現在看的到的話 => 開始採集
+                        if (citizen.getVisible()) {
+                            System.out.println("I am citizen num: " + citizen.myNum + "  I am working now!!");
+                            citizen.collecting(gameObject, base.painter().left() - 30, base.painter().top() + base.painter().height() / 2) ;
                         }
                     }
                 }
-                else {
-                    //System.out.println("No blocked direction");
-                }
             }
-            /*
-            switch (citizen.getWalkingDir()){
-                case RIGHT:{
-                   if(citizen.touchRight()){
-                       citizen.translateX(-1*(citizen.painter().right()-SCREEN_X));
-                       citizen.stop();
-                   }
+
+            // 下面的switch 是碰到邊界的狀況
+            switch (citizen.getWalkingDir()) {
+                case RIGHT: {
+                    if (citizen.touchRight()) {
+                        citizen.translateX(-1 * (citizen.painter().right() - SCREEN_X));
+                        citizen.stop();
+                    }
                     break;
                 }
-                case LEFT:{
-                    if(citizen.touchLeft()){
+                case LEFT: {
+                    if (citizen.touchLeft()) {
                         citizen.translateX(-1 * citizen.painter().left());
                         citizen.stop();
                     }
                     break;
                 }
 
-                case UP:{
-                    if(citizen.touchTop()){
+                case UP: {
+                    if (citizen.touchTop()) {
                         citizen.translateY(-1 * citizen.painter().top());
                         citizen.stop();
                     }
                     break;
                 }
 
-                case DOWN:{
-                    if(citizen.touchBottom()){
-                        citizen.translateY(-1*(citizen.painter().bottom()- SCREEN_Y));
+                case DOWN: {
+                    if (citizen.touchBottom()) {
+                        citizen.translateY(-1 * (citizen.painter().bottom() - SCREEN_Y));
                         citizen.stop();
                     }
                     break;
                 }
             }
-             */
         }
-        if(!city.isAlive()){
-            StartScene startScene=new StartScene(); //還沒有結束畫面已此充當結束遊戲
+
+
+        if (!city.isAlive()) {
+            StartScene startScene = new StartScene(); //還沒有結束畫面已此充當結束遊戲
             //SceneController.getInstance().change(startScene);
         }
     }
@@ -500,15 +540,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         return (e, state, trigTime) -> {
 
-
             if (state == null) {
                 return;
             }
 
-            currentX=e.getX();
-            currentY=e.getY();
+            currentX = e.getX();
+            currentY = e.getY();
 
-            HintDialog.instance().mouseTrig(e,state,trigTime);
+            HintDialog.instance().mouseTrig(e, state, trigTime);
 
             //如果現在沒有框選
             if (!canUseBoxSelection) {
@@ -551,10 +590,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 //                    System.out.println("PRESSED "+trigTime);
 
 
-
-                    // 把座標丟給citizens 讓他 判斷有沒有村民 符合條件
+                    // 把座標丟給citizens 讓他 判斷有沒有村民 符合條件 (BUTTON1 : 左鍵)
                     if (e.getButton() == MouseEvent.BUTTON1) {
-                        currentObj = citizens.getCitizen(e.getX(), e.getY());
+
+                        // 單選 就不能 框選 (擇一)
+                        controlHumans.clear();
+
+                        // 現在控製的Obj 換成這個 (現在先檢查所有村民而已)
+                        currentObj = city.getCitizens().getCitizen(e.getX(), e.getY());
                     }
 
 
@@ -565,7 +608,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                     // 如我現在有能操控的單位 (單選 或 框選)
                     // 按下右鍵 => 設定要前往的(x,y)
-                    if ((currentObj != null || !currentObjs.isEmpty()) && e.getButton() == MouseEvent.BUTTON3) {
+                    if ((currentObj != null || !controlHumans.isEmpty()) && e.getButton() == MouseEvent.BUTTON3) {
                         mouseX = e.getX();
                         mouseY = e.getY();
                         hasSetTarget = true;
@@ -578,7 +621,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 //                    System.out.println("CLICKED "+trigTime);
 
-                    if(e.getButton() == MouseEvent.BUTTON2) {
+                    if (e.getButton() == MouseEvent.BUTTON2) {
                         System.out.println("X: " + e.getX());
                         System.out.println("Y: " + e.getY());
                     }
@@ -598,7 +641,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
 
                 case MOVED: {
-//System.out.println("MOVED");
+
+
                 }
 
             }
@@ -618,7 +662,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         if (commandCode == ESC) {
             hasSetTarget = false;
             currentObj = null;
-            currentObjs.clear();
+            controlHumans.clear();
         }
     }
 
@@ -631,12 +675,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     public void keyTyped(char c, long trigTime) {
         // 按下s的同時 所有操控單位停止移動
         if (c == 's' || c == 'S') {
-            if (currentObj != null) {
-                currentObj.stop();
+            if (currentObj != null && currentObj instanceof Human) {
+                ((Human) currentObj).stop();
             }
 
-            if (currentObjs != null) {
-                for (Human human : currentObjs) {
+            if (controlHumans != null) {
+                for (Human human : controlHumans) {
                     human.stop();
                 }
             }

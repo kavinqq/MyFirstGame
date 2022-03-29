@@ -82,7 +82,7 @@ public abstract class Human extends Creature {
 
         //沒有任何方向是被擋住的時候
         if(this.getBlockedDir()==null){
-            System.out.println("Walk: no blocked direction");
+            //System.out.println("Walk: no blocked direction");
 
             if (targetX() == painter().centerX()){
                 this.setWalkingDir((targetY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP);
@@ -195,7 +195,7 @@ public abstract class Human extends Creature {
                 }
             }
 
-            System.out.println("-------------------------");
+            //System.out.println("-------------------------");
         }
         /*
         //如果有被擋住某個方向的時候

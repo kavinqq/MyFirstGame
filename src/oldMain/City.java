@@ -1,12 +1,15 @@
 package oldMain;
 
+import company.Global;
+import static company.Global.*;
+
 import company.gameobj.BuildingController;
 import company.gameobj.buildings.Building;
-import company.gametest9th.utils.GameKernel;
-
 import company.gameobj.creature.human.*;
 import company.gameobj.creature.enemy.zombies.*;
 import company.gameobj.BuildingController.*;
+
+import company.gametest9th.utils.GameKernel;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -41,7 +44,7 @@ public class City implements GameKernel.GameInterface {
      * 遊戲的人類單位 1.士兵 2.市民
      * 建立一Human的陣列 以存放人類
      */
-    public final Citizens citizens;
+    private Citizens citizens;
     /**
      * 城市的軍隊
      */
@@ -62,7 +65,7 @@ public class City implements GameKernel.GameInterface {
         resource = new Resource();
         buildings = new BuildingController();
         zombies = new ZombieKingdom();
-        citizens = new Citizens(DEFAULT_CITIZEN);
+        citizens = null;
         military = new Military();
     }
 
@@ -113,6 +116,22 @@ public class City implements GameKernel.GameInterface {
     public void gainResource() {
         resource.addWood(buildings.getWoodSpeed() * citizens.getNumOfLoggingCitizens());
         resource.addSteel(buildings.getSteelSpeed() * citizens.getNumOfMiningCitizens());
+        resource.addGas(buildings.getGasProduceNum());
+    }
+
+    /**
+     * 獲得資源的 視覺化版本
+     */
+    public void gainResource(int num, Citizen.Resource resourceType) {
+
+        if(resourceType == Citizen.Resource.WOOD){
+            resource.addWood(num);
+        } else if(resourceType == Citizen.Resource.STEEL){
+            resource.addSteel(num);
+        }
+
+
+        // 瓦斯還沒有寫// TODO: 2022/3/29 瓦斯添加的流程
         resource.addGas(buildings.getGasProduceNum());
     }
 
@@ -515,10 +534,29 @@ public class City implements GameKernel.GameInterface {
     @Override
     public void paint(Graphics g) {
         buildings.paint(g);
+
+        // 下面的數字待調整 所以我暫時先不放到Global
+        g.setColor(Color.white);
+        g.setFont(new Font("TimeRoman", Font.PLAIN, 60));
+        g.drawString("" + resource.getTotalWood(), ICON_START_X + ICON_WIDTH / 2 + 100, ICON_START_Y + 50);
+        g.drawString("" + resource.getTotalSteel(),ICON_START_X + ICON_WIDTH / 2 + ICON_GAP + 100 , ICON_START_Y + 50);
+        g.drawString("" + citizens.getNumOfCitizens(), ICON_START_X + ICON_WIDTH / 2 + ICON_GAP * 2 + 100, ICON_START_Y + 50);
+
     }
 
     @Override
     public void update() {
 
     }
+
+
+    public void setCitizens(Citizens citizens){
+
+        this.citizens = citizens;
+    }
+
+    public Citizens getCitizens(){
+        return citizens;
+    }
+
 }

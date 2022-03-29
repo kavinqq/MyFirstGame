@@ -172,6 +172,10 @@ public class Path {
             public String tree() { return this + "/Tree.png";}
 
             public String specialTree() { return this + "/SpecialTree.png";}
+
+            public String steel() { return this + "/normalSteel.png";}
+
+            public String specialSteel() { return this + "/specialSteel.png";}
         }
 
         public static class Building extends Flow {
