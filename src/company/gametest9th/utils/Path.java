@@ -221,6 +221,10 @@ public class Path {
 
             public String area(){return this +"/area.jpg";}
 
+            public String grass(){return this +"/grass.png";}
+
+            public String airport(){return this+"airport.png";}
+
             public String darkBackground(){return this +"/darkbj4.png";}
         }
 

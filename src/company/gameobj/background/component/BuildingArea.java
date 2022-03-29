@@ -7,9 +7,11 @@ import java.util.ArrayList;
 
 public class BuildingArea implements GameKernel.GameInterface {
     private ArrayList<ArrayList<BuildingGrid>> buildingGrids;
+    private boolean isPreAllNonOnBuildGrid;
 
     private final int numY=2;
     private final int numX=4;
+
 
     public BuildingArea(){
         buildingGrids=new ArrayList<>();
@@ -18,9 +20,22 @@ public class BuildingArea implements GameKernel.GameInterface {
         for (int i = 0; i < numY; i++) {
             buildingGrids.add(new ArrayList<>());
             for (int j = 0; j < numX; j++) {
-                buildingGrids.get(i).add(new BuildingGrid(96+384*j,96+384*i));
+                buildingGrids.get(i).add(new BuildingGrid(96+384*j,96+96*6*i));
             }
         }
+    }
+
+
+
+    public boolean isAllNonOnBuildGrid(){
+        for (int i = 0; i < numY; i++) {
+            for (int j = 0; j < numX; j++) {
+                if(buildingGrids.get(i).get(j).isOnBuildGrid()){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
@@ -34,7 +49,6 @@ public class BuildingArea implements GameKernel.GameInterface {
 
     @Override
     public void update() {
-
     }
     //取得值
     public BuildingGrid get(int i,int j){
