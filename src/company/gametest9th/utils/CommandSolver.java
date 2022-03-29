@@ -95,7 +95,7 @@ public class CommandSolver extends Thread {
 
     public interface MouseCommandListener {
 
-        public void mouseTrig(MouseEvent e, MouseState state, long trigTime);
+        void mouseTrig(MouseEvent e, MouseState state, long trigTime);
     }
 
     public static class CommandWrapper {

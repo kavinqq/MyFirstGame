@@ -2,6 +2,7 @@ package oldMain;
 
 import company.gameobj.BuildingController;
 import company.gameobj.buildings.Building;
+import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
 
 import company.gameobj.creature.human.*;
@@ -9,12 +10,13 @@ import company.gameobj.creature.enemy.zombies.*;
 import company.gameobj.BuildingController.*;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import static company.gameobj.BuildingController.BuildingType.*;
 import static company.gameobj.BuildingController.*;
 
-public class City implements GameKernel.GameInterface {
+public class City implements GameKernel.GameInterface, CommandSolver.MouseCommandListener {
     /**
      * 預設一個城市有幾個人民
      * 預設一個城市有幾個市民
@@ -153,7 +155,7 @@ public class City implements GameKernel.GameInterface {
             }
             //完成建築的升級和建造，科技等級提升
             buildings.completeJob();
-            System.out.println("aa");
+
             if (buildings.isRecentlyUpgradeTech()) {
                 this.upgradeTechLevel();
             }
@@ -519,6 +521,12 @@ public class City implements GameKernel.GameInterface {
 
     @Override
     public void update() {
+        buildings.update();
+    }
 
+
+    @Override
+    public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+        buildings.mouseTrig(e,state,trigTime);
     }
 }

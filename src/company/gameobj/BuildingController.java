@@ -3,11 +3,13 @@ package company.gameobj;
 
 import company.gameobj.buildings.Building;
 import company.gameobj.buildings.*;
+import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
 import oldMain.City;
 import oldMain.Resource;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,7 +21,7 @@ import static company.gameobj.BuildingController.BuildingType.*;
 /**
  * 城市中的建築運作系統
  */
-public class BuildingController implements GameKernel.GameInterface{
+public class BuildingController implements GameKernel.GameInterface, CommandSolver.MouseCommandListener {
 
     /**
      * 飛機升級時間
@@ -74,7 +76,20 @@ public class BuildingController implements GameKernel.GameInterface{
 
     @Override
     public void update() {
+        for (BuildingType value:values()) {
+            for (int j = 0; j < value.list.size(); j++) {
+                value.list().get(j).update();
+            }
+        }
+    }
 
+    @Override
+    public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+        for (BuildingType value:values()) {
+            for (int j = 0; j < value.list.size(); j++) {
+                value.list().get(j).mouseTrig(e,state,trigTime);
+            }
+        }
     }
 
 
@@ -152,8 +167,17 @@ public class BuildingController implements GameKernel.GameInterface{
          */
         int updateStartTime;
 
-        public void paint(Graphics g){
+        private void paint(Graphics g){
             building.paint(g);
+        }
+
+        private void update(){
+            building.update();
+        }
+
+        private void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+            building.mouseTrig(e,state,trigTime);
+
         }
 
         public BuildingNode(Building building) {
@@ -162,7 +186,6 @@ public class BuildingController implements GameKernel.GameInterface{
 
         /**
          * 取得這間建築
-         *
          * @return 建築實體
          */
         public Building getBuilding() {
@@ -346,7 +369,7 @@ public class BuildingController implements GameKernel.GameInterface{
      *
      * @param type 要檢查能不能建造的建築種類
      */
-    public boolean canBuild(BuildingController.BuildingType type, Resource resource) {
+    public boolean canBuild(BuildingType type, Resource resource) {
         if (City.getTechLevel() < type.instance.getTechLevelNeedBuild()) {
             return false;
         }

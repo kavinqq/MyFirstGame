@@ -279,7 +279,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         buildingOption.update();
         buildingArea.update();
 
-
+        city.update();
         //判斷現在有無選取按鈕
         if (buildingOption.getCurrentButton() != null) {
             //取得現在選取的按鈕 及 建築類型
@@ -336,87 +336,86 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
+        //升級
+        if(Building.SelectBuilding!=null){
+            //show出可以升級的建築，且有可以升級的才執行選項
+            city.showCanUpgradeBuilding();
+            //選取要升級的種類
+            if (city.isNoLab() && city.isNoArsenal()) {
+                //break;
+            }
+            BuildingType type = BuildingType.getBuildingTypeByInt(Building.SelectBuilding.getId());
+            //如過建築鏈表中有可以升級的建築就會被顯示出來
+            if (city.canUpgradeBuilding(type)) {
+                //顯示可以升級的建築細節，取得可升級建築陣列
+                ArrayList<BuildingController.BuildingNode> canUpgradeTypeList = city.showAndGetCanUpgradeTypeDetail(type);
+                //若陣列不為空，代表有閒置的研究所或兵工廠可以使用
+                if (canUpgradeTypeList != null) {
+                    switch (type) {
+                        case LAB: {
+                            if (city.isUpgradingTech()) {
+                                ToastController.instance().print("科技已在升級中，請等待此次升級結束");
+                                //System.out.println("科技已在升級中，請等待此次升級結束");
+                            } else {
+                                city.upgradeTechLevel();
+                                ToastController.instance().print("科技升級中");
+                                //System.out.println("科技升級中");
+                            }
+                            break;
+                        }
+                        case ARSENAL: {
+                            //choose = inputInt("要升級1.士兵 2.飛機", 1, 2);
+                            int aaaa=2;
+                            switch (aaaa) {//choose
+                                case 1: {
+                                    if (city.isUpgradingSoldier()) {
+                                        System.out.println("士兵已在升級中，請等待此次升級結束");
+                                    } else {
+                                        city.upgradeSoldier();
+                                        System.out.println("士兵升級中");
+                                    }
+                                    break;
+                                }
+                                case 2: {
+                                    if (city.isUpgradingPlane()) {
+                                        System.out.println("飛機已在升級中");
+                                    } else {
+                                        city.upgradePlane();
+                                        System.out.println("飛機升級中");
+                                    }
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                        default: {
+                            city.upgrade(canUpgradeTypeList.get(0)); //先寫0
+                            ToastController.instance().print("安排升級中");
+                            //System.out.println("安排升級中");
+                        }
+                    }
+                }
+            } else {
+                if (type == LAB && city.getFreeLabNum() == 0) {
+                    ToastController.instance().print("沒有閒置的研究所");
+                    //System.out.println("沒有閒置的研究所");
+                }
+                if (type == ARSENAL && city.getFreeArsenalNum() == 0) {
+                    ToastController.instance().print("沒有閒置的兵工廠");
+                    //System.out.println("沒有閒置的兵工廠");
+                }
+                if (City.getTechLevel() < type.instance().getTechLevelNeedUpgrade()) {
+                    ToastController.instance().print("科技等級不足");
+                    //System.out.println("科技等級不足");
+                }
+                if (!type.instance().isEnoughUpgrade(city.getResource())) {
+                    ToastController.instance().print("物資不足");
+                    //System.out.println("物資不足");
+                }
+            }
+        }
 
 
-//        //升級
-//        //show出可以升級的建築，且有可以升級的才執行選項
-//        city.showCanUpgradeBuilding();
-//        //選取要升級的種類
-//        if (city.isNoLab() && city.isNoArsenal()) {
-//            break;
-//        }
-//        choose = inputInt("請選擇要升級的建築種類(-1離開)：", HOUSE.instance().getId(), AIRPLANE_MILL.instance().getId());
-//        if (choose == LEAVE) {
-//            break;
-//        }
-//        BuildingType type = BuildingType.getBuildingTypeByInt(choose);
-//        //如過建築鏈表中有可以升級的建築就會被顯示出來
-//        if (city.canUpgradeBuilding(type)) {
-//            //顯示可以升級的建築細節，取得可升級建築陣列
-//            ArrayList<BuildingController.BuildingNode> canUpgradeTypeList = city.showAndGetCanUpgradeTypeDetail(type);
-//            //若陣列不為空，代表有閒置的研究所或兵工廠可以使用
-//            if (canUpgradeTypeList != null) {
-//                switch (type) {
-//                    case LAB: {
-//                        if (city.isUpgradingTech()) {
-//                            System.out.println("科技已在升級中，請等待此次升級結束");
-//                        } else {
-//                            city.upgradeTechLevel();
-//                            System.out.println("科技升級中");
-//                        }
-//                        break;
-//                    }
-//                    case ARSENAL: {
-//                        choose = inputInt("要升級1.士兵 2.飛機", 1, 2);
-//                        switch (choose) {
-//                            case 1: {
-//                                if (city.isUpgradingSoldier()) {
-//                                    System.out.println("士兵已在升級中，請等待此次升級結束");
-//                                } else {
-//                                    city.upgradeSoldier();
-//                                    System.out.println("士兵升級中");
-//                                }
-//                                break;
-//                            }
-//                            case 2: {
-//                                if (city.isUpgradingPlane()) {
-//                                    System.out.println("飛機已在升級中");
-//                                } else {
-//                                    city.upgradePlane();
-//                                    System.out.println("飛機升級中");
-//                                }
-//                                break;
-//                            }
-//                        }
-//                        break;
-//                    }
-//                    default: {
-//                        choose = inputInt("請選擇要升級的建築(-1離開)：", 1, canUpgradeTypeList.size());
-//                        if (choose == LEAVE) {
-//                            break;
-//                        }
-//                        city.upgrade(canUpgradeTypeList.get(choose - 1));
-//                        System.out.println("安排升級中");
-//                    }
-//                }
-//            }
-//        } else {
-//            if (type == LAB && city.getFreeLabNum() == 0) {
-//                System.out.println("沒有閒置的研究所");
-//            }
-//            if (type == ARSENAL && city.getFreeArsenalNum() == 0) {
-//                System.out.println("沒有閒置的兵工廠");
-//            }
-//            if (City.getTechLevel() < type.instance().getTechLevelNeedUpgrade()) {
-//                System.out.println("科技等級不足");
-//            }
-//            if (!type.instance().isEnoughUpgrade(city.getResource())) {
-//                System.out.println("物資不足");
-//            }
-//        }
-//        break;
-//    }
-//}
 
 
 
@@ -632,12 +631,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             HintDialog.instance().mouseTrig(e, state, trigTime);
 
+            city.mouseTrig(e,state,trigTime);
+
             //如果現在沒有框選
             if (!canUseBoxSelection) {
                 // 選單控制
                 buildingOption.mouseTrig(e, state, trigTime);
-
-
             }
 
             // 如果現在可以使用框選系統
