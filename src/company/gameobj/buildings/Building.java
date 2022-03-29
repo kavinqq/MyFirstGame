@@ -595,7 +595,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
         switch (state){
-            case PRESSED:
+            case CLICKED:
                 if(readyToUpgrade && !isUpgrading && isEntered(e.getX(),e.getY())){
                     isShowIcon=true;
                     SelectBuilding=this;

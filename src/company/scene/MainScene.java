@@ -344,7 +344,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             if (city.isNoLab() && city.isNoArsenal()) {
                 //break;
             }
-            BuildingType type = BuildingType.getBuildingTypeByInt(Building.SelectBuilding.getId());
+            BuildingController.BuildingNode selectBuilding=BuildingController.BuildingNode.selectBuildingNode;
+            BuildingType type = BuildingType.getBuildingTypeByInt(selectBuilding.getBuilding().getId());
             //如過建築鏈表中有可以升級的建築就會被顯示出來
             if (city.canUpgradeBuilding(type)) {
                 //顯示可以升級的建築細節，取得可升級建築陣列
@@ -389,7 +390,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                             break;
                         }
                         default: {
-                            city.upgrade(canUpgradeTypeList.get(0)); //先寫0
+                            city.upgrade(selectBuilding); //先寫0
                             ToastController.instance().print("安排升級中");
                             //System.out.println("安排升級中");
                         }
@@ -397,19 +398,19 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             } else {
                 if (type == LAB && city.getFreeLabNum() == 0) {
-                    ToastController.instance().print("沒有閒置的研究所");
+                    //ToastController.instance().print("沒有閒置的研究所");
                     //System.out.println("沒有閒置的研究所");
                 }
                 if (type == ARSENAL && city.getFreeArsenalNum() == 0) {
-                    ToastController.instance().print("沒有閒置的兵工廠");
+                    //ToastController.instance().print("沒有閒置的兵工廠");
                     //System.out.println("沒有閒置的兵工廠");
                 }
                 if (City.getTechLevel() < type.instance().getTechLevelNeedUpgrade()) {
-                    ToastController.instance().print("科技等級不足");
+                    //ToastController.instance().print("科技等級不足");
                     //System.out.println("科技等級不足");
                 }
                 if (!type.instance().isEnoughUpgrade(city.getResource())) {
-                    ToastController.instance().print("物資不足");
+                    //ToastController.instance().print("物資不足");
                     //System.out.println("物資不足");
                 }
             }

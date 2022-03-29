@@ -142,6 +142,10 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
      * 儲存各個建築的建造/升級時間
      */
     public class BuildingNode {
+        /**BuildingNode
+         *
+         */
+        public static BuildingNode selectBuildingNode;
         /**
          * 建築本身
          */
@@ -177,7 +181,11 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
 
         private void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
             building.mouseTrig(e,state,trigTime);
-
+            switch (state){
+                case CLICKED :{
+                    selectBuildingNode=this;
+                }
+            }
         }
 
         public BuildingNode(Building building) {
