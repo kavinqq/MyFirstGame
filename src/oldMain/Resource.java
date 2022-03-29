@@ -21,8 +21,8 @@ public class Resource {
      */
     public Resource() {
         totalSteel = 10;
-        totalWood = 100;
-        totalGas = 100;
+        totalWood = 10;
+        totalGas = 10;
     }
 
     /**

@@ -272,24 +272,27 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             //取得現在選取的按鈕 及 建築類型
             BuildingButton currentButton = buildingOption.getCurrentButton();
             type = BuildingType.getBuildingTypeByInt(currentButton.getId());
-            System.out.println(currentButton.painter().left());
             //點選按鈕時 判斷可否蓋建築物
-            canBuild=true; //之後刪掉
-            if (currentButton.isPressed() && !currentButton.isDragging() && !currentButton.isReleased()) {
+            if (currentButton.getCountPressed()>=0 && currentButton.isPressed() && !currentButton.isDragging() && !currentButton.isReleased()) {
+                currentButton.decCountPressed();
                 if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
                     canBuild=false;
+                    currentButton.setCanDragging(false);
                     ToastController.instance().print("建築物已蓋滿");
                     //System.out.println("你的城市 經過多年風風雨雨 鐵與血的灌溉\n如今 從杳無人煙之地 成了 充斥著滿滿的高樓大廈 人車馬龍的繁華之地\n你的城市 已沒有地方可以建造新的建築了");
                 }
                 else if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
                     canBuild=false;
+                    currentButton.setCanDragging(false);
                     ToastController.instance().print("科技等級不足");
                 }
                 else if (!type.instance().isEnoughBuild(city.getResource())) {
                     canBuild=false;
+                    currentButton.setCanDragging(false);
                     ToastController.instance().print("物資不足");
                 }else {
                     canBuild=true;
+                    currentButton.setCanDragging(true);
                 }
             }
             if(canBuild){
@@ -309,7 +312,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         }
                         //判斷是否蓋在建築區上
                         buildingArea.get(i, j).setOnBuildGrid(buildingArea.get(i, j).isCover(currentButton));
-
                     }
                 }
                 //滑鼠放開瞬間 判斷上一偵是否是拖曳且不再區域內
@@ -389,7 +391,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             int count = 0;
             for (Human human : currentObjs) {
                 if (count != 0) {
-                    if (Global.random(0, 2) == 1) {
+                    if (random(0, 2) == 1) {
                         mouseX += 74;
                     } else {
                         mouseY += 74;
