@@ -12,6 +12,13 @@ import java.awt.event.MouseEvent;
 
 public abstract class Building extends GameObject implements CommandSolver.MouseCommandListener {
 
+    public enum State{
+        UNDER_CONSTRUCT,
+        COMPLETED,
+        UPGRADING;
+
+    }
+
     private Image img;
 
     private int woodRequired;
@@ -105,6 +112,9 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     protected int woodForProduction;
     protected int steelForProduction;
     protected int gasForProduction;
+    //建造中的圖
+    private Image underConstructionImg;
+
     /**
      * 已經從City拿取的資源
      */
@@ -135,10 +145,16 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         this.isWorking = false;
         //建築物 剛建造完的時間 (那一個moment)，用來計算建築生產(和buildTime gameTime去做計算)
         this.createTime = -1;
+
+        underConstructionImg=SceneController.getInstance().imageController().tryGetImage(new Path().img().building().ingBuild());
+
     }
+
     protected void imgInit(){
         img=SceneController.getInstance().imageController().tryGetImage(imgPath);
     }
+
+
     /**
      * set給子類建構用
      * @param id
@@ -411,8 +427,6 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         return upgradeTime;
     }
 
-
-
     public int getTechLevelNeedBuild() {
         return techLevelNeedBuild;
     }
@@ -480,12 +494,21 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     @Override
     public void paintComponent(Graphics g) {
+        if(!this.isWorking && !this.readyToUpgrade){
+            g.drawImage(underConstructionImg,painter().left() , painter().top(),  painter().width(), painter().height(), null);
+        }
+        else if(this.readyToUpgrade && !this.isUpgrading){
+            g.drawImage(img, painter().left() , painter().top(),  painter().width(), painter().height(), null);
+            if(this.isWorking){
 
-        g.drawImage(img, painter().left() , painter().top(),  painter().width(), painter().height(), null);
+            }
+        }
     }
+
 
     @Override
     public void update() {
+
 
     }
     //子類初始化

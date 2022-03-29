@@ -316,11 +316,12 @@ public class BuildingController implements GameKernel.GameInterface{
      * @param list 該類建築的鏈表
      * @return 完成建造的數量
      */
-    private int setBuildingStartWork(LinkedList<BuildingController.BuildingNode> list) {
+    private int setBuildingStartWork(LinkedList<BuildingNode> list) {
         int sum = 0;
-        for (BuildingController.BuildingNode node : list) {
+        for (BuildingNode node : list) {
             //若建造完成時間==當前時間->建造完成
             if (node.buildEndTime == City.getGameTime()) {
+                System.out.println("建造完成");
                 node.building.setLevel(node.building.getLevel() + 1);
                 node.building.setUpgrading(false);
                 node.building.setWorking(true);
@@ -568,7 +569,7 @@ public class BuildingController implements GameKernel.GameInterface{
      */
     private int finishUpgradeBuilding(LinkedList<BuildingNode> list) {
         int sum = 0;
-        for (BuildingController.BuildingNode node : list) {
+        for (BuildingNode node : list) {
             //若建築的升級完成時間==當前時間->升級完成
             if (node.upgradeEndTime == City.getGameTime()) {
                 node.building.setLevel(node.building.getLevel() + 1);
@@ -589,7 +590,7 @@ public class BuildingController implements GameKernel.GameInterface{
      * @param resource 都市的物資
      * @return 可以升級數量
      */
-    public int getCanUpgradeNum(BuildingController.BuildingType type, Resource resource) {
+    public int getCanUpgradeNum(BuildingType type, Resource resource) {
         switch (type) {
             //兵工廠直接升級士兵/飛機等級
             case ARSENAL: {

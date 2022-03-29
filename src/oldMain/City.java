@@ -153,7 +153,7 @@ public class City implements GameKernel.GameInterface {
             }
             //完成建築的升級和建造，科技等級提升
             buildings.completeJob();
-
+            System.out.println("aa");
             if (buildings.isRecentlyUpgradeTech()) {
                 this.upgradeTechLevel();
             }

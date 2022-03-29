@@ -143,8 +143,6 @@ public class Path {
 
             public String whiteGrayOpacity() { return this + "/whiteGrayOpacitySeventy.png";}
 
-            public String ingBuild(){return this+"/ingBuild.png";}
-
             public String green() { return this + "/green.png";}
 
             public String red() { return this + "/red.png";}
@@ -172,6 +170,8 @@ public class Path {
             public String tree() { return this + "/Tree.png";}
 
             public String specialTree() { return this + "/SpecialTree.png";}
+
+
         }
 
         public static class Building extends Flow {
@@ -198,6 +198,16 @@ public class Path {
             public String Base() { return this + "/Base.png";};
 
             public String Arsenal(){ return this + "/arsenal.png";}
+
+            public String ingBuild(){return this+"/ingBuild.png";}
+
+            //建築物所需Icon
+            public String noWorkingIcon(){return this+"/noWorkingIcon.png";}
+
+            public String workingIcon(){return this+"/workingIcon.png";}
+
+            public String upGradeIcon(){return this+"/upGradeIcon.png";}
+
         }
 
 
