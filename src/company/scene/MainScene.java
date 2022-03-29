@@ -349,7 +349,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
-
         // 如果 現在有操控單位 單選 && 有設定要前往的目標
         if (currentObj != null && hasSetTarget) {
 
@@ -365,8 +364,33 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         if (!controlHumans.isEmpty() && hasSetTarget) {
             int count = 0;
 
+            boolean isGoingToCollect = false;
+
+
+            /*
+            這邊是為了解決一個狀況:
+            因為我進去採集資源隱形 != 真的不見了, 只是沒有印出來
+            所以如果採資源也要停下來後找地方散開
+            那就會出現沒有和資源物件 collision 的狀況 => 沒辦法觸發採集流程
+            所以我先判斷一下目的地是不是資源堆這樣.
+            */
+            for(GameObject resource: resources){
+                if(mouseX > resource.painter().left() && mouseX < resource.painter().right() && mouseY > resource.painter().top() && mouseY < resource.painter().bottom()){
+                    isGoingToCollect = true;
+                    break;
+                }
+            }
+
+            /*
+            我從目前框選的人類中 共同set一個Target
+            */
             for (Human human : controlHumans) {
-                if (count != 0) {
+
+                /*
+                 1.如果count != 0 表示已經有人在那個位置了
+                 2.如果他要去的目標是個資源堆 && 他是一個村民 那也不能散開
+                 */
+                if (count != 0 && !(isGoingToCollect && human instanceof Citizen)) {
                     if (Global.random(0, 2) == 1) {
                         mouseX += 74;
                     } else {
@@ -472,12 +496,13 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     }
                 }
             } else {
-
                 // 遍尋一次 資源List
                 for (GameObject gameObject : resources) {
 
                     //如果和資源碰撞 && 我的目的地就是在資源裡面
                     if (citizen.isCollision(gameObject) && citizen.isTargetInObj(gameObject)) {
+
+                        System.out.println("I am citizen num: " + citizen.myNum + " I am working!!");
 
                         // 把資源的位置記起來
                         citizen.setResourceTargetX(gameObject.painter().centerX());
@@ -485,7 +510,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                         // 如果村民現在看的到的話 => 開始採集
                         if (citizen.getVisible()) {
-                            System.out.println("I am citizen num: " + citizen.myNum + "  I am working now!!");
                             citizen.collecting(gameObject, base.painter().left() - 30, base.painter().top() + base.painter().height() / 2) ;
                         }
                     }
