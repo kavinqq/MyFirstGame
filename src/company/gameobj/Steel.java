@@ -13,6 +13,7 @@ public class Steel extends GameObject {
     private int y;
 
     private int eachTimeGet;
+    private int totalNum;
 
 
     public Steel(int x, int y) {
@@ -25,6 +26,8 @@ public class Steel extends GameObject {
         image = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().steel());
 
         eachTimeGet = 1;
+
+        totalNum = 9;
     }
 
     public int eachTimeGet() {
@@ -33,6 +36,10 @@ public class Steel extends GameObject {
 
     public void setEachTimeGet(int eachTimeGet){
         this.eachTimeGet = eachTimeGet;
+    }
+
+    public int getTotalNum(){
+        return  totalNum;
     }
 
 

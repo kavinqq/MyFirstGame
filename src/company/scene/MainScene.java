@@ -251,7 +251,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 畫出可採集的資源
         for (GameObject resource : resources) {
-            resource.paint(g);
+            if(resource != null) {
+                resource.paint(g);
+            }
         }
 
         city.paint(g);
@@ -502,16 +504,29 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     //如果和資源碰撞 && 我的目的地就是在資源裡面
                     if (citizen.isCollision(gameObject) && citizen.isTargetInObj(gameObject)) {
 
-                        System.out.println("I am citizen num: " + citizen.myNum + " I am working!!");
-
                         // 把資源的位置記起來
                         citizen.setResourceTargetX(gameObject.painter().centerX());
                         citizen.setResourceTargetY(gameObject.painter().centerY());
 
-                        // 如果村民現在看的到的話 => 開始採集
-                        if (citizen.getVisible()) {
-                            citizen.collecting(gameObject, base.painter().left() - 30, base.painter().top() + base.painter().height() / 2) ;
+                        //開始採集
+                        int resourceNum = 0;
+                        Citizen.Resource resourceType = null;
+
+                        // 幫村民判斷 採了什麼資源 && 一次能採的量
+                        if(gameObject instanceof Tree){
+                            resourceNum = ((Tree)gameObject).eachTimeGet();
+                            resourceType = Citizen.Resource.WOOD;
                         }
+
+                        // 幫村民判斷 採了什麼資源 && 一次能採的量
+                        if(gameObject instanceof Steel){
+                            resourceNum = ((Steel)gameObject).eachTimeGet();
+                            resourceType = Citizen.Resource.STEEL;
+                        }
+
+                        // 村民開始採集
+                        citizen.collecting(gameObject, base.painter().left() - 30, base.painter().top() + base.painter().height() / 2, resourceNum, resourceType);
+
                     }
                 }
             }
