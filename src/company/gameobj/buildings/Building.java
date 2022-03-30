@@ -20,12 +20,21 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     }
 
-    private static class UpGradeIcon extends GameObject{
+    public class UpGradeIcon extends GameObject{
 
         private Image upGradeIcon;
+        private boolean isUpgrade;
+        private int countClick;
+
+
         public UpGradeIcon(int x, int y, int width, int height) {
             super(x, y, width, height);
             upGradeIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().upGradeIcon());
+            countClick=0;
+        }
+
+        public boolean isUpgrade(){
+            return isUpgrade;
         }
 
         @Override
@@ -36,6 +45,27 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         @Override
         public void update() {
 
+        }
+
+        public void decCountClick(){
+            countClick--;
+        }
+
+        public int getCountClick(){
+            return countClick;
+        }
+
+        public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime){
+            switch (state){
+                case CLICKED:{
+                    if(isEntered(e.getX(),e.getY())){
+                        countClick++;
+                        isUpgrade=true;
+                    }else {
+                        isUpgrade=false;
+                    }
+                }
+            }
         }
     }
 
@@ -56,7 +86,6 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             if(isWorking){
                 g.drawImage(workingIcon,painter().left(), painter().top(),Global.BUILDING_ICON_WIDTH,Global.BUILDING_ICON_HEIGHT,null);
             }
-
             //非運作中
             else {
                 g.drawImage(noWorkingIcon,painter().left(), painter().top(),Global.BUILDING_ICON_WIDTH,Global.BUILDING_ICON_HEIGHT,null);
@@ -98,7 +127,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     /**
      * 建造開始的時間
      */
-    private int buildStart;
+    private int buildStartTime;
     /**
      * 建造 需要的時間
      */
@@ -107,6 +136,9 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
      * 升級需要的時間
      */
     private int upgradeTime;
+
+    //升級開始時間
+    private int upgradeStartTime;
     /**
      * 該建築的等級  -1:未建造 0:已建造 1~n:升級次數
      */
@@ -169,8 +201,9 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     protected int gasForProduction;
     //建造中的圖
     private Image underConstructionImg;
-    private UpGradeIcon upGradeIcon;
+    public UpGradeIcon upGradeIcon;
     private WorkingIcon workingIcon;
+
 
     public static Building SelectBuilding;
     //是否顯示Icon
@@ -332,9 +365,12 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
      * @return 獲得 建築物被設定去建造 或 升級時 的開始時間(設定的那一個瞬間 記錄下來 = 世紀帝國按下 升級帝王時代的時候)
      */
     public int getBuildStart() {
-        return buildStart;
+        return buildStartTime;
     }
 
+    public int getBuildEnd() {
+        return buildStartTime+buildTime;
+    }
 
     /**
      * 取得建築物 1.建造時間 2.升級時間 (建造完成後 升級時間會取代建造時間 成為新的建造時間 一起用這樣)
@@ -345,6 +381,17 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         return buildTime;
     }
 
+    public int getUpgradeTime() {
+        return upgradeTime;
+    }
+
+    public int getUpgradeStartTime(){
+        return upgradeStartTime;
+    }
+
+    public int getUpgradeEndTime(){
+        return upgradeTime+upgradeStartTime;
+    }
     /**
      * 取得建築物等級
      *
@@ -491,9 +538,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         return gasCostCreate;
     }
 
-    public int getUpgradeTime() {
-        return upgradeTime;
-    }
+
 
     public int getTechLevelNeedBuild() {
         return techLevelNeedBuild;
@@ -572,13 +617,20 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             //畫出完成的建築物
         } else if (readyToUpgrade && !isUpgrading) {
             g.drawImage(img, painter().left(), painter().top(), painter().width(), painter().height(), null);
-
+            //畫出等級
+            g.drawString("目前等級"+level,painter().left(), painter().top());
             //畫出Icon
             if (isShowIcon) {
                 upGradeIcon.paint(g);
+                //畫出運作中
                 workingIcon.paint(g);
             }
+        //畫出升級中
+        }else if(isUpgrading && !readyToUpgrade){
+            g.drawString("升級中",painter().left(), painter().top());
+            g.drawImage(underConstructionImg, painter().left(), painter().top(), painter().width(), painter().height(), null);
         }
+
     }
 
 
@@ -594,6 +646,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+        upGradeIcon.mouseTrig(e,state,trigTime);
         switch (state){
             case CLICKED:
                 if(readyToUpgrade && !isUpgrading && isEntered(e.getX(),e.getY())){

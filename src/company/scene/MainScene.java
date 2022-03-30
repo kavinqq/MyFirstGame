@@ -337,9 +337,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
         //升級
-        if(Building.SelectBuilding!=null){
+        if(Building.SelectBuilding!=null && BuildingController.BuildingNode.selectBuildingNode!=null){
             //show出可以升級的建築，且有可以升級的才執行選項
-            city.showCanUpgradeBuilding();
+            //city.showCanUpgradeBuilding();
             //選取要升級的種類
             if (city.isNoLab() && city.isNoArsenal()) {
                 //break;
@@ -347,7 +347,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             BuildingController.BuildingNode selectBuilding=BuildingController.BuildingNode.selectBuildingNode;
             BuildingType type = BuildingType.getBuildingTypeByInt(selectBuilding.getBuilding().getId());
             //如過建築鏈表中有可以升級的建築就會被顯示出來
-            if (city.canUpgradeBuilding(type)) {
+            if (city.canUpgradeBuilding(type) && selectBuilding.getBuilding().upGradeIcon.getCountClick()>0) {
                 //顯示可以升級的建築細節，取得可升級建築陣列
                 ArrayList<BuildingController.BuildingNode> canUpgradeTypeList = city.showAndGetCanUpgradeTypeDetail(type);
                 //若陣列不為空，代表有閒置的研究所或兵工廠可以使用
@@ -390,7 +390,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                             break;
                         }
                         default: {
-                            city.upgrade(selectBuilding); //先寫0
+                            city.upgrade(selectBuilding);
                             ToastController.instance().print("安排升級中");
                             //System.out.println("安排升級中");
                         }

@@ -3,6 +3,7 @@ package company.gameobj;
 
 import company.gameobj.buildings.Building;
 import company.gameobj.buildings.*;
+import company.gameobj.message.ToastController;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
 import oldMain.City;
@@ -183,7 +184,9 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
             building.mouseTrig(e,state,trigTime);
             switch (state){
                 case CLICKED :{
-                    selectBuildingNode=this;
+                    if(building.upGradeIcon.isUpgrade()){
+                        selectBuildingNode=this;
+                    }
                 }
             }
         }
