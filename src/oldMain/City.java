@@ -120,10 +120,13 @@ public class City implements GameKernel.GameInterface {
     }
 
     /**
-     * 獲得資源的 視覺化版本
+     * 視覺化的放資源
+     * @param num 資源數量
+     * @param resourceType 資源種類
      */
     public void gainResource(int num, Citizen.Resource resourceType) {
 
+        // 根據村民現在身上的 資源數量 && 種類 放到總資源堆
         if(resourceType == Citizen.Resource.WOOD){
             resource.addWood(num);
         } else if(resourceType == Citizen.Resource.STEEL){

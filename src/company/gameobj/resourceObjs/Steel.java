@@ -1,6 +1,7 @@
-package company.gameobj;
+package company.gameobj.resourceObjs;
 
 import company.controllers.SceneController;
+import company.gameobj.GameObject;
 import company.gametest9th.utils.Path;
 
 import java.awt.*;

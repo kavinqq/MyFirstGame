@@ -50,10 +50,6 @@ public class Citizen extends Human {   //市民
     private int baseX;
     private int baseY;
 
-    private static int count;
-    public int myNum;
-
-
     /**
      * 建構子 預設市民數值為1 , 不能打架 , 初始設定為閒人
      */
@@ -85,8 +81,6 @@ public class Citizen extends Human {   //市民
         resourceTargetX = 0;
         resourceTargetY = 0;
 
-        count++;
-        myNum = count;
     }
 
     /**

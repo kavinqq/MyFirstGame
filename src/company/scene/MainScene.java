@@ -1,7 +1,6 @@
 package company.scene;
 
 import company.Global;
-import company.controllers.SceneController;
 
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -10,21 +9,20 @@ import java.util.ArrayList;
 import static company.gameobj.BuildingController.*;
 
 import company.gameobj.Rect;
-import company.gameobj.Steel;
-import company.gameobj.Tree;
+import company.gameobj.resourceObjs.Steel;
+import company.gameobj.resourceObjs.Tree;
 import company.gameobj.message.HintDialog;
 import company.gameobj.message.ToastController;
 import company.gametest9th.utils.*;
 import company.gameobj.GameObject;
 import company.gameobj.background.Background;
 import company.gameobj.background.component.*;
-import company.gameobj.buildings.Building;
 import company.gameobj.creature.human.Citizen;
 import company.gameobj.buildings.Base;
 import company.gameobj.creature.human.Citizens;
 import company.gameobj.creature.human.Human;
+
 import oldMain.City;
-import oldMain.OldMain;
 
 import java.awt.*;
 
@@ -35,17 +33,6 @@ import static company.Global.*;
  */
 public class MainScene extends Scene implements CommandSolver.KeyListener {
 
-
-    private Image resourceBarUI; // 上方的資源欄位UI
-
-    private Image citizenNumIcon;// 村民數量Icon
-    private Image soldierNumIcon;// 士兵數量Icon
-
-    private Image steelIcon;// 鋼鐵數量Icon
-    private Image treeIcon;//  木頭數量Icon
-    private Image gasIcon; //   瓦斯數量Icon
-    private Image timeIcon; //  時間Icon
-
     private Base base;  // 主堡
     private Background background; // 背景
     private BuildingOption buildingOption; // 建築物選單
@@ -55,10 +42,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     private BoxSelection boxSelection; // 框選模式
     private boolean canUseBoxSelection; // 是否能用框選模式
-
-    //測試: 建築物
-    private Building building1;
-    private Building building2;
 
     //現在位置
     private int currentX;
@@ -83,17 +66,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private BuildingArea buildingArea;
     //private boolean preOnBuildArea[][];
     boolean[][] isOnBuildArea;
-    // 提示詞
-    private String message;
 
     // 時間
     private long startTime;
-    private int nowTime;
-    private String outputTimeStr;
+
 
     // 資源
     private List<GameObject> resources;
-    private Delay resourceRemoveDelay;
+
 
     @Override
     public void sceneBegin() {
@@ -103,7 +83,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         city = new City();// city本體
 
         currentObj = null;// 當前操控的物件(單選)
-        controlHumans = new ArrayList<Human>();
+        controlHumans = new ArrayList<>();// 設定: 只有人物可以多選
 
         //背景
         background = new Background(0, 0, SCREEN_X, SCREEN_Y);
@@ -142,24 +122,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         mouseX = 0;
         mouseY = 0;
 
-        // UI 圖片
-        resourceBarUI = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().resourceBarUI());
-        // Icon圖片
-        citizenNumIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().citizenNumIcon());
-        soldierNumIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().soldierNumIcon());
-        treeIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().treeIcon());
-        steelIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().steelIcon());
-        gasIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().gasIcon());
-        timeIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().timeIcon());
-
-
         // 資源
         resources = new ArrayList<>();
         resources.add(new Tree(350, 400));
         resources.add(new Steel(1200, 400));
 
-        // 採資源耗時1秒
-        resourceRemoveDelay = new Delay(60);
     }
 
     @Override
@@ -168,8 +135,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void paint(Graphics g) {
+
         // 背景
         background.paint(g);
+
+        // 狀態欄
+        StatusBar.instance().paint(g);
 
         // 建築物基座
         buildingArea.paint(g);
@@ -181,34 +152,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //提示框
         HintDialog.instance().paint(g);
         ToastController.instance().paint(g);
-
-        //資源欄 UI
-        // (70,0,500,60) => 我只取這個UI來源的 中間黑色部分
-        g.drawImage(resourceBarUI, 0, 0, WINDOW_WIDTH, STATUS_BAR_HEIGHT, 70, 0, 500, 60, null);
-
-        // 每一組Icon + 搭配的數字 [還沒搭配到的 我先不寫]
-        // 樹木資源
-        g.drawImage(treeIcon, ICON_START_X, ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, null);
-
-        // 鋼鐵資源
-        g.drawImage(steelIcon, ICON_START_X + ICON_GAP * 1, ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, null);
-
-        // 瓦斯資源
-        g.drawImage(gasIcon, ICON_START_X + ICON_GAP * 2, ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, null);
-
-        // 市民數量
-        g.drawImage(citizenNumIcon, ICON_START_X + ICON_GAP * 3, ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, null);
-
-        //士兵數量
-        g.drawImage(soldierNumIcon, ICON_START_X + ICON_GAP * 4, ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, null);
-
-
-        //遊戲時間
-        g.drawImage(timeIcon, ICON_START_X + ICON_GAP * 5, ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, null);
-        g.setColor(Color.white);
-        g.setFont(new Font("TimesRoman", Font.BOLD, 30));
-        g.drawString(outputTimeStr, ICON_START_X + ICON_GAP * 5 + 100, ICON_HEIGHT);
-
 
         // 主堡
         base.paint(g);
@@ -225,7 +168,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 畫出每一個村民
         city.getCitizens().paintAll(g);
 
+        // 如果現在可以使用框選
         if (canUseBoxSelection) {
+
+            // 畫出框選
             boxSelection.paint(g);
         }
 
@@ -261,16 +207,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void update() {
-        // 把 毫秒 換算回 秒 (1秒 = 10的9次方 * 1毫秒)
-        nowTime = Math.round((System.nanoTime() - startTime) / 1000000000);
-
-        // 如果 < 60 => 只顯示秒  否則 顯示分&&秒 (應該不可能有人玩一小時吧)
-        if (nowTime < 60) {
-            outputTimeStr = nowTime + " 秒";
-        } else {
-            outputTimeStr = nowTime / 60 + " 分 " + nowTime % 60 + " 秒";
-        }
-
 
         //建築物相關測試
         buildingOption.update();
@@ -309,6 +245,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //city.getBuildingsNum()
         //建造成功與否
         if (type != null) {
+
             type = BuildingType.getBuildingTypeByInt(buildingOption.getCurrentButton().getId());
             if (city.getBuildingNum() != city.MAX_CAN_BUILD && city.canBuildBuilding(type)) {
                 //city.build(type,buildingOption.getCurrentButton().painter().left(),buildingOption.getCurrentButton().painter().top());
@@ -346,6 +283,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             // 把框到的市民 加入到 tmpControlHumans
             List<Human> tmpControlHumans = city.getCitizens().getBoxCitizens(boxSelection.getBox());
 
+            // 如果新的框選有人(一個也可以) => 把框選的List換過去
             if (!tmpControlHumans.isEmpty()) {
                 controlHumans = new ArrayList<>(tmpControlHumans);
             }
@@ -354,6 +292,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 如果 現在有操控單位(單選) && 有設定要前往的目標
         if (currentObj != null && hasSetTarget) {
 
+            /*
+            為什麼currentObj要特別判斷 是否是Human?
+            因為單選 可以是建築物 不一定會是個人
+             */
             if (currentObj instanceof Human) {
                 ((Human) currentObj).setTarget(mouseX, mouseY);
             }
@@ -364,10 +306,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 如果存有當前框選的所有物件的陣列 有東西
         if (!controlHumans.isEmpty() && hasSetTarget) {
+
+            // 計算有幾個人到Target了
             int count = 0;
 
+            // 是否在前往採集的路上
             boolean isGoingToCollect = false;
-
 
             /*
             這邊是為了解決一個狀況:
@@ -389,8 +333,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             for (Human human : controlHumans) {
 
                 /*
-                 1.如果count != 0 表示已經有人在那個位置了
-                 2.如果他要去的目標是個資源堆 && 他是一個村民 那也不能散開
+                 1.如果count != 0 表示已經有人在那個位置了 要散開
+                 2.但是如果他要去的目標是個資源堆 && 他是一個村民 那不能散開
                  */
                 if (count != 0 && !(isGoingToCollect && human instanceof Citizen)) {
                     if (Global.random(0, 2) == 1) {
@@ -399,8 +343,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         mouseY += 74;
                     }
                 }
+
+                // 這個人前往目的地
                 human.setTarget(mouseX, mouseY);
 
+                // 一旦有人到目的地 就++
                 count++;
             }
 
@@ -414,6 +361,19 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 走路狀態
         for (Citizen citizen : city.getCitizens().getAllCitizens()) {
+
+            /*
+            閒吉 我這邊有多一些東西
+
+            目前是:
+            if() => 村民與base overlap (小疑問: 這個和 isCollision 有差嗎??)
+
+            else if() => citizen.getBlockedDir() != null 村民有被擋住的方向
+
+            (↓我新增的)
+            else() => 其餘狀況 跑一次資源堆物件 [處理村民碰到採集資源的狀況]
+
+            */
 
             //如果人物走到與建築重疊了，將其拉回剛好接觸但不重疊的位置並且讓人物知道這個方向被擋住了，換個方向
             if (citizen.painter().overlap(base.painter())) {
@@ -501,6 +461,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 // 遍尋一次 資源List
                 for (int i = 0; i < resources.size(); i++) {
 
+                    // 先把資源堆物件 取出來(不用每次都用get去跑一次拿他)
                     GameObject resource = resources.get(i);
 
                     //如果和資源碰撞 && 我的目的地就是在資源裡面
@@ -546,40 +507,59 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             // 下面的switch 是碰到邊界的狀況
             switch (citizen.getWalkingDir()) {
+
+                // 如果右邊碰到了邊界
                 case RIGHT: {
                     if (citizen.touchRight()) {
+
+                        // 把人物移動回來 與邊界切齊
                         citizen.translateX(-1 * (citizen.painter().right() - SCREEN_X));
+
+                        // 人物停止移動
                         citizen.stop();
                     }
                     break;
                 }
+
+                // 如果左邊碰到了邊界
                 case LEFT: {
                     if (citizen.touchLeft()) {
+
+                        // 把人物移動回來 與邊界切齊
                         citizen.translateX(-1 * citizen.painter().left());
+
+                        // 人物停止移動
                         citizen.stop();
                     }
                     break;
                 }
 
+                // 如果上面碰到了邊界
                 case UP: {
                     if (citizen.touchTop()) {
+
+                        // 把人物移動回來 與邊界切齊
                         citizen.translateY(-1 * citizen.painter().top());
+
+                        // 人物停止移動
                         citizen.stop();
                     }
                     break;
                 }
 
+                // 如果下面碰到了邊界
                 case DOWN: {
                     if (citizen.touchBottom()) {
+                        // 把人物移動回來 與邊界切齊
                         citizen.translateY(-1 * (citizen.painter().bottom() - SCREEN_Y));
+
+                        // 人物停止移動
                         citizen.stop();
                     }
                     break;
                 }
             }
         }
-
-        resourceRemoveDelay.count();
 
         if (!city.isAlive()) {
             StartScene startScene = new StartScene(); //還沒有結束畫面已此充當結束遊戲
@@ -593,10 +573,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         return (e, state, trigTime) -> {
 
+            // 如果滑鼠沒有任何state 直接return
             if (state == null) {
                 return;
             }
 
+            // 紀錄當下的滑鼠位置
             currentX = e.getX();
             currentY = e.getY();
 
@@ -659,8 +641,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         canUseBoxSelection = true;
                     }
 
-                    // 如我現在有能操控的單位 (單選 或 框選)
-                    // 按下右鍵 => 設定要前往的(x,y)
+                    // 如我現在有能操控的單位 (單選[GameObj] 或 框選[Only Human])
+                    // 按下右鍵 => 設定要前往的(x,y) [BUTTON3 => 右鍵]
                     if ((currentObj != null || !controlHumans.isEmpty()) && e.getButton() == MouseEvent.BUTTON3) {
                         mouseX = e.getX();
                         mouseY = e.getY();
@@ -673,7 +655,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 case CLICKED: {
 
 //                    System.out.println("CLICKED "+trigTime);
-
+                    // 輔助取座標用(沒實際作用 完成可刪除)[BUTTON2 => 中鍵]
                     if (e.getButton() == MouseEvent.BUTTON2) {
                         System.out.println("X: " + e.getX());
                         System.out.println("Y: " + e.getY());
@@ -711,7 +693,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     @Override
     public void keyPressed(int commandCode, long trigTime) {
 
-        // 按下ESC => Reset 所有操控單位
+        // 按下ESC => 釋放所有操控單位
         if (commandCode == ESC) {
             hasSetTarget = false;
             currentObj = null;

@@ -71,6 +71,7 @@ public class Path {
             */
         }
         public static class Zombies extends Flow {
+
             private Zombies(Flow flow) {
                 super(flow, "/Zombie");
             }
@@ -166,9 +167,7 @@ public class Path {
 
             public String timeIcon() { return this + "/timeIcon.png";}
 
-
             // 資源圖片
-
             public String tree() { return this + "/Tree.png";}
 
             public String specialTree() { return this + "/SpecialTree.png";}
@@ -177,6 +176,7 @@ public class Path {
 
             public String specialSteel() { return this + "/specialSteel.png";}
         }
+
 
         public static class Building extends Flow {
 
@@ -204,11 +204,9 @@ public class Path {
             public String Arsenal(){ return this + "/arsenal.png";}
         }
 
-
-
-
         // Resource => img => background
         public static class Background extends Flow {
+
             private Background(Flow flow) {
                 super(flow, "/backgrounds");
             }
