@@ -2,6 +2,7 @@ package company.gameobj;
 
 import company.Global;
 import company.gametest9th.utils.GameKernel;
+import company.gametest9th.utils.Vector;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -9,16 +10,24 @@ import java.util.Arrays;
 public abstract class GameObject implements GameKernel.GameInterface {
 
     private boolean isVisible;
+    private int originalX;
+    private int originalY;
 
     public GameObject(int x, int y, int width, int height) {
         detectRange = new Rect(x, y, width, height);
         painter = new Rect(x, y, width, height);
+
+        originalX = x;
+        originalY = y;
     }
 
     public GameObject(int x, int y, int width, int height, int x2, int y2, int width2, int height2) {
         detectRange = new Rect(x, y, width, height);
         painter = new Rect(x2, y2, width2, height2);
         painter.setCenter(detectRange.centerX(), detectRange.centerY());
+
+        originalX = x;
+        originalY = y;
     }
 
     public GameObject(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight){
@@ -26,6 +35,9 @@ public abstract class GameObject implements GameKernel.GameInterface {
         painter.setCenter(x,y);
         detectRange = new Rect(x,y, colliderWidth, colliderHeight);
         detectRange.setCenter(x,y);
+
+        originalX = x;
+        originalY = y;
     }
 
     public GameObject(Rect rect) {
@@ -196,11 +208,40 @@ public abstract class GameObject implements GameKernel.GameInterface {
         return (this.painter().left()<gameObject.painter().right() && this.painter().right()>gameObject.painter().left());
     }
 
+
+    /**
+     * 設定能不能看見這個物件
+     * @param visible true => 能看見 / false => 不能看見
+     */
+
     public void setVisible(boolean visible){
         this.isVisible = visible;
     }
 
+    /**
+     * 獲得能否看見這個物件
+     * @return true => 能看見 / false => 不能看見
+     */
     public boolean getVisible(){
         return isVisible;
+    }
+
+    /**
+     * 取得要向量 && 移動
+     * @param vector 一段向量
+     */
+    public void cameraMove(Vector vector){
+
+        translate((int)(vector.vx() * Global.CAMERA_SPEED), (int)(vector.vy() * Global.CAMERA_SPEED));
+    }
+
+
+    /**
+     * 重製所有物件回初始位置(地圖回到中心的意思)
+     */
+    public void resetObjectXY(){
+
+        detectRange.moveToPoint(originalX, originalY);
+        painter.moveToPoint(originalX, originalY);
     }
 }

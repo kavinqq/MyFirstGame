@@ -31,7 +31,9 @@ public class SceneController {
     private CommandSolver.KeyListener keyListener;
 
     public void change(Scene scene) {
+
         lastScene = currentScene;
+
         scene.sceneBegin();
         mouseListener = scene.mouseListener();
         keyListener = scene.keyListener();
@@ -43,7 +45,10 @@ public class SceneController {
     }
 
     public void paint(Graphics g) {
+
         currentScene.paint(g);
+
+
     }
 
     public void update() {

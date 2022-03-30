@@ -46,9 +46,12 @@ public class Citizen extends Human {   //市民
     private int resourceTargetX;
     private int resourceTargetY;
 
+    private boolean isGoingToCollect;
+
     // 主堡XY
     private int baseX;
     private int baseY;
+
 
     /**
      * 建構子 預設市民數值為1 , 不能打架 , 初始設定為閒人
@@ -81,6 +84,7 @@ public class Citizen extends Human {   //市民
         resourceTargetX = 0;
         resourceTargetY = 0;
 
+        isGoingToCollect = false;
     }
 
     /**
@@ -208,7 +212,6 @@ public class Citizen extends Human {   //市民
         // 這一次的採集種類 && 量
         this.resourceNum = resourceNum;
         this.resourceType = resourceType;
-
     }
 
 
@@ -244,4 +247,7 @@ public class Citizen extends Human {   //市民
         return resourceTargetY;
     }
 
+    public void turnOffIsGoingToCollect() {
+        isGoingToCollect = false;
+    }
 }

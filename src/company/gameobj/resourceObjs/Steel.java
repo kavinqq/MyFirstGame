@@ -28,10 +28,18 @@ public class Steel extends GameObject {
 
         eachTimeGet = 1;
 
-        totalNum = 9;
+        totalNum = 600;
     }
 
+    /**
+     * 每次拿多少 && 扣多少
+     * @return 每次拿的量
+     */
+
     public int eachTimeGet() {
+
+        totalNum -= eachTimeGet;
+
         return eachTimeGet;
     }
 
@@ -46,7 +54,7 @@ public class Steel extends GameObject {
 
     @Override
     public void paintComponent(Graphics g) {
-        g.drawImage(image, x, y, null);
+        g.drawImage(image, painter().left(), painter().top(), null);
     }
 
     @Override

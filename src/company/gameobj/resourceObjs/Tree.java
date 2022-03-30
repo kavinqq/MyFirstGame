@@ -10,26 +10,23 @@ public class Tree extends GameObject {
 
     private Image image;
 
-    // X,Y座標
-    private int x;
-    private int y;
-
     private int eachTimeGet; // 每次拿的量
     private int totalNum; // 這個資源總共有多少量
 
     public Tree(int x, int y) {
         super(x, y, 128,128);
 
-        this.x = x;
-        this.y = y;
-
         image = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().tree());
 
         eachTimeGet = 3;
 
-        totalNum = 9;
+        totalNum = 600;
     }
 
+    /**
+     * 每次拿多少 && 扣多少
+     * @return 每次拿的量
+     */
 
     public int eachTimeGet() {
         totalNum -= eachTimeGet;
@@ -48,8 +45,7 @@ public class Tree extends GameObject {
 
     @Override
     public void paintComponent(Graphics g) {
-
-        g.drawImage(image, x, y,x + 128, y + 128,0,0,image.getWidth(null), image.getHeight(null), null);
+        g.drawImage(image, painter().left(), painter().top(), null);
     }
 
     @Override

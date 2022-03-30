@@ -24,6 +24,7 @@ import company.gameobj.creature.human.Human;
 
 import oldMain.City;
 
+import javax.swing.*;
 import java.awt.*;
 
 import static company.Global.*;
@@ -73,7 +74,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     // 資源
     private List<GameObject> resources;
-
 
     @Override
     public void sceneBegin() {
@@ -139,9 +139,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 背景
         background.paint(g);
 
-        // 狀態欄
-        StatusBar.instance().paint(g);
-
         // 建築物基座
         buildingArea.paint(g);
 
@@ -202,13 +199,45 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
+        // 狀態欄
+        StatusBar.instance().paint(g);
+
         city.paint(g);
     }
 
     @Override
     public void update() {
 
+        // 更新StatusBar 各項數據
         StatusBar.instance().setTimeString(startTime);
+        StatusBar.instance().updateResource(city.getResource().getTotalWood(), city.getResource().getTotalSteel(), city.getResource().getTotalGas(), city.getTotalCitizen());
+
+        // 優先處理鏡頭移動
+        if((currentX >= SCREEN_X - BUILDING_OPTION_WIDTH || currentX <= 8) || (currentY <= STATUS_BAR_HEIGHT || currentY >= SCREEN_Y - 8)){
+
+            Vector vector = new Vector((currentX - SCREEN_X / 2) * -1, (currentY - SCREEN_Y / 2) * -1);
+            vector = vector.normalize();
+
+            base.cameraMove(vector);
+
+            for(Human human: city.getCitizens().getAllCitizens()){
+                human.cameraMove(vector);
+            }
+
+            for(GameObject resource: resources){
+                resource.cameraMove(vector);
+            }
+
+            buildingArea.buildingAreaCameraMove(vector);
+        }
+
+//        if(currentY >= SCREEN_Y){
+//
+//            Vector vector = new Vector((currentX - SCREEN_X / 2) * -1, (currentY - SCREEN_Y / 2) * -1);
+//            vector = vector.normalize();
+//
+//            StatusBar.instance().cameraMove(vector);
+//        }
 
         //建築物相關測試
         buildingOption.update();
@@ -466,7 +495,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     // 先把資源堆物件 取出來(不用每次都用get去跑一次拿他)
                     GameObject resource = resources.get(i);
 
-                    //如果和資源碰撞 && 我的目的地就是在資源裡面
+                    //如果和資源碰撞 && 我的目的地就是在資源裡面 && 村民看的到的話(沒寫這個條件 他會重複計算)
                     if (citizen.isCollision(resource) && citizen.isTargetInObj(resource) && citizen.getVisible()) {
 
                         // 把資源的位置記起來
@@ -496,6 +525,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                             // 如果資源採乾了 移除他
                             if(resource != null && ((Steel)resource).getTotalNum() <= 0){
+
                                 resources.remove(i);
                             }
                         }
@@ -665,21 +695,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                     break;
                 }
-                case EXITED: {
-
-                    //                  System.out.println("EXIT");
-                    break;
-                }
-
-                case WHEEL_MOVED: {
-//             System.out.println("WHEEL_MOVED");
-
-                    break;
-                }
 
                 case MOVED: {
-
-
                 }
 
             }
@@ -700,6 +717,20 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             hasSetTarget = false;
             currentObj = null;
             controlHumans.clear();
+        }
+
+        if (commandCode == SPACE){
+            base.resetObjectXY();
+
+            for(Human human: city.getCitizens().getAllCitizens()){
+                human.resetObjectXY();
+            }
+
+            for(GameObject resource: resources){
+                resource.resetObjectXY();
+            }
+
+            buildingArea.buildingAreaResetPosition();
         }
     }
 
@@ -722,5 +753,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             }
         }
+
     }
 }

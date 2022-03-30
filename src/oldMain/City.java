@@ -187,6 +187,7 @@ public class City implements GameKernel.GameInterface {
             }
 
             zombies.timePass();
+
             //殭屍來襲時間( 每16小時來一次 )
             if (zombies.isAttacking()) {
                 System.out.println("殭屍來襲：" + this.zombies.getZombieTroop());
@@ -378,19 +379,24 @@ public class City implements GameKernel.GameInterface {
      * 顯示目前城市的所有資訊
      */
     public void showInfo() {
+
         //所有資源的資訊
         System.out.printf("第%d小時\n目前總資源量如下:\n" +
                 "木材: %d , 鋼鐵: %d, 瓦斯: %d\n", getGameTime() + 1, resource.getTotalWood(), resource.getTotalSteel(), resource.getTotalGas());
+
         //所有人力資源的資訊
         System.out.printf("目前人力資源如下:\n" +
                 "總市民人數: %d \n" +
                 "採木人: %d , 採鋼人: %d, 閒人: %d\n",
                 citizens.getNumOfCitizens(), citizens.getNumOfLoggingCitizens(), citizens.getNumOfMiningCitizens(), citizens.getNumOfFreeCitizens());
+
         //所有人民的資訊
         System.out.printf("目前士兵量如下:\n" +
                 "士兵: %d名, 飛機 %d架\n", military.getNumOfArmySoldier(), military.getNumOfAirmen());
+
         //顯示科技等級
         System.out.println("目前科技等級為:" + techLevel);
+
         //顯示下波攻擊倒數
         System.out.println("距下波攻擊還有 " + (16 - getGameTime() % 16) + " 小時");
         System.out.println("---------------------------------------------------");
@@ -537,14 +543,6 @@ public class City implements GameKernel.GameInterface {
     @Override
     public void paint(Graphics g) {
         buildings.paint(g);
-
-        // 下面的數字待調整 所以我暫時先不放到Global
-        g.setColor(Color.white);
-        g.setFont(new Font("TimeRoman", Font.PLAIN, 60));
-        g.drawString("" + resource.getTotalWood(), ICON_START_X + ICON_WIDTH / 2 + 100, ICON_START_Y + 50);
-        g.drawString("" + resource.getTotalSteel(),ICON_START_X + ICON_WIDTH / 2 + ICON_GAP + 100 , ICON_START_Y + 50);
-        g.drawString("" + citizens.getNumOfCitizens(), ICON_START_X + ICON_WIDTH / 2 + ICON_GAP * 2 + 100, ICON_START_Y + 50);
-
     }
 
     @Override

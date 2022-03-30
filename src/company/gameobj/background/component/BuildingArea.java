@@ -1,6 +1,7 @@
 package company.gameobj.background.component;
 
 import company.gametest9th.utils.GameKernel;
+import company.gametest9th.utils.Vector;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -51,4 +52,35 @@ public class BuildingArea implements GameKernel.GameInterface {
     public int lengthY(){
         return numY;
     }
+
+    /**
+     * 所有的基座 給我朝著 這段向量前進
+     * @param vector 向量
+     */
+
+    public void buildingAreaCameraMove(Vector vector){
+        for(ArrayList<BuildingGrid> buildingGridArr : buildingGrids){
+
+            for(BuildingGrid buildingGrid: buildingGridArr) {
+
+                buildingGrid.cameraMove(vector);
+            }
+        }
+    }
+
+    /**
+     * 所有的基座 給我回歸原味
+     *
+    */
+
+    public void buildingAreaResetPosition(){
+        for(ArrayList<BuildingGrid> buildingGridArr : buildingGrids){
+
+            for(BuildingGrid buildingGrid: buildingGridArr) {
+
+                buildingGrid.resetObjectXY();
+            }
+        }
+    }
+
 }

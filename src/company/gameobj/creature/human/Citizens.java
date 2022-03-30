@@ -252,6 +252,7 @@ public class Citizens {
      * @param y Y座標
      * @return 一個村民
      */
+
     public Citizen getCitizen(int x, int y){
 
         // 尋訪每一個村民

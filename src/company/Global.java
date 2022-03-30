@@ -80,6 +80,8 @@ public class Global {
     //建築
     public final static int BuildingTypeNum = 8;
 
+    public static final int CAMERA_SPEED = 5;
+
     /**
      * 操作指令
      */
