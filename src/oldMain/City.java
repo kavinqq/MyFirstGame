@@ -1,13 +1,20 @@
 package oldMain;
 
+import company.Global;
+import static company.Global.*;
+
 import company.gameobj.BuildingController;
 import company.gameobj.buildings.Building;
+
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
+
 
 import company.gameobj.creature.human.*;
 import company.gameobj.creature.enemy.zombies.*;
 import company.gameobj.BuildingController.*;
+
+import company.gametest9th.utils.GameKernel;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -43,7 +50,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
      * 遊戲的人類單位 1.士兵 2.市民
      * 建立一Human的陣列 以存放人類
      */
-    public final Citizens citizens;
+    private Citizens citizens;
     /**
      * 城市的軍隊
      */
@@ -64,7 +71,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         resource = new Resource();
         buildings = new BuildingController();
         zombies = new ZombieKingdom();
-        citizens = new Citizens(DEFAULT_CITIZEN);
+        citizens = null;
         military = new Military();
     }
 
@@ -119,6 +126,25 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
     }
 
     /**
+     * 視覺化的放資源
+     * @param num 資源數量
+     * @param resourceType 資源種類
+     */
+    public void gainResource(int num, Citizen.Resource resourceType) {
+
+        // 根據村民現在身上的 資源數量 && 種類 放到總資源堆
+        if(resourceType == Citizen.Resource.WOOD){
+            resource.addWood(num);
+        } else if(resourceType == Citizen.Resource.STEEL){
+            resource.addSteel(num);
+        }
+
+
+        // 瓦斯還沒有寫// TODO: 2022/3/29 瓦斯添加的流程
+        resource.addGas(buildings.getGasProduceNum());
+    }
+
+    /**
      * 黨指令下達完畢
      * 會依造指令而去執行每個單位時間索賄發生的事情
      * 1.因人而產出的物資
@@ -130,6 +156,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
      *
      * @param thisRoundTimePass 這一輪指令的時間
      */
+    //TODO system -> toaster 辰
     public void doCityWorkAndTimePass(int thisRoundTimePass) {
         //把時間流動前做的指令 && 決定流動的時間跑完
         for (int time = 0; time < thisRoundTimePass; time++) {
@@ -141,17 +168,17 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             int numOfNewCitizens = buildings.getNewCitizenNum(resource);
             if (numOfNewCitizens != 0) {
                 this.citizens.add(numOfNewCitizens);
-                System.out.printf("第%d回合 有新市民出生 ,閒置人數:%d\n", getGameTime() + 1, citizens.getNumOfFreeCitizens());
+                //System.out.printf("第%d回合 有新市民出生 ,閒置人數:%d\n", getGameTime() + 1, citizens.getNumOfFreeCitizens());
             }
             int numOfNewArmySoldiers = buildings.getNewArmyNum(resource);
             if (numOfNewArmySoldiers != 0) {
                 this.military.addArmy(numOfNewArmySoldiers);
-                System.out.printf("第%d回合 有 %d 個新戰士出生,目前一共有%d個戰士\n", getGameTime() + 1, numOfNewArmySoldiers, military.getNumOfArmySoldier());
+                //System.out.printf("第%d回合 有 %d 個新戰士出生,目前一共有%d個戰士\n", getGameTime() + 1, numOfNewArmySoldiers, military.getNumOfArmySoldier());
             }
             int numOfNewAirMen = buildings.getNewPlaneNum(resource);
             if (numOfNewAirMen != 0) {
                 this.military.addAirForce(numOfNewAirMen);
-                System.out.printf("第%d回合 有 %d 架新飛機產生,目前一共有%d架飛機\n", getGameTime() + 1, numOfNewAirMen, military.getNumOfAirmen());
+                //System.out.printf("第%d回合 有 %d 架新飛機產生,目前一共有%d架飛機\n", getGameTime() + 1, numOfNewAirMen, military.getNumOfAirmen());
             }
             //完成建築的升級和建造，科技等級提升
             buildings.completeJob();
@@ -167,6 +194,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             }
 
             zombies.timePass();
+
             //殭屍來襲時間( 每16小時來一次 )
             if (zombies.isAttacking()) {
                 //建築物升級測試會被毀掉，先註解掉
@@ -359,19 +387,24 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
      * 顯示目前城市的所有資訊
      */
     public void showInfo() {
+
         //所有資源的資訊
         System.out.printf("第%d小時\n目前總資源量如下:\n" +
                 "木材: %d , 鋼鐵: %d, 瓦斯: %d\n", getGameTime() + 1, resource.getTotalWood(), resource.getTotalSteel(), resource.getTotalGas());
+
         //所有人力資源的資訊
         System.out.printf("目前人力資源如下:\n" +
                 "總市民人數: %d \n" +
                 "採木人: %d , 採鋼人: %d, 閒人: %d\n",
                 citizens.getNumOfCitizens(), citizens.getNumOfLoggingCitizens(), citizens.getNumOfMiningCitizens(), citizens.getNumOfFreeCitizens());
+
         //所有人民的資訊
         System.out.printf("目前士兵量如下:\n" +
                 "士兵: %d名, 飛機 %d架\n", military.getNumOfArmySoldier(), military.getNumOfAirmen());
+
         //顯示科技等級
         System.out.println("目前科技等級為:" + techLevel);
+
         //顯示下波攻擊倒數
         System.out.println("距下波攻擊還有 " + (16 - getGameTime() % 16) + " 小時");
         System.out.println("---------------------------------------------------");
@@ -540,4 +573,15 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         buildings.mouseTrig(e,state,trigTime);
         currentBuildingNode=selectBuildingNode(e.getX(),e.getY());
     }
+
+
+    public void setCitizens(Citizens citizens){
+
+        this.citizens = citizens;
+    }
+
+    public Citizens getCitizens(){
+        return citizens;
+    }
+
 }

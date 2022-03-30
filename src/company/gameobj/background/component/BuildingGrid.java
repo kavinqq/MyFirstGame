@@ -13,7 +13,7 @@ public class BuildingGrid extends GameObject {
     private boolean isPreOnBuildGrid;
 
     public BuildingGrid(int x, int y) {
-        super(x, y,192+96,192+96);
+        super(x, y,96*5/4,96*5/4);
         img=SceneController.getInstance().imageController().tryGetImage(new Path().img().background().grass());
     }
 

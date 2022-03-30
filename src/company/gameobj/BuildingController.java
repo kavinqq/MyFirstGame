@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.function.ToDoubleBiFunction;
 
 import static company.gameobj.BuildingController.BuildingType.*;
 
@@ -295,8 +296,6 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         newBuilding.buildEndTime = City.getGameTime() + newBuilding.building.getBuildTime();
         //尚未開始運作
         newBuilding.building.setWorking(false);
-//        //設置為升級中 創建不等於升級中
-//        newBuilding.building.setUpgrading(true);
         //設置為不可升級狀態
         newBuilding.building.setReadyToUpgrade(false);
 
@@ -362,7 +361,6 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         for (BuildingNode node : list) {
             //若建造完成時間==當前時間->建造完成
             if (node.buildEndTime == City.getGameTime()) {
-                System.out.println("建造完成");
                 node.building.setLevel(node.building.getLevel() + 1);
                 node.building.setUpgrading(false);
                 node.building.setWorking(true);

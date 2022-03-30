@@ -1,6 +1,8 @@
 package company.gameobj.creature.human;
 
 import company.Global;
+
+import company.gameobj.GameObject;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.Delay;
 import company.gametest9th.utils.HumanAnimator;
@@ -9,6 +11,14 @@ import company.gametest9th.utils.Path;
 import java.awt.*;
 
 public class Citizen extends Human {   //市民
+
+    // 控管村民身上資源的enum
+    public enum Resource {
+
+        // 瓦斯自動採 所以不用寫
+        WOOD,
+        STEEL;
+    }
 
     public enum WORK_STATUS {
         FREE, WOOD, STEEL;
@@ -24,8 +34,23 @@ public class Citizen extends Human {   //市民
     private static final int colliderHeight = 64;
 
     private Delay toolDelay;
+    private Delay visibleDelay; // 隱形的秒數
 
     private HumanAnimator animator;
+
+    // 這次採到的資源類別 && 數量
+    private Resource resourceType;
+    private int resourceNum;
+
+    // 從哪個資源堆採的 紀錄下XY
+    private int resourceTargetX;
+    private int resourceTargetY;
+
+    private boolean isGoingToCollect;
+
+    // 主堡XY
+    private int baseX;
+    private int baseY;
 
 
     /**
@@ -40,10 +65,26 @@ public class Citizen extends Human {   //市民
         toolDelay = new Delay(30);
 
         // 村民的圖片
-        setCharacterType(0);
+        setCharacterType(6);
 
         // 動畫初始化
         animator = new HumanAnimator(getCharacterType(), getMoveStatus());
+
+        // 現在看不看的見村民
+        setVisible(true);
+
+        // 能不能看到人物的delay
+        visibleDelay = new Delay(60);
+
+        // 目前身上的資源類別 && 數量
+        resourceType = null;
+        resourceNum = 0;
+
+        // 上一個採集點
+        resourceTargetX = 0;
+        resourceTargetY = 0;
+
+        isGoingToCollect = false;
     }
 
     /**
@@ -103,6 +144,16 @@ public class Citizen extends Human {   //市民
     @Override
     public void update() {
 
+        // 隱形時間到
+        if(visibleDelay.count()){
+
+            // 現形
+            setVisible(true);
+
+            // 回去放資源
+            setTarget(baseX, baseY);
+        }
+
         // 如果我的MoveStatue 是 walk
         if (getMoveStatus() == Animator.State.WALK) {
 
@@ -138,9 +189,65 @@ public class Citizen extends Human {   //市民
 
         // 設定目的地X Y
         if (!this.isAt(x, y)) {
+
             this.setTargetXY(x, y);
             this.setMoveStatus(Animator.State.WALK);
         }
     }
 
+    // 採集ING
+    public void collecting(GameObject gameObject, int baseX, int baseY, int resourceNum, Resource resourceType){
+
+        // 把base的位置一起傳進來 記起來
+        this.baseX = baseX;
+        this.baseY = baseY;
+
+
+        // 開始計時 (消失1秒)
+        visibleDelay.play();
+
+        // 消失ing
+        setVisible(false);
+
+        // 這一次的採集種類 && 量
+        this.resourceNum = resourceNum;
+        this.resourceType = resourceType;
+    }
+
+
+    public int getResourceNum(){
+        return resourceNum;
+    }
+
+    public Resource getResourceType(){
+        return resourceType;
+    }
+
+    public void setResourceType(){
+        resourceType = null;
+    }
+
+    public void setResourceNum(){
+        resourceNum = 0;
+    }
+
+    public void setResourceTargetX(int x){
+        this.resourceTargetX = x;
+    }
+
+    public void setResourceTargetY(int y){
+        this.resourceTargetY = y;
+    }
+
+    public int getResourceTargetX(){
+        return resourceTargetX;
+    }
+
+    public int getResourceTargetY(){
+        return resourceTargetY;
+    }
+
+    public void turnOffIsGoingToCollect() {
+        isGoingToCollect = false;
+    }
 }

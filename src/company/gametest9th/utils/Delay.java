@@ -45,6 +45,7 @@ public class Delay {
             }
             return true;
         }
+
         count++;
         return false;
     }

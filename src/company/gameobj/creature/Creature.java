@@ -284,4 +284,11 @@ public abstract class Creature extends GameObject {
         return (this.painter().centerX() == targetX && this.painter().centerY() == targetY);
     }
 
+    // 目的地是否在該gameObj裡面
+    public boolean isTargetInObj(GameObject gameObject){
+
+        return targetX > gameObject.painter().left() && targetX < gameObject.painter().right() && targetY < gameObject.painter().bottom() && targetY > gameObject.painter().top();
+
+    }
+
 }

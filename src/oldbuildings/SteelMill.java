@@ -35,7 +35,7 @@ public class SteelMill extends BuildingsOld {
 
     @Override
     public String toString() {
-        return "煉鋼廠:每小時採集量+1(每房屋等級+2)";
+        return "煉鋼廠: 每小時採集量+1(每房屋等級+2)";
     }
 
     public String buildingDetail(int level){

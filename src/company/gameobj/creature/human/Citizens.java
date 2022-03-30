@@ -45,11 +45,18 @@ public class Citizens {
      * @param defaultNumOfCitizens
      */
     public Citizens(int defaultNumOfCitizens) {
+
+        System.out.println("DNOC: " + defaultNumOfCitizens);
+
         this.valueOfCitizens = 0;
+
         this.numOfFreeCitizens = 0;
+
         this.numOfLoggingCitizens = 0;
+
         this.numOfMiningCitizens = 0;
-//        this.add(defaultNumOfCitizens); // 暫時先註解掉一下 我測試東西而已
+
+        this.add(defaultNumOfCitizens); // 暫時先註解掉一下
 
         maxCitizen = 100;
         count = 0;
@@ -63,10 +70,15 @@ public class Citizens {
      * @param num
      */
     public void add(int num) {
+
         Citizen citizen;
+
         this.numOfFreeCitizens += num;
+
         for (int i = 0; i < num; i++) {
-            citizen = new Citizen(Global.SCREEN_X/2, Global.SCREEN_Y/2);//TODO: set the correct x and y
+            System.out.println("I : " + i);
+//            citizen = new Citizen(Global.SCREEN_X/2, Global.SCREEN_Y/2);//TODO: set the correct x and y
+            citizen = new Citizen(100, 400 + i * 74);
             this.valueOfCitizens += citizen.getValue();
             this.citizens.add(citizen);
         }
@@ -167,7 +179,9 @@ public class Citizens {
      * @param work
      */
     public void assignCitizenToWork(int num, OldMain.Command work) {
+
         this.numOfFreeCitizens -= num;
+
         if (work == OldMain.Command.WOOD) {
             this.numOfLoggingCitizens += num;
         } else if (work == OldMain.Command.STEEL) {
@@ -175,6 +189,7 @@ public class Citizens {
         }
 
         Citizen citizen;
+
         for (int i = 0; num > 0; i++) {
             citizen = citizens.get(i);
             if (citizen.isFree()) {
@@ -206,12 +221,23 @@ public class Citizens {
         return this.citizens.size();
     }
 
+
+    // 畫出所有的村民
     public void paintAll(Graphics g){
+
+        // 遍尋村民List
         for(Citizen citizen: citizens){
-            citizen.paint(g);
+
+            // 如果他現在能被看見的話 => 畫出他
+            if(citizen.getVisible()){
+                citizen.paint(g);
+            }
         }
     }
 
+    /**
+     *
+     */
     public void updateAll(){
 
         for(Citizen citizen: citizens){
@@ -226,6 +252,7 @@ public class Citizens {
      * @param y Y座標
      * @return 一個村民
      */
+
     public Citizen getCitizen(int x, int y){
 
         // 尋訪每一個村民
@@ -240,6 +267,13 @@ public class Citizens {
         // 沒有村民在這個範圍內
         return null;
     }
+
+
+    /**
+     * 獲得框選的村民
+     * @param box 框選的框框
+     * @return 回傳被框選的人民
+     */
 
     public List<Human> getBoxCitizens(GameObject box){
 
@@ -257,6 +291,8 @@ public class Citizens {
 
         return citizensInBox;
     }
+
+
 
     public List<Citizen> getAllCitizens(){
         return this.citizens;

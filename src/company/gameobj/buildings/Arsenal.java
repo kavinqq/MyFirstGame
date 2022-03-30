@@ -46,9 +46,11 @@ public class Arsenal extends Building {
     public String toString() {
         return "兵工廠:可以升級士兵";
     }
+
     public String buildingDetail(int level){
         return "";
     }
+
     //初始化
     @Override
     protected void init() {
@@ -69,5 +71,4 @@ public class Arsenal extends Building {
                 .setImgPath(new Path().img().building().Arsenal());
         imgInit();
     }
-
 }
