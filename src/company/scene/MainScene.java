@@ -208,6 +208,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     @Override
     public void update() {
 
+        StatusBar.instance().setTimeString(startTime);
+
         //建築物相關測試
         buildingOption.update();
 
