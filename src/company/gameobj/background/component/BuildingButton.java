@@ -242,21 +242,17 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
             }
 
             case RELEASED:{
-                released();
+                originPosition();
+                currentId=0;
+                isDragged=false;
+                isDragging =false;
+                isPressed=false;
+                isReleased=true;
+                isMoveOnButton=false;
                 break;
             }
         }
         previousX =e.getX();
         previousY =e.getY();
-    }
-
-    private void released() {
-        originPosition();
-        currentId=0;
-        isDragged=false;
-        isDragging =false;
-        isPressed=false;
-        isReleased=true;
-        isMoveOnButton=false;
     }
 }

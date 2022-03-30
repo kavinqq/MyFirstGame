@@ -35,7 +35,7 @@ public class SteelMill extends Building{
         setId(5)
                 .setName("煉鋼廠")
                 .setBuildTime(1)
-                .setUpgradeTime(30)
+                .setUpgradeTime(5)
                 .setTechLevelNeedUpgrade(2)
                 .setLevelC(0)
                 .setTechLevel(1)

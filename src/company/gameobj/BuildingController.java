@@ -3,6 +3,7 @@ package company.gameobj;
 
 import company.gameobj.buildings.Building;
 import company.gameobj.buildings.*;
+import company.gameobj.creature.human.Citizen;
 import company.gameobj.message.ToastController;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
@@ -66,11 +67,14 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
      */
     private ArrayList<Building> damageBuilding;
 
+
+
     @Override
     public void paint(Graphics g) {
         for (BuildingType value:values()) {
             for (int j = 0; j < value.list.size(); j++) {
-                value.list().get(j).paint(g);
+                value.list().get(j).getBuilding().paint(g);
+
             }
         }
     }
@@ -79,6 +83,8 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
     public void update() {
         for (BuildingType value:values()) {
             for (int j = 0; j < value.list.size(); j++) {
+
+
                 value.list().get(j).update();
             }
         }
@@ -89,6 +95,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         for (BuildingType value:values()) {
             for (int j = 0; j < value.list.size(); j++) {
                 value.list().get(j).mouseTrig(e,state,trigTime);
+
             }
         }
     }
@@ -146,7 +153,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         /**BuildingNode
          *
          */
-        public static BuildingNode selectBuildingNode;
+        public BuildingNode selectBuildingNode;
         /**
          * 建築本身
          */
@@ -182,17 +189,14 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
 
         private void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
             building.mouseTrig(e,state,trigTime);
-            switch (state){
-                case CLICKED :{
-                    if(building.upGradeIcon.isUpgrade()){
-                        selectBuildingNode=this;
-                    }
-                }
-            }
         }
 
         public BuildingNode(Building building) {
             this.building = building;
+        }
+
+        public boolean getCan(int x){
+            return building.getIcons().get(x).getCan();
         }
 
         /**
@@ -235,6 +239,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         isUpgradingSoldier = false;
         isUpgradingPlane = false;
         isUpgradingTech = false;
+
     }
 
     /**
@@ -290,10 +295,12 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         newBuilding.buildEndTime = City.getGameTime() + newBuilding.building.getBuildTime();
         //尚未開始運作
         newBuilding.building.setWorking(false);
-        //設置為升級中
-        newBuilding.building.setUpgrading(true);
+//        //設置為升級中 創建不等於升級中
+//        newBuilding.building.setUpgrading(true);
         //設置為不可升級狀態
         newBuilding.building.setReadyToUpgrade(false);
+
+        newBuilding.building.setUpgrading(false);
         //添加進該分類的鏈表中
         type.list.add(newBuilding);
     }
@@ -1089,9 +1096,25 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
      *
      * @return 是否正在升級科技
      */
-    public boolean isUpgradingTech() {
+    public boolean isUpgradingTech(BuildingNode buildingNode) {
+//        buildingNode.building.setUpgrading(true);
+//        buildingNode.building.setWorking(false);
+//        buildingNode.building.setReadyToUpgrade(false);
         return isUpgradingTech;
     }
+
+    public BuildingNode selectionBuildingNode(int x,int y){
+        for (BuildingType value:values()) {
+            for (int j = 0; j < value.list.size(); j++) {
+                if (value.list().get(j).building.isEntered(x, y)) {
+                    return value.list().get(j);
+                }
+            }
+        }
+        return null;
+    }
+
+
 
     /**
      * 建築受到傷害
@@ -1195,6 +1218,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
 
         return builder.toString();
     }
+
 
     /**
      * 沒有研究所

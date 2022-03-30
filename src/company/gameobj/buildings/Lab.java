@@ -1,9 +1,11 @@
 package company.gameobj.buildings;
+import company.Global;
 import company.gametest9th.utils.Path;
 
 import company.gameobj.GameObject;
 
 public class Lab extends Building {
+
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工廠)
@@ -21,7 +23,7 @@ public class Lab extends Building {
     public Lab(int x, int y) {
         super(x, y);
         init();
-    }
+        }
 
 
 
@@ -30,6 +32,7 @@ public class Lab extends Building {
     }
     //初始化
     protected void init(){
+
         setId(2)
                 .setName("研究所")
                 .setBuildTime(3)

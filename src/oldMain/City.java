@@ -461,8 +461,8 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
      *
      * @return 是否正在升級科技
      */
-    public boolean isUpgradingTech() {
-        return buildings.isUpgradingTech();
+    public boolean isUpgradingTech(BuildingNode buildingNode) {
+        return buildings.isUpgradingTech(buildingNode);
     }
 
     /**
@@ -525,9 +525,19 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         buildings.update();
     }
 
+    private BuildingNode currentBuildingNode;
+
+    public BuildingNode selectBuildingNode(int x,int y){
+        return buildings.selectionBuildingNode(x,y);
+    }
+
+    public BuildingNode getCurrentBuildingNode(){
+        return currentBuildingNode;
+    }
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
         buildings.mouseTrig(e,state,trigTime);
+        currentBuildingNode=selectBuildingNode(e.getX(),e.getY());
     }
 }

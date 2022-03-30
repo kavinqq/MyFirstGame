@@ -96,7 +96,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private long startTime;
     private int nowTime;
     private String outputTimeStr;
-
+    private Building currentBuilding;
     boolean preDragging;
 
     @Override
@@ -134,8 +134,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         realityDelay = new Delay(realityTimeSpeed);
         realityDelay.loop();
 
-        gameTimeSpeed=120;
-        gameDelay=new Delay(gameTimeSpeed);
+        gameTimeSpeed = 120;
+        gameDelay = new Delay(gameTimeSpeed);
         gameDelay.loop();
 
 
@@ -183,8 +183,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //城市
         city.paint(g);
-
-
 
         //資源欄 UI
         // (70,0,500,60) => 我只取這個UI來源的 中間黑色部分
@@ -250,10 +248,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
         //畫當前按鈕
-        if(buildingOption.getCurrentButton()!=null){
+        if (buildingOption.getCurrentButton() != null) {
             buildingOption.getCurrentButton().paint(g);
         }
-
 
 
         //提示框
@@ -261,7 +258,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         ToastController.instance().paint(g);
 
     }
+
     private boolean canBuild;
+
     @Override
     public void update() {
         // 把 毫秒 換算回 秒 (1秒 = 10的9次方 * 1毫秒)
@@ -280,36 +279,35 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         buildingArea.update();
 
         city.update();
+
         //判斷現在有無選取按鈕
         if (buildingOption.getCurrentButton() != null) {
             //取得現在選取的按鈕 及 建築類型
             BuildingButton currentButton = buildingOption.getCurrentButton();
             type = BuildingType.getBuildingTypeByInt(currentButton.getId());
             //點選按鈕時 判斷可否蓋建築物
-            if (currentButton.getCountPressed()>=0 && currentButton.isPressed() && !currentButton.isDragging() && !currentButton.isReleased()) {
+            if (currentButton.getCountPressed() >= 0 && currentButton.isPressed() && !currentButton.isDragging() && !currentButton.isReleased()) {
                 currentButton.decCountPressed();
                 if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
-                    canBuild=false;
+                    canBuild = false;
                     currentButton.setCanDragging(false);
-                    ToastController.instance().print("建築物已蓋滿");
+                    ToastController.instance().print("建造-建築物已蓋滿");
                     //System.out.println("你的城市 經過多年風風雨雨 鐵與血的灌溉\n如今 從杳無人煙之地 成了 充斥著滿滿的高樓大廈 人車馬龍的繁華之地\n你的城市 已沒有地方可以建造新的建築了");
-                }
-                else if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
-                    canBuild=false;
+                } else if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
+                    canBuild = false;
                     currentButton.setCanDragging(false);
-                    ToastController.instance().print("科技等級不足");
-                }
-                else if (!type.instance().isEnoughBuild(city.getResource())) {
-                    canBuild=false;
+                    ToastController.instance().print("建造-科技等級不足");
+                } else if (!type.instance().isEnoughBuild(city.getResource())) {
+                    canBuild = false;
                     currentButton.setCanDragging(false);
-                    ToastController.instance().print("物資不足");
-                }else {
-                    canBuild=true;
+                    ToastController.instance().print("建造-物資不足");
+                } else {
+                    canBuild = true;
                     currentButton.setCanDragging(true);
                 }
             }
             //建造階段
-            if(canBuild){
+            if (canBuild) {
                 //判斷是否進入可建造區
                 for (int i = 0; i < buildingArea.lengthY(); i++) {
                     for (int j = 0; j < buildingArea.lengthX(); j++) {
@@ -319,9 +317,13 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                         //滑鼠放開時，判斷上一偵是否在建造區中
                         if (currentButton.isReleased && buildingArea.get(i, j).isOnBuildGrid()) {//
+
+
                             //建造房子
                             city.build(type, currentX - BUILDING_WIDTH / 2, currentY - BUILDING_HEIGHT / 2);
                             ToastController.instance().print(type.instance().getName() + "建造成功");
+
+
                         }
                         //判斷是否蓋在建築區上
                         buildingArea.get(i, j).setOnBuildGrid(buildingArea.get(i, j).isCover(currentButton));
@@ -329,7 +331,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
                 //滑鼠放開瞬間 判斷上一偵是否是拖曳且不再區域內
                 if (currentButton.isReleased && isPreAllNonBuildGrid && preDragging) {
-                    ToastController.instance().print("此處不能蓋房子");
+                    ToastController.instance().print("建造-此處不能蓋房子");
                 }
                 preDragging = currentButton.isDragging();
                 isPreAllNonBuildGrid = buildingArea.isAllNonOnBuildGrid();
@@ -337,104 +339,73 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
         //升級
-        if(Building.SelectBuilding!=null && BuildingController.BuildingNode.selectBuildingNode!=null){
-            //show出可以升級的建築，且有可以升級的才執行選項
-            //city.showCanUpgradeBuilding();
+        if (city.getCurrentBuildingNode() != null) {
             //選取要升級的種類
-            if (city.isNoLab() && city.isNoArsenal()) {
-                //break;
-            }
-            BuildingController.BuildingNode selectBuilding=BuildingController.BuildingNode.selectBuildingNode;
+            BuildingController.BuildingNode selectBuilding = city.getCurrentBuildingNode();
             BuildingType type = BuildingType.getBuildingTypeByInt(selectBuilding.getBuilding().getId());
-            //如過建築鏈表中有可以升級的建築就會被顯示出來
-            if (city.canUpgradeBuilding(type) && selectBuilding.getBuilding().upGradeIcon.getCountClick()>0) {
-                //顯示可以升級的建築細節，取得可升級建築陣列
-                ArrayList<BuildingController.BuildingNode> canUpgradeTypeList = city.showAndGetCanUpgradeTypeDetail(type);
-                //若陣列不為空，代表有閒置的研究所或兵工廠可以使用
-                if (canUpgradeTypeList != null) {
+
+            if ((selectBuilding.getBuilding().getIcons().size() == 2 && selectBuilding.getCan(0))
+            ||(selectBuilding.getBuilding().getIcons().size() == 3 && (selectBuilding.getCan(0)
+            ||selectBuilding.getBuilding().getIcons().get(2).getCan()))) {
+
+
+                if (City.getTechLevel() < type.instance().getTechLevelNeedUpgrade()) {
+                    ToastController.instance().print("升級-科技等級不足");
+
+                } else if (!type.instance().isEnoughUpgrade(city.getResource())) {
+                    ToastController.instance().print("升級-物資不足");
+
+                } else if (city.canUpgradeBuilding(type)) {// && selectBuilding.getBuilding().upGradeIcon.getCountClick()>0
+
                     switch (type) {
                         case LAB: {
-                            if (city.isUpgradingTech()) {
-                                ToastController.instance().print("科技已在升級中，請等待此次升級結束");
+                            if (city.isUpgradingTech(selectBuilding)) {
+                                ToastController.instance().print("升級-科技已在升級中，請等待此次升級結束");
                                 //System.out.println("科技已在升級中，請等待此次升級結束");
                             } else {
                                 city.upgradeTechLevel();
-                                ToastController.instance().print("科技升級中");
+                                ToastController.instance().print("升級-科技開始升級");
                                 //System.out.println("科技升級中");
                             }
                             break;
                         }
                         case ARSENAL: {
-                            //choose = inputInt("要升級1.士兵 2.飛機", 1, 2);
-                            int aaaa=2;
-                            switch (aaaa) {//choose
-                                case 1: {
-                                    if (city.isUpgradingSoldier()) {
-                                        System.out.println("士兵已在升級中，請等待此次升級結束");
-                                    } else {
-                                        city.upgradeSoldier();
-                                        System.out.println("士兵升級中");
-                                    }
-                                    break;
+                            if (selectBuilding.getCan(0)) {
+                                if (city.isUpgradingSoldier()) {
+                                    System.out.println("士兵已在升級中，請等待此次升級結束");
+                                } else {
+                                    city.upgradeSoldier();
+                                    System.out.println("士兵升級中");
                                 }
-                                case 2: {
-                                    if (city.isUpgradingPlane()) {
-                                        System.out.println("飛機已在升級中");
-                                    } else {
-                                        city.upgradePlane();
-                                        System.out.println("飛機升級中");
-                                    }
-                                    break;
+                            }
+                            if (selectBuilding.getCan(2)) {
+                                if (city.isUpgradingPlane()) {
+                                    System.out.println("飛機已在升級中");
+                                } else {
+                                    city.upgradePlane();
+                                    System.out.println("飛機升級中");
                                 }
+
                             }
                             break;
                         }
                         default: {
-                            city.upgrade(selectBuilding);
-                            ToastController.instance().print("安排升級中");
-                            //System.out.println("安排升級中");
+                            if (selectBuilding.getBuilding().getIcons().get(0).getCan()) {
+                                city.upgrade(selectBuilding);
+                                ToastController.instance().print("安排升級中");
+                                //System.out.println("安排升級中");
+                            }
                         }
                     }
                 }
-            } else {
-                if (type == LAB && city.getFreeLabNum() == 0) {
-                    //ToastController.instance().print("沒有閒置的研究所");
-                    //System.out.println("沒有閒置的研究所");
+                //限制按鈕按一次 就變成false;
+                selectBuilding.getBuilding().getIcons().get(0).setCan(false);
+                if(selectBuilding.getBuilding().getIcons().size() == 3){
+                    selectBuilding.getBuilding().getIcons().get(2).setCan(false);
                 }
-                if (type == ARSENAL && city.getFreeArsenalNum() == 0) {
-                    //ToastController.instance().print("沒有閒置的兵工廠");
-                    //System.out.println("沒有閒置的兵工廠");
-                }
-                if (City.getTechLevel() < type.instance().getTechLevelNeedUpgrade()) {
-                    //ToastController.instance().print("科技等級不足");
-                    //System.out.println("科技等級不足");
-                }
-                if (!type.instance().isEnoughUpgrade(city.getResource())) {
-                    //ToastController.instance().print("物資不足");
-                    //System.out.println("物資不足");
-                }
+
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -632,8 +603,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             HintDialog.instance().mouseTrig(e, state, trigTime);
 
-            city.mouseTrig(e,state,trigTime);
-
+            city.mouseTrig(e, state, trigTime);
             //如果現在沒有框選
             if (!canUseBoxSelection) {
                 // 選單控制

@@ -84,10 +84,6 @@ public abstract class GameObject implements GameKernel.GameInterface {
         return null;
     }
 
-
-
-
-
     public boolean isCollision(GameObject object) {
         //return collider.overlap(object.collider);
         return painter.overlap(object.painter);
