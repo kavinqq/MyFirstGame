@@ -186,7 +186,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 if(redRects!= null){
                     g.setColor(Color.red);
                     for (int i = 0; i < redRects.length; i++) {
-                        System.out.println("abba");
                         if(greenRect.overlap(redRects[i])){
                             g.fillRect(redRects[i].left(),redRects[i].top(),redRects[i].width(),redRects[i].height());
                         }

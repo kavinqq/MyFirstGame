@@ -75,6 +75,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     private int thisRoundTimePass; //要跳過的時間
 
+    private boolean preCanBuild;
     // 資源
     private List<GameObject> resources;
 
@@ -99,7 +100,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //base先不刪下面有些東西與base連接
         base = new Base(20, 20);
 
-
+        preCanBuild = true;
         // city本體
         city = new City();
         //city.build(BuildingType.BASE,SCREEN_X / 2 - Base.BASE_WIDTH, SCREEN_Y / 2 - Base.BASE_HEIGHT);
@@ -162,7 +163,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 //        city.getCitizens().paintAll(g);
 
 
-
         // 如果現在可以使用框選
         if (canUseBoxSelection) {
 
@@ -189,8 +189,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             }
         }
-
-
 
 
         // 畫出可採集的資源
@@ -269,16 +267,16 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 if (city.getBuildingNum() >= city.MAX_CAN_BUILD) {
                     canBuild = false;
                     currentButton.setCanDragging(false);
-                    ToastController.instance().print("建造-建築物已蓋滿 最大建築物量為"+city.MAX_CAN_BUILD);
+                    ToastController.instance().print("建造-建築物已蓋滿 最大建築物量為" + city.MAX_CAN_BUILD);
                     //System.out.println("你的城市 經過多年風風雨雨 鐵與血的灌溉\n如今 從杳無人煙之地 成了 充斥著滿滿的高樓大廈 人車馬龍的繁華之地\n你的城市 已沒有地方可以建造新的建築了");
                 } else if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
                     canBuild = false;
                     currentButton.setCanDragging(false);
-                    ToastController.instance().print("建造-科技等級不足 科技等級需要"+type.instance().getTechLevelNeedBuild()+"級");
+                    ToastController.instance().print("建造-科技等級不足 科技等級需要" + type.instance().getTechLevelNeedBuild() + "級");
                 } else if (!type.instance().isEnoughBuild(city.getResource())) {
                     canBuild = false;
                     currentButton.setCanDragging(false);
-                    ToastController.instance().print("建造-物資不足 " +type.instance().showBuildCost());
+                    ToastController.instance().print("建造-物資不足 " + type.instance().showBuildCost());
                 } else {
                     canBuild = true;
                     currentButton.setCanDragging(true);
@@ -294,27 +292,30 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         //將重疊區域回傳給buildingOption
                         Rect greenRect = currentButton.overlapObject(buildingArea.get(i, j));
                         currentButton.setGreenRect(greenRect);
-                        if(currentButton.getGreenRect() !=null){
-                            for (BuildingType value:values()) {
-                                ArrayList<Rect> redRects=new ArrayList<>();
+                        if (currentButton.getGreenRect() != null) {
+                            //與蓋好建築物比較回傳給currentButton
+                            for (BuildingType value : values()) {
+                                ArrayList<Rect> redRects = new ArrayList<>();
                                 for (int k = 0; k < value.list().size(); k++) {
-                                    Rect tmpRect=value.list().get(k).getBuilding().overlapRect(currentButton.getGreenRect());
-                                    if(tmpRect != null){
+                                    Rect tmpRect = value.list().get(k).getBuilding().overlapRect(currentButton.getGreenRect());
+                                    if (tmpRect != null) {
                                         redRects.add(tmpRect);
-                                        currentButton.setRedRects(redRects.toArray(new Rect[redRects.size()]));
                                     }
                                 }
-
+                                if (redRects != null && redRects.size() >= 1) {
+                                    currentButton.setRedRects(redRects.toArray(new Rect[redRects.size()]));
+                                }
                             }
                         }
 
+
                         //滑鼠放開時，判斷滑鼠放開的上一偵是否在建造區中
-                        if (currentButton.isReleased && buildingArea.get(i, j).isOnBuildGrid()) {//
+                        if (currentButton.isReleased && buildingArea.get(i, j).isOnBuildGrid() && preCanBuild) {//
 
 
                             //建造房子
                             city.build(type, currentMouseX - BUILDING_WIDTH / 2, currentMouseY - BUILDING_HEIGHT / 2);
-                            ToastController.instance().print("建造-"+type.instance().getName() + "成功");
+                            ToastController.instance().print("建造-" + type.instance().getName() + "成功");
 
 
                         }
@@ -326,9 +327,30 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             }
             //滑鼠放開瞬間 判斷上一偵是否是拖曳且不再區域內
-            if (currentButton.isReleased && isPreAllNonBuildGrid && preDragging && currentButton.getRedRects()!=null) {
+            if (currentButton.isReleased && (isPreAllNonBuildGrid || !preCanBuild) && preDragging) {//|| canBuild
+                System.out.println("此處不能蓋房子");
                 ToastController.instance().print("建造-此處不能蓋房子");
             }
+
+
+            if (currentButton.getGreenRect() != null && currentButton.getRedRects() != null) {
+                for (int k = 0; k < currentButton.getRedRects().length; k++) {
+                    if (!currentButton.getGreenRect().overlap(currentButton.getRedRects()[k])) {
+                        preCanBuild = true;
+                    } else {
+                        preCanBuild = false;
+                        break;
+                    }
+                }
+            }
+            if (currentButton.getGreenRect() != null && currentButton.getRedRects() != null) {
+                System.out.println("Current\t" + currentButton.painter().top());
+                System.out.println("Green\t" + currentButton.getGreenRect().top());
+                System.out.println("RedRects\t" + currentButton.getRedRects()[0].top());
+
+            }
+            System.out.println("preCanBuild\t" + preCanBuild);
+
             preDragging = currentButton.isDragging();
             isPreAllNonBuildGrid = buildingArea.isAllNonOnBuildGrid();
         }
