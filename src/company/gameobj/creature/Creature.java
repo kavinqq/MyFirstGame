@@ -311,7 +311,6 @@ public abstract class Creature extends GameObject {
      */
 
     @Override
-
     public void cameraMove() {
 
         // 本體跟著鏡頭動
@@ -330,6 +329,8 @@ public abstract class Creature extends GameObject {
     /**
      * 重製視窗回初始位置
      */
+
+    @Override
     public void resetObjectXY() {
 
         // 本體跟著鏡頭動
