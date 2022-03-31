@@ -65,7 +65,7 @@ public class City implements GameKernel.GameInterface {
         resource = new Resource();
         buildings = new BuildingController();
         zombies = new ZombieKingdom();
-        citizens = null;
+        citizens = null;//TODO
         military = new Military();
     }
 
