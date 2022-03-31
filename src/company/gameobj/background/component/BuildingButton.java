@@ -61,10 +61,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     private boolean isDragged;
     //緩衝有些正常感應不夠靈敏
     private boolean isShuffle;
-    //紅色區域
-    private Image redImg;
-    //綠色區域
-    private Image greenImg;
     //isRedImg
     private boolean isVisible;
     //是否是現在的按鈕Id
@@ -76,7 +72,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
 
     private boolean canDragging;
 
-    private Rect redRect; //最底層紅
+    private Rect[] redRects; //最底層紅
     private Rect greenRect;
 
 
@@ -88,8 +84,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         ox=x;
         oy=y;
         isMoveOnButton =false;
-        countPressed=0;
-        canBuild=true;//Fixme_待做
     }
 
     public int getCountPressed() {
@@ -124,7 +118,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         if(painter().left()!=ox || painter().top()!=oy){
             setPainterStartFromTopLeft(ox,oy);
         }
-
     }
 
     //滑鼠是否再按鈕上
@@ -157,11 +150,27 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     }
 
     //從外部控制綠色方形
-    public void setGreenRect(Rect Rect) {
-        if(Rect == null){
+    public void setGreenRect(Rect rect) {
+        if(rect == null){
             return;
         }
-        this.greenRect = Rect;
+        this.greenRect = rect;
+    }
+
+    //從綠色方形上在覆蓋紅色方形
+    public void setRedRects(Rect[] rects){
+        if(rects == null){
+            return;
+        }
+        this.redRects=rects;
+    }
+
+    public Rect getGreenRect(){
+        return greenRect;
+    }
+
+    public Rect[] getRedRects(){
+        return redRects;
     }
 
     @Override
@@ -174,6 +183,15 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
             if(greenRect != null && this.detectRange().overlap(greenRect)){
                 g.setColor(Color.green);
                 g.fillRect(greenRect.left(), greenRect.top(), greenRect.width(), greenRect.height());
+                if(redRects!= null){
+                    g.setColor(Color.red);
+                    for (int i = 0; i < redRects.length; i++) {
+                        System.out.println("abba");
+                        if(greenRect.overlap(redRects[i])){
+                            g.fillRect(redRects[i].left(),redRects[i].top(),redRects[i].width(),redRects[i].height());
+                        }
+                    }
+                }
             }
             g.setColor(Color.black);
         }

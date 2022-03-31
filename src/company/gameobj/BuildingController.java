@@ -75,7 +75,6 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         for (BuildingType value:values()) {
             for (int j = 0; j < value.list.size(); j++) {
                 value.list().get(j).getBuilding().paint(g);
-
             }
         }
     }
@@ -84,8 +83,6 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
     public void update() {
         for (BuildingType value:values()) {
             for (int j = 0; j < value.list.size(); j++) {
-
-
                 value.list().get(j).update();
             }
         }
@@ -96,7 +93,6 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         for (BuildingType value:values()) {
             for (int j = 0; j < value.list.size(); j++) {
                 value.list().get(j).mouseTrig(e,state,trigTime);
-
             }
         }
     }

@@ -590,6 +590,14 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         return military;
     }
 
+    /**
+     * 獲得City裡面 存有所有建築物的物件
+     * @return 存有所有建築物的物件
+     */
+    public BuildingController getBuildings() {
+        return buildings;
+    }
+
     @Override
     public void paint(Graphics g) {
         buildings.paint(g);

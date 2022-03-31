@@ -101,7 +101,17 @@ public abstract class GameObject implements GameKernel.GameInterface {
         painter.translateY(y);
     }
 
-
+    public Rect overlapRect(Rect rect) {
+        if (painter.overlap(rect)) {
+            //已確認交疊情況下 排順序下 找到X、Y方向 第2第3為交疊正方形位置
+            int[] intsX = {detectRange.left(), rect.left(), detectRange.right(), rect.right()};
+            Arrays.sort(intsX);
+            int[] intsY = {detectRange.top(), rect.top(), detectRange.bottom(), rect.bottom()};
+            Arrays.sort(intsY);
+            return new Rect(intsX[1], intsY[1], intsX[2] - intsX[1], intsY[2] - intsY[1]);
+        }
+        return null;
+    }
     public Rect overlapObject(GameObject object) {
         if (painter.overlap(object.painter)) {
             //已確認交疊情況下 排順序下 找到X、Y方向 第2第3為交疊正方形位置

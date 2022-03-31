@@ -29,19 +29,10 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
     private BuildingButton currentButton;
 
-    private Rect redRect;
-    private Rect greenRect;
-    private Image greenImg; //不可建造紅背景
-    private Image redImg; //可建造綠背景
     private int pressCount;
 
     public BuildingOption() {
         buildingButtons= new ArrayList(BuildingTypeNum);//建立所有建築物按鈕
-        //可建:綠背景
-        greenImg =SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().green());
-        //不可建:紅背景
-        redImg =SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().red());
-
 
         imgs = new Image[BuildingTypeNum];
 

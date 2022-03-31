@@ -28,6 +28,7 @@ import oldMain.City;
 import java.awt.*;
 
 import static company.Global.*;
+import static company.gameobj.BuildingController.BuildingType.values;
 
 
 /**
@@ -289,14 +290,27 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         //將重疊區域回傳給buildingOption
                         Rect greenRect = currentButton.overlapObject(buildingArea.get(i, j));
                         currentButton.setGreenRect(greenRect);
+                        if(currentButton.getGreenRect() !=null){
+                            for (BuildingType value:values()) {
+                                ArrayList<Rect> redRects=new ArrayList<>();
+                                for (int k = 0; k < value.list().size(); k++) {
+                                    Rect tmpRect=value.list().get(k).getBuilding().overlapRect(currentButton.getGreenRect());
+                                    if(tmpRect != null){
+                                        redRects.add(tmpRect);
+                                        currentButton.setRedRects(redRects.toArray(new Rect[redRects.size()]));
+                                    }
+                                }
 
-                        //滑鼠放開時，判斷上一偵是否在建造區中
+                            }
+                        }
+
+                        //滑鼠放開時，判斷滑鼠放開的上一偵是否在建造區中
                         if (currentButton.isReleased && buildingArea.get(i, j).isOnBuildGrid()) {//
 
 
                             //建造房子
                             city.build(type, currentMouseX - BUILDING_WIDTH / 2, currentMouseY - BUILDING_HEIGHT / 2);
-                            ToastController.instance().print(type.instance().getName() + "建造成功");
+                            ToastController.instance().print("建造-"+type.instance().getName() + "成功");
 
 
                         }
@@ -305,13 +319,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     }
 
                 }
-                //滑鼠放開瞬間 判斷上一偵是否是拖曳且不再區域內
-                if (currentButton.isReleased && isPreAllNonBuildGrid && preDragging) {
-                    ToastController.instance().print("建造-此處不能蓋房子");
-                }
-                preDragging = currentButton.isDragging();
-                isPreAllNonBuildGrid = buildingArea.isAllNonOnBuildGrid();
+
             }
+            //滑鼠放開瞬間 判斷上一偵是否是拖曳且不再區域內
+            if (currentButton.isReleased && isPreAllNonBuildGrid && preDragging) {
+                ToastController.instance().print("建造-此處不能蓋房子");
+            }
+            preDragging = currentButton.isDragging();
+            isPreAllNonBuildGrid = buildingArea.isAllNonOnBuildGrid();
         }
 
         //升級
