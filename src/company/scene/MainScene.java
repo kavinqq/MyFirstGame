@@ -18,9 +18,6 @@ import company.gametest9th.utils.*;
 import company.gameobj.GameObject;
 import company.gameobj.background.Background;
 import company.gameobj.background.component.*;
-
-import company.gameobj.buildings.Building;
-
 import company.gameobj.creature.human.Citizen;
 import company.gameobj.buildings.Base;
 import company.gameobj.creature.human.Citizens;
@@ -28,12 +25,10 @@ import company.gameobj.creature.human.Human;
 
 import oldMain.City;
 
-import javax.swing.*;
 import java.awt.*;
 
 import static company.Global.*;
-import static company.gameobj.BuildingController.BuildingType.*;
-import static company.gameobj.BuildingController.BuildingType.ARSENAL;
+
 
 /**
  * 遊戲主場景
@@ -50,43 +45,35 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private BoxSelection boxSelection; // 框選模式
     private boolean canUseBoxSelection; // 是否能用框選模式
 
-    //現在位置
-    private int currentX;
-    private int currentY;
 
+    //滑鼠相關
+    private int targetX; // 滑鼠右鍵點擊的 目標X
+    private int targetY; // 滑鼠右鍵點擊的 目標Y
 
-    //前一個滑鼠狀態
-    private CommandSolver.MouseState preState;
-    private boolean hasSetTarget;
-    private int mouseX;
-    private int mouseY;
+    private boolean hasSetTarget; // 是否設定了目標
 
-
-    //遊戲時間
-    Delay gameDelay;
-    private int gameTimeSpeed;
-
-    int thisRoundTimePass; //要跳過的時間
+    private int currentMouseX;// 這一帧當下的滑鼠X
+    private int currentMouseY;// 這一帧當下的滑鼠Y
 
     //與建築相關
-
     City city; //城市
-    //可建造區
-    private BuildingArea buildingArea;
-    //上一偵有無拖曳
-    boolean preDragging;
-    //判斷可否建造
-    private boolean canBuild;
-    //判斷上一偵是否按鈕沒碰到全部建築格
-    boolean isPreAllNonBuildGrid;
 
+    private BuildingArea buildingArea; //可建造區
 
+    private boolean preDragging; //上一偵有無拖曳
 
+    private boolean canBuild;//判斷可否建造
 
-    // 時間
-    private long startTime;
+    private boolean isPreAllNonBuildGrid;//判斷上一偵是否按鈕沒碰到全部建築格
 
+    // 時間相關
+    private long startTime; // 開始時間
 
+    private Delay gameDelay; //遊戲時間
+
+    private int gameTimeSpeed;//遊戲進行時間
+
+    private int thisRoundTimePass; //要跳過的時間
 
     // 資源
     private List<GameObject> resources;
@@ -104,50 +91,40 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //背景
         background = new Background(0, 0, SCREEN_X, SCREEN_Y);
 
-
         //建築物選單
         buildingOption = new BuildingOption();
-
 
         //可建築區
         buildingArea = new BuildingArea();
 
-
         base = new Base(SCREEN_X / 2 - Base.BASE_WIDTH, SCREEN_Y / 2 - Base.BASE_HEIGHT);
-
 
         // 測試: 預設有 ? 個 村民
         city.setCitizens(new Citizens(4));
-
-
 
         //設定遊戲時間 120偵為遊戲一小時(oldMain的流動一小時)
         gameTimeSpeed = 120;
         gameDelay = new Delay(gameTimeSpeed);
         gameDelay.loop();
 
-
         // 當前操控的物件
         currentObj = null;
-
 
         // 框選模式
         boxSelection = new BoxSelection();
         canUseBoxSelection = false;
-        preState = null;
 
         // 是否設定前往目標
         hasSetTarget = false;
 
-        // 上一幀滑鼠X,Y
-        mouseX = 0;
-        mouseY = 0;
+        // 目標X Y
+        targetX = 0;
+        targetY = 0;
 
         // 資源
         resources = new ArrayList<>();
         resources.add(new Tree(350, 400));
         resources.add(new Steel(1200, 400));
-
     }
 
     @Override
@@ -166,16 +143,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //建築物選單
         buildingOption.paint(g);
 
-
         //城市
         city.paint(g);
 
-
         // 主堡
         base.paint(g);
-
-
-
 
         // 畫出每一個村民
         city.getCitizens().paintAll(g);
@@ -207,18 +179,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
-
-
-
         //提示框
-
         HintDialog.instance().paint(g);
         ToastController.instance().paint(g);
 
 
         // 畫出可採集的資源
         for (GameObject resource : resources) {
-            if(resource != null) {
+            if (resource != null) {
                 resource.paint(g);
             }
         }
@@ -229,8 +197,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 狀態欄
         StatusBar.instance().paint(g);
 
-
-
         //畫當前按鈕
         if (buildingOption.getCurrentButton() != null) {
             buildingOption.getCurrentButton().paint(g);
@@ -239,26 +205,32 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     }
 
 
-
     @Override
     public void update() {
+
         // 更新StatusBar 各項數據
         StatusBar.instance().setTimeString(startTime);
         StatusBar.instance().updateResource(city.getResource().getTotalWood(), city.getResource().getTotalSteel(), city.getResource().getTotalGas(), city.getTotalCitizen());
 
         // 優先處理鏡頭移動
-        if((currentX >= SCREEN_X - BUILDING_OPTION_WIDTH || currentX <= 8) || (currentY <= STATUS_BAR_HEIGHT || currentY >= SCREEN_Y - 8)){
+        if ((currentMouseX >= SCREEN_X || currentMouseX <= 8) || (currentMouseY <= 0 || currentMouseY >= SCREEN_Y - 8)) {
 
-            Vector vector = new Vector((currentX - SCREEN_X / 2) * -1, (currentY - SCREEN_Y / 2) * -1);
+            // 得到向量 滑鼠的位置(XY) - 螢幕中心(XY)
+            Vector vector = new Vector((currentMouseX - SCREEN_X / 2) * -1, (currentMouseY - SCREEN_Y / 2) * -1);
+
+            // 向量換算成 單位向量
             vector = vector.normalize();
+
+
+            // 下面就是移動地圖上每一個物件
 
             base.cameraMove(vector);
 
-            for(Human human: city.getCitizens().getAllCitizens()){
+            for (Human human : city.getCitizens().getAllCitizens()) {
                 human.cameraMove(vector);
             }
 
-            for(GameObject resource: resources){
+            for (GameObject resource : resources) {
                 resource.cameraMove(vector);
             }
 
@@ -315,7 +287,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
                             //建造房子
-                            city.build(type, currentX - BUILDING_WIDTH / 2, currentY - BUILDING_HEIGHT / 2);
+                            city.build(type, currentMouseX - BUILDING_WIDTH / 2, currentMouseY - BUILDING_HEIGHT / 2);
                             ToastController.instance().print(type.instance().getName() + "建造成功");
 
 
@@ -341,8 +313,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             BuildingType type = BuildingType.getBuildingTypeByInt(selectBuilding.getBuilding().getId());
 
             if ((selectBuilding.getBuilding().getIcons().size() == 2 && selectBuilding.getCan(0))
-            ||(selectBuilding.getBuilding().getIcons().size() == 3 && (selectBuilding.getCan(0)
-            ||selectBuilding.getBuilding().getIcons().get(2).getCan()))) {
+                    || (selectBuilding.getBuilding().getIcons().size() == 3 && (selectBuilding.getCan(0)
+                    || selectBuilding.getBuilding().getIcons().get(2).getCan()))) {
 
 
                 if (City.getTechLevel() < type.instance().getTechLevelNeedUpgrade()) {
@@ -395,7 +367,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
                 //限制按鈕按一次 就變成false;
                 selectBuilding.getBuilding().getIcons().get(0).setCan(false);
-                if(selectBuilding.getBuilding().getIcons().size() == 3){
+                if (selectBuilding.getBuilding().getIcons().size() == 3) {
                     selectBuilding.getBuilding().getIcons().get(2).setCan(false);
                 }
             }
@@ -425,7 +397,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             因為單選 可以是建築物 不一定會是個人
              */
             if (currentObj instanceof Human) {
-                ((Human) currentObj).setTarget(mouseX, mouseY);
+                ((Human) currentObj).setTarget(targetX, targetY);
             }
 
             // reset boolean
@@ -449,8 +421,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             那就會出現沒有和資源物件 collision 的狀況 => 沒辦法觸發採集流程
             所以我先判斷一下目的地是不是資源堆這樣.
             */
-            for(GameObject resource: resources){
-                if(mouseX > resource.painter().left() && mouseX < resource.painter().right() && mouseY > resource.painter().top() && mouseY < resource.painter().bottom()){
+            for (GameObject resource : resources) {
+                if (targetX > resource.painter().left() && targetX < resource.painter().right() && targetY > resource.painter().top() && targetY < resource.painter().bottom()) {
                     isGoingToCollect = true;
                     break;
                 }
@@ -468,14 +440,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 if (count != 0 && !(isGoingToCollect && human instanceof Citizen)) {
                     if (Global.random(0, 2) == 1) {
 
-                        mouseX += 74;
+                        targetX += 74;
                     } else {
-                        mouseY += 74;
+                        targetY += 74;
                     }
                 }
 
                 // 這個人前往目的地
-                human.setTarget(mouseX, mouseY);
+                human.setTarget(targetX, targetY);
 
                 // 一旦有人到目的地 就++
                 count++;
@@ -606,24 +578,24 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         Citizen.Resource resourceType = null;
 
                         // 幫村民判斷 採了什麼資源 && 一次能採的量
-                        if(resource instanceof Tree){
+                        if (resource instanceof Tree) {
 
-                            resourceNum = ((Tree)resource).eachTimeGet();
+                            resourceNum = ((Tree) resource).eachTimeGet();
                             resourceType = Citizen.Resource.WOOD;
 
                             // 如果資源採乾了 移除他
-                            if(resource != null && ((Tree)resource).getTotalNum() <= 0){
+                            if (resource != null && ((Tree) resource).getTotalNum() <= 0) {
                                 resources.remove(i);
                             }
                         }
 
                         // 幫村民判斷 採了什麼資源 && 一次能採的量
-                        if(resource instanceof Steel){
-                            resourceNum = ((Steel)resource).eachTimeGet();
+                        if (resource instanceof Steel) {
+                            resourceNum = ((Steel) resource).eachTimeGet();
                             resourceType = Citizen.Resource.STEEL;
 
                             // 如果資源採乾了 移除他
-                            if(resource != null && ((Steel)resource).getTotalNum() <= 0){
+                            if (resource != null && ((Steel) resource).getTotalNum() <= 0) {
 
                                 resources.remove(i);
                             }
@@ -717,8 +689,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
             // 紀錄當下的滑鼠位置
-            currentX = e.getX();
-            currentY = e.getY();
+            currentMouseX = e.getX();
+            currentMouseY = e.getY();
 
             HintDialog.instance().mouseTrig(e, state, trigTime);
 
@@ -762,7 +734,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 //                    System.out.println("PRESSED "+trigTime);
 
 
-
                     // 把座標丟給citizens 讓他 判斷有沒有村民 符合條件 (BUTTON1 : 左鍵)
                     if (e.getButton() == MouseEvent.BUTTON1) {
 
@@ -782,8 +753,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     // 如我現在有能操控的單位 (單選[GameObj] 或 框選[Only Human])
                     // 按下右鍵 => 設定要前往的(x,y) [BUTTON3 => 右鍵]
                     if ((currentObj != null || !controlHumans.isEmpty()) && e.getButton() == MouseEvent.BUTTON3) {
-                        mouseX = e.getX();
-                        mouseY = e.getY();
+                        targetX = e.getX();
+                        targetY = e.getY();
                         hasSetTarget = true;
                     }
 
@@ -825,13 +796,13 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             controlHumans.clear();
         }
 
-        if (commandCode == SPACE){
+        if (commandCode == SPACE) {
             base.resetObjectXY();
-            for(Human human: city.getCitizens().getAllCitizens()){
+            for (Human human : city.getCitizens().getAllCitizens()) {
                 human.resetObjectXY();
             }
 
-            for(GameObject resource: resources){
+            for (GameObject resource : resources) {
                 resource.resetObjectXY();
             }
 

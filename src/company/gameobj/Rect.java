@@ -5,6 +5,11 @@ import java.util.Arrays;
 
 public class Rect {
 
+    private int x;
+    private int y;
+    private int width;
+    private int height;
+
     public Rect(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
@@ -12,17 +17,36 @@ public class Rect {
         this.height = height;
     }
 
-    private int x;
-    private int y;
-    private int width;
-    private int height;
-
     public final int centerX() {
         return x + width / 2;
     }
 
     public final int centerY() {
         return y + height / 2;
+    }
+
+    public final int left() {
+        return x;
+    }
+
+    public final int right() {
+        return x + width;
+    }
+
+    public final int top() {
+        return y;
+    }
+
+    public final int bottom() {
+        return y + height;
+    }
+
+    public final int width() {
+        return this.width;
+    }
+
+    public final int height() {
+        return this.height;
     }
 
     public final void setCenter(int x, int y) {
@@ -96,32 +120,6 @@ public class Rect {
         this.height = height;
         return this;
     }
-
-    public final int left() {
-        return x;
-    }
-
-    public final int right() {
-        return x + width;
-    }
-
-    public final int top() {
-        return y;
-    }
-
-    public final int bottom() {
-        return y + height;
-    }
-
-    public final int width() {
-        return this.width;
-    }
-
-    public final int height() {
-        return this.height;
-    }
-
-
 
     public final boolean overlap(Rect object) {
         if (right() <= object.left()) {
