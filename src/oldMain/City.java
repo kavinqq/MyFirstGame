@@ -26,7 +26,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
      */
 
     public final int DEFAULT_CITIZEN = 20;
-    public final int MAX_CAN_BUILD = 100;
+    public final int MAX_CAN_BUILD = 5; //TODO 不確定建築物損壞後有沒有減掉當前建築物數量
     public final int ZOMBIE_TYPE = 6;
 
     /**

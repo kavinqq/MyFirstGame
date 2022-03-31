@@ -312,6 +312,11 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         return this;
     }
 
+    protected  Building setTechLevelNeedBuild(int buildTime){
+        Building.this.techLevelNeedBuild = buildTime;
+        return this;
+    }
+
     protected Building setUpgradeTime(int upgradeTime) {
         Building.this.upgradeTime = upgradeTime;
         return this;
@@ -436,6 +441,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         return upgradeTime;
     }
 
+    //改BuildingNode會用到
 //    public int getUpgradeStartTime(){
 //        return upgradeStartTime;
 //    }
@@ -654,6 +660,14 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
      * @level 幾等時的作用
      */
     public abstract String buildingDetail(int level);
+
+    public String showBuildCost(){
+        return "建造所需木材:"+woodCostCreate+" 鋼鐵:" + steelCostCreate +" 瓦斯:" +gasCostCreate;
+    }
+
+    public String showUpgradeCost(){
+        return "升級所需木材:"+woodCostLevelUp+" 鋼鐵:" + steelCostLevelUp +" 瓦斯:" +gasCostLevelUp;
+    }
 
 //    public Image getUnderConstructionImg(){
 //        return underConstructionImg;

@@ -60,6 +60,7 @@ public class Arsenal extends Building {
                 .setUpgradeTime(48)
                 .setLevelC(0)
                 .setTechLevel(2)
+                .setTechLevelNeedBuild(2)
                 .setTechLevelNeedUpgrade(2)
                 .setHp(30)
                 .setWoodCostCreate(30)

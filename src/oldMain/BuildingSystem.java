@@ -60,6 +60,7 @@ public class BuildingSystem {
      * 建築的種類和實體與儲存鏈表
      */
     public enum BuildingType {
+
         ARSENAL(new Arsenal(), new LinkedList<>()),
         BARRACKS(new Barracks(), new LinkedList<>()),
         HOUSE(new House(), new LinkedList<>()),

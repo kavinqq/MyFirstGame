@@ -20,8 +20,8 @@ public class Resource {
      * Resource建構子 用來把 一開始的 木/鋼鐵 資源歸0
      */
     public Resource() {
-        totalSteel = 1000;
-        totalWood = 1000;
+        totalSteel = 20;
+        totalWood = 20;
         totalGas = 20;
     }
 

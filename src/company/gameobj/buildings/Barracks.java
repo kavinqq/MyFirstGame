@@ -50,6 +50,7 @@ public class Barracks extends Building{
             .setBuildTime(2)
             .setUpgradeTime(30)
             .setLevelC(0)
+                .setTechLevelNeedBuild(1)
             .setTechLevel(1)
             .setTechLevelNeedUpgrade(2)
             .setHp(30)

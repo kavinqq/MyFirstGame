@@ -39,6 +39,7 @@ public class Lab extends Building {
                 .setUpgradeTime(24)
                 .setLevelC(0)
                 .setTechLevel(1)
+                .setTechLevelNeedBuild(1)
                 .setTechLevelNeedUpgrade(1)
                 .setHp(30)
                 .setWoodCostCreate(10)

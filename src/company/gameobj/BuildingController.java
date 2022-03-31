@@ -102,6 +102,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
      * 建築的種類和實體與儲存鏈表
      */
     public enum BuildingType {
+        BASE(new Base(),new LinkedList<>()),
         ARSENAL(new Arsenal(), new LinkedList<>()),
         BARRACKS(new Barracks(), new LinkedList<>()),
         HOUSE(new House(), new LinkedList<>()),
@@ -147,10 +148,6 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
      * 儲存各個建築的建造/升級時間
      */
     public class BuildingNode {
-        /**BuildingNode
-         *
-         */
-        public BuildingNode selectBuildingNode;
         /**
          * 建築本身
          */
@@ -248,6 +245,10 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
     public void build(BuildingType type, Resource resource,int x,int y) {
         BuildingNode newBuilding;
         switch (type) {
+            case BASE:{
+                newBuilding = new BuildingController.BuildingNode(new Base(x,y));
+                break;
+            }
             case ARSENAL: {
                 newBuilding = new BuildingController.BuildingNode(new Arsenal(x,y));
                 break;
@@ -295,6 +296,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         //設置為不可升級狀態
         newBuilding.building.setReadyToUpgrade(false);
 
+        buildingNum++; //建造完成，建築數+1
         newBuilding.building.setUpgrading(false);
         //添加進該分類的鏈表中
         type.list.add(newBuilding);
@@ -362,7 +364,6 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
                 node.building.setWorking(true);
                 node.building.setReadyToUpgrade(true);
                 node.updateStartTime = City.getGameTime();
-                buildingNum++; //建造完成，建築數+1
                 sum++;
                 //若建造的是研究所，閒置數+1
                 if (node.building instanceof Lab) {

@@ -15,10 +15,17 @@ public class Base extends Building {
         init();
     }
 
+    public Base()
+    {
+        super(0,0,BASE_WIDTH, BASE_HEIGHT);
+        init();
+    }
+
     @Override
     public void update() {
 
     }
+
     //初始化
     @Override
     protected void init() {

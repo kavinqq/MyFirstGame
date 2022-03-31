@@ -96,10 +96,13 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         buildingArea = new BuildingArea();
 
         //主堡
-        base = new Base(SCREEN_X / 2 - Base.BASE_WIDTH, SCREEN_Y / 2 - Base.BASE_HEIGHT);
+        //base先不刪下面有些東西與base連接
+        base = new Base(20, 20);
+
 
         // city本體
         city = new City();
+        //city.build(BuildingType.BASE,SCREEN_X / 2 - Base.BASE_WIDTH, SCREEN_Y / 2 - Base.BASE_HEIGHT);
 
         // 測試: 預設有 ? 個 村民
         city.setCitizens(4);
@@ -187,9 +190,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
-        //提示框
-        HintDialog.instance().paint(g);
-        ToastController.instance().paint(g);
+
 
 
         // 畫出可採集的資源
@@ -210,6 +211,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             buildingOption.getCurrentButton().paint(g);
         }
 
+        //提示框
+        HintDialog.instance().paint(g);
+        ToastController.instance().paint(g);
     }
 
 
@@ -262,19 +266,19 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             //點選按鈕時 判斷可否蓋建築物
             if (currentButton.getCountPressed() >= 0 && currentButton.isPressed() && !currentButton.isDragging() && !currentButton.isReleased()) {
                 currentButton.decCountPressed();
-                if (city.getBuildingNum() == city.MAX_CAN_BUILD) {
+                if (city.getBuildingNum() >= city.MAX_CAN_BUILD) {
                     canBuild = false;
                     currentButton.setCanDragging(false);
-                    ToastController.instance().print("建造-建築物已蓋滿");
+                    ToastController.instance().print("建造-建築物已蓋滿 最大建築物量為"+city.MAX_CAN_BUILD);
                     //System.out.println("你的城市 經過多年風風雨雨 鐵與血的灌溉\n如今 從杳無人煙之地 成了 充斥著滿滿的高樓大廈 人車馬龍的繁華之地\n你的城市 已沒有地方可以建造新的建築了");
                 } else if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
                     canBuild = false;
                     currentButton.setCanDragging(false);
-                    ToastController.instance().print("建造-科技等級不足");
+                    ToastController.instance().print("建造-科技等級不足 科技等級需要"+type.instance().getTechLevelNeedBuild()+"級");
                 } else if (!type.instance().isEnoughBuild(city.getResource())) {
                     canBuild = false;
                     currentButton.setCanDragging(false);
-                    ToastController.instance().print("建造-物資不足");
+                    ToastController.instance().print("建造-物資不足 " +type.instance().showBuildCost());
                 } else {
                     canBuild = true;
                     currentButton.setCanDragging(true);
@@ -322,7 +326,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             }
             //滑鼠放開瞬間 判斷上一偵是否是拖曳且不再區域內
-            if (currentButton.isReleased && isPreAllNonBuildGrid && preDragging) {
+            if (currentButton.isReleased && isPreAllNonBuildGrid && preDragging && currentButton.getRedRects()!=null) {
                 ToastController.instance().print("建造-此處不能蓋房子");
             }
             preDragging = currentButton.isDragging();
