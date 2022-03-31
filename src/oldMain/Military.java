@@ -4,6 +4,7 @@ import company.Global;
 import company.gameobj.creature.human.AirForceSoldier;
 import company.gameobj.creature.human.ArmySoldier;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,9 +35,11 @@ public class Military {
      * @param num
      */
     public void addArmy(int num){
+
         ArmySoldier armySoldier;
+
         for(int i=0; i<num; i++){
-            armySoldier = new ArmySoldier( Global.SCREEN_X/2, Global.SCREEN_Y/2, this.armyLevel);
+            armySoldier = new ArmySoldier( 900, 700, this.armyLevel);
             this.armyValue += armySoldier.getValue();
             this.army.add(armySoldier);
         }
@@ -47,9 +50,13 @@ public class Military {
      * @param num
      */
     public void addAirForce(int num){
+
         AirForceSoldier airForceSoldier;
+
         for(int i=0; i<num; i++){
-            airForceSoldier = new AirForceSoldier(Global.SCREEN_X/2, Global.SCREEN_Y/2, this.airForceLevel);//TODO: use the correct x and y
+
+            airForceSoldier = new AirForceSoldier(800, 700, this.airForceLevel);//TODO: use the correct x and y
+
             this.airForceValue += airForceSoldier.getValue();
             this.airForce.add(airForceSoldier);
         }
@@ -182,5 +189,20 @@ public class Military {
      */
     public int getNumOfArmySoldier(){
         return this.army.size();
+    }
+
+    /**
+     * 畫出軍隊
+     * @param g Graphics
+     */
+    public void paintAll(Graphics g) {
+
+        for(ArmySoldier armySoldier: army){
+            armySoldier.paintComponent(g);
+        }
+
+        for(AirForceSoldier airForceSoldier: airForce){
+            airForceSoldier.paintComponent(g);
+        }
     }
 }

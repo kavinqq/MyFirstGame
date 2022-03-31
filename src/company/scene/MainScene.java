@@ -39,12 +39,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private Background background; // 背景
     private BuildingOption buildingOption; // 建築物選單
 
-    private GameObject currentObj; // 當前操控的物件
-    private List<Human> controlHumans;
+    private GameObject currentObj; // 當前操控的物件(單選)
+    private List<Human> controlHumans;// 當前操控的物件(多選)
 
     private BoxSelection boxSelection; // 框選模式
     private boolean canUseBoxSelection; // 是否能用框選模式
-
 
     //滑鼠相關
     private int targetX; // 滑鼠右鍵點擊的 目標X
@@ -83,8 +82,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         startTime = System.nanoTime();// 進入場景之後紀錄開始時間
 
-        city = new City();// city本體
-
         currentObj = null;// 當前操控的物件(單選)
         controlHumans = new ArrayList<>();// 設定: 只有人物可以多選
 
@@ -97,10 +94,18 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //可建築區
         buildingArea = new BuildingArea();
 
+        //主堡
         base = new Base(SCREEN_X / 2 - Base.BASE_WIDTH, SCREEN_Y / 2 - Base.BASE_HEIGHT);
 
+        // city本體
+        city = new City();
+
         // 測試: 預設有 ? 個 村民
-        city.setCitizens(new Citizens(4));
+        city.setCitizens(4);
+
+        // 測試: 預設有 ? 個 士兵
+        city.getMilitary().addArmy(1);
+        city.getMilitary().addAirForce(1);
 
         //設定遊戲時間 120偵為遊戲一小時(oldMain的流動一小時)
         gameTimeSpeed = 120;
@@ -150,7 +155,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         base.paint(g);
 
         // 畫出每一個村民
-        city.getCitizens().paintAll(g);
+//        city.getCitizens().paintAll(g);
+
+
 
         // 如果現在可以使用框選
         if (canUseBoxSelection) {
@@ -242,6 +249,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         buildingOption.update();
         buildingArea.update();
 
+        //City更新
         city.update();
 
         //判斷現在有無選取按鈕
@@ -456,10 +464,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             // reset boolean
             hasSetTarget = false;
         }
-
-
-        // 更新所有村民狀態
-        city.getCitizens().updateAll();
 
         // 走路狀態
         for (Citizen citizen : city.getCitizens().getAllCitizens()) {

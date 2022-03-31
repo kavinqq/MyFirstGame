@@ -46,8 +46,6 @@ public class Citizen extends Human {   //市民
     private int resourceTargetX;
     private int resourceTargetY;
 
-    private boolean isGoingToCollect;
-
     // 主堡XY
     private int baseX;
     private int baseY;
@@ -57,7 +55,7 @@ public class Citizen extends Human {   //市民
      * 建構子 預設市民數值為1 , 不能打架 , 初始設定為閒人
      */
     public Citizen(int x, int y) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, CITIZEN_INITIAL_VALUE, CITIZEN_INITIAL_SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY,HUMAN_TYPE.CITIZEN, Animator.State.STAND);
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, CITIZEN_INITIAL_VALUE, CITIZEN_INITIAL_SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY,HUMAN_TYPE.CITIZEN, 6);
 
         // 預設人物出生方向朝下
         setWalkingDir(Global.Direction.DOWN);
@@ -66,9 +64,6 @@ public class Citizen extends Human {   //市民
 
         // 村民的圖片
         setCharacterType(6);
-
-        // 動畫初始化
-        animator = new HumanAnimator(getCharacterType(), getMoveStatus());
 
         // 現在看不看的見村民
         setVisible(true);
@@ -84,7 +79,6 @@ public class Citizen extends Human {   //市民
         resourceTargetX = 0;
         resourceTargetY = 0;
 
-        isGoingToCollect = false;
     }
 
     /**
@@ -134,7 +128,7 @@ public class Citizen extends Human {   //市民
     @Override
     public void paintComponent(Graphics g) {
 
-        animator.paint(getWalkingDir(), painter().left(), painter().top(), painter().right(), painter().bottom(), g);
+        getAnimator().paint(getWalkingDir(), painter().left(), painter().top(), painter().right(), painter().bottom(), g);
     }
 
 
@@ -158,17 +152,18 @@ public class Citizen extends Human {   //市民
         if (getMoveStatus() == Animator.State.WALK) {
 
             // 改成行走動畫
-            animator.setState(Animator.State.WALK);
+            getAnimator().setState(Animator.State.WALK);
 
             // 行走
             walk();
         } else {
 
             // 改成站立動畫
-            animator.setState(Animator.State.STAND);
+            getAnimator().setState(Animator.State.STAND);
         }
 
-        animator.update();
+        // 動畫更新[換圖片]
+        getAnimator().update();
 
 //        //TODO
 //        if (workStatus == WORK_STATUS.FREE) {
@@ -247,7 +242,4 @@ public class Citizen extends Human {   //市民
         return resourceTargetY;
     }
 
-    public void turnOffIsGoingToCollect() {
-        isGoingToCollect = false;
-    }
 }

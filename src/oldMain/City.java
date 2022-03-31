@@ -1,20 +1,14 @@
 package oldMain;
 
-import company.Global;
-import static company.Global.*;
-
 import company.gameobj.BuildingController;
 import company.gameobj.buildings.Building;
 
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
 
-
 import company.gameobj.creature.human.*;
 import company.gameobj.creature.enemy.zombies.*;
 import company.gameobj.BuildingController.*;
-
-import company.gametest9th.utils.GameKernel;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -30,6 +24,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
      * 有幾種不同建築
      * 總共有幾種殭屍
      */
+
     public final int DEFAULT_CITIZEN = 20;
     public final int MAX_CAN_BUILD = 100;
     public final int ZOMBIE_TYPE = 6;
@@ -37,27 +32,38 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
     /**
      * 遊戲的建築物
      */
+
     private BuildingController buildings;
+
     /**
      * 由於整個遊戲 只有一個文明等級 所以設定在 City全域變數
      */
+
     private static int techLevel = 1;
+
     /**
      * 整個遊戲的時間軸 (小時為單位)
      */
+
     private static int gameTime = 0;
+
     /**
      * 遊戲的人類單位 1.士兵 2.市民
      * 建立一Human的陣列 以存放人類
      */
+
     private Citizens citizens;
+
     /**
      * 城市的軍隊
      */
-    public final Military military;
+
+    public Military military;
+
     /**
      * 城市的殭屍群
      */
+
     private ZombieKingdom zombies;
     /**
      * 全部的資源 類別
@@ -139,8 +145,6 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             resource.addSteel(num);
         }
 
-
-        // 瓦斯還沒有寫// TODO: 2022/3/29 瓦斯添加的流程
         resource.addGas(buildings.getGasProduceNum());
     }
 
@@ -465,12 +469,6 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         return buildings.getFreeArsenalNum();
     }
 
-
-    public boolean isAlive() {
-        return (!this.citizens.isAllDead() || !this.military.isAllDead() || !buildings.isAllDestroyed());
-    }
-
-
     /**
      * 是否正在升級士兵
      *
@@ -548,16 +546,6 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         return buildings.isNoArsenal();
     }
 
-    @Override
-    public void paint(Graphics g) {
-        buildings.paint(g);
-    }
-
-    @Override
-    public void update() {
-        buildings.update();
-    }
-
     private BuildingNode currentBuildingNode;
 
     public BuildingNode selectBuildingNode(int x,int y){
@@ -568,20 +556,67 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         return currentBuildingNode;
     }
 
+    public boolean isAlive() {
+        return (!this.citizens.isAllDead() || !this.military.isAllDead() || !buildings.isAllDestroyed());
+    }
+
+
+    /**
+     * 更改City裡面 存有所有人民的物件
+     * @param numOfCitizens 該物件有幾個村民
+     */
+
+    public void setCitizens(int numOfCitizens){
+
+        this.citizens = new Citizens(numOfCitizens);
+    }
+
+    /**
+     * 獲得City裡面 存有所有人民的物件
+     * @return 存有所有人民的物件
+     */
+
+    public Citizens getCitizens(){
+        return citizens;
+    }
+
+
+    /**
+     * 獲得City裡面 存有所有士兵的物件
+     * @return 存有所有士兵的物件
+     */
+
+    public Military getMilitary() {
+        return military;
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        buildings.paint(g);
+
+        citizens.paintAll(g);
+
+        military.paintAll(g);
+    }
+
+    @Override
+    public void update() {
+
+        buildings.update();
+
+        citizens.updateAll();
+
+
+    }
+
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+
         buildings.mouseTrig(e,state,trigTime);
         currentBuildingNode=selectBuildingNode(e.getX(),e.getY());
     }
 
 
-    public void setCitizens(Citizens citizens){
 
-        this.citizens = citizens;
-    }
-
-    public Citizens getCitizens(){
-        return citizens;
-    }
 
 }

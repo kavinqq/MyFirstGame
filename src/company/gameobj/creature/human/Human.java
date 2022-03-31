@@ -7,15 +7,18 @@ import company.gametest9th.utils.HumanAnimator;
 
 public abstract class Human extends Creature {
 
+    /**
+     * 人物種類 (村民 or 士兵)
+     */
     public enum HUMAN_TYPE {
         CITIZEN, SOLDIER;
     }
 
-    private int characterType;
+    private int characterType; // 用來選擇該角色的圖片
 
-    private Animator.State state;
+    private Animator.State animatorState;// 動畫目前的狀態
 
-    private HumanAnimator animator;
+    private HumanAnimator animator;// 人物動畫物件
 
     private HUMAN_TYPE humanType;
 
@@ -25,13 +28,40 @@ public abstract class Human extends Creature {
 
 
 
-    public Human(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility, Animator.State state) {
+    public Human(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility) {
+
         super(x, y, x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, value, speed, img, flyAbility, Animator.State.STAND);
+
+        // 預設出生後站立
+        this.animatorState = Animator.State.STAND;
+
+        // 依照能否飛行 選擇 圖片
+        if(flyAbility == FLY_ABILITY.CAN_FLY){
+            this.characterType = 5;
+        } else {
+            this.characterType = 2;
+        }
+
+        // 創建動畫物件
+        animator = new HumanAnimator(characterType, animatorState);
+
     }
 
-    public Human(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility, HUMAN_TYPE humanType,Animator.State state) {
+    public Human(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility, HUMAN_TYPE humanType, int characterType) {
+
+        // 呼叫Creature建構子
         super(x, y, x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, value, speed, img, flyAbility, Animator.State.STAND);
+
         this.humanType = humanType;
+
+        // 剛出生都是站著不動
+        animatorState = Animator.State.STAND;
+
+        // 該人物要選哪張圖片
+        this.characterType = characterType;
+
+        // 創建動畫物件
+        animator = new HumanAnimator(characterType, animatorState);
     }
 
 
@@ -324,7 +354,11 @@ public abstract class Human extends Creature {
         characterType = type;
     }
 
-
+    /**
+     * 設定目的地 X Y
+     * @param x 目的地X座標
+     * @param y 目的地Y座標
+     */
     public void setTarget(int x, int y) {
         // 設定目的地X Y
         if (this.isAt(x, y)) {
@@ -341,6 +375,14 @@ public abstract class Human extends Creature {
     public void stop() {
         setTarget(painter().centerX(), painter().centerY());
         setMoveStatus(Animator.State.STAND);
+    }
+
+    /**
+     * 取得Human的動畫
+     * @return 該人物的動畫
+     */
+    public Animator getAnimator(){
+        return animator;
     }
 
 }

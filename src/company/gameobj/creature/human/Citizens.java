@@ -46,8 +46,6 @@ public class Citizens {
      */
     public Citizens(int defaultNumOfCitizens) {
 
-        System.out.println("DNOC: " + defaultNumOfCitizens);
-
         this.valueOfCitizens = 0;
 
         this.numOfFreeCitizens = 0;
@@ -56,27 +54,34 @@ public class Citizens {
 
         this.numOfMiningCitizens = 0;
 
-        this.add(defaultNumOfCitizens); // 暫時先註解掉一下
+        this.add(defaultNumOfCitizens);
 
-        maxCitizen = 100;
+
+        // 上限10個
+        maxCitizen = 10;
+
+        // 共有幾個村民
         count = 0;
 
+        // 框選了幾個村民 => 用A:ist存
         citizensInBox = new ArrayList<>();
     }
 
     /**
-     * 新增 num 個居民
+     * 新增 num 個村民
      *
-     * @param num
+     * @param num 要加幾個村民
      */
     public void add(int num) {
 
+        // 新的村民宣告
         Citizen citizen;
 
+        // 新增?個村民 閒民數量+?  [舊程式碼部分]
         this.numOfFreeCitizens += num;
 
+        // 下面是新增村民之後 他的出生地點 [所有XY數值都是測試用 沒意義]
         for (int i = 0; i < num; i++) {
-            System.out.println("I : " + i);
 //            citizen = new Citizen(Global.SCREEN_X/2, Global.SCREEN_Y/2);//TODO: set the correct x and y
             citizen = new Citizen(100, 400 + i * 74);
             this.valueOfCitizens += citizen.getValue();
@@ -236,7 +241,7 @@ public class Citizens {
     }
 
     /**
-     *
+     * 更新所有村民
      */
     public void updateAll(){
 

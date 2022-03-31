@@ -13,7 +13,6 @@ public abstract class Creature extends GameObject {
         FIGHTING, NOT_FIGHTING;
     }
 
-
     public enum FLY_ABILITY {
         CAN_FLY, CANNOT_FLY;
     }
