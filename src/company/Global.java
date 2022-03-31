@@ -44,15 +44,16 @@ public class Global {
     public static final int STATUS_BAR_HEIGHT = 80;
 
     //遊戲視窗大小
+
     public static final int SCREEN_X = WINDOW_WIDTH - 8 - 8;
     public static final int SCREEN_Y = WINDOW_HEIGHT - 31 - 8;
 
-    //用來判斷撞到邊界的視窗XY (會跟著鏡頭移動一起動)
-    public static int CHANGEABLE_SCREEN_LEFT = 0;
-    public static int CHANGEABLE_SCREEN_RIGHT = SCREEN_X;
-    public static int CHANGEABLE_SCREEN_TOP = 0;
-    public static int CHANGEABLE_SCREEN_BOTTOM = SCREEN_Y;
+    //地圖大小
 
+    public static final int MAP_LEFT = (WINDOW_WIDTH - 8 - 8) * -1;
+    public static final int MAP_RIGHT = (WINDOW_WIDTH - 8 - 8) * 2;
+    public static final int MAP_TOP = (WINDOW_WIDTH - 8 - 8) * -1;
+    public static final int MAP_BOTTOM = (WINDOW_WIDTH - 8 - 8) * 2;
 
     //基座大小
     public static final int FOUNDATION_WIDTH = 118;
@@ -147,26 +148,5 @@ public class Global {
         CAMERA_MOVE_VY = vy;
     }
 
-    /**
-     * 根據鏡頭移動值去調整可動式邊界
-     * @param vx 鏡頭移動X值
-     * @param vy 鏡頭移動Y值
-     */
-    public static void setChangeableScreenBound(int vx, int vy){
-        CHANGEABLE_SCREEN_LEFT += vx;
-        CHANGEABLE_SCREEN_RIGHT += vx;
-        CHANGEABLE_SCREEN_TOP += vx;
-        CHANGEABLE_SCREEN_RIGHT += vy;
-    }
 
-    /**
-     * 重製隨鏡頭移動的邊界
-     */
-
-    public static void resetChangeableScreenXY(){
-        CHANGEABLE_SCREEN_LEFT = 0;
-        CHANGEABLE_SCREEN_RIGHT = SCREEN_X;
-        CHANGEABLE_SCREEN_TOP = 0;
-        CHANGEABLE_SCREEN_BOTTOM = SCREEN_Y;
-    }
 }

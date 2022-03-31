@@ -160,7 +160,7 @@ public abstract class GameObject implements GameKernel.GameInterface {
      */
 
     public boolean touchTop() {
-        return detectRange.top() <= Global.CHANGEABLE_SCREEN_TOP;
+        return detectRange.top() <= Global.MAP_TOP;
     }
 
     /**
@@ -170,7 +170,7 @@ public abstract class GameObject implements GameKernel.GameInterface {
      */
 
     public boolean touchBottom() {
-        return detectRange.bottom() >= Global.CHANGEABLE_SCREEN_BOTTOM;
+        return detectRange.bottom() >= Global.MAP_BOTTOM;
     }
 
     /**
@@ -180,7 +180,7 @@ public abstract class GameObject implements GameKernel.GameInterface {
      */
 
     public boolean touchLeft() {
-        return detectRange.left() <= Global.CHANGEABLE_SCREEN_LEFT;
+        return detectRange.left() <= Global.MAP_LEFT;
     }
 
     /**
@@ -190,7 +190,7 @@ public abstract class GameObject implements GameKernel.GameInterface {
      */
 
     public boolean touchRight() {
-        return detectRange.right() >= Global.CHANGEABLE_SCREEN_RIGHT;
+        return detectRange.right() >= Global.MAP_RIGHT;
     }
 
     public void shutDetectRange() {

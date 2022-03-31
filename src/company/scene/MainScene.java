@@ -235,9 +235,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 如果這一帧的鏡頭移動量 != 0 [必須移動]
         if (CAMERA_MOVE_VX != 0 || CAMERA_MOVE_VY != 0) {
 
-            // 邊界判斷移動
-            Global.setChangeableScreenBound(CAMERA_MOVE_VX, CAMERA_MOVE_VY);
-
             // 下面就是移動地圖上每一個物件
             base.cameraMove();
 
@@ -813,8 +810,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
         if (commandCode == SPACE) {
-
-            resetChangeableScreenXY();
 
             for (Human human : city.getCitizens().getAllCitizens()) {
                 human.resetObjectXY();
