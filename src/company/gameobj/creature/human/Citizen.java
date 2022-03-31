@@ -2,6 +2,7 @@ package company.gameobj.creature.human;
 
 import company.Global;
 
+import company.controllers.AudioResourceController;
 import company.gameobj.GameObject;
 import company.gametest9th.utils.*;
 

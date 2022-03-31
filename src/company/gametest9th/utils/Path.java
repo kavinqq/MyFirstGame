@@ -276,6 +276,12 @@ public class Path {
         private Sound() {
             super(new Resources(), "/sounds");
         }
+
+        public String mainSceneBGM() {return this + "/MainSceneBGM.wav";}
+
+        public String readyToWork() {return this + "/ReadyToWork.wav";}
+
+        public String what() {return this + "/What.wav";}
     }
 
 
@@ -292,7 +298,9 @@ public class Path {
      * 把聲音路徑往上傳
      * @return 音效檔的路徑
      */
+
     public Sound sound() {
         return new Sound();
     }
+
 }

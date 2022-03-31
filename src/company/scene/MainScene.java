@@ -2,12 +2,14 @@ package company.scene;
 
 import company.Global;
 
+
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.ArrayList;
 
 import static company.gameobj.BuildingController.*;
 
+import company.controllers.AudioResourceController;
 import company.gameobj.BuildingController;
 import company.gameobj.Rect;
 import company.gameobj.resourceObjs.Steel;
@@ -76,6 +78,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     // 資源
     private List<GameObject> resources;
 
+
     @Override
     public void sceneBegin() {
 
@@ -129,6 +132,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         resources = new ArrayList<>();
         resources.add(new Tree(350, 400));
         resources.add(new Steel(1200, 400));
+
+        AudioResourceController.getInstance().loop(new Path().sound().mainSceneBGM(), 2);
     }
 
     @Override
@@ -414,7 +419,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             因為單選 可以是建築物 不一定會是個人
              */
             if (currentObj instanceof Human) {
+
                 ((Human) currentObj).setTarget(targetX, targetY);
+                AudioResourceController.getInstance().play(new Path().sound().readyToWork());
             }
 
             // reset boolean
@@ -465,6 +472,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                 // 這個人前往目的地
                 human.setTarget(targetX, targetY);
+                AudioResourceController.getInstance().play(new Path().sound().readyToWork());
 
                 // 一旦有人到目的地 就++
                 count++;
@@ -755,6 +763,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                         // 現在控製的Obj 換成這個 (現在先檢查所有村民而已)
                         currentObj = city.getCitizens().getCitizen(e.getX(), e.getY());
+
+                        if(currentObj != null){
+                            AudioResourceController.getInstance().play(new Path().sound().what());
+                        }
+
                     }
 
 
