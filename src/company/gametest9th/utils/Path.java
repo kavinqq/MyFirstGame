@@ -198,7 +198,7 @@ public class Path {
 
             public String AirplanemIll() { return this + "/airplanemIll.png";}
 
-            public String Base() { return this + "/Base.png";};
+            public String Base() { return this + "/BaseAndFoundation.png";};
 
             public String Arsenal(){ return this + "/arsenal.png";}
 
@@ -226,13 +226,15 @@ public class Path {
 
             public String grassBG() { return this + "/grassBG.png";}
 
-            public String foundation(){ return this + "/foundation.png";}
+            public String foundation(){ return this + "/foundationNew.png";}
+
+            public String buttonFoundation(){ return this + "/buttonFoundation.png";}
 
             public String road(){ return this + "/road1.png";}
 
             public String area(){return this +"/area.jpg";}
 
-            public String grass(){return this +"/foundation9.png";}
+            public String grass(){return this +"/grass.png";}
 
             public String airport(){return this+"airport.png";}
 

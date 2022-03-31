@@ -56,7 +56,7 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         }
 
         //新增地基圖片
-        foundation_img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().foundation());
+        foundation_img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().buttonFoundation());
 
     }
 

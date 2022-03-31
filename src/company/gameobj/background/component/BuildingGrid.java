@@ -14,7 +14,7 @@ public class BuildingGrid extends GameObject {
 
     public BuildingGrid(int x, int y) {
         super(x, y,96*5/4,96*5/4);
-        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().background().grass());
+        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().background().foundation());
     }
 
     public void setOnBuildGrid(boolean bool){
