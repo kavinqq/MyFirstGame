@@ -4,6 +4,7 @@ import company.Global;
 import company.gameobj.creature.Creature;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.HumanAnimator;
+import company.gametest9th.utils.Vector;
 
 public abstract class Human extends Creature {
 
@@ -369,6 +370,7 @@ public abstract class Human extends Creature {
         }
     }
 
+
     /**
      * 停止移動 目的地 直接 =  現在位置(就是直接讓他到目的地的意思)
      */
@@ -384,6 +386,7 @@ public abstract class Human extends Creature {
     public Animator getAnimator(){
         return animator;
     }
+
 
 }
 

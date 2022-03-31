@@ -17,8 +17,11 @@ public class Background extends GameObject implements GameKernel.GameInterface,C
     private Image bg_img;
 
     public Background(int x, int y, int width, int height) {
+
         super(x, y, width, height);
+
         bg_img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().background());
+
         shutDetectRange();
     }
 
@@ -34,9 +37,6 @@ public class Background extends GameObject implements GameKernel.GameInterface,C
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-//        if(state== CommandSolver.MouseState.DRAGGED){
-//            offset(e.getX(),e.getY());
-//        }
 
     }
 

@@ -2,7 +2,6 @@ package company.gameobj;
 
 import company.Global;
 import company.gametest9th.utils.GameKernel;
-import company.gametest9th.utils.Vector;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -12,7 +11,7 @@ public abstract class GameObject implements GameKernel.GameInterface {
     private boolean isVisible; // 能否看見這個物件
 
     private int originalX; // 原本的鏡頭X
-    private int originalY; // 總共的鏡頭移動量Y
+    private int originalY; //
 
     private Rect detectRange;
     private Rect painter;
@@ -153,20 +152,45 @@ public abstract class GameObject implements GameKernel.GameInterface {
         return painter;
     }
 
+
+    /**
+     * 如果碰到視窗頂端
+     *
+     * @return true 碰到 false 沒碰到
+     */
+
     public boolean touchTop() {
-        return detectRange.top() <= 0;
+        return detectRange.top() <= Global.CHANGEABLE_SCREEN_TOP;
     }
+
+    /**
+     * 如果碰到視窗底部
+     *
+     * @return true 碰到 false 沒碰到
+     */
 
     public boolean touchBottom() {
-        return detectRange.bottom() >= Global.SCREEN_Y;
+        return detectRange.bottom() >= Global.CHANGEABLE_SCREEN_BOTTOM;
     }
+
+    /**
+     * 如果碰到視窗左邊
+     *
+     * @return true 碰到 false 沒碰到
+     */
 
     public boolean touchLeft() {
-        return detectRange.left() <= 0;
+        return detectRange.left() <= Global.CHANGEABLE_SCREEN_LEFT;
     }
 
+    /**
+     * 如果碰到視窗右邊
+     *
+     * @return true 碰到 false 沒碰到
+     */
+
     public boolean touchRight() {
-        return detectRange.right() >= Global.SCREEN_X;
+        return detectRange.right() >= Global.CHANGEABLE_SCREEN_RIGHT;
     }
 
     public void shutDetectRange() {
@@ -239,23 +263,21 @@ public abstract class GameObject implements GameKernel.GameInterface {
      *
      * @return true => 能看見 / false => 不能看見
      */
+
     public boolean getVisible() {
         return isVisible;
     }
 
     /**
      * 取得要向量 && 移動
-     *
-     * @param vector 一段向量
      */
-    public void cameraMove(Vector vector) {
+    public void cameraMove() {
 
-        translate((int) (vector.vx() * Global.CAMERA_SPEED), (int) (vector.vy() * Global.CAMERA_SPEED));
+        translate(Global.CAMERA_MOVE_VX, Global.CAMERA_MOVE_VY);
     }
 
-
     /**
-     * 重製所有物件回初始位置(地圖回到中心的意思)
+     * 重製視窗回初始位置
      */
     public void resetObjectXY() {
 
@@ -263,4 +285,5 @@ public abstract class GameObject implements GameKernel.GameInterface {
         painter.moveToPoint(originalX, originalY);
 
     }
+
 }

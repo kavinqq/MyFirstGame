@@ -20,7 +20,6 @@ import company.gameobj.background.Background;
 import company.gameobj.background.component.*;
 import company.gameobj.creature.human.Citizen;
 import company.gameobj.buildings.Base;
-import company.gameobj.creature.human.Citizens;
 import company.gameobj.creature.human.Human;
 
 import oldMain.City;
@@ -158,7 +157,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 //        city.getCitizens().paintAll(g);
 
 
-
         // 如果現在可以使用框選
         if (canUseBoxSelection) {
 
@@ -219,29 +217,43 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         StatusBar.instance().setTimeString(startTime);
         StatusBar.instance().updateResource(city.getResource().getTotalWood(), city.getResource().getTotalSteel(), city.getResource().getTotalGas(), city.getTotalCitizen());
 
-        // 優先處理鏡頭移動
+        // 處理鏡頭移動
         if ((currentMouseX >= SCREEN_X || currentMouseX <= 8) || (currentMouseY <= 0 || currentMouseY >= SCREEN_Y - 8)) {
 
-            // 得到向量 滑鼠的位置(XY) - 螢幕中心(XY)
-            Vector vector = new Vector((currentMouseX - SCREEN_X / 2) * -1, (currentMouseY - SCREEN_Y / 2) * -1);
+            // 得到向量 螢幕中心(XY) - 滑鼠的位置(XY) [我沒用絕對值 讓他帶正負值進去]
+            Vector vector = new Vector(SCREEN_X / 2 - currentMouseX, SCREEN_Y / 2 - currentMouseY);
 
             // 向量換算成 單位向量
             vector = vector.normalize();
 
+            // 設定鏡頭移動的單位量(放在Global是因為 他跟每個人有關)
+            Global.setCameraMoveVx((int) (vector.vx() * CAMERA_SPEED));
+            Global.setCameraMoveVy((int) (vector.vy() * CAMERA_SPEED));
+        }
+
+
+        // 如果這一帧的鏡頭移動量 != 0 [必須移動]
+        if (CAMERA_MOVE_VX != 0 || CAMERA_MOVE_VY != 0) {
+
+            // 邊界判斷移動
+            Global.setChangeableScreenBound(CAMERA_MOVE_VX, CAMERA_MOVE_VY);
 
             // 下面就是移動地圖上每一個物件
-
-            base.cameraMove(vector);
+            base.cameraMove();
 
             for (Human human : city.getCitizens().getAllCitizens()) {
-                human.cameraMove(vector);
+                human.cameraMove();
             }
 
             for (GameObject resource : resources) {
-                resource.cameraMove(vector);
+                resource.cameraMove();
             }
 
-            buildingArea.buildingAreaCameraMove(vector);
+            buildingArea.buildingAreaCameraMove();
+
+            // Reset 鏡頭移動量
+            CAMERA_MOVE_VX = 0;
+            CAMERA_MOVE_VY = 0;
         }
 
 
@@ -606,7 +618,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         }
 
                         // 村民開始採集
-                        citizen.collecting(resource, base.painter().left() - 30, base.painter().top() + base.painter().height() / 2, resourceNum, resourceType);
+                        citizen.collecting(resource, base.painter().centerX(), base.painter().centerY(), resourceNum, resourceType);
 
                     }
                 }
@@ -801,10 +813,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
         if (commandCode == SPACE) {
-            base.resetObjectXY();
+
+            resetChangeableScreenXY();
+
             for (Human human : city.getCitizens().getAllCitizens()) {
                 human.resetObjectXY();
             }
+
+            base.resetObjectXY();
 
             for (GameObject resource : resources) {
                 resource.resetObjectXY();
