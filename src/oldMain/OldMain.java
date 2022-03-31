@@ -153,7 +153,7 @@ public class OldMain {
                                 if (canUpgradeTypeList != null) {
                                     switch (type) {
                                         case LAB: {
-                                            if (city.isUpgradingTech()) {
+                                            if (true) { //city.isUpgradingTech()
                                                 System.out.println("科技已在升級中，請等待此次升級結束");
                                             } else {
                                                 city.upgradeTechLevel();

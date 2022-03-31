@@ -8,10 +8,24 @@ import java.awt.*;
 
 public class BuildingGrid extends GameObject {
     private Image img;
+
+    private boolean isOnBuildGrid;
+    private boolean isPreOnBuildGrid;
+
     public BuildingGrid(int x, int y) {
-        super(x, y,192+96,192+96);
-        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().background().foundation());
+        super(x, y,96*5/4,96*5/4);
+        img=SceneController.getInstance().imageController().tryGetImage(new Path().img().background().grass());
     }
+
+    public void setOnBuildGrid(boolean bool){
+        isPreOnBuildGrid =bool;
+    }
+
+    public boolean isOnBuildGrid(){
+        return isPreOnBuildGrid;
+    }
+
+
 
     @Override
     public void paintComponent(Graphics g) {

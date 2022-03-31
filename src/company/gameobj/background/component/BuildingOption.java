@@ -37,7 +37,10 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
     public BuildingOption() {
         buildingButtons= new ArrayList(BuildingTypeNum);//建立所有建築物按鈕
-
+        //可建:綠背景
+        greenImg =SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().green());
+        //不可建:紅背景
+        redImg =SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().red());
 
 
         imgs = new Image[BuildingTypeNum];
@@ -54,10 +57,7 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
         //新增地基圖片
         foundation_img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().foundation());
-        //可建:綠背景
-        greenImg =SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().green());
-        //不可建:紅背景
-        redImg =SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().red());
+
     }
 
 
@@ -86,15 +86,6 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     }
 
 
-    //從外部控制綠色方形
-    public void setGreenRect(Rect Rect) {
-        if(Rect == null){
-            return;
-        }
-        this.greenRect = Rect;
-    }
-
-
     @Override
     public void paint(Graphics g) {
         //基地為背景先畫
@@ -109,48 +100,24 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
             if(currentButton==null){
                 buildingButtons.get(i).paint(g);
             }else if(i!=currentButton.getId()-1){
-                buildingButtons.get(i).paint(g);
+               buildingButtons.get(i).paint(g);
             }
         }
-        //最後畫
-        if(currentButton!=null && currentButton.getId()-1>=0) {
-            if (currentButton.isDragging()) {
-                //畫拖曳中的按鈕
-                redRect = currentButton.painter();
-                g.drawImage(redImg, redRect.left(), redRect.top(), redRect.width(), redRect.height(), null);
-
-                //綠色區域有與紅色交疊才畫出
-                if (greenRect != null && redRect.overlap(greenRect)) {
-                    g.drawImage(greenImg, greenRect.left(), greenRect.top(), greenRect.width(), greenRect.height(), null);
-                }
-            }
-            //畫被點擊的按鈕
-            buildingButtons.get(currentButton.getId() - 1).paint(g);
-        }
-
     }
 
 
     @Override
     public void update() {
+        //移出時不要有文字
         if(!checkMouseOnButtons()){
             HintDialog.instance().setHintMessage("");
         }
 
-        //取得當前按鈕
+        //印出update ，取得當前按鈕
         for (int i = 0; i < BuildingTypeNum; i++) {
-            if(buildingButtons.get(i).isShuffle()){
+            buildingButtons.get(i).update();
+            if(buildingButtons.get(i).getId()==BuildingButton.currentId){ //if(buildingButtons.get(i).isShuffle()){
                 currentButton=buildingButtons.get(i);
-                break;
-            }
-        }
-
-        //印出建築物提示文字
-        for (int i = 0; i < BuildingTypeNum; i++) {
-            if(buildingButtons.get(i).isMoveOnButton() && !buildingButtons.get(i).isDragged()) {
-                type = BuildingType.getBuildingTypeByInt(buildingButtons.get(i).getId());
-                HintDialog.instance().setHintMessage(type.instance().getName());
-                break;
             }
         }
     }

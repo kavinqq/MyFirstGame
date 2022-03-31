@@ -3,15 +3,20 @@ package company.gameobj;
 
 import company.gameobj.buildings.Building;
 import company.gameobj.buildings.*;
+import company.gameobj.creature.human.Citizen;
+import company.gameobj.message.ToastController;
+import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
 import oldMain.City;
 import oldMain.Resource;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.function.ToDoubleBiFunction;
 
 import static company.gameobj.BuildingController.BuildingType.*;
 
@@ -19,7 +24,7 @@ import static company.gameobj.BuildingController.BuildingType.*;
 /**
  * 城市中的建築運作系統
  */
-public class BuildingController implements GameKernel.GameInterface{
+public class BuildingController implements GameKernel.GameInterface, CommandSolver.MouseCommandListener {
 
     /**
      * 飛機升級時間
@@ -63,18 +68,37 @@ public class BuildingController implements GameKernel.GameInterface{
      */
     private ArrayList<Building> damageBuilding;
 
+
+
     @Override
     public void paint(Graphics g) {
         for (BuildingType value:values()) {
             for (int j = 0; j < value.list.size(); j++) {
-                value.list().get(j).paint(g);
+                value.list().get(j).getBuilding().paint(g);
+
             }
         }
     }
 
     @Override
     public void update() {
+        for (BuildingType value:values()) {
+            for (int j = 0; j < value.list.size(); j++) {
 
+
+                value.list().get(j).update();
+            }
+        }
+    }
+
+    @Override
+    public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+        for (BuildingType value:values()) {
+            for (int j = 0; j < value.list.size(); j++) {
+                value.list().get(j).mouseTrig(e,state,trigTime);
+
+            }
+        }
     }
 
 
@@ -127,6 +151,10 @@ public class BuildingController implements GameKernel.GameInterface{
      * 儲存各個建築的建造/升級時間
      */
     public class BuildingNode {
+        /**BuildingNode
+         *
+         */
+        public BuildingNode selectBuildingNode;
         /**
          * 建築本身
          */
@@ -152,17 +180,28 @@ public class BuildingController implements GameKernel.GameInterface{
          */
         int updateStartTime;
 
-        public void paint(Graphics g){
+        private void paint(Graphics g){
             building.paint(g);
+        }
+
+        private void update(){
+            building.update();
+        }
+
+        private void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+            building.mouseTrig(e,state,trigTime);
         }
 
         public BuildingNode(Building building) {
             this.building = building;
         }
 
+        public boolean getCan(int x){
+            return building.getIcons().get(x).getCan();
+        }
+
         /**
          * 取得這間建築
-         *
          * @return 建築實體
          */
         public Building getBuilding() {
@@ -201,6 +240,7 @@ public class BuildingController implements GameKernel.GameInterface{
         isUpgradingSoldier = false;
         isUpgradingPlane = false;
         isUpgradingTech = false;
+
     }
 
     /**
@@ -256,10 +296,10 @@ public class BuildingController implements GameKernel.GameInterface{
         newBuilding.buildEndTime = City.getGameTime() + newBuilding.building.getBuildTime();
         //尚未開始運作
         newBuilding.building.setWorking(false);
-        //設置為升級中
-        newBuilding.building.setUpgrading(true);
         //設置為不可升級狀態
         newBuilding.building.setReadyToUpgrade(false);
+
+        newBuilding.building.setUpgrading(false);
         //添加進該分類的鏈表中
         type.list.add(newBuilding);
     }
@@ -316,9 +356,9 @@ public class BuildingController implements GameKernel.GameInterface{
      * @param list 該類建築的鏈表
      * @return 完成建造的數量
      */
-    private int setBuildingStartWork(LinkedList<BuildingController.BuildingNode> list) {
+    private int setBuildingStartWork(LinkedList<BuildingNode> list) {
         int sum = 0;
-        for (BuildingController.BuildingNode node : list) {
+        for (BuildingNode node : list) {
             //若建造完成時間==當前時間->建造完成
             if (node.buildEndTime == City.getGameTime()) {
                 node.building.setLevel(node.building.getLevel() + 1);
@@ -345,7 +385,7 @@ public class BuildingController implements GameKernel.GameInterface{
      *
      * @param type 要檢查能不能建造的建築種類
      */
-    public boolean canBuild(BuildingController.BuildingType type, Resource resource) {
+    public boolean canBuild(BuildingType type, Resource resource) {
         if (City.getTechLevel() < type.instance.getTechLevelNeedBuild()) {
             return false;
         }
@@ -568,7 +608,7 @@ public class BuildingController implements GameKernel.GameInterface{
      */
     private int finishUpgradeBuilding(LinkedList<BuildingNode> list) {
         int sum = 0;
-        for (BuildingController.BuildingNode node : list) {
+        for (BuildingNode node : list) {
             //若建築的升級完成時間==當前時間->升級完成
             if (node.upgradeEndTime == City.getGameTime()) {
                 node.building.setLevel(node.building.getLevel() + 1);
@@ -589,7 +629,7 @@ public class BuildingController implements GameKernel.GameInterface{
      * @param resource 都市的物資
      * @return 可以升級數量
      */
-    public int getCanUpgradeNum(BuildingController.BuildingType type, Resource resource) {
+    public int getCanUpgradeNum(BuildingType type, Resource resource) {
         switch (type) {
             //兵工廠直接升級士兵/飛機等級
             case ARSENAL: {
@@ -1054,9 +1094,25 @@ public class BuildingController implements GameKernel.GameInterface{
      *
      * @return 是否正在升級科技
      */
-    public boolean isUpgradingTech() {
+    public boolean isUpgradingTech(BuildingNode buildingNode) {
+//        buildingNode.building.setUpgrading(true);
+//        buildingNode.building.setWorking(false);
+//        buildingNode.building.setReadyToUpgrade(false);
         return isUpgradingTech;
     }
+
+    public BuildingNode selectionBuildingNode(int x,int y){
+        for (BuildingType value:values()) {
+            for (int j = 0; j < value.list.size(); j++) {
+                if (value.list().get(j).building.isEntered(x, y)) {
+                    return value.list().get(j);
+                }
+            }
+        }
+        return null;
+    }
+
+
 
     /**
      * 建築受到傷害
@@ -1160,6 +1216,7 @@ public class BuildingController implements GameKernel.GameInterface{
 
         return builder.toString();
     }
+
 
     /**
      * 沒有研究所

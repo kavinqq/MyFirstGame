@@ -5,6 +5,11 @@ import static company.Global.*;
 
 import company.gameobj.BuildingController;
 import company.gameobj.buildings.Building;
+
+import company.gametest9th.utils.CommandSolver;
+import company.gametest9th.utils.GameKernel;
+
+
 import company.gameobj.creature.human.*;
 import company.gameobj.creature.enemy.zombies.*;
 import company.gameobj.BuildingController.*;
@@ -12,12 +17,13 @@ import company.gameobj.BuildingController.*;
 import company.gametest9th.utils.GameKernel;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import static company.gameobj.BuildingController.BuildingType.*;
 import static company.gameobj.BuildingController.*;
 
-public class City implements GameKernel.GameInterface {
+public class City implements GameKernel.GameInterface, CommandSolver.MouseCommandListener {
     /**
      * 預設一個城市有幾個人民
      * 預設一個城市有幾個市民
@@ -150,6 +156,7 @@ public class City implements GameKernel.GameInterface {
      *
      * @param thisRoundTimePass 這一輪指令的時間
      */
+    //TODO system -> toaster 辰
     public void doCityWorkAndTimePass(int thisRoundTimePass) {
         //把時間流動前做的指令 && 決定流動的時間跑完
         for (int time = 0; time < thisRoundTimePass; time++) {
@@ -161,17 +168,17 @@ public class City implements GameKernel.GameInterface {
             int numOfNewCitizens = buildings.getNewCitizenNum(resource);
             if (numOfNewCitizens != 0) {
                 this.citizens.add(numOfNewCitizens);
-                System.out.printf("第%d回合 有新市民出生 ,閒置人數:%d\n", getGameTime() + 1, citizens.getNumOfFreeCitizens());
+                //System.out.printf("第%d回合 有新市民出生 ,閒置人數:%d\n", getGameTime() + 1, citizens.getNumOfFreeCitizens());
             }
             int numOfNewArmySoldiers = buildings.getNewArmyNum(resource);
             if (numOfNewArmySoldiers != 0) {
                 this.military.addArmy(numOfNewArmySoldiers);
-                System.out.printf("第%d回合 有 %d 個新戰士出生,目前一共有%d個戰士\n", getGameTime() + 1, numOfNewArmySoldiers, military.getNumOfArmySoldier());
+                //System.out.printf("第%d回合 有 %d 個新戰士出生,目前一共有%d個戰士\n", getGameTime() + 1, numOfNewArmySoldiers, military.getNumOfArmySoldier());
             }
             int numOfNewAirMen = buildings.getNewPlaneNum(resource);
             if (numOfNewAirMen != 0) {
                 this.military.addAirForce(numOfNewAirMen);
-                System.out.printf("第%d回合 有 %d 架新飛機產生,目前一共有%d架飛機\n", getGameTime() + 1, numOfNewAirMen, military.getNumOfAirmen());
+                //System.out.printf("第%d回合 有 %d 架新飛機產生,目前一共有%d架飛機\n", getGameTime() + 1, numOfNewAirMen, military.getNumOfAirmen());
             }
             //完成建築的升級和建造，科技等級提升
             buildings.completeJob();
@@ -187,18 +194,20 @@ public class City implements GameKernel.GameInterface {
             }
 
             zombies.timePass();
+
             //殭屍來襲時間( 每16小時來一次 )
             if (zombies.isAttacking()) {
-                System.out.println("殭屍來襲：" + this.zombies.getZombieTroop());
-                System.out.println("你的部隊：空軍攻擊力：" + this.military.getAirForceValue()+"，陸軍攻擊力：" + this.military.getArmyValue());
-                //用來 計算抵擋完殭屍後的人口狀況 和 算完後遊戲是否結束
-                this.fightZombies(this.zombies.getZombieTroop());
-                //顯示被破壞的建築
-                System.out.println(buildings.sumDamageBuilding());
-                if (!this.isAlive()) {
-                    System.out.println("這裡已經什麼都沒有了....");
-                    System.out.println("Game Over");
-                }
+                //建築物升級測試會被毀掉，先註解掉
+//                System.out.println("殭屍來襲：" + this.zombies.getZombieTroop());
+//                System.out.println("你的部隊：空軍攻擊力：" + this.military.getAirForceValue()+"，陸軍攻擊力：" + this.military.getArmyValue());
+//                //用來 計算抵擋完殭屍後的人口狀況 和 算完後遊戲是否結束
+//                this.fightZombies(this.zombies.getZombieTroop());
+//                //顯示被破壞的建築
+//                System.out.println(buildings.sumDamageBuilding());
+//                if (!this.isAlive()) {
+//                    System.out.println("這裡已經什麼都沒有了....");
+//                    System.out.println("Game Over");
+//                }
             }
         }
     }
@@ -378,19 +387,24 @@ public class City implements GameKernel.GameInterface {
      * 顯示目前城市的所有資訊
      */
     public void showInfo() {
+
         //所有資源的資訊
         System.out.printf("第%d小時\n目前總資源量如下:\n" +
                 "木材: %d , 鋼鐵: %d, 瓦斯: %d\n", getGameTime() + 1, resource.getTotalWood(), resource.getTotalSteel(), resource.getTotalGas());
+
         //所有人力資源的資訊
         System.out.printf("目前人力資源如下:\n" +
                 "總市民人數: %d \n" +
                 "採木人: %d , 採鋼人: %d, 閒人: %d\n",
                 citizens.getNumOfCitizens(), citizens.getNumOfLoggingCitizens(), citizens.getNumOfMiningCitizens(), citizens.getNumOfFreeCitizens());
+
         //所有人民的資訊
         System.out.printf("目前士兵量如下:\n" +
                 "士兵: %d名, 飛機 %d架\n", military.getNumOfArmySoldier(), military.getNumOfAirmen());
+
         //顯示科技等級
         System.out.println("目前科技等級為:" + techLevel);
+
         //顯示下波攻擊倒數
         System.out.println("距下波攻擊還有 " + (16 - getGameTime() % 16) + " 小時");
         System.out.println("---------------------------------------------------");
@@ -480,8 +494,8 @@ public class City implements GameKernel.GameInterface {
      *
      * @return 是否正在升級科技
      */
-    public boolean isUpgradingTech() {
-        return buildings.isUpgradingTech();
+    public boolean isUpgradingTech(BuildingNode buildingNode) {
+        return buildings.isUpgradingTech(buildingNode);
     }
 
     /**
@@ -537,19 +551,27 @@ public class City implements GameKernel.GameInterface {
     @Override
     public void paint(Graphics g) {
         buildings.paint(g);
-
-        // 下面的數字待調整 所以我暫時先不放到Global
-        g.setColor(Color.white);
-        g.setFont(new Font("TimeRoman", Font.PLAIN, 60));
-        g.drawString("" + resource.getTotalWood(), ICON_START_X + ICON_WIDTH / 2 + 100, ICON_START_Y + 50);
-        g.drawString("" + resource.getTotalSteel(),ICON_START_X + ICON_WIDTH / 2 + ICON_GAP + 100 , ICON_START_Y + 50);
-        g.drawString("" + citizens.getNumOfCitizens(), ICON_START_X + ICON_WIDTH / 2 + ICON_GAP * 2 + 100, ICON_START_Y + 50);
-
     }
 
     @Override
     public void update() {
+        buildings.update();
+    }
 
+    private BuildingNode currentBuildingNode;
+
+    public BuildingNode selectBuildingNode(int x,int y){
+        return buildings.selectionBuildingNode(x,y);
+    }
+
+    public BuildingNode getCurrentBuildingNode(){
+        return currentBuildingNode;
+    }
+
+    @Override
+    public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+        buildings.mouseTrig(e,state,trigTime);
+        currentBuildingNode=selectBuildingNode(e.getX(),e.getY());
     }
 
 

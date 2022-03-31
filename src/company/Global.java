@@ -79,6 +79,13 @@ public class Global {
 
     //建築
     public final static int BuildingTypeNum = 8;
+    //建築Icon
+    public static final int BUILDING_ICON_WIDTH = 15;
+    public static final int BUILDING_ICON_HEIGHT = 15;
+
+    public static final int BUILDING_ICON_GAP_X =20;
+
+    public static final int CAMERA_SPEED = 5;
 
     /**
      * 操作指令

@@ -2,46 +2,74 @@ package company.gameobj;
 
 import company.Global;
 import company.gametest9th.utils.GameKernel;
+import company.gametest9th.utils.Vector;
 
 import java.awt.*;
 import java.util.Arrays;
 
 public abstract class GameObject implements GameKernel.GameInterface {
 
-    private boolean isVisible;
+    private boolean isVisible; // 能否看見這個物件
 
-    public GameObject(int x, int y, int width, int height) {
-        detectRange = new Rect(x, y, width, height);
-        painter = new Rect(x, y, width, height);
-    }
-
-    public GameObject(int x, int y, int width, int height, int x2, int y2, int width2, int height2) {
-        detectRange = new Rect(x, y, width, height);
-        painter = new Rect(x2, y2, width2, height2);
-        painter.setCenter(detectRange.centerX(), detectRange.centerY());
-    }
-
-    public GameObject(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight){
-        painter = new Rect(x,y,painterWidth, painterHeight);
-        painter.setCenter(x,y);
-        detectRange = new Rect(x,y, colliderWidth, colliderHeight);
-        detectRange.setCenter(x,y);
-    }
-
-    public GameObject(Rect rect) {
-        painter = rect.clone();
-        detectRange = rect.clone();
-    }
-
-    public GameObject(Rect rect, Rect rect2) {
-        painter = rect.clone();
-        detectRange = rect2.clone();
-        painter.setCenter(detectRange.centerX(), detectRange.centerY());
-    }
+    private int originalX; // 原本的鏡頭X
+    private int originalY; // 總共的鏡頭移動量Y
 
     private Rect detectRange;
     private Rect painter;
     private Rect tmpDetectRange;
+
+
+    public GameObject(int x, int y, int width, int height) {
+
+        detectRange = new Rect(x, y, width, height);
+        painter = new Rect(x, y, width, height);
+
+        originalX = x;
+        originalY = y;
+    }
+
+    public GameObject(int x, int y, int width, int height, int x2, int y2, int width2, int height2) {
+
+        detectRange = new Rect(x, y, width, height);
+        painter = new Rect(x2, y2, width2, height2);
+
+        painter.setCenter(detectRange.centerX(), detectRange.centerY());
+
+        originalX = x;
+        originalY = y;
+    }
+
+    public GameObject(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight) {
+
+        painter = new Rect(x, y, painterWidth, painterHeight);
+        painter.setCenter(x, y);
+
+        detectRange = new Rect(x, y, colliderWidth, colliderHeight);
+        detectRange.setCenter(x, y);
+
+        originalX = x;
+        originalY = y;
+    }
+
+    public GameObject(Rect rect) {
+
+        painter = rect.clone();
+        detectRange = rect.clone();
+
+        originalX = rect.left();
+        originalY = rect.top();
+    }
+
+    public GameObject(Rect rect, Rect rect2) {
+
+        painter = rect.clone();
+        painter.setCenter(detectRange.centerX(), detectRange.centerY());
+
+        detectRange = rect2.clone();
+
+        originalX = rect.left();
+        originalY = rect.top();
+    }
 
     public final void setPainterStartFromTopLeft(int x, int y) {
         detectRange.moveToPoint(x, y);
@@ -75,20 +103,16 @@ public abstract class GameObject implements GameKernel.GameInterface {
 
 
     public Rect overlapObject(GameObject object) {
-        if(painter.overlap(object.painter)){
+        if (painter.overlap(object.painter)) {
             //已確認交疊情況下 排順序下 找到X、Y方向 第2第3為交疊正方形位置
-            int[] intsX={detectRange.left(),object.detectRange.left(),detectRange.right(),object.detectRange.right()};
+            int[] intsX = {detectRange.left(), object.detectRange.left(), detectRange.right(), object.detectRange.right()};
             Arrays.sort(intsX);
-            int[] intsY={detectRange.top(),object.detectRange.top(),detectRange.bottom(),object.detectRange.bottom()};
+            int[] intsY = {detectRange.top(), object.detectRange.top(), detectRange.bottom(), object.detectRange.bottom()};
             Arrays.sort(intsY);
-            return new Rect(intsX[1],intsY[1],intsX[2]-intsX[1],intsY[2]-intsY[1]);
+            return new Rect(intsX[1], intsY[1], intsX[2] - intsX[1], intsY[2] - intsY[1]);
         }
         return null;
     }
-
-
-
-
 
     public boolean isCollision(GameObject object) {
         //return collider.overlap(object.collider);
@@ -117,8 +141,8 @@ public abstract class GameObject implements GameKernel.GameInterface {
         return (detectRange.left() < x && detectRange.right() > x && detectRange.top() < y && detectRange.bottom() > y);
     }
 
-    public final boolean isCovering(int x, int y){
-        return (this.painter().left()<=x && x<=this.painter().right() && this.painter().top()<=y && y<=this.painter().bottom());
+    public final boolean isCovering(int x, int y) {
+        return (this.painter().left() <= x && x <= this.painter().right() && this.painter().top() <= y && y <= this.painter().bottom());
     }
 
     public final Rect detectRange() {
@@ -145,13 +169,13 @@ public abstract class GameObject implements GameKernel.GameInterface {
         return detectRange.right() >= Global.SCREEN_X;
     }
 
-    public void shutDetectRange(){
-        tmpDetectRange=detectRange.clone();
-        detectRange=new Rect(0,0,0,0);
+    public void shutDetectRange() {
+        tmpDetectRange = detectRange.clone();
+        detectRange = new Rect(0, 0, 0, 0);
     }
 
-    public void openDetectRange(){
-        detectRange=tmpDetectRange.clone();
+    public void openDetectRange() {
+        detectRange = tmpDetectRange.clone();
     }
 
     @Override
@@ -170,37 +194,73 @@ public abstract class GameObject implements GameKernel.GameInterface {
     public abstract void paintComponent(Graphics g);//TODO: can we change this into non-abstract??
 
     //檢查是否碰到某物件的左邊
-    public boolean touchLeftOf(GameObject gameObject){
-        return (this.painter.right()>=gameObject.painter().left() && this.painter.left()<gameObject.painter().left() && this.isHorizontalParallelTo(gameObject));
+    public boolean touchLeftOf(GameObject gameObject) {
+        return (this.painter.right() >= gameObject.painter().left() && this.painter.left() < gameObject.painter().left() && this.isHorizontalParallelTo(gameObject));
     }
+
     //檢查是否碰到某物件的右邊
-    public boolean touchRightOf(GameObject gameObject){
-        return (this.painter.left()<=gameObject.painter().right() && this.painter.right()>gameObject.painter().right() && this.isHorizontalParallelTo(gameObject));
+    public boolean touchRightOf(GameObject gameObject) {
+        return (this.painter.left() <= gameObject.painter().right() && this.painter.right() > gameObject.painter().right() && this.isHorizontalParallelTo(gameObject));
     }
+
     //檢查是否碰到某物件的上方
-    public boolean touchTopOf(GameObject gameObject){
-        return (this.painter().bottom()>=gameObject.painter().top() && this.painter().top()<gameObject.painter().top() && this.isVerticalParallel(gameObject));
+    public boolean touchTopOf(GameObject gameObject) {
+        return (this.painter().bottom() >= gameObject.painter().top() && this.painter().top() < gameObject.painter().top() && this.isVerticalParallel(gameObject));
     }
+
     //檢查是否碰到某物件的下方
-    public boolean touchBottomOf(GameObject gameObject){
-        return (this.painter().top()<=gameObject.painter.bottom() && this.painter().bottom()>gameObject.painter().bottom() && this.isVerticalParallel(gameObject));
+    public boolean touchBottomOf(GameObject gameObject) {
+        return (this.painter().top() <= gameObject.painter.bottom() && this.painter().bottom() > gameObject.painter().bottom() && this.isVerticalParallel(gameObject));
     }
 
     //檢查是否在水平方向上有重疊
-    public boolean isHorizontalParallelTo(GameObject gameObject){
-        return (this.painter().top()<gameObject.painter().bottom() && this.painter().bottom()>gameObject.painter().top());
+    public boolean isHorizontalParallelTo(GameObject gameObject) {
+        return (this.painter().top() < gameObject.painter().bottom() && this.painter().bottom() > gameObject.painter().top());
     }
 
     //檢查是否在垂直方向上有重疊
-    private boolean isVerticalParallel(GameObject gameObject){
-        return (this.painter().left()<gameObject.painter().right() && this.painter().right()>gameObject.painter().left());
+    private boolean isVerticalParallel(GameObject gameObject) {
+        return (this.painter().left() < gameObject.painter().right() && this.painter().right() > gameObject.painter().left());
     }
 
-    public void setVisible(boolean visible){
+
+    /**
+     * 設定能不能看見這個物件
+     *
+     * @param visible true => 能看見 / false => 不能看見
+     */
+
+    public void setVisible(boolean visible) {
         this.isVisible = visible;
     }
 
-    public boolean getVisible(){
+    /**
+     * 獲得能否看見這個物件
+     *
+     * @return true => 能看見 / false => 不能看見
+     */
+    public boolean getVisible() {
         return isVisible;
+    }
+
+    /**
+     * 取得要向量 && 移動
+     *
+     * @param vector 一段向量
+     */
+    public void cameraMove(Vector vector) {
+
+        translate((int) (vector.vx() * Global.CAMERA_SPEED), (int) (vector.vy() * Global.CAMERA_SPEED));
+    }
+
+
+    /**
+     * 重製所有物件回初始位置(地圖回到中心的意思)
+     */
+    public void resetObjectXY() {
+
+        detectRange.moveToPoint(originalX, originalY);
+        painter.moveToPoint(originalX, originalY);
+
     }
 }

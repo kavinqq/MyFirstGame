@@ -3,6 +3,8 @@ package company.gameobj.buildings;
 
 import company.gametest9th.utils.Path;
 
+import java.awt.*;
+
 public class Arsenal extends Building {
     /**
      * 父類建構子
@@ -24,7 +26,16 @@ public class Arsenal extends Building {
      */
     public Arsenal(int x, int y) {
         super(x, y);
+
         init();
+        getIcons().add(new UpGradeIcon(x+15,y));//x+ (getIcons().size()+1)* Global.BUILDING_ICON_GAP_X
+
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
     }
 
     public Arsenal() {
@@ -35,9 +46,11 @@ public class Arsenal extends Building {
     public String toString() {
         return "兵工廠:可以升級士兵";
     }
+
     public String buildingDetail(int level){
         return "";
     }
+
     //初始化
     @Override
     protected void init() {
@@ -58,5 +71,4 @@ public class Arsenal extends Building {
                 .setImgPath(new Path().img().building().Arsenal());
         imgInit();
     }
-
 }

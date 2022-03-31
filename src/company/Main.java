@@ -3,6 +3,7 @@ package company;
 import company.gametest9th.utils.GameKernel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 public class Main {
@@ -38,6 +39,4 @@ public class Main {
         kernel.run(Global.IS_DEBUG);
 
     }
-
-
 }

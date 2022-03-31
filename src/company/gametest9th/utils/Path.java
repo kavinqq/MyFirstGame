@@ -144,8 +144,6 @@ public class Path {
 
             public String whiteGrayOpacity() { return this + "/whiteGrayOpacitySeventy.png";}
 
-            public String ingBuild(){return this+"/ingBuild.png";}
-
             public String green() { return this + "/green.png";}
 
             public String red() { return this + "/red.png";}
@@ -175,6 +173,7 @@ public class Path {
             public String steel() { return this + "/normalSteel.png";}
 
             public String specialSteel() { return this + "/specialSteel.png";}
+
         }
 
 
@@ -202,6 +201,16 @@ public class Path {
             public String Base() { return this + "/Base.png";};
 
             public String Arsenal(){ return this + "/arsenal.png";}
+
+            public String ingBuild(){return this+"/ingBuild.png";}
+
+            //建築物所需Icon
+            public String noWorkingIcon(){return this+"/noWorkingIcon.png";}
+
+            public String workingIcon(){return this+"/workingIcon.png";}
+
+            public String upGradeIcon(){return this+"/upGradeIcon.png";}
+
         }
 
         // Resource => img => background
@@ -222,6 +231,10 @@ public class Path {
             public String road(){ return this + "/road1.png";}
 
             public String area(){return this +"/area.jpg";}
+
+            public String grass(){return this +"/foundation9.png";}
+
+            public String airport(){return this+"airport.png";}
 
             public String darkBackground(){return this +"/darkbj4.png";}
         }

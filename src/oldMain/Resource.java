@@ -22,7 +22,7 @@ public class Resource {
     public Resource() {
         totalSteel = 1000;
         totalWood = 1000;
-        totalGas = 1000;
+        totalGas = 20;
     }
 
     /**
