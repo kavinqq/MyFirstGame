@@ -673,6 +673,18 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         }
     }
 
+    public boolean getAllUpdateIconsCan(){
+        for (int i = 0; i < icons.size(); i++) {
+            if(icons.get(i) instanceof WorkingIcon){
+                continue;
+            }
+            if(icons.get(i).getCan()){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void setLevel(int level) {
         this.level = level;
     }

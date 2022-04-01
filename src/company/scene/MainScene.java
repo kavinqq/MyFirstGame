@@ -268,7 +268,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     canBuild = false;
                     currentButton.setCanDragging(false);
                     ToastController.instance().print("建造-建築物已蓋滿 最大建築物量為" + city.MAX_CAN_BUILD);
-                    //System.out.println("你的城市 經過多年風風雨雨 鐵與血的灌溉\n如今 從杳無人煙之地 成了 充斥著滿滿的高樓大廈 人車馬龍的繁華之地\n你的城市 已沒有地方可以建造新的建築了");
                 } else if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
                     canBuild = false;
                     currentButton.setCanDragging(false);
@@ -310,7 +309,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
                         //滑鼠放開時，判斷滑鼠放開的上一偵是否在建造區中
-                        if (currentButton.isReleased && buildingArea.get(i, j).isOnBuildGrid() && preCanBuild && !currentButton.isDragging()) {//
+                        if (currentButton.isReleased && buildingArea.get(i, j).isOnBuildGrid() && preCanBuild ) {//
 
 
                             //建造房子
@@ -352,7 +351,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             BuildingController.BuildingNode selectBuilding = city.getCurrentBuildingNode();
             BuildingType type = BuildingType.getBuildingTypeByInt(selectBuilding.getBuilding().getId());
             //TODO:getCan(0)待修
-            if ((selectBuilding.getBuilding().getIcons().size() == 2 && selectBuilding.getCan(0))) {
+            if ((selectBuilding.getBuilding().getAllUpdateIconsCan())) {
 
 
                 if (City.getTechLevel() < type.instance().getTechLevelNeedUpgrade()) {
@@ -367,7 +366,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         case LAB: {
                             if (city.isUpgradingTech(selectBuilding)) {
                                 ToastController.instance().print("升級-科技已在升級中，請等待此次升級結束");
-                                //System.out.println("科技已在升級中，請等待此次升級結束");
                             } else {
                                 city.upgradeTechLevel();
                                 ToastController.instance().print("升級-科技開始升級");
@@ -384,7 +382,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                     ToastController.instance().print("士兵升級中");
                                 }
                             }
-                            if (selectBuilding.getCan(2)) {
+                            if (selectBuilding.getCan(1)) {
                                 if (city.isUpgradingPlane()) {
                                     ToastController.instance().print("飛機已在升級中");
                                 } else {
