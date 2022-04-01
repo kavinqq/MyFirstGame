@@ -99,10 +99,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         buildingArea = new BuildingArea();
 
         //主堡
+
         //base先不刪下面有些東西與base連接
-        base = new Base(20, 20);
+        base = new Base(SCREEN_X / 2, SCREEN_Y / 2);
 
         preCanBuild = true;
+
         // city本體
         city = new City();
         //city.build(BuildingType.BASE,SCREEN_X / 2 - Base.BASE_WIDTH, SCREEN_Y / 2 - Base.BASE_HEIGHT);
@@ -138,7 +140,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         resources.add(new Tree(350, 400));
         resources.add(new Steel(1200, 400));
 
-        AudioResourceController.getInstance().loop(new Path().sound().mainSceneBGM(), 2);
+//        AudioResourceController.getInstance().loop(new Path().sound().mainSceneBGM(), 2);
     }
 
     @Override
@@ -247,14 +249,15 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             // 下面就是移動地圖上每一個物件
             base.cameraMove();
 
-            for (Human human : city.getCitizens().getAllCitizens()) {
-                human.cameraMove();
-            }
+            // city裡面所有東西移動
+            city.cameraMove();
 
+            // 資源堆移動
             for (GameObject resource : resources) {
                 resource.cameraMove();
             }
 
+            // 建築物基座移動
             buildingArea.buildingAreaCameraMove();
 
             // Reset 鏡頭移動量
@@ -276,6 +279,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             //取得現在選取的按鈕 及 建築類型
             BuildingButton currentButton = buildingOption.getCurrentButton();
             BuildingType type = BuildingType.getBuildingTypeByInt(currentButton.getId());
+
             //點選按鈕時 判斷可否蓋建築物
             if (currentButton.getCountPressed() >= 0 && currentButton.isPressed() && !currentButton.isDragging() && !currentButton.isReleased()) {
                 currentButton.decCountPressed();
@@ -329,6 +333,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                             //建造房子
                             city.build(type, currentMouseX - BUILDING_WIDTH / 2, currentMouseY - BUILDING_HEIGHT / 2);
+
                             ToastController.instance().print("建造-" + type.instance().getName() + "成功");
 
 
@@ -852,9 +857,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         if (commandCode == SPACE) {
 
-            for (Human human : city.getCitizens().getAllCitizens()) {
-                human.resetObjectXY();
-            }
+            city.resetObjectXY();
 
             base.resetObjectXY();
 

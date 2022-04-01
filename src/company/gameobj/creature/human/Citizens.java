@@ -91,11 +91,12 @@ public class Citizens {
 
     /**
      * 直接加入一個村民
+     *
      * @param citizen 新村民
      */
     public void add(Citizen citizen) {
         // 如果村民數量未達上限
-        if(count < maxCitizen){
+        if (count < maxCitizen) {
             // 閒人 ++
             this.numOfFreeCitizens += 1;
             valueOfCitizens += citizen.getValue();
@@ -228,13 +229,13 @@ public class Citizens {
 
 
     // 畫出所有的村民
-    public void paintAll(Graphics g){
+    public void paintAll(Graphics g) {
 
         // 遍尋村民List
-        for(Citizen citizen: citizens){
+        for (Citizen citizen : citizens) {
 
             // 如果他現在能被看見的話 => 畫出他
-            if(citizen.getVisible()){
+            if (citizen.getVisible()) {
                 citizen.paint(g);
             }
         }
@@ -243,28 +244,43 @@ public class Citizens {
     /**
      * 更新所有村民
      */
-    public void updateAll(){
+    public void updateAll() {
 
-        for(Citizen citizen: citizens){
+        for (Citizen citizen : citizens) {
             citizen.update();
+        }
+    }
+
+    public void cameraMove(){
+
+        for (Citizen citizen : citizens) {
+            citizen.cameraMove();
+        }
+    }
+
+
+    public void resetObjectXY() {
+        for (Citizen citizen : citizens) {
+            citizen.resetObjectXY();
         }
     }
 
 
     /**
      * 取個一個村民 => 參數(x,y) 在村民的painter()內
+     *
      * @param x X座標
      * @param y Y座標
      * @return 一個村民
      */
 
-    public Citizen getCitizen(int x, int y){
+    public Citizen getCitizen(int x, int y) {
 
         // 尋訪每一個村民
-        for(Citizen citizen: citizens){
+        for (Citizen citizen : citizens) {
 
             // 如果(x, y) 在這個村民的painter範圍內
-            if(citizen.isEntered(x, y)){
+            if (citizen.isEntered(x, y)) {
                 return citizen;
             }
         }
@@ -276,20 +292,21 @@ public class Citizens {
 
     /**
      * 獲得框選的村民
+     *
      * @param box 框選的框框
      * @return 回傳被框選的人民
      */
 
-    public List<Human> getBoxCitizens(GameObject box){
+    public List<Human> getBoxCitizens(GameObject box) {
 
         // 如果 上次框選的村民還在 清空他
-        if(!citizensInBox.isEmpty()){
+        if (!citizensInBox.isEmpty()) {
             citizensInBox.clear();
         }
 
         // 檢查 所有村民 和 傳進的的box 有沒有碰撞
-        for(Citizen citizen: citizens){
-            if(citizen.painter().overlap(box.painter())){
+        for (Citizen citizen : citizens) {
+            if (citizen.painter().overlap(box.painter())) {
                 citizensInBox.add(citizen);
             }
         }
@@ -298,8 +315,7 @@ public class Citizens {
     }
 
 
-
-    public List<Citizen> getAllCitizens(){
+    public List<Citizen> getAllCitizens() {
         return this.citizens;
     }
 

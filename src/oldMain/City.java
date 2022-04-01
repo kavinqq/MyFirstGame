@@ -1,5 +1,6 @@
 package oldMain;
 
+import company.Global;
 import company.gameobj.BuildingController;
 import company.gameobj.buildings.Building;
 
@@ -133,15 +134,16 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
     /**
      * 視覺化的放資源
-     * @param num 資源數量
+     *
+     * @param num          資源數量
      * @param resourceType 資源種類
      */
     public void gainResource(int num, Citizen.Resource resourceType) {
 
         // 根據村民現在身上的 資源數量 && 種類 放到總資源堆
-        if(resourceType == Citizen.Resource.WOOD){
+        if (resourceType == Citizen.Resource.WOOD) {
             resource.addWood(num);
-        } else if(resourceType == Citizen.Resource.STEEL){
+        } else if (resourceType == Citizen.Resource.STEEL) {
             resource.addSteel(num);
         }
 
@@ -258,8 +260,9 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
      *
      * @param type 要建造的建築種類
      */
-    public void build(BuildingType type,int x, int y) {
-        buildings.build(type, resource,x,y);
+    public void build(BuildingType type, int x, int y) {
+
+        buildings.build(type, resource, x, y);
     }
 
     /**
@@ -334,7 +337,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         int landAttack = zombieTroop.getLandAttack();
         int airAttack = zombieTroop.getAirAttack();
         //空中殭屍攻擊空中部隊
-        if (airAttack>0 && airAttack >= military.getAirForceValue()) {
+        if (airAttack > 0 && airAttack >= military.getAirForceValue()) {
             airAttack -= military.getAirForceValue();
             military.getAirForceWipedOut();
         } else {
@@ -342,12 +345,12 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             airAttack = 0;
         }
         //空中殭屍攻擊平民
-        if (airAttack>0 && airAttack >= citizens.getValueOfCitizens()) {
+        if (airAttack > 0 && airAttack >= citizens.getValueOfCitizens()) {
             airAttack -= citizens.getValueOfCitizens();
             citizens.getWipedOut();
         } else {
             citizens.getHarmed(airAttack);
-            airAttack= 0;
+            airAttack = 0;
         }
         //空中殭屍攻擊建築
         if (airAttack > 0) {
@@ -355,7 +358,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             airAttack = 0;
         }
         //地面殭屍攻擊地面部隊
-        if (landAttack>0 && landAttack >= military.getArmyValue()) {
+        if (landAttack > 0 && landAttack >= military.getArmyValue()) {
             landAttack -= military.getArmyValue();
             military.getArmyWipedOut();
         } else {
@@ -363,7 +366,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             landAttack = 0;
         }
         //地面殭屍攻擊平民
-        if (landAttack>0 && landAttack >= citizens.getValueOfCitizens()) {
+        if (landAttack > 0 && landAttack >= citizens.getValueOfCitizens()) {
             landAttack -= citizens.getValueOfCitizens();
             citizens.getWipedOut();
         } else {
@@ -398,8 +401,8 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
         //所有人力資源的資訊
         System.out.printf("目前人力資源如下:\n" +
-                "總市民人數: %d \n" +
-                "採木人: %d , 採鋼人: %d, 閒人: %d\n",
+                        "總市民人數: %d \n" +
+                        "採木人: %d , 採鋼人: %d, 閒人: %d\n",
                 citizens.getNumOfCitizens(), citizens.getNumOfLoggingCitizens(), citizens.getNumOfMiningCitizens(), citizens.getNumOfFreeCitizens());
 
         //所有人民的資訊
@@ -439,9 +442,10 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         return this.citizens.getNumOfCitizens();
     }
 
-    public int getBuildingsNum(int id){
+    public int getBuildingsNum(int id) {
         return buildings.countBuildingNum(id);
     }
+
     /**
      * 城市中的建築數量
      *
@@ -548,11 +552,11 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
     private BuildingNode currentBuildingNode;
 
-    public BuildingNode selectBuildingNode(int x,int y){
-        return buildings.selectionBuildingNode(x,y);
+    public BuildingNode selectBuildingNode(int x, int y) {
+        return buildings.selectionBuildingNode(x, y);
     }
 
-    public BuildingNode getCurrentBuildingNode(){
+    public BuildingNode getCurrentBuildingNode() {
         return currentBuildingNode;
     }
 
@@ -563,26 +567,29 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
     /**
      * 更改City裡面 存有所有人民的物件
+     *
      * @param numOfCitizens 該物件有幾個村民
      */
 
-    public void setCitizens(int numOfCitizens){
+    public void setCitizens(int numOfCitizens) {
 
         this.citizens = new Citizens(numOfCitizens);
     }
 
     /**
      * 獲得City裡面 存有所有人民的物件
+     *
      * @return 存有所有人民的物件
      */
 
-    public Citizens getCitizens(){
+    public Citizens getCitizens() {
         return citizens;
     }
 
 
     /**
      * 獲得City裡面 存有所有士兵的物件
+     *
      * @return 存有所有士兵的物件
      */
 
@@ -592,14 +599,17 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
     /**
      * 獲得City裡面 存有所有建築物的物件
+     *
      * @return 存有所有建築物的物件
      */
     public BuildingController getBuildings() {
         return buildings;
     }
 
+
     @Override
     public void paint(Graphics g) {
+
         buildings.paint(g);
 
         citizens.paintAll(g);
@@ -613,18 +623,36 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         buildings.update();
 
         citizens.updateAll();
+    }
 
+    /**
+     * City內所有物件跟著鏡頭移動
+     */
 
+    public void cameraMove() {
+
+        citizens.cameraMove();
+
+        buildings.cameraMove();
+    }
+
+    /**
+     * City內所有物件 回到畫面為初始鏡頭時 會顯示的位置
+     */
+
+    public void resetObjectXY() {
+
+        citizens.resetObjectXY();
+
+        buildings.resetObjectXY();
     }
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
 
-        buildings.mouseTrig(e,state,trigTime);
-        currentBuildingNode=selectBuildingNode(e.getX(),e.getY());
+        buildings.mouseTrig(e, state, trigTime);
+        currentBuildingNode = selectBuildingNode(e.getX(), e.getY());
     }
-
-
 
 
 }

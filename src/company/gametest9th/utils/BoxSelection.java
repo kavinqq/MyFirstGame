@@ -11,7 +11,6 @@ import static company.Global.WINDOW_HEIGHT;
 
 public class BoxSelection implements CommandSolver.MouseCommandListener {
 
-
     private class Box extends GameObject {
 
         private Image img;  // Box圖片
@@ -27,7 +26,6 @@ public class BoxSelection implements CommandSolver.MouseCommandListener {
             img = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().box());// 載入圖片
         }
 
-
         /**
          * 設定起點
          * @param startX 起點X
@@ -38,7 +36,6 @@ public class BoxSelection implements CommandSolver.MouseCommandListener {
             this.startX = startX;
             this.startY = startY;
         }
-
 
         /**
          * 這定終點
@@ -57,9 +54,6 @@ public class BoxSelection implements CommandSolver.MouseCommandListener {
             this.endX = endX;
             this.endY = endY;
         }
-
-
-
 
         @Override
         public void paintComponent(Graphics g) {
@@ -82,8 +76,6 @@ public class BoxSelection implements CommandSolver.MouseCommandListener {
             painter().scale(Math.abs(endX - startX), Math.abs(endY - startY));
         }
     }
-
-
 
     // 框選
     private boolean hasSetStart;

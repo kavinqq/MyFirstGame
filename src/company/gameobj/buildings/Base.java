@@ -23,7 +23,7 @@ public class Base extends Building {
 
     @Override
     public void update() {
-
+        cameraMove();
     }
 
     //初始化
@@ -44,6 +44,7 @@ public class Base extends Building {
                 .setSteelCostLevelUpC(99)
                 .setGasCostLevelup(99)
                 .setImgPath(new Path().img().building().Base());
+
         imgInit();
     }
 

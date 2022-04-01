@@ -110,8 +110,8 @@ public class Global {
     public static final int CAMERA_SPEED = 8;
 
     // 鏡頭移動量 X 跟 Y
-    public static int CAMERA_MOVE_VX = 0;
-    public static int CAMERA_MOVE_VY = 0;
+    public static int CAMERA_MOVE_VX;
+    public static int CAMERA_MOVE_VY;
 
     /**
      * 輸出範圍內的隨機數字
@@ -149,6 +149,5 @@ public class Global {
     public static void setCameraMoveVy(int vy) {
         CAMERA_MOVE_VY = vy;
     }
-
 
 }

@@ -1,6 +1,7 @@
 
 package company.gameobj;
 
+import company.Global;
 import company.gameobj.buildings.Building;
 import company.gameobj.buildings.*;
 import company.gameobj.creature.human.Citizen;
@@ -72,21 +73,55 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
 
     @Override
     public void paint(Graphics g) {
+
         for (BuildingType value:values()) {
             for (int j = 0; j < value.list.size(); j++) {
-                value.list().get(j).getBuilding().paint(g);
+                value.list().get(j).paint(g);
             }
         }
     }
 
+    /**
+     * 呼叫 內部類別BuildingNode的 update() => building本體存在BuildingNode裡面
+     */
+
     @Override
     public void update() {
+
         for (BuildingType value:values()) {
+
+            //  enum裡面 => public LinkedList<BuildingNode> list()
             for (int j = 0; j < value.list.size(); j++) {
                 value.list().get(j).update();
             }
         }
     }
+
+    /**
+     * 跟隨鏡頭移動所有建築物位置
+     */
+
+    public void cameraMove(){
+
+        for (BuildingType value:values()) {
+            for (int j = 0; j < value.list.size(); j++) {
+                value.list().get(j).getBuilding().cameraMove();
+            }
+        }
+    }
+
+    /**
+     * reset所有建築位置回初始位置
+     */
+
+    public void resetObjectXY(){
+        for (BuildingType value:values()) {
+            for (int j = 0; j < value.list.size(); j++) {
+                value.list().get(j).getBuilding().resetObjectXY();
+            }
+        }
+    }
+
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
@@ -102,6 +137,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
      * 建築的種類和實體與儲存鏈表
      */
     public enum BuildingType {
+
         BASE(new Base(),new LinkedList<>()),
         ARSENAL(new Arsenal(), new LinkedList<>()),
         BARRACKS(new Barracks(), new LinkedList<>()),
@@ -113,6 +149,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         AIRPLANE_MILL(new AirplaneMill(), new LinkedList<>());
 
         private Building instance;
+
         private LinkedList<BuildingNode> list;
 
         BuildingType(Building building, LinkedList<BuildingNode> list) {
@@ -126,6 +163,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
          * @param option 數字選擇
          * @return BuildingType
          */
+
         public static BuildingType getBuildingTypeByInt(int option) {
             for (BuildingType type : values()) {
                 if (type.instance.getId() == option) {
@@ -147,6 +185,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
     /**
      * 儲存各個建築的建造/升級時間
      */
+
     public class BuildingNode {
         /**
          * 建築本身
@@ -173,11 +212,17 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
          */
         int updateStartTime;
 
+
         private void paint(Graphics g){
             building.paint(g);
         }
 
+        /**
+         * BuildingNode 裡面的 update() => 真正建築物的update()
+         */
+
         private void update(){
+
             building.update();
         }
 
@@ -228,6 +273,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
     private int buildingNum;
 
     public BuildingController() {
+
         techLevelStartUpgradeTime = 0;
         buildingNum = 0;
         isUpgradingSoldier = false;
@@ -242,13 +288,18 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
      * @param type     建築種類
      * @param resource 城市資源
      */
+
     public void build(BuildingType type, Resource resource,int x,int y) {
+
         BuildingNode newBuilding;
+
         switch (type) {
+
             case BASE:{
                 newBuilding = new BuildingController.BuildingNode(new Base(x,y));
                 break;
             }
+
             case ARSENAL: {
                 newBuilding = new BuildingController.BuildingNode(new Arsenal(x,y));
                 break;
@@ -281,6 +332,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
                 newBuilding = new BuildingController.BuildingNode(new AirplaneMill(x,y));
                 break;
             }
+
             default: {
                 newBuilding = new BuildingController.BuildingNode(new House(x,y));
             }
@@ -301,6 +353,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         //添加進該分類的鏈表中
         type.list.add(newBuilding);
     }
+
 
     /**
      * 所有建造完成的建築開始運作

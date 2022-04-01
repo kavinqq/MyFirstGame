@@ -214,6 +214,7 @@ public abstract class GameObject implements GameKernel.GameInterface {
 
     @Override
     public final void paint(Graphics g) {
+
         paintComponent(g);
 
         if (Global.IS_DEBUG) {
