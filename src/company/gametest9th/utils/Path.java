@@ -151,7 +151,6 @@ public class Path {
             // UI
             public String resourceBarUI() { return this + "/resourceBarUI.png";}
 
-
             // Icon
             public String treeIcon() { return this + "/TreeIcon.png";}
 
@@ -205,11 +204,11 @@ public class Path {
             public String ingBuild(){return this+"/ingBuild.png";}
 
             //建築物所需Icon
-            public String noWorkingIcon(){return this+"/noWorkingIcon.png";}
+            public String noWorkingIcon(){return this+"/stop.png";}
 
-            public String workingIcon(){return this+"/workingIcon.png";}
+            public String workingIcon(){return this+"/play.png";}
 
-            public String upGradeIcon(){return this+"/upGradeIcon.png";}
+            public String upGradeIcon(){return this+"/plus2.png";}
 
         }
 
@@ -245,7 +244,6 @@ public class Path {
 
         public Actors actors() {
             return new Actors(this);
-
         }
 
         public Humans humans() {
@@ -258,7 +256,6 @@ public class Path {
 
         public Objs objs() {
             return new Objs(this);
-
         }
 
         public Building building(){

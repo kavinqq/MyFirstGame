@@ -27,6 +27,8 @@ public class SteelMill extends Building{
         init();
     }
 
+
+
     public SteelMill(int x,int y) {
         super(x,y);
         init();
@@ -60,11 +62,16 @@ public class SteelMill extends Building{
 
     @Override
     public String toString() {
-        return "煉鋼廠:每小時採集量+1(每房屋等級+2)";
+        return "煉鋼廠:每一次採集最大量+1(每房屋等級+2)";
     }
 
+    public int getSteelSpeed(){
+        return (1 + (super.getLevel()-1)*2);
+    }
+
+    @Override
     public String buildingDetail(int level) {
-        return "煉鋼廠：市民每小時鋼鐵採集量提升至" + (Resource.DEFAULT_STEEL_SPEED + 1 + super.getLevel()) + "單位鋼鐵";
+        return "煉鋼廠：市民每小時鋼鐵採集量提升至" + getSteelSpeed() + "單位鋼鐵";
     }
 
 }

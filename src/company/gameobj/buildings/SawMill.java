@@ -31,8 +31,12 @@ public class SawMill extends Building{
         return "伐木場:每小時採集量+1(每房屋等級+2)";
     }
 
+    public int getSawSpeed(){
+        return (2 + (super.getLevel()-1)*4);
+    }
+
     public String buildingDetail(int level){
-        return "伐木廠：市民每小時木材採集量提升至" + (Resource.DEFAULT_WOOD_SPEED + 1 + super.getLevel()) + "單位木材";
+        return "伐木廠：市民每小時木材採集量提升至" + getSawSpeed() + "單位木材";
     }
     //初始化
     @Override

@@ -17,7 +17,10 @@ public class ResourceSystem {
         resourceObjs = new ArrayList<>();
 
         resourceObjs.add(new Tree(350,400));
-        resourceObjs.add(new Steel(1200,400));
+        resourceObjs.add(new Tree(350,400+128));
+        resourceObjs.add(new Steel(1300,400));
+        resourceObjs.add(new Steel(1300,400+128));
+
     }
 
 

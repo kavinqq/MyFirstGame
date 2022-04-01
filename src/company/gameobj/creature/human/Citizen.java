@@ -4,6 +4,7 @@ import company.Global;
 
 import company.gameobj.GameObject;
 import company.gametest9th.utils.*;
+import oldMain.Resource;
 
 import java.awt.*;
 
@@ -307,21 +308,21 @@ public class Citizen extends Human {   //市民
     /**
      * 這邊設給韋辰的伐木場建造後 改進 伐木效率用 [設為static 可以直接Call Citizen. 不用透過很多層]
      *
-     * @param num 提升的數量
+     * @param num 所有煉鋼廠提升的總和
      */
 
     public static void setMaxCarryWood(int num) {
-        maxCarryWood += num;
+        maxCarryWood = oldMain.Resource.DEFAULT_WOOD_SPEED + num;
     }
 
     /**
      * 和上面一樣 改成鋼鐵版本
      *
-     * @param num 提升的數量
+     * @param num 所有煉鋼廠提升的總和
      */
 
     public static void setMaxCarrySteel(int num) {
-        maxCarrySteel += num;
+        maxCarrySteel = oldMain.Resource.DEFAULT_STEEL_SPEED + num;
     }
 
     /**

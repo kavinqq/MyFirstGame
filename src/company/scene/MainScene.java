@@ -12,6 +12,7 @@ import static company.gameobj.BuildingController.*;
 import company.controllers.AudioResourceController;
 import company.gameobj.BuildingController;
 import company.gameobj.Rect;
+import company.gameobj.buildings.Building;
 import company.gameobj.resourceObjs.ResourceObj;
 import company.gameobj.resourceObjs.ResourceSystem;
 import company.gameobj.message.ToastController;
@@ -89,8 +90,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         startTime = System.nanoTime();// 進入場景之後紀錄開始時間
 
-        currentObj = null;// 當前操控的物件(單選)
-        controlHumans = new ArrayList<>();// 設定: 只有人物可以多選
+        //當前操控的物件(單選)
+        currentObj = null;
+
+        // 設定: 只有人物可以多選
+        controlHumans = new ArrayList<>();
 
         //背景
         background = new Background(0, 0, SCREEN_X, SCREEN_Y);
@@ -101,13 +105,16 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //可建築區
         buildingArea = new BuildingArea();
 
+        //當前操控的按鈕
         currentButton= null;
 
         //主堡
 
         //base先不刪下面有些東西與base連接
-        base = new Base(SCREEN_X / 2, SCREEN_Y / 2);
+        base = new Base();
+        base.setCenter(LAND_X+(LAND_WIDTH) / 2, SCREEN_Y / 2);
 
+        //上一幀是否可建造
         preCanBuild = true;
 
         // city本體
@@ -378,7 +385,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                             if (city.isUpgradingTech(currentBuildNode)) {
                                 ToastController.instance().print("升級-科技已在升級中，請等待此次升級結束");
                             } else {
-                                currentBuildNode.getBuilding().setTechUpgrading(true);
+                                //currentBuildNode.getBuilding().setTechUpgrading(true);
                                 city.upgradeTechLevel();
                                 ToastController.instance().print("升級-科技開始升級");
                             }

@@ -23,7 +23,7 @@ public class Global {
     }
 
     // 是否為Debug模式
-    public static final boolean IS_DEBUG = true;
+    public static final boolean IS_DEBUG = false;
 
     // 每秒update幾次
     public static final int UPDATE_TIMES_PER_SEC = 60;

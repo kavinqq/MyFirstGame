@@ -6,8 +6,8 @@ import company.gametest9th.utils.Path;
 import java.awt.event.MouseEvent;
 
 public class Base extends Building {
-    public static final int BASE_WIDTH = 160;
-    public static final int BASE_HEIGHT = 160;
+    public static final int BASE_WIDTH = 250;
+    public static final int BASE_HEIGHT = 250;
 
     public Base(int x, int y)
     {
@@ -83,5 +83,6 @@ public class Base extends Building {
             }
         }
     }
+
 
 }

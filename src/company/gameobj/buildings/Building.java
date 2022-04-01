@@ -3,6 +3,7 @@ package company.gameobj.buildings;
 import company.Global;
 import company.controllers.SceneController;
 import company.gameobj.GameObject;
+import company.gameobj.creature.human.Citizen;
 import company.gameobj.message.HintDialog;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
@@ -761,7 +762,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     }
 
 
-
+    private boolean isAddResouse;
     @Override
     public void paintComponent(Graphics g) {
         if (level==0) { //畫出建造中的建築物 !isWorking() && !readyToUpgrade && !isUpgrading
@@ -777,10 +778,17 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
                     icons.get(i).paint(g);
                 }
             }
+            if(isAddResouse){
+                isAddResouse=false;
+                Citizen.getMaxCarrySteel();
+
+            }
+
             //畫出升級中
         } else if (isUpgrading && !readyToUpgrade) {
             g.drawImage(underConstructionImg, painter().left(), painter().top(), painter().width(), painter().height(), null);
             g.drawString("升級中", painter().left(), painter().top());
+            isAddResouse=true;
         }
     }
 

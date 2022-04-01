@@ -3,6 +3,7 @@ package company.gameobj;
 
 import company.gameobj.buildings.Building;
 import company.gameobj.buildings.*;
+import company.gameobj.creature.human.Citizen;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
 import oldMain.City;
@@ -585,15 +586,16 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         showBuildCompleted();
         //升級完成
         showUpgradeCompleted();
+
+
         //科技等級升級
         if (isUpgradingTech && City.getGameTime() - techLevelStartUpgradeTime - TECH_LEVEL_UPGRADE_TIME == 0) {
             if (BuildingType.LAB.instance instanceof Lab) {
                 Lab lab = (Lab) BuildingType.LAB.instance;
                 lab.levelUpTechResource(lab.getLevel() + 1);
             }
-            isRecentlyUpgradeTech = true;
-
             City.addTechLevel();
+            isRecentlyUpgradeTech = true;
             freeLabNum++;
             isUpgradingTech = false;
         }
@@ -838,15 +840,14 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
      * @return 生產木頭的速度
      */
     public int getWoodSpeed() {
-        if (SAW_MILL.list.size() != 0) {
-            if (SAW_MILL.list.get(0).building instanceof SawMill) {
-                //取最高等級的採集速度
-                SawMill sawMill = (SawMill) SAW_MILL.list.get(0).building;
-                return sawMill.woodSpeed();
+        int sum=0;
+        for (int j = 0; j < SAW_MILL.list.size(); j++) {
+            if(SAW_MILL.list.get(j).getBuilding() instanceof SawMill){
+                SawMill tmp=(SawMill) SAW_MILL.list.get(j).getBuilding();
+                sum+=tmp.getSawSpeed();
             }
         }
-        //沒有伐木場就回傳初始採木速度
-        return Resource.DEFAULT_WOOD_SPEED;
+        return sum;
     }
 
     /**
@@ -855,15 +856,23 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
      * @return 生產鋼鐵的速度
      */
     public int getSteelSpeed() {
-        if (STEEL_MILL.list.size() != 0) {
-            if (STEEL_MILL.list.get(0).building instanceof SteelMill) {
-                //取最高等級的採集速度
-                SteelMill steelMill = (SteelMill) STEEL_MILL.list.get(0).building;
-                return steelMill.steelSpeed();
+        int sum=0;
+        for (int j = 0; j < STEEL_MILL.list.size(); j++) {
+            if(STEEL_MILL.list.get(j).getBuilding() instanceof SteelMill){
+                SteelMill tmp=(SteelMill) STEEL_MILL.list.get(j).getBuilding();
+                sum+=tmp.getSteelSpeed();
             }
         }
-        return Resource.DEFAULT_STEEL_SPEED;
+        return sum;
     }
+
+//        if (STEEL_MILL.list.size() != 0) {
+//            if (STEEL_MILL.list.get(0).building instanceof SteelMill) {
+//                //取最高等級的採集速度
+//                SteelMill steelMill = (SteelMill) STEEL_MILL.list.get(0).building;
+//                return steelMill.steelSpeed();
+//            }
+//        }
 
     /**
      * 取得瓦斯生產量

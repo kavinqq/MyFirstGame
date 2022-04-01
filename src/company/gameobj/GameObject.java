@@ -69,6 +69,11 @@ public abstract class GameObject implements GameKernel.GameInterface {
         originalX = rect.left();
         originalY = rect.top();
     }
+    //設置中心點
+    public void setCenter(int x, int y) {
+        painter.setCenter(x, y);
+        detectRange.setCenter(x, y);
+    }
 
     public final void setPainterStartFromTopLeft(int x, int y) {
         detectRange.moveToPoint(x, y);

@@ -168,7 +168,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             //遊戲時間 流動 1小時
             timePass();
             //生產 木&鋼
-            gainResource();
+            //gainResource();
             //建物.生成人()
             int numOfNewCitizens = buildings.getNewCitizenNum(resource);
             if (numOfNewCitizens != 0) {
@@ -187,6 +187,9 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             }
             //完成建築的升級和建造，科技等級提升
             buildings.completeJob();
+
+            Citizen.setMaxCarrySteel(buildings.getSteelSpeed());
+            Citizen.setMaxCarryWood(buildings.getWoodSpeed());
 
             if (buildings.isRecentlyUpgradeTech()) {
                 this.upgradeTechLevel();
