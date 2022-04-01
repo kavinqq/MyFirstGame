@@ -1,6 +1,7 @@
 package company.gameobj.buildings;
 
 
+import company.Global;
 import company.gametest9th.utils.Path;
 
 import java.awt.*;
@@ -28,9 +29,9 @@ public class Arsenal extends Building {
         super(x, y);
 
         init();
-        getIcons().add(new UpGradeIcon(x+15,y));//x+ (getIcons().size()+1)* Global.BUILDING_ICON_GAP_X
-
-    }
+        getIcons().add(new UpGradeIcon(x+ 3*(Global.BUILDING_ICON_WIDTH*getIcons().size()-1)/2,y,"升級士兵"));
+        getIcons().add(new UpGradeIcon(x+ 3*(Global.BUILDING_ICON_WIDTH*getIcons().size()-1)/2,y,"升級飛機"));
+        }
 
     @Override
     public void paintComponent(Graphics g) {

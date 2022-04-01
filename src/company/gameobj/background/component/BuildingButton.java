@@ -72,12 +72,15 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
 
     private boolean canDragging;
 
+    private HintDialog hintDialog;
+
     private Rect[] redRects; //最底層紅
     private Rect greenRect;
 
 
     public BuildingButton(int x, int y,int id) {
         super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
+        hintDialog=new HintDialog();
         canDragging=false;
         this.id=id;
         isVisible=false;
@@ -173,6 +176,10 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         return redRects;
     }
 
+    public HintDialog getHintDialog() {
+        return hintDialog;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         if(isDragging){
@@ -193,22 +200,26 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 }
             }
             g.setColor(Color.black);
+
         }
         //畫出建造中建築物
         g.drawImage(img,+painter().left(),painter().top(),painter().width(), painter().height(), null);
+        hintDialog.paint(g);
     }
 
     @Override
     public void update() {
+        hintDialog.update();
         ////印出建築物提示文字
         if(isMoveOnButton) {
             type = BuildingType.getBuildingTypeByInt(getId());
-            HintDialog.instance().setHintMessage(type.instance().getName());
+            hintDialog.setHintMessage(type.instance().getName());
         }
     }
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+        hintDialog.mouseTrig(e,state,trigTime);
         switch (state){
             case MOVED: {
                 //若移開不能拖曳

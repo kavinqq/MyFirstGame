@@ -210,7 +210,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
         //提示框
-        HintDialog.instance().paint(g);
+        //HintDialog.instance().paint(g);
         ToastController.instance().paint(g);
     }
 
@@ -310,7 +310,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
                         //滑鼠放開時，判斷滑鼠放開的上一偵是否在建造區中
-                        if (currentButton.isReleased && buildingArea.get(i, j).isOnBuildGrid() && preCanBuild) {//
+                        if (currentButton.isReleased && buildingArea.get(i, j).isOnBuildGrid() && preCanBuild && !currentButton.isDragging()) {//
 
 
                             //建造房子
@@ -328,7 +328,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
             //滑鼠放開瞬間 判斷上一偵是否是拖曳且不再區域內
             if (currentButton.isReleased && (isPreAllNonBuildGrid || !preCanBuild) && preDragging) {//|| canBuild
-                System.out.println("此處不能蓋房子");
                 ToastController.instance().print("建造-此處不能蓋房子");
             }
 
@@ -343,14 +342,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     }
                 }
             }
-            if (currentButton.getGreenRect() != null && currentButton.getRedRects() != null) {
-                System.out.println("Current\t" + currentButton.painter().top());
-                System.out.println("Green\t" + currentButton.getGreenRect().top());
-                System.out.println("RedRects\t" + currentButton.getRedRects()[0].top());
-
-            }
-            System.out.println("preCanBuild\t" + preCanBuild);
-
             preDragging = currentButton.isDragging();
             isPreAllNonBuildGrid = buildingArea.isAllNonOnBuildGrid();
         }
@@ -360,10 +351,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             //選取要升級的種類
             BuildingController.BuildingNode selectBuilding = city.getCurrentBuildingNode();
             BuildingType type = BuildingType.getBuildingTypeByInt(selectBuilding.getBuilding().getId());
-
-            if ((selectBuilding.getBuilding().getIcons().size() == 2 && selectBuilding.getCan(0))
-                    || (selectBuilding.getBuilding().getIcons().size() == 3 && (selectBuilding.getCan(0)
-                    || selectBuilding.getBuilding().getIcons().get(2).getCan()))) {
+            //TODO:getCan(0)待修
+            if ((selectBuilding.getBuilding().getIcons().size() == 2 && selectBuilding.getCan(0))) {
 
 
                 if (City.getTechLevel() < type.instance().getTechLevelNeedUpgrade()) {
@@ -732,12 +721,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 return;
             }
 
-
             // 紀錄當下的滑鼠位置
             currentMouseX = e.getX();
             currentMouseY = e.getY();
 
-            HintDialog.instance().mouseTrig(e, state, trigTime);
+            //HintDialog.instance().mouseTrig(e, state, trigTime);
 
             city.mouseTrig(e, state, trigTime);
             //如果現在沒有框選

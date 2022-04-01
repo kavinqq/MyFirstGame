@@ -23,7 +23,9 @@ public class Lab extends Building {
     public Lab(int x, int y) {
         super(x, y);
         init();
-        }
+        getIcons().add(new UpGradeIcon(x+ 3*(Global.BUILDING_ICON_WIDTH*getIcons().size()-1)/2,y,"升級科技等級"));
+
+    }
 
 
 

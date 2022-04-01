@@ -20,17 +20,9 @@ public class HintDialog implements GameKernel.GameInterface, CommandSolver.Mouse
     private String toastString;
     //計算外面傳入toast的次數
 
-    //在滑鼠碰到處跳出提示
-    private static HintDialog hintDialog;
 
-    public static HintDialog instance() {
-        if (hintDialog == null) {
-            hintDialog = new HintDialog();
-        }
-        return hintDialog;
-    }
 
-    private HintDialog() {
+    public HintDialog() {
         message = "";
     }
 
@@ -48,7 +40,7 @@ public class HintDialog implements GameKernel.GameInterface, CommandSolver.Mouse
         if (message == null) {
             message = "";
         }
-        g.drawString(message, mouseX, mouseY);
+        g.drawString(message, mouseX, mouseY-30);
         //畫toast;
         g.setColor(Color.black);
     }

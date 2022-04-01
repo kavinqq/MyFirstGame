@@ -3,6 +3,7 @@ package company.gameobj.buildings;
 import company.Global;
 import company.controllers.SceneController;
 import company.gameobj.GameObject;
+import company.gameobj.message.HintDialog;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 import oldMain.Resource;
@@ -22,12 +23,14 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     }
 
     public class Icon extends GameObject {
-        private String message;
+        private HintDialog hintDialog;
         private boolean can;
-
-        public Icon(int x, int y) {
+        private boolean isShowMessage;
+        public Icon(int x, int y,String message) {
             super(x, y, Global.BUILDING_ICON_WIDTH, Global.BUILDING_ICON_HEIGHT);
-            message = "";
+            hintDialog=new HintDialog();
+            hintDialog.setHintMessage(message);
+
             can=false;
         }
 
@@ -39,18 +42,41 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             can = bool;
         }
 
+        protected void setMessage(String message){
+            hintDialog.setHintMessage(message);
+        }
+
+        protected  boolean isShowMessage(){
+            return isShowMessage;
+        }
+
+        protected HintDialog getHintDialog(){
+            return hintDialog;
+        }
+
         @Override
         public void paintComponent(Graphics g) {
-            g.drawString(message, painter().left(), painter().top());
+            if(isShowMessage){
+                hintDialog.paint(g);
+            }
+
         }
 
         @Override
         public void update() {
-
+//            hintDialog.setHintMessage(message);
         }
 
         public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long TrigTime) {
 
+            if(state == CommandSolver.MouseState.MOVED){
+                if(isEntered(e.getX(),e.getY())){
+                    hintDialog.mouseTrig(e,state,TrigTime);
+                    isShowMessage=true;
+                    return;
+                }
+            }
+            isShowMessage=false;
         }
     }
 
@@ -59,8 +85,8 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         private Image upGradeIcon;
         public boolean isUpgrade;
 
-        public UpGradeIcon(int x, int y) {
-            super(x, y);
+        public UpGradeIcon(int x, int y,String message) {
+            super(x, y,message);
             upGradeIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().upGradeIcon());
         }
 
@@ -71,21 +97,19 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         @Override
         public void paintComponent(Graphics g) {
             g.drawImage(upGradeIcon, painter().left(), painter().top(), Global.BUILDING_ICON_WIDTH, Global.BUILDING_ICON_HEIGHT, null);
-
-        }
-
-        @Override
-        public void update() {
+            if(isShowMessage()){
+                getHintDialog().paint(g);
+            }
         }
 
         public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-
+             super.mouseTrig(e,state,trigTime);
              switch (state) {
                 case PRESSED: {
                     if (isEntered(e.getX(), e.getY())) {
                         setCan(true);
+                        break;
                     }
-                    break;
                 }
                 default: {
                     setCan(false);
@@ -99,9 +123,10 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
         private Image noWorkingIcon;
         private Image workingIcon;
-
-        public WorkingIcon(int x, int y) {
-            super(x, y);
+        private String message;
+        public WorkingIcon(int x, int y,String message) {
+            super(x, y,message);
+            this.message=message;
             noWorkingIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().noWorkingIcon());
             workingIcon = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().workingIcon());
         }
@@ -111,19 +136,29 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             //運作中
             if (isWorking) {
                 g.drawImage(workingIcon, painter().left(), painter().top(), Global.BUILDING_ICON_WIDTH, Global.BUILDING_ICON_HEIGHT, null);
+
             }
             //非運作中
             else {
                 g.drawImage(noWorkingIcon, painter().left(), painter().top(), Global.BUILDING_ICON_WIDTH, Global.BUILDING_ICON_HEIGHT, null);
+
+            }
+            if(isShowMessage()){
+                getHintDialog().paint(g);
             }
         }
 
         @Override
-        public void update() {
-
+        public void update(){
+            if(isWorking){
+                setMessage("正在生產"+message+"中");
+            }else{
+                setMessage("停止生產"+message+"中");
+            }
         }
 
         public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+            super.mouseTrig(e,state,trigTime);
             switch (state) {
                 case CLICKED: {
                     if (isEntered(e.getX(), e.getY())) {
@@ -281,9 +316,6 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         underConstructionImg = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().ingBuild());
 
         icons = new ArrayList<>();
-        icons.add(new UpGradeIcon(x, y));
-        icons.add(new WorkingIcon(x + Global.BUILDING_ICON_WIDTH + Global.BUILDING_ICON_GAP_X, y));
-
     }
 
     protected void imgInit() {
@@ -685,10 +717,10 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             //畫出完成的建築物
         } else if (readyToUpgrade && !isUpgrading) {
             g.drawImage(img, painter().left(), painter().top(), painter().width(), painter().height(), null);
-            //畫出等級
-            g.drawString("目前等級" + level, painter().left(), painter().top());
             //畫出Icon
             if (isShowIcon) {
+                //畫出等級
+                g.drawString("目前等級" + level, painter().left(), painter().top());
                 for (int i = 0; i < icons.size(); i++) {
                     icons.get(i).paint(g);
                 }
@@ -703,7 +735,11 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     @Override
     public void update() {
-
+        if(isShowIcon){
+            for (int i = 0; i < icons.size(); i++) {
+                icons.get(i).update();
+            }
+        }
     }
 
 
@@ -712,19 +748,18 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-        if (isShowIcon) {
-            for (int i = 0; i < icons.size(); i++) {
-                icons.get(i).mouseTrig(e, state, trigTime);
-            }
-        }
-
         switch (state) {
-            case CLICKED:
+            case PRESSED :
                 if (readyToUpgrade && !isUpgrading && isEntered(e.getX(), e.getY())) {
                     isShowIcon = true;
                 } else {
                     isShowIcon = false;
                 }
+        }
+        if (isShowIcon) {
+            for (int i = 0; i < icons.size(); i++) {
+                icons.get(i).mouseTrig(e, state, trigTime);
+            }
         }
     }
 

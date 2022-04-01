@@ -99,16 +99,15 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
     @Override
     public void update() {
-        //移出時不要有文字
-        if(!checkMouseOnButtons()){
-            HintDialog.instance().setHintMessage("");
-        }
-
         //印出update ，取得當前按鈕
         for (int i = 0; i < BuildingTypeNum; i++) {
             buildingButtons.get(i).update();
-            if(buildingButtons.get(i).getId()==BuildingButton.currentId){ //if(buildingButtons.get(i).isShuffle()){
+            if(buildingButtons.get(i).getId()==BuildingButton.currentId){
                 currentButton=buildingButtons.get(i);
+            }
+            //移出時不要有文字
+            if(!checkMouseOnButtons()){
+                buildingButtons.get(i).getHintDialog().setHintMessage("");
             }
         }
     }

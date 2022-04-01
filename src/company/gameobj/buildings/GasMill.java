@@ -1,5 +1,6 @@
 package company.gameobj.buildings;
 
+import company.Global;
 import company.gametest9th.utils.Path;
 
 public class GasMill extends Building{
@@ -25,6 +26,7 @@ public class GasMill extends Building{
     public GasMill(int x,int y) {
         super(x,y);
         init();
+        getIcons().add(new UpGradeIcon(x+ 3*(Global.BUILDING_ICON_WIDTH*getIcons().size()-1)/2,y,"升級"+getName()));
     }
     public GasMill() {
         init();

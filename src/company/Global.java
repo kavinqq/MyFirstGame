@@ -29,7 +29,7 @@ public class Global {
 
     //整個視窗大小
     public static final int WINDOW_WIDTH = 1920; //1920
-    public static final int WINDOW_HEIGHT = 1080; //1080
+    public static final int WINDOW_HEIGHT = 800; //1080
 
     //狀態攔
     public static final int STATUS_BAR_X = 0;
@@ -80,8 +80,8 @@ public class Global {
     //建築
     public final static int BuildingTypeNum = 8;
     //建築Icon
-    public static final int BUILDING_ICON_WIDTH = 15;
-    public static final int BUILDING_ICON_HEIGHT = 15;
+    public static final int BUILDING_ICON_WIDTH = 25;
+    public static final int BUILDING_ICON_HEIGHT = 25;
 
     public static final int BUILDING_ICON_GAP_X =20;
 

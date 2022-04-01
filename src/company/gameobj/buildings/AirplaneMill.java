@@ -1,5 +1,6 @@
 package company.gameobj.buildings;
 
+import company.Global;
 import company.gametest9th.utils.Path;
 
 public class AirplaneMill extends Building {
@@ -24,6 +25,8 @@ public class AirplaneMill extends Building {
     public AirplaneMill(int x, int y) {
         super(x, y);
         init();
+        getIcons().add(new UpGradeIcon(x+ 3*(Global.BUILDING_ICON_WIDTH*getIcons().size()-1)/2,y,"升級飛機"));
+        getIcons().add(new WorkingIcon(x+ 3*(Global.BUILDING_ICON_WIDTH*getIcons().size()-1)/2,y,"飛機"));
     }
 
     public AirplaneMill() {
