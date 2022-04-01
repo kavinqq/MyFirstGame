@@ -297,4 +297,12 @@ public abstract class GameObject implements GameKernel.GameInterface {
 
     }
 
+    public void setBuildingOriginalX(int sumOfVX) {
+        originalX -= sumOfVX;
+    }
+
+    public void setBuildingOriginalY(int sumOfVY) {
+        originalY -= sumOfVY;
+    }
+
 }

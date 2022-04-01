@@ -319,11 +319,6 @@ public abstract class Creature extends GameObject {
         // 目標也跟著動
         setTargetX(targetX + Global.CAMERA_MOVE_VX);
         setTargetY(targetY + Global.CAMERA_MOVE_VY);
-
-        // 加總總鏡頭移動X Y
-        sumOfCameraMoveX += Global.CAMERA_MOVE_VX;
-        sumOfCameraMoveY += Global.CAMERA_MOVE_VY;
-
     }
 
     /**
@@ -334,34 +329,11 @@ public abstract class Creature extends GameObject {
     public void resetObjectXY() {
 
         // 本體跟著鏡頭動
-        translate(sumOfCameraMoveX * -1, sumOfCameraMoveY * -1);
+        translate(Global.SUM_OF_CAMERA_MOVE_VX * -1, Global.SUM_OF_CAMERA_MOVE_VY * -1);
 
         // 目標也跟著動
-        setTargetX(targetX - sumOfCameraMoveX);
-        setTargetY(targetY - sumOfCameraMoveY);
-
-        // 清空總鏡頭移動X Y
-        sumOfCameraMoveX = 0;
-        sumOfCameraMoveY = 0;
-    }
-
-    /**
-     * 獲得目前總鏡頭移動X (以主堡為基準點)
-     * @return 目前總鏡頭移動X
-     */
-
-    public int getSumOfCameraMoveX(){
-        return sumOfCameraMoveX;
-    }
-
-
-    /**
-     * 獲得目前總鏡頭移動X (以主堡為基準點)
-     * @return 目前總鏡頭移動Y
-     */
-
-    public int getSumOfCameraMoveY(){
-        return sumOfCameraMoveY;
+        setTargetX(targetX - Global.SUM_OF_CAMERA_MOVE_VX);
+        setTargetY(targetY - Global.SUM_OF_CAMERA_MOVE_VY);
     }
 
 }

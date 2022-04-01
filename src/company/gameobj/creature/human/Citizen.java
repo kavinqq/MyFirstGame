@@ -2,7 +2,6 @@ package company.gameobj.creature.human;
 
 import company.Global;
 
-import company.controllers.AudioResourceController;
 import company.gameobj.GameObject;
 import company.gametest9th.utils.*;
 
@@ -34,8 +33,6 @@ public class Citizen extends Human {   //市民
     private Delay toolDelay;
     private Delay visibleDelay; // 隱形的秒數
 
-    private HumanAnimator animator;
-
     // 這次採到的資源類別 && 數量
     private Resource resourceType;
     private int resourceNum;
@@ -47,6 +44,10 @@ public class Citizen extends Human {   //市民
     // 主堡XY
     private int baseX;
     private int baseY;
+
+    // 我現在一次最大能帶多少木頭 && 鋼鐵回來
+    private static int maxCarryWood;
+    private static int maxCarrySteel;
 
 
     /**
@@ -77,6 +78,9 @@ public class Citizen extends Human {   //市民
         resourceTargetX = 0;
         resourceTargetY = 0;
 
+        // 預設採集量
+        maxCarryWood = 3;
+        maxCarrySteel = 1;
     }
 
     /**
@@ -196,7 +200,7 @@ public class Citizen extends Human {   //市民
     }
 
     // 採集ING
-    public void collecting(GameObject gameObject, int baseX, int baseY, int resourceNum, Resource resourceType) {
+    public void collecting(GameObject gameObject, int baseX, int baseY, String resourceTypeStr) {
 
         // 把base的位置一起傳進來 記起來
         this.baseX = baseX;
@@ -209,10 +213,26 @@ public class Citizen extends Human {   //市民
         // 消失ing
         setVisible(false);
 
-        // 這一次的採集種類 && 量
-        this.resourceNum = resourceNum;
-        this.resourceType = resourceType;
+        setCarryFromResourceTypeStr(resourceTypeStr);
+    }
 
+    /**
+     * 根據傳進來的資源堆字串去設定 身上的資源種類和數量
+     * @param resourceTypeStr 資源堆字串
+     */
+    private void setCarryFromResourceTypeStr(String resourceTypeStr){
+
+        // 如果這次採集的是木頭
+        if(resourceTypeStr.equals("WOOD")){
+            resourceNum = maxCarryWood;
+            resourceType = Resource.WOOD;
+        }
+
+        // 如果這次採集的是鋼鐵
+        if(resourceTypeStr.equals("STEEL")){
+            resourceNum = maxCarrySteel;
+            resourceType = Resource.STEEL;
+        }
     }
 
 
@@ -254,7 +274,7 @@ public class Citizen extends Human {   //市民
      */
 
     @Override
-    public void cameraMove(){
+    public void cameraMove() {
 
         // 因為村民有額外紀錄 XY 要另外改
         baseX += Global.CAMERA_MOVE_VX;
@@ -274,14 +294,55 @@ public class Citizen extends Human {   //市民
     public void resetObjectXY() {
 
         // 因為村民有額外紀錄 XY 要另外改
-        baseX -= getSumOfCameraMoveX();
-        baseY -= getSumOfCameraMoveY();
+        baseX -= Global.SUM_OF_CAMERA_MOVE_VX;
+        baseY -= Global.SUM_OF_CAMERA_MOVE_VY;
 
-        resourceTargetX -= getSumOfCameraMoveX();
-        resourceTargetY -= getSumOfCameraMoveY();
+        resourceTargetX -= Global.SUM_OF_CAMERA_MOVE_VX;
+        resourceTargetY -= Global.SUM_OF_CAMERA_MOVE_VY;
 
-        // ↓ Human的reset 會把 sum清空 要最後執行
+
         super.resetObjectXY();
     }
+
+    /**
+     * 這邊設給韋辰的伐木場建造後 改進 伐木效率用 [設為static 可以直接Call Citizen. 不用透過很多層]
+     *
+     * @param num 提升的數量
+     */
+
+    public static void setMaxCarryWood(int num) {
+        maxCarryWood += num;
+    }
+
+    /**
+     * 和上面一樣 改成鋼鐵版本
+     *
+     * @param num 提升的數量
+     */
+
+    public static void setMaxCarrySteel(int num) {
+        maxCarrySteel += num;
+    }
+
+    /**
+     * 取得現在的伐木效率
+     *
+     * @return 現在的伐木效率
+     */
+
+    public static int getMaxCarryWood() {
+        return maxCarryWood;
+    }
+
+    /**
+     * 取得現在的採鋼效率
+     *
+     * @return 現在的採鋼效率
+     */
+
+    public static int getMaxCarrySteel() {
+        return maxCarrySteel;
+    }
+
 
 }
