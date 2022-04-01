@@ -5,6 +5,9 @@ import company.gameobj.GameObject;
 
 import java.awt.*;
 
+/**
+ * 所有資源堆的父類
+ */
 abstract public class ResourceObj extends GameObject {
 
     /**
@@ -27,12 +30,14 @@ abstract public class ResourceObj extends GameObject {
     //該資源堆的圖片
     private Image image;
 
+    //資源種類
     private ResourceType resourceType;
 
 
     public ResourceObj(int x, int y, int width, int height) {
         super(x, y, width, height);
 
+        // 預設資源量為0 (讓子類別自己設定 => 呼叫 setTotalNum)
         totalNum = 0;
     }
 

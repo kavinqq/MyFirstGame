@@ -14,8 +14,6 @@ import company.gameobj.BuildingController;
 import company.gameobj.Rect;
 import company.gameobj.resourceObjs.ResourceObj;
 import company.gameobj.resourceObjs.ResourceSystem;
-import company.gameobj.resourceObjs.Steel;
-import company.gameobj.resourceObjs.Tree;
 import company.gameobj.message.ToastController;
 import company.gametest9th.utils.*;
 import company.gameobj.GameObject;
@@ -624,21 +622,24 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                         //開始採集
 
-                        // 如果採集的是木頭
-                        if (resourceObj.getResourceTypeStr().equals("WOOD")) {
+                        if (resourceObj.getResourceTypeStr().equals("WOOD")) { // 如果採集的是木頭
 
+                            // 資源堆被採集了(目前單次最大能採多少木頭數量)
                             resourceObj.beCollected(Citizen.getMaxCarryWood());
-                        }
+                        } else if (resourceObj.getResourceTypeStr().equals("STEEL")) { // 如果採集的是鋼鐵
 
-                        // 如果採集的是鋼鐵
-                        if (resourceObj.getResourceTypeStr().equals("STEEL")) {
-
+                            // 資源堆被採集了(目前單次最大能採多少鋼鐵數量)
                             resourceObj.beCollected(Citizen.getMaxCarrySteel());
                         }
 
-                        // 如果資源採乾了 移除他
-                        if (resourceObj != null && resourceObj.getTotalNum() <= 0) {
+                        // 如果資源採乾了
+                        if (resourceObj.getTotalNum() <= 0) {
+
+                            // 移除他
                             resourceSystem.remove(i);
+
+                            //因為是ArrayList 移除後 下一個會馬上接上來
+                            i--;
                         }
 
                         // 村民開始採集
@@ -839,6 +840,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             controlHumans.clear();
         }
 
+        // 按下SPACE => 鏡頭中心回到主堡身上
         if (commandCode == SPACE) {
 
             city.resetObjectXY();
@@ -873,6 +875,5 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             }
         }
-
     }
 }

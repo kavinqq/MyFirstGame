@@ -2,10 +2,14 @@ package company.gameobj.resourceObjs;
 
 import company.gametest9th.utils.Path;
 
+/**
+ * 鋼鐵資源堆
+ */
 public class Steel extends ResourceObj {
 
     public Steel(int x, int y) {
 
+        // 設定初始位置 && 寬高
         super(x, y, 128,128);
 
         // 設定鋼鐵堆圖片
