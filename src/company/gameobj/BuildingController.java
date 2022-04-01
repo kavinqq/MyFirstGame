@@ -119,6 +119,9 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         for (BuildingType value:values()) {
             for (int j = 0; j < value.list.size(); j++) {
                 value.list().get(j).getBuilding().resetObjectXY();
+                for (int i = 0; i < value.list().get(j).getBuilding().getIcons().size(); i++) {
+                    value.list().get(j).getBuilding().getIcons().get(i).resetObjectXY();
+                }
             }
         }
     }
