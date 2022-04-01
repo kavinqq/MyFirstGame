@@ -2,12 +2,14 @@ package company.scene;
 
 import company.Global;
 
+
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.ArrayList;
 
 import static company.gameobj.BuildingController.*;
 
+import company.controllers.AudioResourceController;
 import company.gameobj.BuildingController;
 import company.gameobj.Rect;
 import company.gameobj.resourceObjs.Steel;
@@ -20,7 +22,6 @@ import company.gameobj.background.Background;
 import company.gameobj.background.component.*;
 import company.gameobj.creature.human.Citizen;
 import company.gameobj.buildings.Base;
-import company.gameobj.creature.human.Citizens;
 import company.gameobj.creature.human.Human;
 
 import oldMain.City;
@@ -79,6 +80,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     // 資源
     private List<GameObject> resources;
 
+
     @Override
     public void sceneBegin() {
 
@@ -135,6 +137,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         resources = new ArrayList<>();
         resources.add(new Tree(350, 400));
         resources.add(new Steel(1200, 400));
+
+        AudioResourceController.getInstance().loop(new Path().sound().mainSceneBGM(), 2);
     }
 
     @Override
@@ -222,29 +226,40 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         StatusBar.instance().setTimeString(startTime);
         StatusBar.instance().updateResource(city.getResource().getTotalWood(), city.getResource().getTotalSteel(), city.getResource().getTotalGas(), city.getTotalCitizen());
 
-        // 優先處理鏡頭移動
+        // 處理鏡頭移動
         if ((currentMouseX >= SCREEN_X || currentMouseX <= 8) || (currentMouseY <= 0 || currentMouseY >= SCREEN_Y - 8)) {
 
-            // 得到向量 滑鼠的位置(XY) - 螢幕中心(XY)
-            Vector vector = new Vector((currentMouseX - SCREEN_X / 2) * -1, (currentMouseY - SCREEN_Y / 2) * -1);
+            // 得到向量 螢幕中心(XY) - 滑鼠的位置(XY) [我沒用絕對值 讓他帶正負值進去]
+            Vector vector = new Vector(SCREEN_X / 2 - currentMouseX, SCREEN_Y / 2 - currentMouseY);
 
             // 向量換算成 單位向量
             vector = vector.normalize();
 
+            // 設定鏡頭移動的單位量(放在Global是因為 他跟每個人有關)
+            Global.setCameraMoveVx((int) (vector.vx() * CAMERA_SPEED));
+            Global.setCameraMoveVy((int) (vector.vy() * CAMERA_SPEED));
+        }
+
+
+        // 如果這一帧的鏡頭移動量 != 0 [必須移動]
+        if (CAMERA_MOVE_VX != 0 || CAMERA_MOVE_VY != 0) {
 
             // 下面就是移動地圖上每一個物件
-
-            base.cameraMove(vector);
+            base.cameraMove();
 
             for (Human human : city.getCitizens().getAllCitizens()) {
-                human.cameraMove(vector);
+                human.cameraMove();
             }
 
             for (GameObject resource : resources) {
-                resource.cameraMove(vector);
+                resource.cameraMove();
             }
 
-            buildingArea.buildingAreaCameraMove(vector);
+            buildingArea.buildingAreaCameraMove();
+
+            // Reset 鏡頭移動量
+            CAMERA_MOVE_VX = 0;
+            CAMERA_MOVE_VY = 0;
         }
 
 
@@ -350,7 +365,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             //選取要升級的種類
             BuildingController.BuildingNode selectBuilding = city.getCurrentBuildingNode();
             BuildingType type = BuildingType.getBuildingTypeByInt(selectBuilding.getBuilding().getId());
-            //TODO:getCan(0)待修
+
             if ((selectBuilding.getBuilding().getAllUpdateIconsCan())) {
 
 
@@ -433,7 +448,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             因為單選 可以是建築物 不一定會是個人
              */
             if (currentObj instanceof Human) {
+
                 ((Human) currentObj).setTarget(targetX, targetY);
+                AudioResourceController.getInstance().play(new Path().sound().readyToWork());
             }
 
             // reset boolean
@@ -484,6 +501,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                 // 這個人前往目的地
                 human.setTarget(targetX, targetY);
+                AudioResourceController.getInstance().play(new Path().sound().readyToWork());
 
                 // 一旦有人到目的地 就++
                 count++;
@@ -634,7 +652,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         }
 
                         // 村民開始採集
-                        citizen.collecting(resource, base.painter().left() - 30, base.painter().top() + base.painter().height() / 2, resourceNum, resourceType);
+                        citizen.collecting(resource, base.painter().centerX(), base.painter().centerY(), resourceNum, resourceType);
 
                     }
                 }
@@ -773,6 +791,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                         // 現在控製的Obj 換成這個 (現在先檢查所有村民而已)
                         currentObj = city.getCitizens().getCitizen(e.getX(), e.getY());
+
+                        if(currentObj != null){
+                            AudioResourceController.getInstance().play(new Path().sound().what());
+                        }
+
                     }
 
 
@@ -828,10 +851,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
         if (commandCode == SPACE) {
-            base.resetObjectXY();
+
             for (Human human : city.getCitizens().getAllCitizens()) {
                 human.resetObjectXY();
             }
+
+            base.resetObjectXY();
 
             for (GameObject resource : resources) {
                 resource.resetObjectXY();

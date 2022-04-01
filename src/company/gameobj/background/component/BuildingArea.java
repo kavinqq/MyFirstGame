@@ -71,15 +71,14 @@ public class BuildingArea implements GameKernel.GameInterface {
 
     /**
      * 所有的基座 給我朝著 這段向量前進
-     * @param vector 向量
      */
 
-    public void buildingAreaCameraMove(Vector vector){
+    public void buildingAreaCameraMove(){
         for(ArrayList<BuildingGrid> buildingGridArr : buildingGrids){
 
             for(BuildingGrid buildingGrid: buildingGridArr) {
 
-                buildingGrid.cameraMove(vector);
+                buildingGrid.cameraMove();
             }
         }
     }

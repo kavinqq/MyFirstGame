@@ -2,11 +2,9 @@ package company.gameobj.creature.human;
 
 import company.Global;
 
+import company.controllers.AudioResourceController;
 import company.gameobj.GameObject;
-import company.gametest9th.utils.Animator;
-import company.gametest9th.utils.Delay;
-import company.gametest9th.utils.HumanAnimator;
-import company.gametest9th.utils.Path;
+import company.gametest9th.utils.*;
 
 import java.awt.*;
 
@@ -55,7 +53,7 @@ public class Citizen extends Human {   //市民
      * 建構子 預設市民數值為1 , 不能打架 , 初始設定為閒人
      */
     public Citizen(int x, int y) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, CITIZEN_INITIAL_VALUE, CITIZEN_INITIAL_SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY,HUMAN_TYPE.CITIZEN, 6);
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, CITIZEN_INITIAL_VALUE, CITIZEN_INITIAL_SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY, HUMAN_TYPE.CITIZEN, 6);
 
         // 預設人物出生方向朝下
         setWalkingDir(Global.Direction.DOWN);
@@ -123,6 +121,7 @@ public class Citizen extends Human {   //市民
 
     /**
      * 人物的每帧繪畫
+     *
      * @param g
      */
     @Override
@@ -138,8 +137,13 @@ public class Citizen extends Human {   //市民
     @Override
     public void update() {
 
+        if (Global.CAMERA_MOVE_VX != 0 || Global.CAMERA_MOVE_VY != 0) {
+
+        }
+
+
         // 隱形時間到
-        if(visibleDelay.count()){
+        if (visibleDelay.count()) {
 
             // 現形
             setVisible(true);
@@ -177,6 +181,7 @@ public class Citizen extends Human {   //市民
 
     /**
      * 設定目的地
+     *
      * @param x 目的地X
      * @param y 目的地Y
      */
@@ -191,7 +196,7 @@ public class Citizen extends Human {   //市民
     }
 
     // 採集ING
-    public void collecting(GameObject gameObject, int baseX, int baseY, int resourceNum, Resource resourceType){
+    public void collecting(GameObject gameObject, int baseX, int baseY, int resourceNum, Resource resourceType) {
 
         // 把base的位置一起傳進來 記起來
         this.baseX = baseX;
@@ -207,39 +212,76 @@ public class Citizen extends Human {   //市民
         // 這一次的採集種類 && 量
         this.resourceNum = resourceNum;
         this.resourceType = resourceType;
+
     }
 
 
-    public int getResourceNum(){
+    public int getResourceNum() {
         return resourceNum;
     }
 
-    public Resource getResourceType(){
+    public Resource getResourceType() {
         return resourceType;
     }
 
-    public void setResourceType(){
+    public void setResourceType() {
         resourceType = null;
     }
 
-    public void setResourceNum(){
+    public void setResourceNum() {
         resourceNum = 0;
     }
 
-    public void setResourceTargetX(int x){
+    public void setResourceTargetX(int x) {
         this.resourceTargetX = x;
     }
 
-    public void setResourceTargetY(int y){
+    public void setResourceTargetY(int y) {
         this.resourceTargetY = y;
     }
 
-    public int getResourceTargetX(){
+    public int getResourceTargetX() {
         return resourceTargetX;
     }
 
-    public int getResourceTargetY(){
+    public int getResourceTargetY() {
         return resourceTargetY;
+    }
+
+
+    /**
+     * 鏡頭移動
+     */
+
+    @Override
+    public void cameraMove(){
+
+        // 因為村民有額外紀錄 XY 要另外改
+        baseX += Global.CAMERA_MOVE_VX;
+        baseY += Global.CAMERA_MOVE_VY;
+
+        resourceTargetX += Global.CAMERA_MOVE_VX;
+        resourceTargetY += Global.CAMERA_MOVE_VY;
+
+        super.cameraMove();
+    }
+
+    /**
+     * 重製視窗回初始位置
+     */
+
+    @Override
+    public void resetObjectXY() {
+
+        // 因為村民有額外紀錄 XY 要另外改
+        baseX -= getSumOfCameraMoveX();
+        baseY -= getSumOfCameraMoveY();
+
+        resourceTargetX -= getSumOfCameraMoveX();
+        resourceTargetY -= getSumOfCameraMoveY();
+
+        // ↓ Human的reset 會把 sum清空 要最後執行
+        super.resetObjectXY();
     }
 
 }

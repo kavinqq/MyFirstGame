@@ -38,6 +38,9 @@ public abstract class Creature extends GameObject {
     private Global.Direction walkingDir;
     private Global.Direction blockedDir;
 
+    private int sumOfCameraMoveX; // 鏡頭移動量X
+    private int sumOfCameraMoveY; // 鏡頭移動量Y
+
 
     public Creature(int x, int y, int targetX, int targetY, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility, Animator.State moveStatus) {
 
@@ -58,6 +61,10 @@ public abstract class Creature extends GameObject {
         this.fightingStatus = FIGHTING_STATUS.NOT_FIGHTING;
 
         this.moveStatus = moveStatus;
+
+        // 原本的位置
+        sumOfCameraMoveX = 0;
+        sumOfCameraMoveY = 0;
     }
 
 
@@ -118,6 +125,7 @@ public abstract class Creature extends GameObject {
 
     /**
      * 回傳這個生物的圖片
+     *
      * @return 該生物的圖片
      */
 
@@ -127,6 +135,7 @@ public abstract class Creature extends GameObject {
 
     /**
      * 設定行走狀態
+     *
      * @param walkingStatus 新的行走狀態
      */
 
@@ -136,7 +145,8 @@ public abstract class Creature extends GameObject {
 
     /**
      * 回傳該生物目前的行走狀態 (站立 or 行走)
-     * @return e
+     *
+     * @return 行走狀況
      */
 
     public Animator.State getMoveStatus() {
@@ -145,6 +155,7 @@ public abstract class Creature extends GameObject {
 
     /**
      * 設定目的地 x, y
+     *
      * @param x 目的地X
      * @param y 目的地Y
      */
@@ -168,25 +179,28 @@ public abstract class Creature extends GameObject {
 
     /**
      * 單純設定 目的地X
-     * @param targetX  目的地X
+     *
+     * @param targetX 目的地X
      */
 
-    private void setTargetX(int targetX) {
+    public void setTargetX(int targetX) {
         this.targetX = targetX;
     }
 
 
     /**
      * 單純設定目的地X
+     *
      * @param targetY 目的地X
      */
 
-    private void setTargetY(int targetY) {
+    public void setTargetY(int targetY) {
         this.targetY = targetY;
     }
 
     /**
      * 取得目的地X
+     *
      * @return 目的地X
      */
 
@@ -196,6 +210,7 @@ public abstract class Creature extends GameObject {
 
     /**
      * 取得目的地Y
+     *
      * @return 目的地Y
      */
 
@@ -215,6 +230,7 @@ public abstract class Creature extends GameObject {
 
     /**
      * 每個生物的移動速度(每一幀)
+     *
      * @return 移動速度
      */
 
@@ -284,10 +300,68 @@ public abstract class Creature extends GameObject {
     }
 
     // 目的地是否在該gameObj裡面
-    public boolean isTargetInObj(GameObject gameObject){
+    public boolean isTargetInObj(GameObject gameObject) {
 
         return targetX > gameObject.painter().left() && targetX < gameObject.painter().right() && targetY < gameObject.painter().bottom() && targetY > gameObject.painter().top();
 
+    }
+
+    /**
+     * 鏡頭移動
+     */
+
+    @Override
+    public void cameraMove() {
+
+        // 本體跟著鏡頭動
+        translate(Global.CAMERA_MOVE_VX, Global.CAMERA_MOVE_VY);
+
+        // 目標也跟著動
+        setTargetX(targetX + Global.CAMERA_MOVE_VX);
+        setTargetY(targetY + Global.CAMERA_MOVE_VY);
+
+        // 加總總鏡頭移動X Y
+        sumOfCameraMoveX += Global.CAMERA_MOVE_VX;
+        sumOfCameraMoveY += Global.CAMERA_MOVE_VY;
+
+    }
+
+    /**
+     * 重製視窗回初始位置
+     */
+
+    @Override
+    public void resetObjectXY() {
+
+        // 本體跟著鏡頭動
+        translate(sumOfCameraMoveX * -1, sumOfCameraMoveY * -1);
+
+        // 目標也跟著動
+        setTargetX(targetX - sumOfCameraMoveX);
+        setTargetY(targetY - sumOfCameraMoveY);
+
+        // 清空總鏡頭移動X Y
+        sumOfCameraMoveX = 0;
+        sumOfCameraMoveY = 0;
+    }
+
+    /**
+     * 獲得目前總鏡頭移動X (以主堡為基準點)
+     * @return 目前總鏡頭移動X
+     */
+
+    public int getSumOfCameraMoveX(){
+        return sumOfCameraMoveX;
+    }
+
+
+    /**
+     * 獲得目前總鏡頭移動X (以主堡為基準點)
+     * @return 目前總鏡頭移動Y
+     */
+
+    public int getSumOfCameraMoveY(){
+        return sumOfCameraMoveY;
     }
 
 }
