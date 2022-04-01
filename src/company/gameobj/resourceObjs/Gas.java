@@ -1,12 +1,11 @@
 package company.gameobj.resourceObjs;
 
 import company.controllers.SceneController;
-import company.gameobj.GameObject;
 import company.gametest9th.utils.Path;
 
 import java.awt.*;
 
-public class Gas extends GameObject {
+public class Gas extends ResourceObj {
 
     private Image image;
 

@@ -306,8 +306,20 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         buildingInit(x, y);
     }
 
+    /**
+     * 視覺化後都用這個
+     * @param x 建築物的left
+     * @param y 建築物的top
+     */
+
     public Building(int x, int y) {
+
         super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
+
+        //訂出 初始鏡頭 他要回到的位置
+        setBuildingOriginalX(Global.SUM_OF_CAMERA_MOVE_VX);
+        setBuildingOriginalY(Global.SUM_OF_CAMERA_MOVE_VY);
+
         buildingInit(x, y);
     }
 

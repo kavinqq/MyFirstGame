@@ -12,9 +12,8 @@ import static company.gameobj.BuildingController.*;
 import company.controllers.AudioResourceController;
 import company.gameobj.BuildingController;
 import company.gameobj.Rect;
-import company.gameobj.buildings.Building;
-import company.gameobj.resourceObjs.Steel;
-import company.gameobj.resourceObjs.Tree;
+import company.gameobj.resourceObjs.ResourceObj;
+import company.gameobj.resourceObjs.ResourceSystem;
 import company.gameobj.message.ToastController;
 import company.gametest9th.utils.*;
 import company.gameobj.GameObject;
@@ -30,7 +29,6 @@ import java.awt.*;
 
 import static company.Global.*;
 import static company.gameobj.BuildingController.BuildingType.values;
-
 
 /**
  * 遊戲主場景
@@ -83,7 +81,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
     // 資源
-    private List<GameObject> resources;
+    private ResourceSystem resourceSystem;
 
 
     @Override
@@ -143,10 +141,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         targetY = 0;
 
         // 資源
-        resources = new ArrayList<>();
-        resources.add(new Tree(350, 400));
-        resources.add(new Steel(1200, 400));
-
+        resourceSystem = new ResourceSystem();
 //        AudioResourceController.getInstance().loop(new Path().sound().mainSceneBGM(), 2);
     }
 
@@ -203,13 +198,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
-
-        // 畫出可採集的資源
-        for (GameObject resource : resources) {
-            if (resource != null) {
-                resource.paint(g);
-            }
-        }
+        //畫出遊戲內所有的資源堆
+        resourceSystem.paint(g);
 
         //畫出城市所有已建造建築物
         city.paint(g);
@@ -245,8 +235,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             vector = vector.normalize();
 
             // 設定鏡頭移動的單位量(放在Global是因為 他跟每個人有關)
-            Global.setCameraMoveVx((int) (vector.vx() * CAMERA_SPEED));
-            Global.setCameraMoveVy((int) (vector.vy() * CAMERA_SPEED));
+            Global.setCameraMoveVX((int) (vector.vx() * CAMERA_SPEED));
+            Global.setCameraMoveVY((int) (vector.vy() * CAMERA_SPEED));
         }
 
 
@@ -259,10 +249,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             // city裡面所有東西移動
             city.cameraMove();
 
-            // 資源堆移動
-            for (GameObject resource : resources) {
-                resource.cameraMove();
-            }
+            // 所有資源堆移動
+            resourceSystem.cameraMove();
 
             // 建築物基座移動
             buildingArea.buildingAreaCameraMove();
@@ -475,13 +463,15 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             /*
             這邊是為了解決一個狀況:
-            因為我進去採集資源隱形 != 真的不見了, 只是沒有印出來
-            所以如果採資源也要停下來後找地方散開
-            那就會出現沒有和資源物件 collision 的狀況 => 沒辦法觸發採集流程
+            因為我進去採集資源隱形 並不是 真的不見了, 只是沒有印出來, 還是會有碰撞
+            所以如果採資源也要停下來要後找地方散開
+            散開之後沒碰到資源堆,那就會出現沒有和資源物件 collision 的狀況 => 沒辦法觸發採集流程
             所以我先判斷一下目的地是不是資源堆這樣.
             */
-            for (GameObject resource : resources) {
-                if (targetX > resource.painter().left() && targetX < resource.painter().right() && targetY > resource.painter().top() && targetY < resource.painter().bottom()) {
+            for (int i = 0 ; i < resourceSystem.size(); i++) {
+
+                // 如果目的地確定是在 資源堆裡面 => 我確定我要派他去採集
+                if (targetX > resourceSystem.get(i).painter().left() && targetX < resourceSystem.get(i).painter().right() && targetY > resourceSystem.get(i).painter().top() && targetY < resourceSystem.get(i).painter().bottom()) {
                     isGoingToCollect = true;
                     break;
                 }
@@ -616,50 +606,44 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     }
                 }
             } else {
-                // 遍尋一次 資源List
-                for (int i = 0; i < resources.size(); i++) {
 
-                    // 先把資源堆物件 取出來(不用每次都用get去跑一次拿他)
-                    GameObject resource = resources.get(i);
+                // 遍尋一次 資源List
+                for (int i = 0; i < resourceSystem.size(); i++) {
+
+                    // 先把資源堆記錄下來 不用每次都get一次
+                    ResourceObj resourceObj = resourceSystem.get(i);
 
                     //如果和資源碰撞 && 我的目的地就是在資源裡面 && 村民看的到的話(沒寫這個條件 他會重複計算)
-                    if (citizen.isCollision(resource) && citizen.isTargetInObj(resource) && citizen.getVisible()) {
+                    if (citizen.isCollision(resourceObj) && citizen.isTargetInObj(resourceObj) && citizen.getVisible()) {
 
                         // 把資源的位置記起來
-                        citizen.setResourceTargetX(resource.painter().centerX());
-                        citizen.setResourceTargetY(resource.painter().centerY());
+                        citizen.setResourceTargetX(resourceObj.painter().centerX());
+                        citizen.setResourceTargetY(resourceObj.painter().centerY());
 
                         //開始採集
-                        int resourceNum = 0;
-                        Citizen.Resource resourceType = null;
 
-                        // 幫村民判斷 採了什麼資源 && 一次能採的量
-                        if (resource instanceof Tree) {
+                        if (resourceObj.getResourceTypeStr().equals("WOOD")) { // 如果採集的是木頭
 
-                            resourceNum = ((Tree) resource).eachTimeGet();
-                            resourceType = Citizen.Resource.WOOD;
+                            // 資源堆被採集了(目前單次最大能採多少木頭數量)
+                            resourceObj.beCollected(Citizen.getMaxCarryWood());
+                        } else if (resourceObj.getResourceTypeStr().equals("STEEL")) { // 如果採集的是鋼鐵
 
-                            // 如果資源採乾了 移除他
-                            if (resource != null && ((Tree) resource).getTotalNum() <= 0) {
-                                resources.remove(i);
-                            }
+                            // 資源堆被採集了(目前單次最大能採多少鋼鐵數量)
+                            resourceObj.beCollected(Citizen.getMaxCarrySteel());
                         }
 
-                        // 幫村民判斷 採了什麼資源 && 一次能採的量
-                        if (resource instanceof Steel) {
-                            resourceNum = ((Steel) resource).eachTimeGet();
-                            resourceType = Citizen.Resource.STEEL;
+                        // 如果資源採乾了
+                        if (resourceObj.getTotalNum() <= 0) {
 
-                            // 如果資源採乾了 移除他
-                            if (resource != null && ((Steel) resource).getTotalNum() <= 0) {
+                            // 移除他
+                            resourceSystem.remove(i);
 
-                                resources.remove(i);
-                            }
+                            //因為是ArrayList 移除後 下一個會馬上接上來
+                            i--;
                         }
 
                         // 村民開始採集
-                        citizen.collecting(resource, base.painter().centerX(), base.painter().centerY(), resourceNum, resourceType);
-
+                        citizen.collecting(resourceObj, base.painter().centerX(), base.painter().centerY(), resourceObj.getResourceTypeStr());
                     }
                 }
             }
@@ -859,17 +843,18 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             controlHumans.clear();
         }
 
+        // 按下SPACE => 鏡頭中心回到主堡身上
         if (commandCode == SPACE) {
 
             city.resetObjectXY();
 
             base.resetObjectXY();
 
-            for (GameObject resource : resources) {
-                resource.resetObjectXY();
-            }
+            resourceSystem.resetObjectXY();
 
             buildingArea.buildingAreaResetPosition();
+
+            Global.resetSumOfCameraMove();
         }
     }
 
@@ -880,6 +865,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void keyTyped(char c, long trigTime) {
+
         // 按下s的同時 所有操控單位停止移動
         if (c == 's' || c == 'S') {
             if (currentObj != null && currentObj instanceof Human) {
@@ -892,6 +878,5 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             }
         }
-
     }
 }

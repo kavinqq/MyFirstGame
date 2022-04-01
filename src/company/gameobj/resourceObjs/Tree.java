@@ -1,55 +1,24 @@
 package company.gameobj.resourceObjs;
 
-import company.controllers.SceneController;
-import company.gameobj.GameObject;
 import company.gametest9th.utils.Path;
 
-import java.awt.*;
-
-public class Tree extends GameObject {
-
-    private Image image;
-
-    private int eachTimeGet; // 每次拿的量
-    private int totalNum; // 這個資源總共有多少量
+/**
+ * 樹木資源堆
+ */
+public class Tree extends ResourceObj {
 
     public Tree(int x, int y) {
+
+        // 設定初始位置 && 寬高
         super(x, y, 128,128);
 
-        image = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().tree());
+        // 設定樹木資源堆圖片
+        setImage(new Path().img().objs().tree());
 
-        eachTimeGet = 3;
+        // 樹木堆預設有1000個樹木資源
+        setTotalNum(1000);
 
-        totalNum = 600;
-    }
-
-    /**
-     * 每次拿多少 && 扣多少
-     * @return 每次拿的量
-     */
-
-    public int eachTimeGet() {
-        totalNum -= eachTimeGet;
-
-        return eachTimeGet;
-    }
-
-    public void setEachTimeGet(int eachTimeGet){
-        this.eachTimeGet = eachTimeGet;
-    }
-
-    public int getTotalNum(){
-        return  totalNum;
-    }
-
-
-    @Override
-    public void paintComponent(Graphics g) {
-        g.drawImage(image, painter().left(), painter().top(), null);
-    }
-
-    @Override
-    public void update() {
-
+        // 資源類別為木頭
+        setResourceType(ResourceType.WOOD);
     }
 }

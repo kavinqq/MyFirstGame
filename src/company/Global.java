@@ -121,8 +121,12 @@ public class Global {
     public static final int CAMERA_SPEED = 8;
 
     // 鏡頭移動量 X 跟 Y
-    public static int CAMERA_MOVE_VX;
-    public static int CAMERA_MOVE_VY;
+    public static int CAMERA_MOVE_VX = 0;
+    public static int CAMERA_MOVE_VY = 0;
+
+    // 鏡頭移動總量 X 跟 Y
+    public static int SUM_OF_CAMERA_MOVE_VX = 0;
+    public static int SUM_OF_CAMERA_MOVE_VY = 0;
 
     /**
      * 輸出範圍內的隨機數字
@@ -147,8 +151,9 @@ public class Global {
      * @param vx 鏡頭移動的 X值
      */
 
-    public static void setCameraMoveVx(int vx) {
+    public static void setCameraMoveVX(int vx) {
         CAMERA_MOVE_VX = vx;
+        SUM_OF_CAMERA_MOVE_VX += vx;
     }
 
     /**
@@ -157,8 +162,13 @@ public class Global {
      * @param vy 鏡頭移動的 Y值
      */
 
-    public static void setCameraMoveVy(int vy) {
+    public static void setCameraMoveVY(int vy) {
         CAMERA_MOVE_VY = vy;
+        SUM_OF_CAMERA_MOVE_VY += vy;
     }
 
+    public static void resetSumOfCameraMove(){
+        SUM_OF_CAMERA_MOVE_VX = 0;
+        SUM_OF_CAMERA_MOVE_VY = 0;
+    }
 }
