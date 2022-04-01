@@ -156,7 +156,7 @@ public class OldMain {
                                             if (true) { //city.isUpgradingTech()
                                                 System.out.println("科技已在升級中，請等待此次升級結束");
                                             } else {
-                                                city.upgradeTechLevel();
+                                                //city.upgradeTechLevel();
                                                 System.out.println("科技升級中");
                                             }
                                             break;

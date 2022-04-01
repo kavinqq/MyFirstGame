@@ -239,6 +239,8 @@ public class Path {
             public String airport(){return this+"airport.png";}
 
             public String darkBackground(){return this +"/darkbj4.png";}
+
+            public String tarmac(){return this +"/tarmac.png";}
         }
 
         public Actors actors() {

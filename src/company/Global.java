@@ -35,7 +35,7 @@ public class Global {
 
     //整個視窗大小
     public static final int WINDOW_WIDTH = 1920; //1920
-    public static final int WINDOW_HEIGHT = 800; //1080
+    public static final int WINDOW_HEIGHT = 1080; //1080
 
     //狀態攔
     public static final int STATUS_BAR_X = 0;
@@ -57,17 +57,16 @@ public class Global {
 
     //基座大小
     public static final int FOUNDATION_WIDTH = 118;
-    public static final int FOUNDATION_HEIGHT = 117;
+    public static final int FOUNDATION_HEIGHT = 116;
 
     //選單大小
     public static final int BUILDING_OPTION_WIDTH = 150;
-    public static final int OPTION_GAP_Y = 5;
+    public static final int OPTION_GAP_Y = 0;
     public static final int OPTION_GAP_X = (BUILDING_OPTION_WIDTH - FOUNDATION_WIDTH) / 2;
-    public static final int BUILDING_OPTION_HEIGHT = SCREEN_Y;
     public static final int BUILDING_OPTION_X = WINDOW_WIDTH - BUILDING_OPTION_WIDTH;
     public static final int BUILDING_OPTION_Y = STATUS_BAR_HEIGHT;
 
-    //領地大小
+    //領地大小 可刪
     public static final int LAND_WIDTH = 1600;
     public static final int LAND_HEIGHT = 840;
     public static final int LAND_X = (SCREEN_X - LAND_WIDTH - BUILDING_OPTION_WIDTH) / 2;
@@ -77,9 +76,22 @@ public class Global {
     public static final int BUILDING_WIDTH = 96;
     public static final int BUILDING_HEIGHT = 96;
 
-    //基座與建築物差
+    //按鈕基座與建築物差
     public static final int DIV_GAP_X = (FOUNDATION_WIDTH - BUILDING_WIDTH) / 2;
     public static final int DIV_GAP_Y = (FOUNDATION_HEIGHT - BUILDING_HEIGHT) / 2;
+
+    //建築區起始位置
+    public static final int BUILDING_AREA_X = BUILDING_WIDTH;
+    public static final int BUILDING_AREA_Y = BUILDING_HEIGHT;
+    public static final int BUILDING_AREA_DISTANCE_X= BUILDING_WIDTH*5/2;
+    public static final int BUILDING_AREA_DISTANCE_Y = BUILDING_HEIGHT*5/2;
+
+    public static final int BUILDING_GRID_WIDTH= BUILDING_WIDTH*3/2;
+    public static final int BUILDING_GRID_HEIGHT= BUILDING_WIDTH*3/2;
+
+    public final static int numY=4;
+    public final static int numX=7;
+
 
     //Icon相關設定
     public static final int ICON_START_X = 2;
@@ -92,7 +104,6 @@ public class Global {
     public final static int BuildingTypeNum = 8;
 
     //建築Icon
-
     public static final int BUILDING_ICON_WIDTH = 25;
     public static final int BUILDING_ICON_HEIGHT = 25;
     public static final int BUILDING_ICON_GAP_X = 20;

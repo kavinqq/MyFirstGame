@@ -39,7 +39,6 @@ public class GasMill extends Building{
                 .setBuildTime(1)
                 .setUpgradeTime(30)
                 .setLevelC(0)
-                .setTechLevel(2)
                 .setTechLevelNeedBuild(2)
                 .setTechLevelNeedUpgrade(3)
                 .setHp(20)

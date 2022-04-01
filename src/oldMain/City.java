@@ -1,6 +1,5 @@
 package oldMain;
 
-import company.Global;
 import company.gameobj.BuildingController;
 import company.gameobj.buildings.Building;
 
@@ -27,7 +26,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
      */
 
     public final int DEFAULT_CITIZEN = 20;
-    public final int MAX_CAN_BUILD = 5; //TODO 不確定建築物損壞後有沒有減掉當前建築物數量
+    public final int MAX_CAN_BUILD = 14; //TODO 不確定建築物損壞後有沒有減掉當前建築物數量
     public final int ZOMBIE_TYPE = 6;
 
     /**
@@ -78,7 +77,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         resource = new Resource();
         buildings = new BuildingController();
         zombies = new ZombieKingdom();
-        citizens = null;//TODO
+        citizens = null;
         military = new Military();
     }
 
@@ -552,12 +551,28 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
     private BuildingNode currentBuildingNode;
 
-    public BuildingNode selectBuildingNode(int x, int y) {
-        return buildings.selectionBuildingNode(x, y);
+    //選擇被點選的buildingNode
+    public BuildingNode getCuurentBuildingNode(int x, int y) {
+        for (BuildingType value:values()) {
+            for (int j = 0; j < value.list().size(); j++) {
+                if(value.list().get(j).getBuilding().isEntered(x,y)){
+                    return value.list().get(j);
+                }
+            }
+        }
+        return null;
     }
 
-    public BuildingNode getCurrentBuildingNode() {
-        return currentBuildingNode;
+    //選擇被點選的building
+    public Building getCurrentBuilding(int x,int y) {
+        for (BuildingType value:values()) {
+            for (int j = 0; j < value.list().size(); j++) {
+                if(value.list().get(j).getBuilding().isEntered(x,y)){
+                    return value.list().get(j).getBuilding();
+                }
+            }
+        }
+        return null;
     }
 
     public boolean isAlive() {
@@ -651,7 +666,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
 
         buildings.mouseTrig(e, state, trigTime);
-        currentBuildingNode = selectBuildingNode(e.getX(), e.getY());
+        currentBuildingNode = getCuurentBuildingNode(e.getX(), e.getY());
     }
 
 

@@ -43,7 +43,6 @@ public class House extends Building {
                 .setBuildTime(1)
                 .setUpgradeTime(30)
                 .setLevelC(0)
-                .setTechLevel(1)
                 .setTechLevelNeedBuild(1)
                 .setTechLevelNeedUpgrade(2)
                 .setHp(10)

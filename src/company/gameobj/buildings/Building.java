@@ -20,45 +20,54 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         UPGRADING;
     }
 
+//    public Image getUnderConstructionImg(){
+//        return underConstructionImg;
+//    }
+//
+//    public Image getImg(){
+//        return img;
+//    }
+    //建築物上的控制升級或開啟關閉的物件
     public class Icon extends GameObject {
-
+        //建築物顯示提示框
         private HintDialog hintDialog;
-
-        private boolean can;
-
+        //是否顯示提示框
         private boolean isShowMessage;
+        //是否被點擊
+        private boolean isPressed;
+
 
         public Icon(int x, int y, String message) {
 
             super(x, y, Global.BUILDING_ICON_WIDTH, Global.BUILDING_ICON_HEIGHT);
             hintDialog = new HintDialog();
             hintDialog.setHintMessage(message);
-
-            can = false;
+            isPressed = false;
         }
-
-        public boolean getCan() {
-            return can;
+        //取得點擊
+        public boolean getPressed() {
+            return isPressed;
         }
-
-        public void setCan(boolean bool) {
-            can = bool;
+        //關閉點擊狀態
+        public void setPressed(boolean bool) {
+            isPressed = bool;
         }
-
+        //設置訊息內容
         protected void setMessage(String message) {
             hintDialog.setHintMessage(message);
         }
-
+        //取得是否顯示訊息
         protected boolean isShowMessage() {
             return isShowMessage;
         }
-
+        //得到對話框類
         protected HintDialog getHintDialog() {
             return hintDialog;
         }
 
         @Override
         public void paintComponent(Graphics g) {
+            //畫文字訊息
             if (isShowMessage) {
                 hintDialog.paint(g);
             }
@@ -68,10 +77,6 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         @Override
         public void update() {
 
-            System.out.println("Building Global VX: " + Global.CAMERA_MOVE_VX);
-
-            cameraMove();
-//            hintDialog.setHintMessage(message);
         }
 
         public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long TrigTime) {
@@ -114,12 +119,12 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             switch (state) {
                 case PRESSED: {
                     if (isEntered(e.getX(), e.getY())) {
-                        setCan(true);
+                        setPressed(true);
                         break;
                     }
                 }
                 default: {
-                    setCan(false);
+                    setPressed(false);
                 }
             }
         }
@@ -170,7 +175,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
             super.mouseTrig(e, state, trigTime);
             switch (state) {
-                case CLICKED: {
+                case PRESSED : {
                     if (isEntered(e.getX(), e.getY())) {
                         isWorking = !isWorking;
                     }
@@ -244,6 +249,8 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
      * 建築血量
      */
     private int hp;
+    //科技等級是否在升級
+    private boolean isTechUpgrading;
 
     /**
      * 是否要準備要升級了
@@ -282,8 +289,6 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     protected int gasForProduction;
     //建造中的圖
     private Image underConstructionImg;
-    public UpGradeIcon upGradeIcon;
-    public WorkingIcon workingIcon;
 
     //public static Building SelectBuilding;
     //是否顯示Icon
@@ -319,9 +324,8 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         this.isWorking = false;
 
         this.isUpgrading = false;
-//建築物 剛建造完的時間 (那一個moment)，用來計算建築生產(和buildTime gameTime去做計算)
+        //建築物 剛建造完的時間 (那一個moment)，用來計算建築生產(和buildTime gameTime去做計算)
         this.createTime = -1;
-
 
         underConstructionImg = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().ingBuild());
 
@@ -332,10 +336,17 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         img = SceneController.getInstance().imageController().tryGetImage(imgPath);
     }
 
+    //設定是否升級
+    public void setTechUpgrading(boolean isTechUpgrading){
+        this.isTechUpgrading=isTechUpgrading;
+    }
+
+    public boolean getIsTechUpgrading(){
+        return isTechUpgrading;
+    }
 
     /**
      * set給子類建構用
-     *
      * @param id
      * @return
      */
@@ -343,82 +354,86 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         Building.this.id = id;
         return this;
     }
-
+    //設定給子類用
     protected Building setName(String name) {
         Building.this.name = name;
         return this;
     }
-
+    //設定給子類用
     protected Building setBuildTime(int buildTime) {
         Building.this.buildTime = buildTime;
         return this;
     }
-
+    //設定給子類用
     protected Building setTechLevelNeedBuild(int buildTime) {
         Building.this.techLevelNeedBuild = buildTime;
         return this;
     }
-
+    //設定給子類用
     protected Building setUpgradeTime(int upgradeTime) {
         Building.this.upgradeTime = upgradeTime;
         return this;
     }
-
+    //設定給子類用
     protected Building setTechLevelNeedUpgrade(int needTechLevel) {
         Building.this.techLevelNeedUpgrade = needTechLevel;
         return this;
     }
 
-    //給子類用
+    //設定給子類用
     protected Building setLevelC(int level) {
         Building.this.level = level;
         return this;
     }
-
-    protected Building setTechLevel(int techLevelNeedUpgrade) {
-        Building.this.techLevelNeedUpgrade = techLevelNeedUpgrade;
-        return this;
-    }
-
-
+    //設定給子類用
     protected Building setHp(int hp) {
         Building.this.hp = hp;
         return this;
     }
-
+    //設定給子類用
     protected Building setWoodCostCreate(int woodCostCreate) {
         Building.this.woodCostCreate = woodCostCreate;
         return this;
     }
-
+    //設定給子類用
     protected Building setSteelCostCreate(int steelCostCreate) {
         Building.this.steelCostCreate = steelCostCreate;
         return this;
     }
-
+    //設定給子類用
     protected Building setWoodCostLevelUpC(int woodCostLevelUp) {
         Building.this.woodCostLevelUp = woodCostLevelUp;
         return this;
     }
-
+    //設定給子類用
     protected Building setSteelCostLevelUpC(int steelCostLevelUp) {
         Building.this.steelCostLevelUp = steelCostLevelUp;
         return this;
     }
-
+    //設定給子類用
     protected Building setGasCostCreate(int gasCostCreate) {
         Building.this.gasCostCreate = gasCostCreate;
         return this;
     }
-
+    //設定給子類用
     protected Building setGasCostLevelup(int gasCostLevelup) {
         Building.this.gasCostLevelUp = gasCostLevelUp;
         return this;
     }
-
+    //設定給子類用
     protected Building setImgPath(String path) {
         Building.this.imgPath = path;
         return this;
+    }
+
+    //取得施工中圖片
+    public Image getUnderConstructionImg(){
+        return underConstructionImg;
+    }
+
+    //取得建築物圖片
+    public Image getImg(){
+        return img;
     }
 
     /**
@@ -682,17 +697,26 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             this.hp = 0;
         }
     }
-
+    //取得所有update的是否被點選的
     public boolean getAllUpdateIconsCan() {
         for (int i = 0; i < icons.size(); i++) {
             if (icons.get(i) instanceof WorkingIcon) {
                 continue;
             }
-            if (icons.get(i).getCan()) {
+            if (icons.get(i).getPressed()) {
                 return true;
             }
         }
         return false;
+    }
+
+    public void shutAllUpdateIconCan(){
+        for (int i = 0; i < icons.size(); i++) {
+            if (icons.get(i) instanceof WorkingIcon) {
+                continue;
+            }
+            icons.get(i).setPressed(false);
+        }
     }
 
     public void setLevel(int level) {
@@ -723,19 +747,11 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         return "升級所需木材:" + woodCostLevelUp + " 鋼鐵:" + steelCostLevelUp + " 瓦斯:" + gasCostLevelUp;
     }
 
-//    public Image getUnderConstructionImg(){
-//        return underConstructionImg;
-//    }
-//
-//    public Image getImg(){
-//        return img;
-//    }
+
 
     @Override
     public void paintComponent(Graphics g) {
-
-
-        if (!isWorking() && !readyToUpgrade && !isUpgrading) { //畫出建造中的建築物
+        if (level==0) { //畫出建造中的建築物 !isWorking() && !readyToUpgrade && !isUpgrading
             g.drawImage(underConstructionImg, painter().left(), painter().top(), painter().width(), painter().height(), null);
 
         } else if (readyToUpgrade && !isUpgrading) {  //畫出完成的建築物
@@ -758,9 +774,6 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     @Override
     public void update() {
-
-
-
         if (isShowIcon) {
             for (int i = 0; i < icons.size(); i++) {
                 icons.get(i).update();

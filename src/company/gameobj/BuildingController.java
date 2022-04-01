@@ -1,11 +1,8 @@
 
 package company.gameobj;
 
-import company.Global;
 import company.gameobj.buildings.Building;
 import company.gameobj.buildings.*;
-import company.gameobj.creature.human.Citizen;
-import company.gameobj.message.ToastController;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
 import oldMain.City;
@@ -17,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.function.ToDoubleBiFunction;
 
 import static company.gameobj.BuildingController.BuildingType.*;
 
@@ -70,7 +66,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
     private ArrayList<Building> damageBuilding;
 
 
-
+    //畫出所有buildingNode
     @Override
     public void paint(Graphics g) {
 
@@ -105,7 +101,12 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
 
         for (BuildingType value:values()) {
             for (int j = 0; j < value.list.size(); j++) {
+                //移動建築物
                 value.list().get(j).getBuilding().cameraMove();
+                //移動建築物內部物件Icon
+                for (int i = 0; i < value.list().get(j).getBuilding().getIcons().size(); i++) {
+                    value.list().get(j).getBuilding().getIcons().get(i).cameraMove();
+                }
             }
         }
     }
@@ -122,6 +123,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         }
     }
 
+    //呼叫所有 BuildingNode的滑鼠
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
@@ -212,7 +214,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
          */
         int updateStartTime;
 
-
+        //畫BuildingNode裡的building
         private void paint(Graphics g){
             building.paint(g);
         }
@@ -222,10 +224,9 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
          */
 
         private void update(){
-
             building.update();
         }
-
+        //操控BuildingNode裡的building
         private void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
             building.mouseTrig(e,state,trigTime);
         }
@@ -234,8 +235,9 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
             this.building = building;
         }
 
+        //升級 開啟 關閉 Icon是否被按壓
         public boolean getCan(int x){
-            return building.getIcons().get(x).getCan();
+            return building.getIcons().get(x).getPressed();
         }
 
         /**
@@ -273,7 +275,6 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
     private int buildingNum;
 
     public BuildingController() {
-
         techLevelStartUpgradeTime = 0;
         buildingNum = 0;
         isUpgradingSoldier = false;
@@ -588,6 +589,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
                 lab.levelUpTechResource(lab.getLevel() + 1);
             }
             isRecentlyUpgradeTech = true;
+
             City.addTechLevel();
             freeLabNum++;
             isUpgradingTech = false;
@@ -1145,9 +1147,6 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
      * @return 是否正在升級科技
      */
     public boolean isUpgradingTech(BuildingNode buildingNode) {
-//        buildingNode.building.setUpgrading(true);
-//        buildingNode.building.setWorking(false);
-//        buildingNode.building.setReadyToUpgrade(false);
         return isUpgradingTech;
     }
 

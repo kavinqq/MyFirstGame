@@ -35,8 +35,8 @@ public class Barracks extends Building{
      */
     public int produceSoldier(){
         return getLevel()*2-1;
-
     }
+
     @Override
     public String toString() {
         return "軍營:每3小時消耗2木材2鋼鐵產生1位士兵(每房屋等級+2人)";
@@ -54,7 +54,6 @@ public class Barracks extends Building{
             .setUpgradeTime(30)
             .setLevelC(0)
                 .setTechLevelNeedBuild(1)
-            .setTechLevel(1)
             .setTechLevelNeedUpgrade(2)
             .setHp(30)
             .setWoodCostCreate(20)

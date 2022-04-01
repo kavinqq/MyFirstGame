@@ -27,8 +27,6 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     //為靜態類別，可取得Building相關訊息
     BuildingType type;
 
-    private BuildingButton currentButton;
-
     private int pressCount;
 
     public BuildingOption() {
@@ -52,10 +50,6 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     }
 
 
-    public BuildingButton getCurrentButton(){
-        return currentButton;
-    }
-
     //是否所有Button都false
     public boolean checkMouseOnButtons(){
         isMouseOnButtons =false;
@@ -77,6 +71,15 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     }
 
 
+    public BuildingButton getCurrentButton(int x,int y){
+        for (int i = 0; i < buildingButtons.size(); i++) {
+            if(buildingButtons.get(i).isEntered(x,y)){
+                return buildingButtons.get(i);
+            }
+        }
+        return null;
+    }
+
     @Override
     public void paint(Graphics g) {
         //基地為背景先畫
@@ -88,11 +91,7 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         //建築物後畫
         for (int i = 0; i < BuildingTypeNum; i++) {
             //畫按鈕
-            if(currentButton==null){
-                buildingButtons.get(i).paint(g);
-            }else if(i!=currentButton.getId()-1){
-               buildingButtons.get(i).paint(g);
-            }
+            buildingButtons.get(i).paint(g);
         }
     }
 
@@ -102,9 +101,6 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         //印出update ，取得當前按鈕
         for (int i = 0; i < BuildingTypeNum; i++) {
             buildingButtons.get(i).update();
-            if(buildingButtons.get(i).getId()==BuildingButton.currentId){
-                currentButton=buildingButtons.get(i);
-            }
             //移出時不要有文字
             if(!checkMouseOnButtons()){
                 buildingButtons.get(i).getHintDialog().setHintMessage("");

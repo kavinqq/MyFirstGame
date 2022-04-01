@@ -39,10 +39,9 @@ public class SawMill extends Building{
     protected void init() {
         setId(4)
                 .setName("伐木場")
-                .setBuildTime(1)
+                .setBuildTime(2)
                 .setUpgradeTime(30)
                 .setLevelC(0)
-                .setTechLevel(1)
                 .setTechLevelNeedBuild(1)
                 .setTechLevelNeedUpgrade(2)
                 .setHp(10)

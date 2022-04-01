@@ -1,5 +1,6 @@
 package company.gameobj.background.component;
 
+import company.Global;
 import company.gametest9th.utils.GameKernel;
 import company.gametest9th.utils.Vector;
 
@@ -10,21 +11,20 @@ public class BuildingArea implements GameKernel.GameInterface {
     private ArrayList<ArrayList<BuildingGrid>> buildingGrids;
     private boolean isPreAllNonOnBuildGrid;
 
-    private final int numY=4;
-    private final int numX=7;
-
-
     public BuildingArea(){
         buildingGrids=new ArrayList<>();
 //        buildingGrids=new ArrayList();
 
-        for (int i = 0; i < numY; i++) {
+        for (int i = 0; i < Global.numY; i++) {
             buildingGrids.add(new ArrayList<>());
-            for (int j = 0; j < numX; j++) {
-                if(i==0 || i== numY-1 || j==0 || j==numX-1){
-                    buildingGrids.get(i).add(new BuildingGrid(96+96*5*j/4*2,96+96*5*i/4*2));
+            for (int j = 0; j < Global.numX; j++) {
+                //做方形
+                if(i==0 || i== Global.numY-1 || j==0 || j==Global.numX-1){
+                    //挖掉四角
+                    if(!((i==0 || i==Global.numY-1) && (j==0 || j==Global.numX-1))){
+                        buildingGrids.get(i).add(new BuildingGrid(Global.BUILDING_AREA_X+Global.BUILDING_AREA_DISTANCE_X*j,Global.BUILDING_AREA_Y+Global.BUILDING_AREA_DISTANCE_Y*i));
+                    }
                 }
-
             }
         }
     }

@@ -1,5 +1,6 @@
 package company.gameobj.background.component;
 
+import company.Global;
 import company.controllers.SceneController;
 import company.gameobj.GameObject;
 import company.gametest9th.utils.Path;
@@ -12,8 +13,9 @@ public class BuildingGrid extends GameObject {
     private boolean isOnBuildGrid;
     private boolean isPreOnBuildGrid;
 
+
     public BuildingGrid(int x, int y) {
-        super(x, y,96*6/4,96*6/4);
+        super(x, y, Global.BUILDING_GRID_WIDTH,Global.BUILDING_GRID_HEIGHT);
         img=SceneController.getInstance().imageController().tryGetImage(new Path().img().background().foundation());
     }
 
@@ -29,7 +31,6 @@ public class BuildingGrid extends GameObject {
 
     @Override
     public void paintComponent(Graphics g) {
-
         g.drawImage(img,painter().left(),painter().top(),painter().width(),painter().height(),null);
     }
 

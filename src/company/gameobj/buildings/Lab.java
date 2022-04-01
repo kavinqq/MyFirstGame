@@ -1,8 +1,9 @@
 package company.gameobj.buildings;
 import company.Global;
 import company.gametest9th.utils.Path;
+import oldMain.City;
 
-import company.gameobj.GameObject;
+import java.awt.*;
 
 public class Lab extends Building {
 
@@ -40,7 +41,6 @@ public class Lab extends Building {
                 .setBuildTime(3)
                 .setUpgradeTime(24)
                 .setLevelC(0)
-                .setTechLevel(1)
                 .setTechLevelNeedBuild(1)
                 .setTechLevelNeedUpgrade(1)
                 .setHp(30)
@@ -77,6 +77,27 @@ public class Lab extends Building {
                 super.setGasCostLevelUp(10);
                 super.setLevel(1);
                 break;
+            }
+        }
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        if (getLevel()==0) { //畫出建造中的建築物 !isWorking() && !readyToUpgrade && !isUpgrading
+            g.drawImage(getUnderConstructionImg(), painter().left(), painter().top(), painter().width(), painter().height(), null);
+        //畫出升級中的建築物
+        }else if (getIsTechUpgrading()) {
+            g.drawImage(getUnderConstructionImg(), painter().left(), painter().top(), painter().width(), painter().height(), null);
+            g.drawString("科技升級中", painter().left(), painter().top());
+        } else { //畫出完成的建築物
+            g.drawImage(getImg(), painter().left(), painter().top(), painter().width(), painter().height(), null);
+            //畫出Icon
+            if (isShowIcon()) {
+                //畫出等級
+                g.drawString("目前科技等級:" + City.getTechLevel(), painter().left(), painter().top());
+                for (int i = 0; i < getIcons().size(); i++) {
+                    getIcons().get(i).paint(g);
+                }
             }
         }
     }

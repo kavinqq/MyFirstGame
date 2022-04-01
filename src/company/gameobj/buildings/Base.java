@@ -33,8 +33,7 @@ public class Base extends Building {
                 .setName("主堡")
                 .setBuildTime(1)
                 .setUpgradeTime(30)
-                .setLevelC(0)
-                .setTechLevel(1)
+                .setLevelC(1)  //初始等級為1
                 .setTechLevelNeedUpgrade(2)
                 .setHp(100)
                 .setWoodCostCreate(99)

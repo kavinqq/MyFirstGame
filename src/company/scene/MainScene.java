@@ -12,9 +12,9 @@ import static company.gameobj.BuildingController.*;
 import company.controllers.AudioResourceController;
 import company.gameobj.BuildingController;
 import company.gameobj.Rect;
+import company.gameobj.buildings.Building;
 import company.gameobj.resourceObjs.Steel;
 import company.gameobj.resourceObjs.Tree;
-import company.gameobj.message.HintDialog;
 import company.gameobj.message.ToastController;
 import company.gametest9th.utils.*;
 import company.gameobj.GameObject;
@@ -42,6 +42,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private BuildingOption buildingOption; // 建築物選單
 
     private GameObject currentObj; // 當前操控的物件(單選)
+    private BuildingButton currentButton; //當前操控按鈕
+    private BuildingController.BuildingNode currentBuildNode; //操控當前建築物結點
+
     private List<Human> controlHumans;// 當前操控的物件(多選)
 
     private BoxSelection boxSelection; // 框選模式
@@ -77,6 +80,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private int thisRoundTimePass; //要跳過的時間
 
     private boolean preCanBuild;
+
+
     // 資源
     private List<GameObject> resources;
 
@@ -97,6 +102,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //可建築區
         buildingArea = new BuildingArea();
+
+        currentButton= null;
 
         //主堡
 
@@ -211,8 +218,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         StatusBar.instance().paint(g);
 
         //畫當前按鈕
-        if (buildingOption.getCurrentButton() != null) {
-            buildingOption.getCurrentButton().paint(g);
+        if (currentButton != null) {
+            currentButton.paint(g);
         }
 
         //提示框
@@ -274,10 +281,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         city.update();
 
         //判斷現在有無選取按鈕
-        if (buildingOption.getCurrentButton() != null) {
+        if (currentButton != null) {
 
             //取得現在選取的按鈕 及 建築類型
-            BuildingButton currentButton = buildingOption.getCurrentButton();
             BuildingType type = BuildingType.getBuildingTypeByInt(currentButton.getId());
 
             //點選按鈕時 判斷可否蓋建築物
@@ -301,7 +307,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             }
 
-
             //建造階段
             if (canBuild) {
                 //判斷是否進入可建造區
@@ -311,7 +316,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         Rect greenRect = currentButton.overlapObject(buildingArea.get(i, j));
                         currentButton.setGreenRect(greenRect);
                         if (currentButton.getGreenRect() != null) {
-                            //與蓋好建築物比較回傳給currentButton
+                            //若有蓋好的建築物，將redRects給currentButton 一個
                             for (BuildingType value : values()) {
                                 ArrayList<Rect> redRects = new ArrayList<>();
                                 for (int k = 0; k < value.list().size(); k++) {
@@ -328,7 +333,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
                         //滑鼠放開時，判斷滑鼠放開的上一偵是否在建造區中
-                        if (currentButton.isReleased && buildingArea.get(i, j).isOnBuildGrid() && preCanBuild ) {//
+                        if (currentButton.isReleased && preDragging && buildingArea.get(i, j).isOnBuildGrid() && currentButton.getCanBuild() ) {//
 
 
                             //建造房子
@@ -346,18 +351,18 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             }
             //滑鼠放開瞬間 判斷上一偵是否是拖曳且不再區域內
-            if (currentButton.isReleased && (isPreAllNonBuildGrid || !preCanBuild) && preDragging) {//|| canBuild
+            if (currentButton.isReleased && (isPreAllNonBuildGrid || !currentButton.getCanBuild()) && preDragging) {//
                 ToastController.instance().print("建造-此處不能蓋房子");
             }
 
 
             if (currentButton.getGreenRect() != null && currentButton.getRedRects() != null) {
                 for (int k = 0; k < currentButton.getRedRects().length; k++) {
-                    if (!currentButton.getGreenRect().overlap(currentButton.getRedRects()[k])) {
-                        preCanBuild = true;
-                    } else {
+                    if (currentButton.getGreenRect().overlap(currentButton.getRedRects()[k])) {
                         preCanBuild = false;
                         break;
+                    } else {
+                        preCanBuild = true;
                     }
                 }
             }
@@ -366,12 +371,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
         //升級
-        if (city.getCurrentBuildingNode() != null) {
+        if (currentBuildNode != null) {
             //選取要升級的種類
-            BuildingController.BuildingNode selectBuilding = city.getCurrentBuildingNode();
-            BuildingType type = BuildingType.getBuildingTypeByInt(selectBuilding.getBuilding().getId());
-
-            if ((selectBuilding.getBuilding().getAllUpdateIconsCan())) {
+            BuildingType type = BuildingType.getBuildingTypeByInt(currentBuildNode.getBuilding().getId());
+            if ((currentBuildNode.getBuilding().getAllUpdateIconsCan())) {
 
 
                 if (City.getTechLevel() < type.instance().getTechLevelNeedUpgrade()) {
@@ -384,9 +387,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                     switch (type) {
                         case LAB: {
-                            if (city.isUpgradingTech(selectBuilding)) {
+                            if (city.isUpgradingTech(currentBuildNode)) {
                                 ToastController.instance().print("升級-科技已在升級中，請等待此次升級結束");
                             } else {
+                                currentBuildNode.getBuilding().setTechUpgrading(true);
                                 city.upgradeTechLevel();
                                 ToastController.instance().print("升級-科技開始升級");
                             }
@@ -394,7 +398,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         }
                         case ARSENAL: {
                             //士兵已在升級中，請等待此次升級結束
-                            if (selectBuilding.getCan(0)) {
+                            if (currentBuildNode.getCan(0)) {
                                 if (city.isUpgradingSoldier()) {
                                     ToastController.instance().print("士兵已在升級中，請等待此次升級結束");
                                 } else {
@@ -402,7 +406,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                     ToastController.instance().print("士兵升級中");
                                 }
                             }
-                            if (selectBuilding.getCan(1)) {
+                            if (currentBuildNode.getCan(1)) {
                                 if (city.isUpgradingPlane()) {
                                     ToastController.instance().print("飛機已在升級中");
                                 } else {
@@ -414,18 +418,15 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                             break;
                         }
                         default: {
-                            if (selectBuilding.getBuilding().getIcons().get(0).getCan()) {
-                                city.upgrade(selectBuilding);
+                            if (currentBuildNode.getBuilding().getIcons().get(0).getPressed()) {
+                                city.upgrade(currentBuildNode);
                                 ToastController.instance().print("安排升級中");
                             }
                         }
                     }
                 }
                 //限制按鈕按一次 就變成false;
-                selectBuilding.getBuilding().getIcons().get(0).setCan(false);
-                if (selectBuilding.getBuilding().getIcons().size() == 3) {
-                    selectBuilding.getBuilding().getIcons().get(2).setCan(false);
-                }
+                currentBuildNode.getBuilding().shutAllUpdateIconCan();
             }
         }
 
@@ -790,6 +791,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                     // 把座標丟給citizens 讓他 判斷有沒有村民 符合條件 (BUTTON1 : 左鍵)
                     if (e.getButton() == MouseEvent.BUTTON1) {
+                        //單選 按鈕
+                        currentButton =buildingOption.getCurrentButton(e.getX(),e.getY());
+
+                        currentBuildNode =city.getCuurentBuildingNode(e.getX(),e.getY());
 
                         // 單選 就不能 框選 (擇一)
                         controlHumans.clear();
@@ -834,7 +839,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                 case MOVED: {
                 }
-
             }
         };
     }
