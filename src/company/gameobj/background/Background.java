@@ -38,8 +38,8 @@ public class Background extends GameObject implements GameKernel.GameInterface, 
         //停機坪
         for (int i = 0; i < Global.numY; i++) {
             for (int j = 0; j < Global.numX; j++) {
-                if((i==0 || i==Global.numY-1) && (j==0 || j==Global.numX-1)) {
-                    g.drawImage(tarmac_img, (BUILDING_WIDTH)/2+Global.BUILDING_AREA_X + Global.BUILDING_AREA_DISTANCE_X * j, (BUILDING_HEIGHT)/2+Global.BUILDING_AREA_Y+Global.BUILDING_AREA_DISTANCE_Y * i, BUILDING_WIDTH, BUILDING_HEIGHT, null);
+                if ((i == 0 || i == Global.numY - 1) && (j == 0 || j == Global.numX - 1)) {
+                    g.drawImage(tarmac_img, (BUILDING_WIDTH) / 2 + Global.BUILDING_AREA_X + Global.BUILDING_AREA_DISTANCE_X * j, (BUILDING_HEIGHT) / 2 + Global.BUILDING_AREA_Y + Global.BUILDING_AREA_DISTANCE_Y * i, BUILDING_WIDTH, BUILDING_HEIGHT, null);
                 }
             }
         }
