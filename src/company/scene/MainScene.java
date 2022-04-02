@@ -11,8 +11,8 @@ import static company.gameobj.BuildingController.*;
 
 import company.controllers.AudioResourceController;
 import company.gameobj.BuildingController;
+import company.gameobj.FogOfWar;
 import company.gameobj.Rect;
-import company.gameobj.buildings.Building;
 import company.gameobj.resourceObjs.ResourceObj;
 import company.gameobj.resourceObjs.ResourceSystem;
 import company.gameobj.message.ToastController;
@@ -84,6 +84,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     // 資源
     private ResourceSystem resourceSystem;
 
+    // 戰爭迷霧
+
+    private FogOfWar fogOfWar;
+
 
     @Override
     public void sceneBegin() {
@@ -106,13 +110,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         buildingArea = new BuildingArea();
 
         //當前操控的按鈕
-        currentButton= null;
+        currentButton = null;
 
         //主堡
 
         //base先不刪下面有些東西與base連接
         base = new Base();
-        base.setCenter(LAND_X+(LAND_WIDTH) / 2, SCREEN_Y / 2);
 
         //上一幀是否可建造
         preCanBuild = true;
@@ -149,6 +152,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 資源
         resourceSystem = new ResourceSystem();
+
+        // 迷霧
+        fogOfWar = new FogOfWar();
 //        AudioResourceController.getInstance().loop(new Path().sound().mainSceneBGM(), 2);
     }
 
@@ -161,6 +167,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 背景
         background.paint(g);
+
+        //畫出戰爭迷霧
+        fogOfWar.paint(g);
 
         // 建築物基座
         buildingArea.paint(g);
@@ -211,6 +220,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //畫出城市所有已建造建築物
         city.paint(g);
 
+
         // 狀態欄
         StatusBar.instance().paint(g);
 
@@ -232,7 +242,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         StatusBar.instance().updateResource(city.getResource().getTotalWood(), city.getResource().getTotalSteel(), city.getResource().getTotalGas(), city.getTotalCitizen());
 
         // 處理鏡頭移動
+
         if ((currentMouseX >= SCREEN_WIDTH || currentMouseX <= 8) || (currentMouseY <= 0 || currentMouseY >= SCREEN_HEIGHT - 8)) {
+
 
             // 得到向量 螢幕中心(XY) - 滑鼠的位置(XY) [我沒用絕對值 讓他帶正負值進去]
             Vector vector = new Vector(SCREEN_WIDTH / 2 - currentMouseX, SCREEN_HEIGHT / 2 - currentMouseY);
@@ -260,6 +272,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             // 建築物基座移動
             buildingArea.buildingAreaCameraMove();
+
+            // 迷霧移動
+            fogOfWar.cameraMove();
 
             // Reset 鏡頭移動量
             CAMERA_MOVE_VX = 0;
@@ -327,7 +342,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
                         //滑鼠放開時，判斷滑鼠放開的上一偵是否在建造區中
-                        if (currentButton.isReleased && preDragging && buildingArea.get(i, j).isOnBuildGrid() && currentButton.getCanBuild() ) {//
+                        if (currentButton.isReleased && preDragging && buildingArea.get(i, j).isOnBuildGrid() && currentButton.getCanBuild()) {//
 
 
                             //建造房子
@@ -472,7 +487,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             散開之後沒碰到資源堆,那就會出現沒有和資源物件 collision 的狀況 => 沒辦法觸發採集流程
             所以我先判斷一下目的地是不是資源堆這樣.
             */
-            for (int i = 0 ; i < resourceSystem.size(); i++) {
+            for (int i = 0; i < resourceSystem.size(); i++) {
 
                 // 如果目的地確定是在 資源堆裡面 => 我確定我要派他去採集
                 if (targetX > resourceSystem.get(i).painter().left() && targetX < resourceSystem.get(i).painter().right() && targetY > resourceSystem.get(i).painter().top() && targetY < resourceSystem.get(i).painter().bottom()) {
@@ -708,6 +723,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
+        // 更新迷霧狀況
+        // 先看看有沒有村民碰到了 迷霧
+        for (Human human : city.getCitizens().getAllCitizens()) {
+            fogOfWar.update(human);
+        }
+
         // 時間自然流動
         if (gameDelay.count()) {
             thisRoundTimePass = 1;
@@ -780,9 +801,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     // 把座標丟給citizens 讓他 判斷有沒有村民 符合條件 (BUTTON1 : 左鍵)
                     if (e.getButton() == MouseEvent.BUTTON1) {
                         //單選 按鈕
-                        currentButton =buildingOption.getCurrentButton(e.getX(),e.getY());
+                        currentButton = buildingOption.getCurrentButton(e.getX(), e.getY());
 
-                        currentBuildNode =city.getCuurentBuildingNode(e.getX(),e.getY());
+                        currentBuildNode = city.getCuurentBuildingNode(e.getX(), e.getY());
 
                         // 單選 就不能 框選 (擇一)
                         controlHumans.clear();
@@ -790,7 +811,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         // 現在控製的Obj 換成這個 (現在先檢查所有村民而已)
                         currentObj = city.getCitizens().getCitizen(e.getX(), e.getY());
 
-                        if(currentObj != null){
+                        if (currentObj != null) {
                             AudioResourceController.getInstance().play(new Path().sound().what());
                         }
 
@@ -857,6 +878,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             resourceSystem.resetObjectXY();
 
             buildingArea.buildingAreaResetPosition();
+
+            fogOfWar.resetObjectXY();
 
             Global.resetSumOfCameraMove();
         }

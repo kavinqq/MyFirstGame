@@ -1,9 +1,12 @@
 package company.gameobj.buildings;
 
+import company.Global;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 
 import java.awt.event.MouseEvent;
+
+import static company.Global.*;
 
 public class Base extends Building {
     public static final int BASE_WIDTH = 250;
@@ -12,12 +15,17 @@ public class Base extends Building {
     public Base(int x, int y)
     {
         super(x,y,BASE_WIDTH, BASE_HEIGHT);
+
+        setBuildingOriginalX(Global.SUM_OF_CAMERA_MOVE_VX);
+        setBuildingOriginalY(Global.SUM_OF_CAMERA_MOVE_VY);
         init();
     }
 
     public Base()
     {
-        super(0,0,BASE_WIDTH, BASE_HEIGHT);
+        super(LAND_X+(LAND_WIDTH) / 2 - BASE_WIDTH / 2,SCREEN_Y / 2 - BASE_HEIGHT / 2,BASE_WIDTH, BASE_HEIGHT);
+        setBuildingOriginalX(Global.SUM_OF_CAMERA_MOVE_VX);
+        setBuildingOriginalY(Global.SUM_OF_CAMERA_MOVE_VY);
         init();
     }
 
