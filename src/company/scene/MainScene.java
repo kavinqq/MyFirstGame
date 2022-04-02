@@ -11,8 +11,8 @@ import static company.gameobj.BuildingController.*;
 
 import company.controllers.AudioResourceController;
 import company.gameobj.BuildingController;
+import company.gameobj.FogOfWar;
 import company.gameobj.Rect;
-import company.gameobj.buildings.Building;
 import company.gameobj.resourceObjs.ResourceObj;
 import company.gameobj.resourceObjs.ResourceSystem;
 import company.gameobj.message.ToastController;
@@ -84,6 +84,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     // 資源
     private ResourceSystem resourceSystem;
 
+    // 戰爭迷霧
+
+    private FogOfWar fogOfWar;
+
 
     @Override
     public void sceneBegin() {
@@ -112,7 +116,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //base先不刪下面有些東西與base連接
         base = new Base();
-        base.setCenter(LAND_X+(LAND_WIDTH) / 2, SCREEN_Y / 2);
 
         //上一幀是否可建造
         preCanBuild = true;
@@ -149,6 +152,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 資源
         resourceSystem = new ResourceSystem();
+
+        // 迷霧
+        fogOfWar = new FogOfWar();
 //        AudioResourceController.getInstance().loop(new Path().sound().mainSceneBGM(), 2);
     }
 
@@ -161,6 +167,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 背景
         background.paint(g);
+
+        //畫出戰爭迷霧
+        fogOfWar.paint(g);
 
         // 建築物基座
         buildingArea.paint(g);
@@ -210,6 +219,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //畫出城市所有已建造建築物
         city.paint(g);
+
+
 
         // 狀態欄
         StatusBar.instance().paint(g);
@@ -261,6 +272,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             // 建築物基座移動
             buildingArea.buildingAreaCameraMove();
+
+            // 迷霧移動
+            fogOfWar.cameraMove();
 
             // Reset 鏡頭移動量
             CAMERA_MOVE_VX = 0;
@@ -711,6 +725,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
+        // 更新迷霧狀況
+        // 先看看有沒有村民碰到了 迷霧
+        for(Human human: city.getCitizens().getAllCitizens()){
+            fogOfWar.update(human);
+        }
+
         // 時間自然流動
         if (gameDelay.count()) {
             thisRoundTimePass = 1;
@@ -860,6 +880,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             resourceSystem.resetObjectXY();
 
             buildingArea.buildingAreaResetPosition();
+
+            fogOfWar.resetObjectXY();
 
             Global.resetSumOfCameraMove();
         }
