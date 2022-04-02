@@ -607,13 +607,6 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
             Lab.resetTechUpgradePercent();
         //正在升級 時間未到
         }else if(isUpgradingTech){
-            int count=0;
-            for (int i = 0; i < LAB.list.size(); i++) {
-                //並計算非建造中的建築物
-                if (LAB.list.get(i).building.getLevel()!=0){
-                    count++;
-                }
-            }
             Lab.addPercentTechUpgrade(canUseNum(LAB));
         }
 
@@ -631,7 +624,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
 
 
         //飛機等級升級
-        if (isUpgradingPlane && Arsenal.getPlanePercent() >= 0) {
+        if (isUpgradingPlane && Arsenal.getPlanePercent() == 1) {
             freeArsenalNum++;
             isUpgradingPlane = false;
             Arsenal.setPlaneLevelUpgrading(false);
