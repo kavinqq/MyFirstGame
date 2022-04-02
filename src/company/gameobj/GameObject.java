@@ -167,6 +167,7 @@ public abstract class GameObject implements GameKernel.GameInterface {
         return painter;
     }
 
+    //TODO: 行走邊界還沒搞定QQ 2022/04/02 19:20
 
     /**
      * 如果碰到視窗頂端
@@ -205,7 +206,12 @@ public abstract class GameObject implements GameKernel.GameInterface {
      */
 
     public boolean touchRight() {
-        return detectRange.right() >= Global.MAP_RIGHT;
+
+        if(Global.SUM_OF_CAMERA_MOVE_VX < 0){
+            return detectRange.right() >= (Global.SUM_OF_CAMERA_MOVE_VX * -1) + Global.SCREEN_X - Global.BUILDING_OPTION_WIDTH;
+        } else {
+            return detectRange.right() >= Global.SCREEN_X - Global.BUILDING_OPTION_WIDTH;
+        }
     }
 
     public void shutDetectRange() {

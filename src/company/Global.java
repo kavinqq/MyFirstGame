@@ -83,14 +83,14 @@ public class Global {
     //建築區起始位置
     public static final int BUILDING_AREA_X = BUILDING_WIDTH;
     public static final int BUILDING_AREA_Y = BUILDING_HEIGHT;
-    public static final int BUILDING_AREA_DISTANCE_X= BUILDING_WIDTH*5/2;
-    public static final int BUILDING_AREA_DISTANCE_Y = BUILDING_HEIGHT*5/2;
+    public static final int BUILDING_AREA_DISTANCE_X = BUILDING_WIDTH * 5 / 2;
+    public static final int BUILDING_AREA_DISTANCE_Y = BUILDING_HEIGHT * 5 / 2;
 
-    public static final int BUILDING_GRID_WIDTH= BUILDING_WIDTH*3/2;
-    public static final int BUILDING_GRID_HEIGHT= BUILDING_WIDTH*3/2;
+    public static final int BUILDING_GRID_WIDTH = BUILDING_WIDTH * 3 / 2;
+    public static final int BUILDING_GRID_HEIGHT = BUILDING_WIDTH * 3 / 2;
 
-    public final static int numY=4;
-    public final static int numX=7;
+    public final static int numY = 4;
+    public final static int numX = 7;
 
 
     //Icon相關設定
@@ -118,7 +118,7 @@ public class Global {
     public static final int ESC = 6;
 
     // 鏡頭移動的速度
-    public static final int CAMERA_SPEED = 8;
+    public static final int CAMERA_SPEED = 15;
 
     // 鏡頭移動量 X 跟 Y
     public static int CAMERA_MOVE_VX = 0;
@@ -127,6 +127,7 @@ public class Global {
     // 鏡頭移動總量 X 跟 Y
     public static int SUM_OF_CAMERA_MOVE_VX = 0;
     public static int SUM_OF_CAMERA_MOVE_VY = 0;
+
 
     /**
      * 輸出範圍內的隨機數字
@@ -152,8 +153,17 @@ public class Global {
      */
 
     public static void setCameraMoveVX(int vx) {
-        CAMERA_MOVE_VX = vx;
-        SUM_OF_CAMERA_MOVE_VX += vx;
+
+        CAMERA_MOVE_VX = vx; // 這次的鏡頭X移動量
+        SUM_OF_CAMERA_MOVE_VX += vx;// 目前為止的鏡頭X移動量[尚未按下Space reset前]
+
+        if (SUM_OF_CAMERA_MOVE_VX * -1 <= (MAP_LEFT + 100)) { // 如果鏡頭向左移動量 已經到了左邊界 無法前進
+            SUM_OF_CAMERA_MOVE_VX -= vx;// 把加的移動量 減回來
+            CAMERA_MOVE_VX = 0;// 這次X移動量 = 0
+        } else if (SUM_OF_CAMERA_MOVE_VX * -1 >= (MAP_RIGHT - (SCREEN_X - BUILDING_OPTION_WIDTH) - 100)) { // 如果鏡頭向右移動量 已經到了右邊界 無法前進
+            SUM_OF_CAMERA_MOVE_VX -= vx;// 把加的移動量 減回來
+            CAMERA_MOVE_VX = 0;// 這次X移動量 = 0
+        }
     }
 
     /**
@@ -163,11 +173,24 @@ public class Global {
      */
 
     public static void setCameraMoveVY(int vy) {
-        CAMERA_MOVE_VY = vy;
-        SUM_OF_CAMERA_MOVE_VY += vy;
+        CAMERA_MOVE_VY = vy; // 這次的鏡頭Y移動量
+        SUM_OF_CAMERA_MOVE_VY += vy;// 目前為止的鏡頭Y移動量[尚未按下Space reset前]
+
+        if (SUM_OF_CAMERA_MOVE_VY * -1 <= (MAP_TOP + 100)) {// 如果鏡頭向上移動量 已經到了上邊界 無法前進
+
+            SUM_OF_CAMERA_MOVE_VY -= vy; // 把加的移動量 減回來
+            CAMERA_MOVE_VY = 0;// 這次Y移動量 = 0
+        } else if (SUM_OF_CAMERA_MOVE_VY * -1 >= (MAP_BOTTOM - SCREEN_Y - 100)) {// 如果鏡頭向下移動量 已經到下邊界 無法前進(向下移動量極限 = 整當地圖的下邊界 - 視窗下邊界)
+
+            SUM_OF_CAMERA_MOVE_VY -= vy;// 把加的移動量 減回來
+            CAMERA_MOVE_VY = 0;// 這次Y移動量 = 0
+        }
     }
 
-    public static void resetSumOfCameraMove(){
+    /**
+     * 重置目前鏡頭的移動量總和
+     */
+    public static void resetSumOfCameraMove() {
         SUM_OF_CAMERA_MOVE_VX = 0;
         SUM_OF_CAMERA_MOVE_VY = 0;
     }
