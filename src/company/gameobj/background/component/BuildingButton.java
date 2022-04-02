@@ -71,6 +71,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     public BuildingButton(int x, int y,int id) {
         super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
         hintDialog=new HintDialog();
+
         canDragging=false;
         this.id=id;
         ox=x;
@@ -160,6 +161,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
 
     @Override
     public void paintComponent(Graphics g) {
+        //拖曳中的按鈕
         if(isDragging){
             //最底層紅
             g.setColor(Color.red);
@@ -190,12 +192,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
 
     @Override
     public void update() {
-        hintDialog.update();
-        //印出建築物提示文字
-        if(isMoveOnButton) {
-            type = BuildingType.getBuildingTypeByInt(getId());
-            hintDialog.setHintMessage(type.instance().getName());
-        }
+
     }
 
     @Override

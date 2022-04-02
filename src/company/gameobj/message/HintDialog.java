@@ -9,7 +9,10 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class HintDialog implements GameKernel.GameInterface, CommandSolver.MouseCommandListener {
-
+    enum State{
+        ABSOLUTE, //絕對座標
+        RELATIVE; //相對座標
+    }
 
     //提示
     private String message;
@@ -17,13 +20,14 @@ public class HintDialog implements GameKernel.GameInterface, CommandSolver.Mouse
     private int mouseX;
     //y座標
     private int mouseY;
-    //toast的字串
-    private String toastString;
-    //計算外面傳入toast的次數
-
-
+    //位移座標
+    private int x;
+    private int y;
+    //目前狀態
+    private State status;
 
     public HintDialog() {
+        y=-30;
         message = "";
     }
 
@@ -32,6 +36,18 @@ public class HintDialog implements GameKernel.GameInterface, CommandSolver.Mouse
         message = hintMessage;
     }
 
+    //設置要位移的位置
+    public void setHintAbsolutePosition(int x,int y) {
+        status=State.ABSOLUTE;
+        this.x=x;
+        this.y=y;
+    }
+
+    public void setHintRelativePosition(int x,int y){
+        status=State.RELATIVE;
+        this.x=x;
+        this.y=y;
+    }
 
     @Override
     public void paint(Graphics g) {
@@ -41,7 +57,11 @@ public class HintDialog implements GameKernel.GameInterface, CommandSolver.Mouse
         if (message == null) {
             message = "";
         }
-        g.drawString(message, mouseX, mouseY-30);
+        if(status==State.ABSOLUTE){
+            g.drawString(message, x, y);
+        } else if(status==State.RELATIVE){
+            g.drawString(message, mouseX+x, mouseY+y);
+        }
         //畫toast;
         g.setColor(Color.black);
     }
@@ -57,4 +77,6 @@ public class HintDialog implements GameKernel.GameInterface, CommandSolver.Mouse
         mouseX = e.getX();
         mouseY = e.getY();
     }
+
+
 }

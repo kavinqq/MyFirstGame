@@ -756,7 +756,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     public void getDamage(int damage) {
         this.hp -= damage;
-        if (this.hp <= 0) {
+        if (this.hp < 0) {
             this.hp = 0;
         }
     }
