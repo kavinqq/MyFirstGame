@@ -229,6 +229,8 @@ public class Path {
 
             public String buttonFoundation(){ return this + "/buttonFoundation.png";}
 
+            public String buildingOptionBg(){return this + "/sea.png";}
+
             public String road(){ return this + "/road1.png";}
 
             public String area(){return this +"/area.jpg";}

@@ -57,9 +57,9 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     private boolean isPressed;
     //拖曳且有物件
     private boolean isDragging;
-
+    //按下且有物件
     private boolean isPressing;
-
+    //外部控制 若按下是不能建造，則不能拖曳
     private boolean canDragging;
 
     private HintDialog hintDialog;
@@ -110,7 +110,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     public boolean isMoveOnButton(){
         return isMoveOnButton;
     }
-
 
     public boolean isDragging() {
         return isDragging;

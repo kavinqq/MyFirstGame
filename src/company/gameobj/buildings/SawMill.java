@@ -12,7 +12,7 @@ public class SawMill extends Building{
     public SawMill(int x, int y) {
         super(x, y);
         init();
-        getIcons().add(new UpGradeIcon(x+ 3*(Global.BUILDING_ICON_WIDTH*getIcons().size()-1)/2,y,"升級"+getName()));
+        getIcons().add(new UpGradeIcon(x,y,"升級"+getName()));
     }
 
     public SawMill() {

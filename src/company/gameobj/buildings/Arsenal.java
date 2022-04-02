@@ -29,8 +29,8 @@ public class Arsenal extends Building {
         super(x, y);
 
         init();
-        getIcons().add(new UpGradeIcon(x+ 3*(Global.BUILDING_ICON_WIDTH*getIcons().size()-1)/2,y,"升級士兵"));
-        getIcons().add(new UpGradeIcon(x+ 3*(Global.BUILDING_ICON_WIDTH*getIcons().size()-1)/2,y,"升級飛機"));
+        getIcons().add(new UpGradeIcon(x,y,"升級士兵"));
+        getIcons().add(new UpGradeIcon(x+ x+ painter().width()-Global.BUILDING_ICON_WIDTH*getIcons().size(),y,"升級飛機"));
         }
 
     @Override

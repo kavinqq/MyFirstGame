@@ -61,6 +61,7 @@ public class Global {
 
     //選單大小
     public static final int BUILDING_OPTION_WIDTH = 150;
+    public static final int BUILDING_OPTION_HEIGHT = WINDOW_HEIGHT-STATUS_BAR_HEIGHT;
     public static final int OPTION_GAP_Y = 0;
     public static final int OPTION_GAP_X = (BUILDING_OPTION_WIDTH - FOUNDATION_WIDTH) / 2;
     public static final int BUILDING_OPTION_X = WINDOW_WIDTH - BUILDING_OPTION_WIDTH;
@@ -77,8 +78,9 @@ public class Global {
     public static final int BUILDING_HEIGHT = 96;
 
     //按鈕基座與建築物差
-    public static final int DIV_GAP_X = (FOUNDATION_WIDTH - BUILDING_WIDTH) / 2;
-    public static final int DIV_GAP_Y = (FOUNDATION_HEIGHT - BUILDING_HEIGHT) / 2;
+    public static final int FB_DIV_GAP_X = (FOUNDATION_WIDTH - BUILDING_WIDTH) / 2;
+    public static final int FB_DIV_GAP_Y = (FOUNDATION_HEIGHT - BUILDING_HEIGHT) / 2;
+
 
     //建築區起始位置
     public static final int BUILDING_AREA_X = BUILDING_WIDTH;
