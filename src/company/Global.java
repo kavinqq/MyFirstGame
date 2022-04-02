@@ -171,7 +171,7 @@ public class Global {
         if (SUM_OF_CAMERA_MOVE_VX * -1 <= (MAP_LEFT + 100)) { // 如果鏡頭向左移動量 已經到了左邊界 無法前進
             SUM_OF_CAMERA_MOVE_VX -= vx;// 把加的移動量 減回來
             CAMERA_MOVE_VX = 0;// 這次X移動量 = 0
-        } else if (SUM_OF_CAMERA_MOVE_VX * -1 >= (MAP_RIGHT - (SCREEN_X - BUILDING_OPTION_WIDTH) - 100)) { // 如果鏡頭向右移動量 已經到了右邊界 無法前進
+        } else if (SUM_OF_CAMERA_MOVE_VX * -1 >= (MAP_RIGHT - (SCREEN_WIDTH - BUILDING_OPTION_WIDTH) - 100)) { // 如果鏡頭向右移動量 已經到了右邊界 無法前進
             SUM_OF_CAMERA_MOVE_VX -= vx;// 把加的移動量 減回來
             CAMERA_MOVE_VX = 0;// 這次X移動量 = 0
         }
@@ -191,7 +191,7 @@ public class Global {
 
             SUM_OF_CAMERA_MOVE_VY -= vy; // 把加的移動量 減回來
             CAMERA_MOVE_VY = 0;// 這次Y移動量 = 0
-        } else if (SUM_OF_CAMERA_MOVE_VY * -1 >= (MAP_BOTTOM - SCREEN_Y - 100)) {// 如果鏡頭向下移動量 已經到下邊界 無法前進(向下移動量極限 = 整當地圖的下邊界 - 視窗下邊界)
+        } else if (SUM_OF_CAMERA_MOVE_VY * -1 >= (MAP_BOTTOM - SCREEN_HEIGHT - 100)) {// 如果鏡頭向下移動量 已經到下邊界 無法前進(向下移動量極限 = 整當地圖的下邊界 - 視窗下邊界)
 
             SUM_OF_CAMERA_MOVE_VY -= vy;// 把加的移動量 減回來
             CAMERA_MOVE_VY = 0;// 這次Y移動量 = 0

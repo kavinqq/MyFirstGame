@@ -208,9 +208,9 @@ public abstract class GameObject implements GameKernel.GameInterface {
     public boolean touchRight() {
 
         if(Global.SUM_OF_CAMERA_MOVE_VX < 0){
-            return detectRange.right() >= (Global.SUM_OF_CAMERA_MOVE_VX * -1) + Global.SCREEN_X - Global.BUILDING_OPTION_WIDTH;
+            return detectRange.right() >= (Global.SUM_OF_CAMERA_MOVE_VX * -1) + Global.SCREEN_WIDTH - Global.BUILDING_OPTION_WIDTH;
         } else {
-            return detectRange.right() >= Global.SCREEN_X - Global.BUILDING_OPTION_WIDTH;
+            return detectRange.right() >= Global.SCREEN_WIDTH - Global.BUILDING_OPTION_WIDTH;
         }
     }
 

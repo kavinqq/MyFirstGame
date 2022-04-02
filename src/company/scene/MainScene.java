@@ -713,7 +713,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 case DOWN: {
                     if (citizen.touchBottom()) {
                         // 把人物移動回來 與邊界切齊
-                        citizen.translateY(-1 * (citizen.painter().bottom() - SCREEN_Y));
+                        citizen.translateY(-1 * (citizen.painter().bottom() - SCREEN_HEIGHT));
 
                         // 人物停止移動
                         citizen.stop();

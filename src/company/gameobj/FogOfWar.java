@@ -43,7 +43,7 @@ public class FogOfWar {
         // 加入迷霧
         for (int fogY = MAP_TOP; fogY < MAP_BOTTOM; fogY += 150) {
             for (int fogX = MAP_LEFT; fogX < MAP_RIGHT; fogX += 150) {
-                if (!(fogX >= 0 && fogX <= SCREEN_X && fogY >= 0 && fogY <= SCREEN_Y)) {
+                if (!(fogX >= 0 && fogX <= SCREEN_WIDTH && fogY >= 0 && fogY <= SCREEN_HEIGHT)) {
                     fogs.add(new Fog(fogX, fogY));
                 }
             }

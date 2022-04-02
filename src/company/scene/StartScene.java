@@ -28,7 +28,7 @@ public class StartScene extends Scene{
     private final int CHOICE_WIDTH =  200;
     private final int CHOICE_HEIGHT = 50;
     private final int CHOICE_GAP = 50;
-    private final int CHOICE_Y_DEFAULT = Global.SCREEN_Y / 2 - MENU_HEIGHT / 2;
+    private final int CHOICE_Y_DEFAULT = Global.SCREEN_HEIGHT / 2 - MENU_HEIGHT / 2;
     private final Color CHOICE_FILL_COLOR  = Color.PINK;
     private final Color CHOICE_HOVER_COLOR = Color.GREEN;
 

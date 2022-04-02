@@ -23,7 +23,7 @@ public class Base extends Building {
 
     public Base()
     {
-        super(LAND_X+(LAND_WIDTH) / 2 - BASE_WIDTH / 2,SCREEN_Y / 2 - BASE_HEIGHT / 2,BASE_WIDTH, BASE_HEIGHT);
+        super(LAND_X+(LAND_WIDTH) / 2 - BASE_WIDTH / 2,SCREEN_HEIGHT / 2 - BASE_HEIGHT / 2,BASE_WIDTH, BASE_HEIGHT);
         setBuildingOriginalX(Global.SUM_OF_CAMERA_MOVE_VX);
         setBuildingOriginalY(Global.SUM_OF_CAMERA_MOVE_VY);
         init();
