@@ -3,7 +3,6 @@ package company.gameobj;
 
 import company.gameobj.buildings.Building;
 import company.gameobj.buildings.*;
-import company.gameobj.creature.human.Citizen;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
 import oldMain.City;
@@ -58,7 +57,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
      */
     private boolean isUpgradingPlane;
     /**
-     * 是否已在升級科技
+     * 是否已在升級科技 所有科技院共同共用
      */
     private boolean isUpgradingTech;
     /**
@@ -430,6 +429,11 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
                 if ((node.building instanceof Arsenal)) {
                     freeArsenalNum++;
                 }
+                //建造完成也要加血量
+                node.building.addHpPercent();
+                //隨著時間建造物加血量
+            }else if(node.buildEndTime > City.getGameTime()){
+                node.building.addHpPercent();
             }
         }
         return sum;
@@ -674,6 +678,11 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
                 node.building.setReadyToUpgrade(true);
                 freeLabNum++; //釋放研究所資源
                 sum++;
+                //完成後升級進度條歸0
+                node.building.resetUpgradePercent();
+            }else if(node.upgradeEndTime>City.getGameTime()){
+                //增加升級進度條
+                node.building.addUpgradePercent();
             }
         }
         return sum;
@@ -1301,4 +1310,5 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         }
         return true;
     }
+
 }

@@ -34,7 +34,7 @@ public class Background extends GameObject implements GameKernel.GameInterface, 
     @Override
     public void paintComponent(Graphics g) {
         //背景
-        g.drawImage(bg_img, painter().left(), painter().top(), SCREEN_X, SCREEN_Y, null);
+        g.drawImage(bg_img, painter().left(), painter().top(), SCREEN_WIDTH, SCREEN_HEIGHT, null);
         //停機坪
         for (int i = 0; i < Global.numY; i++) {
             for (int j = 0; j < Global.numX; j++) {

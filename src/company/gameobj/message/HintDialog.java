@@ -1,6 +1,7 @@
 package company.gameobj.message;
 
 
+import company.Global;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
 
@@ -36,7 +37,7 @@ public class HintDialog implements GameKernel.GameInterface, CommandSolver.Mouse
     public void paint(Graphics g) {
         //畫滑鼠移到的字
         g.setColor(Color.white);
-        g.setFont(new Font("Dialog", Font.BOLD, 25));
+        g.setFont(new Font("Dialog", Font.BOLD, Global.FONT_SIZE));
         if (message == null) {
             message = "";
         }

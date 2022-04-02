@@ -97,7 +97,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         controlHumans = new ArrayList<>();
 
         //背景
-        background = new Background(0, 0, SCREEN_X, SCREEN_Y);
+        background = new Background(SCREEN_X, SCREEN_Y, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         //建築物選單
         buildingOption = new BuildingOption();
@@ -233,10 +233,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         StatusBar.instance().updateResource(city.getResource().getTotalWood(), city.getResource().getTotalSteel(), city.getResource().getTotalGas(), city.getTotalCitizen());
 
         // 處理鏡頭移動
-        if ((currentMouseX >= SCREEN_X || currentMouseX <= 8) || (currentMouseY <= 0 || currentMouseY >= SCREEN_Y - 8)) {
+        if ((currentMouseX >= SCREEN_WIDTH || currentMouseX <= 8) || (currentMouseY <= 0 || currentMouseY >= SCREEN_HEIGHT - 8)) {
 
             // 得到向量 螢幕中心(XY) - 滑鼠的位置(XY) [我沒用絕對值 讓他帶正負值進去]
-            Vector vector = new Vector(SCREEN_X / 2 - currentMouseX, SCREEN_Y / 2 - currentMouseY);
+            Vector vector = new Vector(SCREEN_WIDTH / 2 - currentMouseX, SCREEN_HEIGHT / 2 - currentMouseY);
 
             // 向量換算成 單位向量
             vector = vector.normalize();
@@ -370,8 +370,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             //選取要升級的種類
             BuildingType type = BuildingType.getBuildingTypeByInt(currentBuildNode.getBuilding().getId());
             if ((currentBuildNode.getBuilding().getAllUpdateIconsCan())) {
-
-
                 if (City.getTechLevel() < type.instance().getTechLevelNeedUpgrade()) {
                     ToastController.instance().print("升級-科技等級不足");
 
@@ -663,7 +661,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     if (citizen.touchRight()) {
 
                         // 把人物移動回來 與邊界切齊
-                        citizen.translateX(-1 * (citizen.painter().right() - SCREEN_X));
+                        citizen.translateX(-1 * (citizen.painter().right() - SCREEN_WIDTH));
 
                         // 人物停止移動
                         citizen.stop();

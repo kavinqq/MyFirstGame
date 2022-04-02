@@ -24,7 +24,7 @@ public class Lab extends Building {
     public Lab(int x, int y) {
         super(x, y);
         init();
-        getIcons().add(new UpGradeIcon(x,y,"升級科技等級"));
+        getIcons().add(new UpGradeIcon(x,y+painter().height()-Global.BUILDING_ICON_HEIGHT,"升級科技等級"));
 
     }
 
@@ -35,11 +35,10 @@ public class Lab extends Building {
     }
     //初始化
     protected void init(){
-
         setId(2)
                 .setName("研究所")
                 .setBuildTime(3)
-                .setUpgradeTime(24)
+                .setUpgradeTime(3)
                 .setLevelC(0)
                 .setTechLevelNeedBuild(1)
                 .setTechLevelNeedUpgrade(1)

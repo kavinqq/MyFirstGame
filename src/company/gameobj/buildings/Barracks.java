@@ -22,8 +22,8 @@ public class Barracks extends Building{
     public Barracks(int x, int y) {
         super(x, y);
         init();
-        getIcons().add(new UpGradeIcon(x,y,"升級軍營"));
-        getIcons().add(new WorkingIcon(x+ painter().width()-Global.BUILDING_ICON_WIDTH*getIcons().size(),y,"士兵"));
+        getIcons().add(new UpGradeIcon(x,y+painter().height()-Global.BUILDING_ICON_HEIGHT,"升級軍營"));
+        getIcons().add(new WorkingIcon(x+ painter().width()-Global.BUILDING_ICON_WIDTH*getIcons().size(),y+painter().height()-Global.BUILDING_ICON_HEIGHT,"士兵"));
     }
 
     public Barracks() {

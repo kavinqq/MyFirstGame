@@ -8,9 +8,8 @@ public class House extends Building {
     public House(int x, int y) {
         super(x, y);
         init();
-        getIcons().add(new UpGradeIcon(x,y,"升級房屋"));
-        getIcons().add(new WorkingIcon(x+ painter().width()-Global.BUILDING_ICON_WIDTH*getIcons().size(),y,"市民"));
-
+        getIcons().add(new UpGradeIcon(x,y+painter().height()-Global.BUILDING_ICON_HEIGHT,"升級房屋"));
+        getIcons().add(new WorkingIcon(x+ painter().width()-Global.BUILDING_ICON_WIDTH*getIcons().size(),y+painter().height()-Global.BUILDING_ICON_HEIGHT,"市民"));
     }
 
     public House() {
@@ -40,11 +39,11 @@ public class House extends Building {
     protected void init() {
         setId(1)
                 .setName("房屋")
-                .setBuildTime(1)
-                .setUpgradeTime(30)
+                .setBuildTime(2)
+                .setUpgradeTime(3)
                 .setLevelC(0)
                 .setTechLevelNeedBuild(1)
-                .setTechLevelNeedUpgrade(2)
+                .setTechLevelNeedUpgrade(1)
                 .setHp(10)
                 .setWoodCostCreate(10)
                 .setSteelCostCreate(0)

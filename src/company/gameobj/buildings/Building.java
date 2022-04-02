@@ -21,7 +21,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         UPGRADING;
     }
 
-//    public Image getUnderConstructionImg(){
+    //    public Image getUnderConstructionImg(){
 //        return underConstructionImg;
 //    }
 //
@@ -46,22 +46,27 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             hintDialog.setHintMessage(message);
             isPressed = false;
         }
+
         //取得點擊
         public boolean getPressed() {
             return isPressed;
         }
+
         //關閉點擊狀態
         public void setPressed(boolean bool) {
             isPressed = bool;
         }
+
         //設置訊息內容
         protected void setMessage(String message) {
             hintDialog.setHintMessage(message);
         }
+
         //取得是否顯示訊息
         protected boolean isShowMessage() {
             return isShowMessage;
         }
+
         //得到對話框類
         protected HintDialog getHintDialog() {
             return hintDialog;
@@ -73,7 +78,6 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             if (isShowMessage) {
                 hintDialog.paint(g);
             }
-
         }
 
         @Override
@@ -177,7 +181,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
             super.mouseTrig(e, state, trigTime);
             switch (state) {
-                case PRESSED : {
+                case PRESSED: {
                     if (isEntered(e.getX(), e.getY())) {
                         isWorking = !isWorking;
                     }
@@ -188,6 +192,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     private ArrayList<Icon> icons;
     private Image img;
+
 
     private int woodRequired;
     private int steelRequired;
@@ -251,8 +256,16 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
      * 建築血量
      */
     private int hp;
+    //當前hp
+    private int currentHp;
+    //血量百分比
+    private float percentHp;
+    //升級進度條百分比
+    private float percentUpgrade;
     //科技等級是否在升級
     private boolean isTechUpgrading;
+    //文字高度
+    private int showStringHeight;
 
     /**
      * 是否要準備要升級了
@@ -310,6 +323,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     /**
      * 視覺化後都用這個
+     *
      * @param x 建築物的left
      * @param y 建築物的top
      */
@@ -343,6 +357,8 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
         underConstructionImg = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().ingBuild());
 
+        showStringHeight = 20;
+
         icons = new ArrayList<>();
     }
 
@@ -351,16 +367,17 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     }
 
     //設定是否升級
-    public void setTechUpgrading(boolean isTechUpgrading){
-        this.isTechUpgrading=isTechUpgrading;
+    public void setTechUpgrading(boolean isTechUpgrading) {
+        this.isTechUpgrading = isTechUpgrading;
     }
 
-    public boolean getIsTechUpgrading(){
+    public boolean getIsTechUpgrading() {
         return isTechUpgrading;
     }
 
     /**
      * set給子類建構用
+     *
      * @param id
      * @return
      */
@@ -368,26 +385,31 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         Building.this.id = id;
         return this;
     }
+
     //設定給子類用
     protected Building setName(String name) {
         Building.this.name = name;
         return this;
     }
+
     //設定給子類用
     protected Building setBuildTime(int buildTime) {
         Building.this.buildTime = buildTime;
         return this;
     }
+
     //設定給子類用
     protected Building setTechLevelNeedBuild(int buildTime) {
         Building.this.techLevelNeedBuild = buildTime;
         return this;
     }
+
     //設定給子類用
     protected Building setUpgradeTime(int upgradeTime) {
         Building.this.upgradeTime = upgradeTime;
         return this;
     }
+
     //設定給子類用
     protected Building setTechLevelNeedUpgrade(int needTechLevel) {
         Building.this.techLevelNeedUpgrade = needTechLevel;
@@ -399,41 +421,49 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         Building.this.level = level;
         return this;
     }
+
     //設定給子類用
     protected Building setHp(int hp) {
         Building.this.hp = hp;
         return this;
     }
+
     //設定給子類用
     protected Building setWoodCostCreate(int woodCostCreate) {
         Building.this.woodCostCreate = woodCostCreate;
         return this;
     }
+
     //設定給子類用
     protected Building setSteelCostCreate(int steelCostCreate) {
         Building.this.steelCostCreate = steelCostCreate;
         return this;
     }
+
     //設定給子類用
     protected Building setWoodCostLevelUpC(int woodCostLevelUp) {
         Building.this.woodCostLevelUp = woodCostLevelUp;
         return this;
     }
+
     //設定給子類用
     protected Building setSteelCostLevelUpC(int steelCostLevelUp) {
         Building.this.steelCostLevelUp = steelCostLevelUp;
         return this;
     }
+
     //設定給子類用
     protected Building setGasCostCreate(int gasCostCreate) {
         Building.this.gasCostCreate = gasCostCreate;
         return this;
     }
+
     //設定給子類用
     protected Building setGasCostLevelup(int gasCostLevelup) {
         Building.this.gasCostLevelUp = gasCostLevelUp;
         return this;
     }
+
     //設定給子類用
     protected Building setImgPath(String path) {
         Building.this.imgPath = path;
@@ -441,12 +471,12 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     }
 
     //取得施工中圖片
-    public Image getUnderConstructionImg(){
+    public Image getUnderConstructionImg() {
         return underConstructionImg;
     }
 
     //取得建築物圖片
-    public Image getImg(){
+    public Image getImg() {
         return img;
     }
 
@@ -700,6 +730,26 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         return hp;
     }
 
+    //換成血量百分比
+    public void addHpPercent() {
+        percentHp += (double) 1 / buildTime ;
+        if(percentHp>100){
+            percentHp=100;
+        }
+    }
+
+    //換成升級百分比
+    public void addUpgradePercent() {
+        percentUpgrade += (double) 1 / upgradeTime ;
+        if(percentUpgrade>100){
+            percentUpgrade=100;
+        }
+    }
+
+    //升級完後下一次升級從0開始
+    public void resetUpgradePercent(){
+        percentUpgrade=0;
+    }
 
     public void setGasCostLevelUp(int gasCostLevelUp) {
         this.gasCostLevelUp = gasCostLevelUp;
@@ -711,6 +761,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             this.hp = 0;
         }
     }
+
     //取得所有update的是否被點選的
     public boolean getAllUpdateIconsCan() {
         for (int i = 0; i < icons.size(); i++) {
@@ -724,7 +775,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         return false;
     }
 
-    public void shutAllUpdateIconCan(){
+    public void shutAllUpdateIconCan() {
         for (int i = 0; i < icons.size(); i++) {
             if (icons.get(i) instanceof WorkingIcon) {
                 continue;
@@ -763,23 +814,34 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
 
     private boolean isAddResouse;
+
     @Override
     public void paintComponent(Graphics g) {
-        if (level==0) { //畫出建造中的建築物 !isWorking() && !readyToUpgrade && !isUpgrading
+        g.setColor(Color.red);
+        //血量條
+        g.fillRect(painter().left(), painter().bottom(), (int) ((percentHp) * painter().width()), Global.HP_HEIGHT);
+        //升級中及完成顯示白色
+        g.setColor(Color.white);
+
+
+        if (level == 0) { //畫出建造中的建築物 !isWorking() && !readyToUpgrade && !isUpgrading
             g.drawImage(underConstructionImg, painter().left(), painter().top(), painter().width(), painter().height(), null);
 
         } else if (readyToUpgrade && !isUpgrading) {  //畫出完成的建築物
             g.drawImage(img, painter().left(), painter().top(), painter().width(), painter().height(), null);
             //畫出Icon
             if (isShowIcon) {
+
+                g.setFont(new Font("Dialog", Font.BOLD, Global.FONT_SIZE));
                 //畫出等級
-                g.drawString("目前等級" + level, painter().left(), painter().top());
+                g.drawString("目前等級" + level, painter().width() / 2 + painter().left() - Global.FONT_SIZE * 2, painter().top() - showStringHeight);
                 for (int i = 0; i < icons.size(); i++) {
                     icons.get(i).paint(g);
                 }
+
             }
-            if(isAddResouse){
-                isAddResouse=false;
+            if (isAddResouse) {
+                isAddResouse = false;
                 Citizen.getMaxCarrySteel();
 
             }
@@ -787,9 +849,13 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             //畫出升級中
         } else if (isUpgrading && !readyToUpgrade) {
             g.drawImage(underConstructionImg, painter().left(), painter().top(), painter().width(), painter().height(), null);
-            g.drawString("升級中", painter().left(), painter().top());
-            isAddResouse=true;
+            g.drawString("升級中", painter().width() / 2 + painter().left() - Global.FONT_SIZE * 2, painter().top() - showStringHeight);
+            isAddResouse = true;
+            //升級進度條
+            g.setColor(Color.yellow);
+            g.fillRect(painter().left(), painter().bottom()+Global.HP_HEIGHT+2, (int) ((percentUpgrade) * painter().width()), Global.HP_HEIGHT);
         }
+        g.setColor(Color.black);
     }
 
 
@@ -810,6 +876,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
         switch (state) {
             case PRESSED:
+                //建造完成showIcon
                 if (readyToUpgrade && !isUpgrading && isEntered(e.getX(), e.getY())) {
                     isShowIcon = true;
                 } else {

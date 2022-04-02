@@ -16,15 +16,20 @@ class Toast implements GameKernel.GameInterface {//每一個toast為獨立 因�
 
     //出現幾秒
     private Delay toastDelay;
+
     //延緩秒數
     private int delaySecond;
+
     //是否可以清除自己
     private boolean isClearSelf;
+
     //控制文字上升速度沒有double
     private int countSpeed;
     private int count;
+
     //字體大小
     private int fontSize;
+
     public Toast(String string){
         toastMessage = string;
 
@@ -35,16 +40,17 @@ class Toast implements GameKernel.GameInterface {//每一個toast為獨立 因�
         toastDelay.loop();
 
         isClearSelf =false;
-        fontSize=25;
-        toastX = Global.WINDOW_WIDTH/2-string.length()*fontSize/2;
+        toastX = Global.WINDOW_WIDTH/2-string.length()*Global.FONT_SIZE/2;
         toastY = Global.WINDOW_HEIGHT*3/4;
 
     }
 
+    //清除自己
     public boolean isClearSelf(){
         return isClearSelf;
     }
 
+    //往上移動
     private void toastMove() {
         toastY=toastY-1;
     }
@@ -53,11 +59,12 @@ class Toast implements GameKernel.GameInterface {//每一個toast為獨立 因�
     public void paint(Graphics g){
 
         g.setColor(Color.darkGray);
-        g.setFont(new Font("Dialog", Font.BOLD, fontSize));
+        g.setFont(new Font("Dialog", Font.BOLD, Global.FONT_SIZE));
         //當偵數跑完後刪除
         if (toastDelay.count()) {
             isClearSelf =true;
         } else {
+            //每count完移動一次
             if(count%countSpeed==0){
                 count-=countSpeed;
                 toastMove();

@@ -1,5 +1,7 @@
 package company;
 
+import java.awt.*;
+
 public class Global {
 
     /**
@@ -41,12 +43,13 @@ public class Global {
     public static final int STATUS_BAR_X = 0;
     public static final int STATUS_BAR_Y = 0;
     public static final int STATUS_BAR_WIDTH = WINDOW_WIDTH;
-    public static final int STATUS_BAR_HEIGHT = 80;
+    public static final int STATUS_BAR_HEIGHT = 60;
 
     //遊戲視窗大小
-
-    public static final int SCREEN_X = WINDOW_WIDTH - 8 - 8;
-    public static final int SCREEN_Y = WINDOW_HEIGHT - 31 - 8;
+    public static final int SCREEN_X = 0;
+    public static final int SCREEN_Y = 0;
+    public static final int SCREEN_WIDTH = WINDOW_WIDTH - 8 - 8;
+    public static final int SCREEN_HEIGHT = WINDOW_HEIGHT - 31 - 8;
 
     //地圖大小
 
@@ -64,14 +67,14 @@ public class Global {
     public static final int BUILDING_OPTION_HEIGHT = WINDOW_HEIGHT-STATUS_BAR_HEIGHT;
     public static final int OPTION_GAP_Y = 0;
     public static final int OPTION_GAP_X = (BUILDING_OPTION_WIDTH - FOUNDATION_WIDTH) / 2;
-    public static final int BUILDING_OPTION_X = WINDOW_WIDTH - BUILDING_OPTION_WIDTH;
+    public static final int BUILDING_OPTION_X =SCREEN_WIDTH - BUILDING_OPTION_WIDTH;
     public static final int BUILDING_OPTION_Y = STATUS_BAR_HEIGHT;
 
-    //領地大小 可刪
+    //領地大小
     public static final int LAND_WIDTH = 1600;
     public static final int LAND_HEIGHT = 840;
-    public static final int LAND_X = (SCREEN_X - LAND_WIDTH - BUILDING_OPTION_WIDTH) / 2;
-    public static final int LAND_Y = SCREEN_Y / 2 - LAND_HEIGHT / 2;
+    public static final int LAND_X = (SCREEN_WIDTH - LAND_WIDTH - BUILDING_OPTION_WIDTH) / 2;
+    public static final int LAND_Y = SCREEN_HEIGHT / 2 - LAND_HEIGHT / 2;
 
     //建築物大小
     public static final int BUILDING_WIDTH = 96;
@@ -95,7 +98,7 @@ public class Global {
     public final static int numX=7;
 
 
-    //Icon相關設定
+    //StatusBar Icon相關設定
     public static final int ICON_START_X = 2;
     public static final int ICON_START_Y = 14;
     public static final int ICON_WIDTH = 60;
@@ -120,7 +123,7 @@ public class Global {
     public static final int ESC = 6;
 
     // 鏡頭移動的速度
-    public static final int CAMERA_SPEED = 8;
+    public static final int CAMERA_SPEED = 16;
 
     // 鏡頭移動量 X 跟 Y
     public static int CAMERA_MOVE_VX = 0;
@@ -129,6 +132,12 @@ public class Global {
     // 鏡頭移動總量 X 跟 Y
     public static int SUM_OF_CAMERA_MOVE_VX = 0;
     public static int SUM_OF_CAMERA_MOVE_VY = 0;
+
+    //文字大小
+    public static int FONT_SIZE = 25 ;
+
+    //血量的高度
+    public static int HP_HEIGHT=10;
 
     /**
      * 輸出範圍內的隨機數字

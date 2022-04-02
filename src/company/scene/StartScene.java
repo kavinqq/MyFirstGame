@@ -42,11 +42,11 @@ public class StartScene extends Scene{
 
         int choiceCnt = 1;
 
-        choices.add(new MenuChoice(Global.SCREEN_X / 2 - CHOICE_WIDTH / 2,  CHOICE_Y_DEFAULT + (CHOICE_GAP + CHOICE_HEIGHT) * choiceCnt - CHOICE_HEIGHT + 100
+        choices.add(new MenuChoice(Global.SCREEN_WIDTH / 2 - CHOICE_WIDTH / 2,  CHOICE_Y_DEFAULT + (CHOICE_GAP + CHOICE_HEIGHT) * choiceCnt - CHOICE_HEIGHT + 100
                                     , CHOICE_WIDTH, CHOICE_HEIGHT, "開始遊戲", CHOICE_FILL_COLOR, CHOICE_HOVER_COLOR,MenuChoice.Option.START));
         choiceCnt++;
 
-        choices.add(new MenuChoice(Global.SCREEN_X / 2 - CHOICE_WIDTH / 2,  CHOICE_Y_DEFAULT + (CHOICE_GAP + CHOICE_HEIGHT) * choiceCnt - CHOICE_HEIGHT + 100
+        choices.add(new MenuChoice(Global.SCREEN_WIDTH / 2 - CHOICE_WIDTH / 2,  CHOICE_Y_DEFAULT + (CHOICE_GAP + CHOICE_HEIGHT) * choiceCnt - CHOICE_HEIGHT + 100
                                     , CHOICE_WIDTH, CHOICE_HEIGHT, "離開遊戲", CHOICE_FILL_COLOR, CHOICE_HOVER_COLOR, MenuChoice.Option.EXIT));
         choiceCnt++;
     }
@@ -59,7 +59,7 @@ public class StartScene extends Scene{
 
     @Override
     public void paint(Graphics g) {
-        g.drawImage(img, 0, 0, Global.SCREEN_X, Global.SCREEN_Y, null);
+        g.drawImage(img, 0, 0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT, null);
 
 //        // start menu
 //        g.setColor(Color.blue);
