@@ -26,15 +26,15 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
     /**
      * 飛機升級時間
      */
-    public static final int PLANE_LEVEL_UPGRADE_TIME = 48;
+    public static final int PLANE_LEVEL_UPGRADE_TIME = 20; //48
     /**
      * 士兵升級時間
      */
-    public static final int SOLDIER_LEVEL_UPGRADE_TIME = 48;
+    public static final int SOLDIER_LEVEL_UPGRADE_TIME = 20; //48
     /**
      * 科技升級時間
      */
-    public static final int TECH_LEVEL_UPGRADE_TIME = 24;
+    public static final int TECH_LEVEL_UPGRADE_TIME = 5; //24
     /**
      * 此回合有升級科技
      */
@@ -185,6 +185,8 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         public LinkedList<BuildingNode> list() {
             return list;
         }
+
+
     }
 
     /**
@@ -593,26 +595,63 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
 
 
         //科技等級升級
-        if (isUpgradingTech && City.getGameTime() - techLevelStartUpgradeTime - TECH_LEVEL_UPGRADE_TIME == 0) {
+        if (isUpgradingTech && Lab.getTechUpgradePercent()>=1) {//City.getGameTime() - techLevelStartUpgradeTime  - TECH_LEVEL_UPGRADE_TIME >= 0
             if (BuildingType.LAB.instance instanceof Lab) {
                 Lab lab = (Lab) BuildingType.LAB.instance;
                 lab.levelUpTechResource(lab.getLevel() + 1);
             }
             City.addTechLevel();
-            isRecentlyUpgradeTech = true;
             freeLabNum++;
             isUpgradingTech = false;
+            Lab.setTechLevelUpgrading(false);
+            Lab.resetTechUpgradePercent();
+        //正在升級 時間未到
+        }else if(isUpgradingTech){
+            int count=0;
+            for (int i = 0; i < LAB.list.size(); i++) {
+                //並計算非建造中的建築物
+                if (LAB.list.get(i).building.getLevel()!=0){
+                    count++;
+                }
+            }
+            Lab.addPercentTechUpgrade(canUseNum(LAB));
         }
+
+
         //士兵等級升級
-        if (isUpgradingSoldier && City.getGameTime() - soldierLevelStartUpgradeTime - SOLDIER_LEVEL_UPGRADE_TIME == 0) {
+        if (isUpgradingSoldier && Arsenal.getSoldierPercent()==1) {
             freeArsenalNum++;
             isUpgradingSoldier = false;
+            Arsenal.setSoldierLevelUpgrading(false);
+            Arsenal.resetSoldierPercent();
+        }else if(isUpgradingSoldier){
+            //計算可以加速建築的數量
+            Arsenal.addSoldierPercent(canUseNum(ARSENAL));
         }
+
+
         //飛機等級升級
-        if (isUpgradingPlane && City.getGameTime() - planeLevelStartUpgradeTime - PLANE_LEVEL_UPGRADE_TIME == 0) {
+        if (isUpgradingPlane && Arsenal.getPlanePercent() >= 0) {
             freeArsenalNum++;
             isUpgradingPlane = false;
+            Arsenal.setPlaneLevelUpgrading(false);
+            Arsenal.resetPlanePercent();
+        }else if(isUpgradingPlane){
+            //計算可以加速建築的數量
+            Arsenal.addPlanePercent(canUseNum(ARSENAL));
         }
+    }
+
+    //非建造中可使用的建築物 主要給兵工廠及研究所用
+    private int canUseNum(BuildingController.BuildingType type){
+        int count=0;
+        for (int i = 0; i < type.list.size(); i++) {
+            //並計算非建造中的建築物
+            if (type.list.get(i).building.getLevel()!=0){
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
@@ -745,6 +784,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         techLevelStartUpgradeTime = City.getGameTime();
         freeLabNum--;
         isUpgradingTech = true;
+        Lab.setTechLevelUpgrading(true);
     }
 
     /**
@@ -755,6 +795,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         soldierLevelStartUpgradeTime = City.getGameTime();
         freeArsenalNum--;
         isUpgradingSoldier = true;
+        Arsenal.setSoldierLevelUpgrading(true);
     }
 
     /**
@@ -764,7 +805,8 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         ARSENAL.instance.takeResourceUpgrade(resource);
         planeLevelStartUpgradeTime = City.getGameTime();
         freeArsenalNum--;
-        isUpgradingPlane = false;
+        isUpgradingPlane = true;
+        Arsenal.setPlaneLevelUpgrading(true);
     }
 
     /**

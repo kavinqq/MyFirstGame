@@ -1,11 +1,16 @@
 package company.gameobj.buildings;
 import company.Global;
+import company.gameobj.BuildingController;
 import company.gametest9th.utils.Path;
 import oldMain.City;
 
 import java.awt.*;
 
 public class Lab extends Building {
+
+    public static boolean isTechLevelUpgrading;
+
+    private static float techUpgradePercent;
 
     /**
      * 父類建構子
@@ -25,10 +30,12 @@ public class Lab extends Building {
         super(x, y);
         init();
         getIcons().add(new UpGradeIcon(x,y+painter().height()-Global.BUILDING_ICON_HEIGHT,"升級科技等級"));
-
     }
 
-
+    //設定現在是否在升級科技
+    public static void setTechLevelUpgrading(boolean b){
+        isTechLevelUpgrading =b;
+    }
 
     public Lab() {
         init();
@@ -82,22 +89,58 @@ public class Lab extends Building {
 
     @Override
     public void paintComponent(Graphics g) {
-        if (getLevel()==0) { //畫出建造中的建築物 !isWorking() && !readyToUpgrade && !isUpgrading
+        //升級中及完成顯示白色
+        g.setColor(Color.white);
+
+
+        if (getLevel() == 0) { //畫出建造中的建築物 !isWorking() && !readyToUpgrade && !isUpgrading
             g.drawImage(getUnderConstructionImg(), painter().left(), painter().top(), painter().width(), painter().height(), null);
-        //畫出升級中的建築物
-        }else if (getIsTechUpgrading()) {
-            g.drawImage(getUnderConstructionImg(), painter().left(), painter().top(), painter().width(), painter().height(), null);
-            g.drawString("科技升級中", painter().left(), painter().top());
-        } else { //畫出完成的建築物
+
+        } else if (!isTechLevelUpgrading) {  //畫出完成的建築物
             g.drawImage(getImg(), painter().left(), painter().top(), painter().width(), painter().height(), null);
             //畫出Icon
             if (isShowIcon()) {
+                g.setFont(new Font("Dialog", Font.BOLD, Global.FONT_SIZE));
                 //畫出等級
-                g.drawString("目前科技等級:" + City.getTechLevel(), painter().left(), painter().top());
+                g.drawString("目前科技等級" + City.getTechLevel(), painter().width() / 2 + painter().left() - Global.FONT_SIZE * 2, painter().top() - showStringHeight());
                 for (int i = 0; i < getIcons().size(); i++) {
                     getIcons().get(i).paint(g);
                 }
+
             }
+        //畫出升級中
+        } else if (isTechLevelUpgrading) {
+            g.drawImage(getUnderConstructionImg(), painter().left(), painter().top(), painter().width(), painter().height(), null);
+            g.drawString("升級科技等級中", painter().width() / 2 + painter().left() - Global.FONT_SIZE * 2, painter().top() - showStringHeight());
+            //升級進度條
+            g.setColor(Color.yellow);
+            g.fillRect(painter().left(), painter().bottom()+Global.HP_HEIGHT+2, (int) (techUpgradePercent * painter().width()), Global.HP_HEIGHT);
         }
+        //血量條
+        g.setColor(Color.red);
+        g.fillRect(painter().left(), painter().bottom(), painter().width(), Global.HP_HEIGHT);
+        g.setColor(Color.green);
+        g.fillRect(painter().left(), painter().bottom(), (int) ((getPercentHp()) * painter().width()), Global.HP_HEIGHT);
+        //復原
+        g.setColor(Color.black);
+    }
+
+
+    //所有研究所共有此升級條
+    public static void addPercentTechUpgrade(int num){
+        techUpgradePercent += num*1.0f / BuildingController.TECH_LEVEL_UPGRADE_TIME;
+        if(techUpgradePercent>1){
+            techUpgradePercent=1;
+        }
+    }
+
+    // 研究進度條歸0
+    public static void resetTechUpgradePercent(){
+        techUpgradePercent=0;
+    }
+
+    //取得科技進度百分比
+    public static int getTechUpgradePercent(){
+        return (int)techUpgradePercent;
     }
 }

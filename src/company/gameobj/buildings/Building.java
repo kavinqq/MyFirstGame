@@ -262,8 +262,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     private float percentHp;
     //升級進度條百分比
     private float percentUpgrade;
-    //科技等級是否在升級
-    private boolean isTechUpgrading;
+
     //文字高度
     private int showStringHeight;
 
@@ -366,13 +365,13 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         img = SceneController.getInstance().imageController().tryGetImage(imgPath);
     }
 
-    //設定是否升級
-    public void setTechUpgrading(boolean isTechUpgrading) {
-        this.isTechUpgrading = isTechUpgrading;
+    //給lab子類用
+    protected float getPercentHp(){
+        return percentHp;
     }
-
-    public boolean getIsTechUpgrading() {
-        return isTechUpgrading;
+    //給lab子類用
+    protected int showStringHeight(){
+        return showStringHeight;
     }
 
     /**
@@ -813,13 +812,9 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     }
 
 
-    private boolean isAddResouse;
-
     @Override
     public void paintComponent(Graphics g) {
-        g.setColor(Color.red);
-        //血量條
-        g.fillRect(painter().left(), painter().bottom(), (int) ((percentHp) * painter().width()), Global.HP_HEIGHT);
+
         //升級中及完成顯示白色
         g.setColor(Color.white);
 
@@ -827,34 +822,33 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         if (level == 0) { //畫出建造中的建築物 !isWorking() && !readyToUpgrade && !isUpgrading
             g.drawImage(underConstructionImg, painter().left(), painter().top(), painter().width(), painter().height(), null);
 
-        } else if (readyToUpgrade && !isUpgrading) {  //畫出完成的建築物
+        //畫出完成的建築物
+        } else if (readyToUpgrade && !isUpgrading) {
             g.drawImage(img, painter().left(), painter().top(), painter().width(), painter().height(), null);
             //畫出Icon
             if (isShowIcon) {
-
                 g.setFont(new Font("Dialog", Font.BOLD, Global.FONT_SIZE));
                 //畫出等級
                 g.drawString("目前等級" + level, painter().width() / 2 + painter().left() - Global.FONT_SIZE * 2, painter().top() - showStringHeight);
                 for (int i = 0; i < icons.size(); i++) {
                     icons.get(i).paint(g);
                 }
-
-            }
-            if (isAddResouse) {
-                isAddResouse = false;
-                Citizen.getMaxCarrySteel();
-
             }
 
-            //畫出升級中
+        //畫出升級中
         } else if (isUpgrading && !readyToUpgrade) {
             g.drawImage(underConstructionImg, painter().left(), painter().top(), painter().width(), painter().height(), null);
             g.drawString("升級中", painter().width() / 2 + painter().left() - Global.FONT_SIZE * 2, painter().top() - showStringHeight);
-            isAddResouse = true;
             //升級進度條
             g.setColor(Color.yellow);
             g.fillRect(painter().left(), painter().bottom()+Global.HP_HEIGHT+2, (int) ((percentUpgrade) * painter().width()), Global.HP_HEIGHT);
         }
+        g.setColor(Color.red);
+        g.fillRect(painter().left(), painter().bottom(), painter().width(), Global.HP_HEIGHT);
+        g.setColor(Color.green);
+        //血量條
+        g.fillRect(painter().left(), painter().bottom(), (int) ((percentHp) * painter().width()), Global.HP_HEIGHT);
+
         g.setColor(Color.black);
     }
 

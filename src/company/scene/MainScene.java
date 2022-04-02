@@ -220,7 +220,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
         //提示框
-        //HintDialog.instance().paint(g);
         ToastController.instance().paint(g);
     }
 
