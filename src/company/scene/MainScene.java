@@ -13,6 +13,9 @@ import company.controllers.AudioResourceController;
 import company.gameobj.BuildingController;
 import company.gameobj.FogOfWar;
 import company.gameobj.Rect;
+import company.gameobj.creature.enemy.zombies.Zombie;
+import company.gameobj.creature.enemy.zombies.ZombieKing;
+import company.gameobj.creature.enemy.zombies.ZombieKingdom;
 import company.gameobj.resourceObjs.ResourceObj;
 import company.gameobj.resourceObjs.ResourceSystem;
 import company.gameobj.message.ToastController;
@@ -60,6 +63,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     //與建築相關
     City city; //城市
+    ZombieKingdom zombieKingdom;
 
     private BuildingArea buildingArea; //可建造區
 
@@ -122,6 +126,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // city本體
         city = new City();
+        zombieKingdom = new ZombieKingdom();
         //city.build(BuildingType.BASE,SCREEN_X / 2 - Base.BASE_WIDTH, SCREEN_Y / 2 - Base.BASE_HEIGHT);
 
         // 測試: 預設有 ? 個 村民
@@ -179,6 +184,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //城市
         city.paint(g);
+
+        zombieKingdom.paint();
 
         // 主堡
         base.paint(g);
@@ -240,9 +247,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 更新StatusBar 各項數據
         StatusBar.instance().setTimeString(startTime);
         StatusBar.instance().updateResource(city.getResource().getTotalWood(), city.getResource().getTotalSteel(), city.getResource().getTotalGas(), city.getTotalCitizen());
-
+/*
         // 處理鏡頭移動
-
         if ((currentMouseX >= SCREEN_WIDTH || currentMouseX <= 8) || (currentMouseY <= 0 || currentMouseY >= SCREEN_HEIGHT - 8)) {
 
 
@@ -281,13 +287,15 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             CAMERA_MOVE_VY = 0;
         }
 
-
+ */
         //建築物相關測試
         buildingOption.update();
         buildingArea.update();
 
         //City更新
         city.update();
+
+
 
         //判斷現在有無選取按鈕
         if (currentButton != null) {

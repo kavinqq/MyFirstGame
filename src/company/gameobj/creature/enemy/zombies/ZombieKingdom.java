@@ -1,12 +1,16 @@
 package company.gameobj.creature.enemy.zombies;
 
+import company.gametest9th.utils.GameKernel;
+
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 殭屍族群類
  */
-public class ZombieKingdom {
+public class ZombieKingdom implements GameKernel.GameInterface{
 
     private int zombieTime;
     private int attackRound;
@@ -39,7 +43,7 @@ public class ZombieKingdom {
         this.zombies.put(zombieBig, 0);
         this.zombies.put(zombieKing, 0);
         this.zombies.put(zombieWitch, 0);
-        this.zombies.put(zombieNormal, 0);
+        this.zombies.put(zombieNormal, 1);
         this.zombies.put(zombieTypeI, 0);
         this.zombies.put(zombieTypeII, 0);
         this.zombies.put(zombieFlying, 0);
@@ -108,6 +112,25 @@ public class ZombieKingdom {
         }
     }
 
+    //TODO
+//    public List<Zombie> getZombies(){
+//        List<Zombie> ans = new ArrayList<Zombie>();
+//        for(Map.Entry<Zombie, List<Zombie>> entry: zombies.entrySet()){
+//
+//        }
+//        return ans;
+//    }
+
+    @Override
+    public void paint(Graphics g) {
+
+    }
+
+    @Override
+    public void update() {
+
+    }
+
     /**
      * 殭屍族群
      */
@@ -158,5 +181,9 @@ public class ZombieKingdom {
      */
     public ZombieTroop getZombieTroop() {
         return this.zombieTroop;
+    }
+
+    public void paint(){
+
     }
 }

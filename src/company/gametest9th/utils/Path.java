@@ -73,40 +73,40 @@ public class Path {
         public static class Zombies extends Flow {
 
             private Zombies(Flow flow) {
-                super(flow, "/Zombie");
+                super(flow, "/zombies");
             }
 
             //TODO
             public String zombieNormal(){
-                return this + "/monster3.png";
+                return this + "/monster.png";
             }
 
             public String zombieBig(){
-                return this + "/monster3.png";
+                return this + "/monster.png";
             }
 
             public String zombieTypeI(){
-                return this + "/monster3.png";
+                return this + "/monster.png";
             }
 
             public String zombieTypeII() {
-                return this + "/monster3.png";
+                return this + "/monster.png";
             }
 
             public String zombieKing(){
-                return this + "/monster3.png";
+                return this + "/monster.png";
             }
 
             public String zombieWitch(){
-                return this + "/monster3.png";
+                return this + "/monster.png";
             }
 
             public String zombieFlying(){
-                return this + "/monster3.png";
+                return this + "/monster.png";
             }
 
             public String zombieFlyingBig(){
-                return this + "/monster3.png";
+                return this + "/monster.png";
             }
         }
 

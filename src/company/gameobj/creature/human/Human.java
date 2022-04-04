@@ -19,8 +19,6 @@ public abstract class Human extends Creature {
 
     private Animator.State animatorState;// 動畫目前的狀態
 
-    private HumanAnimator animator;// 人物動畫物件
-
     private HUMAN_TYPE humanType;
 
     private int value;
@@ -44,7 +42,7 @@ public abstract class Human extends Creature {
         }
 
         // 創建動畫物件
-        animator = new HumanAnimator(characterType, animatorState);
+        this.setAnimator(new HumanAnimator(characterType, animatorState));
 
     }
 
@@ -62,7 +60,7 @@ public abstract class Human extends Creature {
         this.characterType = characterType;
 
         // 創建動畫物件
-        animator = new HumanAnimator(characterType, animatorState);
+        this.setAnimator(new HumanAnimator(characterType, animatorState));
     }
 
 
@@ -378,15 +376,5 @@ public abstract class Human extends Creature {
         setTarget(painter().centerX(), painter().centerY());
         setMoveStatus(Animator.State.STAND);
     }
-
-    /**
-     * 取得Human的動畫
-     * @return 該人物的動畫
-     */
-    public Animator getAnimator(){
-        return animator;
-    }
-
-
 }
 

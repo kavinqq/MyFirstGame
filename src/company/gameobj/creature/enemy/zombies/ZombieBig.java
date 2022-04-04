@@ -13,11 +13,11 @@ public class ZombieBig extends Zombie {
      * 這種殭屍的預設攻擊力
      */
     public ZombieBig(int x, int y){
-        super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight,7, new Path().img().zombies().zombieBig(), FLY_ABILITY.CANNOT_FLY);
+        super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight,7, new Path().img().zombies().zombieBig(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_BIG);
     }
 
     public ZombieBig(){
-        super(-1000, -1000, painterWidth, painterHeight, colliderWidth, colliderHeight,7, new Path().img().zombies().zombieBig(), FLY_ABILITY.CANNOT_FLY);
+        super(-1000, -1000, painterWidth, painterHeight, colliderWidth, colliderHeight,7, new Path().img().zombies().zombieBig(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_BIG);
     }
 
 

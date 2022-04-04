@@ -4,6 +4,7 @@ import company.Global;
 import company.controllers.SceneController;
 import company.gameobj.GameObject;
 import company.gametest9th.utils.Animator;
+import company.gametest9th.utils.HumanAnimator;
 
 import java.awt.*;
 
@@ -40,6 +41,8 @@ public abstract class Creature extends GameObject {
 
     private int sumOfCameraMoveX; // 鏡頭移動量X
     private int sumOfCameraMoveY; // 鏡頭移動量Y
+
+    private Animator animator;// 人物動畫物件
 
 
     public Creature(int x, int y, int targetX, int targetY, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility, Animator.State moveStatus) {
@@ -335,5 +338,22 @@ public abstract class Creature extends GameObject {
         setTargetX(targetX - Global.SUM_OF_CAMERA_MOVE_VX);
         setTargetY(targetY - Global.SUM_OF_CAMERA_MOVE_VY);
     }
+
+    /**
+     * 取得creature的動畫
+     * @return 該生物的動畫
+     */
+    public Animator getAnimator() {
+        return animator;
+    }
+
+    /**
+     * 設置creature的動畫
+     * 將該生物的動畫設置為傳入的動畫器
+     */
+    public void setAnimator(Animator animator) {
+        this.animator = animator;
+    }
+
 
 }

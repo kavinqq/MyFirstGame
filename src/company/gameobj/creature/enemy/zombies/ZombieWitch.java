@@ -14,11 +14,11 @@ public class ZombieWitch extends Zombie {
      * 這種殭屍的預設攻擊力
      */
     public ZombieWitch(int x, int y) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 25, new Path().img().zombies().zombieWitch(), FLY_ABILITY.CANNOT_FLY);
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 25, new Path().img().zombies().zombieWitch(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_WITCH);
     }
 
     public ZombieWitch() {
-        super(-1000, -1000, painterWidth, painterHeight, colliderWidth, colliderHeight, 25, new Path().img().zombies().zombieWitch(), FLY_ABILITY.CANNOT_FLY);
+        super(-1000, -1000, painterWidth, painterHeight, colliderWidth, colliderHeight, 25, new Path().img().zombies().zombieWitch(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_WITCH);
     }
 
 

@@ -205,4 +205,12 @@ public class Military {
             airForceSoldier.paintComponent(g);
         }
     }
+
+    public List<AirForceSoldier> getAirForce() {
+        return airForce;
+    }
+
+    public List<ArmySoldier> getArmy() {
+        return army;
+    }
 }

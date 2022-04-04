@@ -14,11 +14,11 @@ public class ZombieNormal extends Zombie {
      * 這種殭屍的預設攻擊力
      */
     public ZombieNormal(int x, int y) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 5, new Path().img().zombies().zombieNormal(), FLY_ABILITY.CANNOT_FLY);
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 5, new Path().img().zombies().zombieNormal(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_NORMAL);
     }
 
     public ZombieNormal() {
-        super(-1000, -1000, painterWidth, painterHeight, colliderWidth, colliderHeight, 5, new Path().img().zombies().zombieNormal(), FLY_ABILITY.CANNOT_FLY);
+        super(-1000, -1000, painterWidth, painterHeight, colliderWidth, colliderHeight, 5, new Path().img().zombies().zombieNormal(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_NORMAL);
     }
 
 
