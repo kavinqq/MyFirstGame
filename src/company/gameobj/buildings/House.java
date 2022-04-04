@@ -8,8 +8,8 @@ public class House extends Building {
     public House(int x, int y) {
         super(x, y);
         init();
-        getIcons().add(new UpGradeIcon(x,y+painter().height()-Global.BUILDING_ICON_HEIGHT,"升級房屋"));
-        getIcons().add(new WorkingIcon(x+ painter().width()-Global.BUILDING_ICON_WIDTH*getIcons().size(),y+painter().height()-Global.BUILDING_ICON_HEIGHT,"市民"));
+        getIcons().add(new UpGradeIcon(getIcons().size(),"升級房屋"));
+        getIcons().add(new WorkingIcon(getIcons().size(),"市民"));
     }
 
     public House() {

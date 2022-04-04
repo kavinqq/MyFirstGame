@@ -558,7 +558,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
     public BuildingNode getCuurentBuildingNode(int x, int y) {
         for (BuildingType value:values()) {
             for (int j = 0; j < value.list().size(); j++) {
-                if(value.list().get(j).getBuilding().isEntered(x,y)){
+                if(value.list().get(j).getBuilding().isEntered(x,y) || value.list().get(j).getBuilding().isShowIcon()){
                     return value.list().get(j);
                 }
             }

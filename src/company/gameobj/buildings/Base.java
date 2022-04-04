@@ -39,7 +39,7 @@ public class Base extends Building {
     protected void init() {
         setId(9)
                 .setName("主堡")
-                .setBuildTime(1)
+                .setBuildTime(0)
                 .setUpgradeTime(30)
                 .setLevelC(1)  //初始等級為1
                 .setTechLevelNeedUpgrade(2)

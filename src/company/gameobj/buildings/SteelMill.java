@@ -32,7 +32,7 @@ public class SteelMill extends Building{
     public SteelMill(int x,int y) {
         super(x,y);
         init();
-        getIcons().add(new UpGradeIcon(x,y+painter().height()-Global.BUILDING_ICON_HEIGHT,"升級"+getName()));
+        getIcons().add(new UpGradeIcon(getIcons().size(),"升級"+getName()));
     }
     //初始化
     protected void init(){

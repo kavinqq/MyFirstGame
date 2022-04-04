@@ -26,7 +26,7 @@ public class GasMill extends Building{
     public GasMill(int x,int y) {
         super(x,y);
         init();
-        getIcons().add(new UpGradeIcon(x,y+painter().height()-Global.BUILDING_ICON_HEIGHT,"升級"+getName()));
+        getIcons().add(new UpGradeIcon(0,"升級"+getName()));
     }
     public GasMill() {
         init();

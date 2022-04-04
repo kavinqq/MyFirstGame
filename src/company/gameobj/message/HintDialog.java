@@ -27,6 +27,7 @@ public class HintDialog implements GameKernel.GameInterface, CommandSolver.Mouse
     private State status;
 
     public HintDialog() {
+        status =State.RELATIVE;
         y=-30;
         message = "";
     }

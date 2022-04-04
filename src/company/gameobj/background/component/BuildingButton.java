@@ -192,7 +192,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     @Override
     public void update() {
         if (isMoveOnButton) {
-            System.out.println("a");
             type = BuildingType.getBuildingTypeByInt(getId());
             getHintDialog().setHintAbsolutePosition(-775 + painter().left(), +30 + painter().top());
             getHintDialog().setHintMessage(type.instance().getName() + "：資源需求：木材:" + type.instance().getWoodCostCreate() + ", 鋼鐵:" + type.instance().getSteelCostCreate() + ", 瓦斯:" + type.instance().getGasCostCreate() + "，科技等級需求：" + type.instance().getTechLevelNeedBuild());

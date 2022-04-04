@@ -29,7 +29,7 @@ public class Lab extends Building {
     public Lab(int x, int y) {
         super(x, y);
         init();
-        getIcons().add(new UpGradeIcon(x,y+painter().height()-Global.BUILDING_ICON_HEIGHT,"升級科技等級"));
+        getIcons().add(new UpGradeIcon(getIcons().size(),"升級科技等級"));
     }
 
     //設定現在是否在升級科技

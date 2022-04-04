@@ -379,6 +379,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             isPreAllNonBuildGrid = buildingArea.isAllNonOnBuildGrid();
         }
 
+
         //升級
         if (currentBuildNode != null) {
             //選取要升級的種類

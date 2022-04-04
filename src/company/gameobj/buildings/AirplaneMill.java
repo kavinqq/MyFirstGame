@@ -25,8 +25,8 @@ public class AirplaneMill extends Building {
     public AirplaneMill(int x, int y) {
         super(x, y);
         init();
-        getIcons().add(new UpGradeIcon(x,y+painter().height()-Global.BUILDING_ICON_HEIGHT,"升級飛機"));
-        getIcons().add(new WorkingIcon(x+ painter().width()-Global.BUILDING_ICON_WIDTH*getIcons().size(),y+painter().height()-Global.BUILDING_ICON_HEIGHT,"飛機"));
+        getIcons().add(new UpGradeIcon(getIcons().size(),"升級飛機"));
+        getIcons().add(new WorkingIcon(getIcons().size(),"飛機"));
     }
 
     public AirplaneMill() {
