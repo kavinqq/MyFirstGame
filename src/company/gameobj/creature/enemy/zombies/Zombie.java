@@ -3,8 +3,11 @@ package company.gameobj.creature.enemy.zombies;
 import company.Global;
 import company.gameobj.creature.Creature;
 import company.gameobj.creature.enemy.Enemy;
+import company.gameobj.creature.human.Human;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.ZombieAnimator;
+
+import java.awt.*;
 
 public abstract class Zombie extends Enemy {
 
@@ -54,7 +57,35 @@ public abstract class Zombie extends Enemy {
     public abstract int currentRoundCount(int round);
 
     @Override
-    public void walk(){
+    public void paintComponent(Graphics g) {
+        this.getAnimator().paint(getWalkingDir(), painter().left(), painter().top(), painter().right(), painter().bottom(), g);
+    }
 
+    @Override
+    public void update() {
+
+        // 如果我的MoveStatue 是 walk
+        switch (getMoveStatus()){
+            case STAND:{
+                getAnimator().setState(Animator.State.STAND);
+                break;
+            }
+            case WALK:{
+                getAnimator().setState(Animator.State.WALK);
+                // 行走
+                walk();
+                break;
+            }
+        }
+
+        // 動畫更新[換圖片]
+        getAnimator().update();
+    }
+
+
+    public void isSeeing(Human human){
+        if(this.detectRange().overlap(human.painter())){
+            this.setAttackTarget(human);
+        }
     }
 }

@@ -26,10 +26,6 @@ public class ZombieFlyingBig extends Zombie {
         return (round - 7) / 2;
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        g.drawImage(this.getImg(), this.painter().left(), this.painter().top(), null);
-    }
 
     @Override
     public void update() {

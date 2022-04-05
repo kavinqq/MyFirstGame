@@ -27,13 +27,4 @@ public class ZombieNormal extends Zombie {
         return round * 3;
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        g.drawImage(this.getImg(), this.painter().left(), this.painter().top(), null);
-    }
-
-    @Override
-    public void update() {
-
-    }
 }

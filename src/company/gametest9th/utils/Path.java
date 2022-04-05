@@ -111,6 +111,15 @@ public class Path {
         }
 
 
+        public static class Effects extends Flow {
+            private Effects(Flow flow) {
+                super(flow, "/effects");
+            }
+
+            public String SwordShadow(){
+                return this + "/SwordShadow.png";
+            }
+        }
 
 
         // Resource => img => Actors
@@ -266,6 +275,10 @@ public class Path {
 
         public Background background() {
             return new Background(this);
+        }
+
+        public Effects effects(){
+            return new Effects(this);
         }
 
     }

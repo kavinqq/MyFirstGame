@@ -33,10 +33,6 @@ public class ZombieFlying extends Zombie {
 
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        g.drawImage(this.getImg(), this.painter().left(), this.painter().top(), null);
-    }
 
     @Override
     public void update() {

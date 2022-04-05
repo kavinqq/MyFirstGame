@@ -27,10 +27,6 @@ public class ZombieKing extends Zombie {
         return (round * 2) / 12;
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        g.drawImage(this.getImg(), this.painter().left(), this.painter().top(), null);
-    }
 
     @Override
     public void update() {

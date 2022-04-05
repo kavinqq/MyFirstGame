@@ -246,13 +246,20 @@ public class Citizens {
      */
     public void updateAll() {
 
-        for (Citizen citizen : citizens) {
-            citizen.update();
+        Citizen citizen;
+        for (int i=0; i<citizens.size(); i++) {
+            citizen = citizens.get(i);
+            if(citizen.isAlive()){
+                citizen.update();
+            }
+            else{
+                citizens.remove(i);
+                i--;
+            }
         }
     }
 
     public void cameraMove(){
-
         for (Citizen citizen : citizens) {
             citizen.cameraMove();
         }

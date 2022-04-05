@@ -1,5 +1,7 @@
 package company.gameobj.creature.human;
 
+import company.gameobj.GameObject;
+
 /**
  * @author Lillian
  * @Date 2022/3/7
@@ -37,5 +39,11 @@ public abstract class Soldier extends Human{
 
     public boolean isAirForce(){
         return (this.soldierType == SOLDIER_TYPE.AIR_FORCE);
+    }
+
+    public void detect(GameObject gameObject){
+        if(this.detectRange().overlap(gameObject.painter())){
+            this.setAttackTarget(gameObject);
+        }
     }
 }

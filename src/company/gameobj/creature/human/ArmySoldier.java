@@ -29,13 +29,6 @@ public class ArmySoldier extends Soldier  {  //士兵
     }
 
     @Override
-    public void paintComponent(Graphics g) {
-
-        //畫出動畫
-        getAnimator().paint(getWalkingDir(), painter().left(), painter().top(), painter().right(), painter().bottom(), g);
-    }
-
-    @Override
     public void update() {
 
         //動畫更新

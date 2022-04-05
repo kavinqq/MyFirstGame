@@ -27,10 +27,6 @@ public class ZombieWitch extends Zombie {
         return round / 10;
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        g.drawImage(this.getImg(), this.painter().left(), this.painter().top(), null);
-    }
 
     @Override
     public void update() {
