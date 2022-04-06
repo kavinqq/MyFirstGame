@@ -1,6 +1,9 @@
 package oldMain;
 
+import company.Global;
 import company.gameobj.BuildingController;
+import company.gameobj.background.component.TarmacArr;
+import company.gameobj.buildings.Base;
 import company.gameobj.buildings.Building;
 
 import company.gametest9th.utils.CommandSolver;
@@ -29,6 +32,8 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
     public final int MAX_CAN_BUILD = 14; //TODO 不確定建築物損壞後有沒有減掉當前建築物數量
     public final int ZOMBIE_TYPE = 6;
 
+    //停機坪
+    private TarmacArr tarmacArr;
     /**
      * 遊戲的建築物
      */
@@ -74,11 +79,13 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
      * 城市的建構子 建構初始的 人民/殭屍/建築物陣列
      */
     public City() {
+        tarmacArr =new TarmacArr();
         resource = new Resource();
         buildings = new BuildingController();
         zombies = new ZombieKingdom();
         citizens = null;
         military = new Military();
+        buildings.build(BASE,resource,Base.BASE_X,Base.BASE_Y); //等mainScene 解決
     }
 
     /**
@@ -165,7 +172,6 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
      *
      * @param thisRoundTimePass 這一輪指令的時間
      */
-    //TODO system -> toaster 辰
     public void doCityWorkAndTimePass(int thisRoundTimePass) {
         //把時間流動前做的指令 && 決定流動的時間跑完
         for (int time = 0; time < thisRoundTimePass; time++) {
@@ -176,18 +182,18 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             gainGas();
             //建物.生成人()
             int numOfNewCitizens = buildings.getNewCitizenNum(resource);
-            if (numOfNewCitizens != 0) {
-                this.citizens.add(numOfNewCitizens,0,0);
+            if (numOfNewCitizens > 0) {
+                this.citizens.add(numOfNewCitizens, Base.BASE_X-225,Base.BASE_Y);
                 //System.out.printf("第%d回合 有新市民出生 ,閒置人數:%d\n", getGameTime() + 1, citizens.getNumOfFreeCitizens());
             }
             int numOfNewArmySoldiers = buildings.getNewArmyNum(resource);
-            if (numOfNewArmySoldiers != 0) {
-                this.military.addArmy(numOfNewArmySoldiers);
+            if (numOfNewArmySoldiers > 0) {
+                this.military.addArmy(numOfNewArmySoldiers); //Base.BASE_X+225,Base.BASE_Y
                 //System.out.printf("第%d回合 有 %d 個新戰士出生,目前一共有%d個戰士\n", getGameTime() + 1, numOfNewArmySoldiers, military.getNumOfArmySoldier());
             }
             int numOfNewAirMen = buildings.getNewPlaneNum(resource);
-            if (numOfNewAirMen != 0) {
-                this.military.addAirForce(numOfNewAirMen);
+            if (numOfNewAirMen > 0) {
+                this.military.addAirForce(numOfNewAirMen); //tarmacArr
                 //System.out.printf("第%d回合 有 %d 架新飛機產生,目前一共有%d架飛機\n", getGameTime() + 1, numOfNewAirMen, military.getNumOfAirmen());
             }
             //完成建築的升級和建造，科技等級提升
@@ -633,6 +639,9 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
     @Override
     public void paint(Graphics g) {
 
+        //停機坪
+        tarmacArr.paint(g);
+
         buildings.paint(g);
 
         citizens.paintAll(g);
@@ -642,6 +651,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
     @Override
     public void update() {
+
 
         buildings.update();
 
@@ -655,6 +665,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
      */
 
     public void cameraMove() {
+        tarmacArr.cameraMove();
 
         citizens.cameraMove();
 
@@ -667,6 +678,8 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
     public void resetObjectXY() {
 
+        tarmacArr.resetObjectXY();
+
         citizens.resetObjectXY();
 
         buildings.resetObjectXY();
@@ -674,7 +687,6 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-
         buildings.mouseTrig(e, state, trigTime);
         currentBuildingNode = getCuurentBuildingNode(e.getX(), e.getY());
     }

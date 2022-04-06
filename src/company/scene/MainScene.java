@@ -13,6 +13,8 @@ import company.controllers.AudioResourceController;
 import company.gameobj.BuildingController;
 import company.gameobj.FogOfWar;
 import company.gameobj.Rect;
+import company.gameobj.buildings.Arsenal;
+import company.gameobj.buildings.Building;
 import company.gameobj.creature.enemy.zombies.Zombie;
 import company.gameobj.creature.enemy.zombies.ZombieKing;
 import company.gameobj.creature.enemy.zombies.ZombieKingdom;
@@ -41,7 +43,7 @@ import static company.gameobj.BuildingController.BuildingType.values;
  */
 public class MainScene extends Scene implements CommandSolver.KeyListener {
 
-    private Base base;  // 主堡
+    private Building base;  // 主堡
     private Background background; // 背景
     private BuildingOption buildingOption; // 建築物選單
     private TarmacArr tarmacArr; //停機坪
@@ -127,7 +129,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //主堡
 
         //base先不刪下面有些東西與base連接
-        base = new Base();
+        base = new Arsenal(200,300);
 
         //上一幀是否可建造
         preCanBuild = true;
@@ -141,6 +143,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //city.build(BuildingType.BASE,SCREEN_X / 2 - Base.BASE_WIDTH, SCREEN_Y / 2 - Base.BASE_HEIGHT);
 
         // 測試: 預設有 ? 個 村民
+
         city.setCitizens(4);
 
         // 測試: 預設有 ? 個 士兵
@@ -187,9 +190,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 建築物基座
         buildingArea.paint(g);
 
-        //停機坪
-        tarmacArr.paint(g);
-
         //城市
         city.paint(g);
 
@@ -197,7 +197,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         zombieNormal.paint(g);
 
-        // 主堡
+//        //停機坪
+//        tarmacArr.paint(g);
+//        // 主堡
         base.paint(g);
 
 
@@ -303,6 +305,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             // 迷霧移動
             fogOfWar.cameraMove();
 
+            zombieNormal.cameraMove();
+
             // Reset 鏡頭移動量
             CAMERA_MOVE_VX = 0;
             CAMERA_MOVE_VY = 0;
@@ -315,6 +319,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //City更新
         city.update();
+        zombieKingdom.update();
 
 
 
@@ -793,6 +798,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         zombieNormal.update();
 
         if(zombieNormal.isCollision(base)){
+            System.out.println();
             switch (zombieNormal.getWalkingDir()){
                 case LEFT:{
                     if(zombieNormal.touchRightOf(base)){

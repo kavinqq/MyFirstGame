@@ -21,13 +21,6 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         UPGRADING;
     }
 
-    //    public Image getUnderConstructionImg(){
-//        return underConstructionImg;
-//    }
-//
-//    public Image getImg(){
-//        return img;
-//    }
     //建築物上的控制升級或開啟關閉的物件
     public class Icon extends GameObject {
         public boolean iSMoveOnIcons;
@@ -272,8 +265,28 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     private int hp;
     //當前hp
     private int currentHp;
+
+    //取得當前血量
+    public int getCurrentHp(){
+        return currentHp;
+    }
+
+    //設置當前血量
+    protected void setCurrentHp(int currentHp){
+        this.currentHp=currentHp;
+    }
+
+    //移除自己
+    public boolean isRemoveSelf(){
+        if(this.currentHp<0){
+            return true;
+        }
+        return false;
+    }
+
     //血量百分比
     private float percentHp;
+
     //升級進度條百分比
     private float percentUpgrade;
 
@@ -359,6 +372,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     //建築物初始化(){
     protected void buildingInit(int x, int y) {
+
         //建築物是否在建築，建築中 -> true
         this.readyToUpgrade = true;
         //建築物是否在運轉
@@ -710,7 +724,6 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         return gasCostCreate;
     }
 
-
     public int getTechLevelNeedBuild() {
         return techLevelNeedBuild;
     }
@@ -746,6 +759,11 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     //換成血量百分比
     public void addHpPercent() {
         percentHp += (double) 1 / buildTime ;
+        currentHp += percentHp * hp;
+        if(currentHp > hp){
+            currentHp =hp;
+        }
+
         if(percentHp>100){
             percentHp=100;
         }
@@ -768,10 +786,11 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         this.gasCostLevelUp = gasCostLevelUp;
     }
 
+    //
     public void getDamage(int damage) {
-        this.hp -= damage;
-        if (this.hp < 0) {
-            this.hp = 0;
+        this.currentHp -= damage;
+        if (this.currentHp < 0) {
+            this.currentHp = 0;
         }
     }
 
@@ -841,7 +860,6 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             g.drawImage(img, painter().left(), painter().top(), painter().width(), painter().height(), null);
             //畫出Icon
             if (isShowIcon) {
-
                 //畫出等級
                 g.drawString("目前等級" + level, painter().width() / 2 + painter().left() - Global.FONT_SIZE * 2, painter().top() - showStringHeight);
                 for (int i = 0; i < icons.size(); i++) {
@@ -857,11 +875,11 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             g.setColor(Color.yellow);
             g.fillRect(painter().left(), painter().bottom()+Global.HP_HEIGHT+2, (int) ((percentUpgrade) * painter().width()), Global.HP_HEIGHT);
         }
+        //血量條
         g.setColor(Color.red);
         g.fillRect(painter().left(), painter().bottom(), painter().width(), Global.HP_HEIGHT);
         g.setColor(Color.green);
-        //血量條
-        g.fillRect(painter().left(), painter().bottom(), (int) ((percentHp) * painter().width()), Global.HP_HEIGHT);
+        g.fillRect(painter().left(), painter().bottom(), (int) (currentHp * painter().width())/hp, Global.HP_HEIGHT);
 
         g.setColor(Color.black);
     }

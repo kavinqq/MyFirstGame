@@ -22,7 +22,7 @@ public class House extends Building {
      * @return 增加的市民數
      */
     public int produceCitizen() {
-        return (getLevel()) * 2 + 1;
+        return (getLevel());
     }
 
     @Override
