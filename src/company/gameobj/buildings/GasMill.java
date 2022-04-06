@@ -61,7 +61,7 @@ public class GasMill extends Building{
 
     @Override
     public String toString(){
-        return "生產瓦斯";
+        return "自動定時生產瓦斯";
     }//(每過一段時間 每房屋等級+1)
 
     public String buildingDetail(int level){

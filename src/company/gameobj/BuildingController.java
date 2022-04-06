@@ -1,10 +1,12 @@
 
 package company.gameobj;
 
+import company.controllers.AudioResourceController;
 import company.gameobj.buildings.Building;
 import company.gameobj.buildings.*;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
+import company.gametest9th.utils.Path;
 import oldMain.City;
 import oldMain.Resource;
 
@@ -432,6 +434,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
                     freeArsenalNum++;
                 }
                 //建造完成也要加血量
+                AudioResourceController.getInstance().play(new Path().sound().constructionComplete());
                 node.building.addHpPercent();
                 //隨著時間建造物加血量
             }else if(node.buildEndTime > City.getGameTime()){
@@ -712,6 +715,8 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
                 sum++;
                 //完成後升級進度條歸0
                 node.building.resetUpgradePercent();
+                //播放音樂
+                AudioResourceController.getInstance().play(new Path().sound().constructionComplete());
             }else if(node.upgradeEndTime>City.getGameTime()){
                 //增加升級進度條
                 node.building.addUpgradePercent();

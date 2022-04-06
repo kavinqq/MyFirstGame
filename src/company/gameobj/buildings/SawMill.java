@@ -21,7 +21,7 @@ public class SawMill extends Building{
 
     @Override
     public String toString() {
-        return "每小時採集量+1";
+        return "增加村民最大採集量";
     }//(每房屋等級+2)
 
     /**

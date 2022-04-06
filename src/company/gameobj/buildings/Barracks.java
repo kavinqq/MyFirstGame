@@ -39,7 +39,7 @@ public class Barracks extends Building{
 
     @Override
     public String toString() {
-        return "產生士兵";
+        return "定時自動產生士兵";
     }//
 
     public String buildingDetail(int level){

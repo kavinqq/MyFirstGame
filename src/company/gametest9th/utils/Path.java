@@ -405,6 +405,22 @@ public class Path {
         public String what() {
             return this + "/What.wav";
         }
+
+        public String what2(){
+            return this + "/what2.wav";
+        }
+
+        public String building() {
+            return this + "/building.wav";
+        }
+
+        public String constructionComplete() {
+            return this + "/constructionComplete.wav";
+        }
+
+        public String underAttack() {
+            return this + "/underAttack.wav";
+        }
     }
 
 

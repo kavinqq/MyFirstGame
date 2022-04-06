@@ -61,7 +61,7 @@ public class Lab extends Building {
     }
     @Override
     public String toString() {
-        return "升級科技等級和建築";
+        return "升級科技等級";
     }
 
     public String buildingDetail(int level){

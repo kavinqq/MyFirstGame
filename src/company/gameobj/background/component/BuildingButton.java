@@ -80,7 +80,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
 
         type = BuildingType.getBuildingTypeByInt(getId());
 
-        multiIHintDialog.add("建築物名稱\t:"+type.instance().getName());
+        multiIHintDialog.add("建築物名稱\t:"+type.instance().getName() +"\n");
         multiIHintDialog.add("");
         multiIHintDialog.add(type.instance().toString());
         multiIHintDialog.add("");

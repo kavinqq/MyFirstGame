@@ -49,7 +49,7 @@ public class Arsenal extends Building {
 
     @Override
     public String toString() {
-        return "升級士兵/飛行士兵";
+        return "強化士兵";
     }
 
     public String buildingDetail(int level){

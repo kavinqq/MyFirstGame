@@ -62,7 +62,7 @@ public class SteelMill extends Building{
 
     @Override
     public String toString() {
-        return "每一次採集最大量+1";
+        return "增加村民最大採集量";
     }//(每房屋等級+2)
 
     public int getSteelSpeed(){

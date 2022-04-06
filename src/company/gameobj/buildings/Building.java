@@ -831,7 +831,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
         //升級中及完成顯示白色
         g.setColor(Color.white);
-
+        g.setFont(new Font("Dialog", Font.BOLD, Global.FONT_SIZE));
 
         if (level == 0) { //畫出建造中的建築物 !isWorking() && !readyToUpgrade && !isUpgrading
             g.drawImage(underConstructionImg, painter().left(), painter().top(), painter().width(), painter().height(), null);
@@ -841,7 +841,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
             g.drawImage(img, painter().left(), painter().top(), painter().width(), painter().height(), null);
             //畫出Icon
             if (isShowIcon) {
-                g.setFont(new Font("Dialog", Font.BOLD, Global.FONT_SIZE));
+
                 //畫出等級
                 g.drawString("目前等級" + level, painter().width() / 2 + painter().left() - Global.FONT_SIZE * 2, painter().top() - showStringHeight);
                 for (int i = 0; i < icons.size(); i++) {

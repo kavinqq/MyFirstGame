@@ -377,7 +377,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                             //建造房子
                             city.build(type, currentMouseX - BUILDING_WIDTH / 2, currentMouseY - BUILDING_HEIGHT / 2);
-
+                            AudioResourceController.getInstance().play(new Path().sound().building());
                             ToastController.instance().print("建造-" + type.instance().getName() + "成功");
 
 
