@@ -67,8 +67,6 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
             buildingButtons.add(new BuildingButton(buttonX, BUILDING_OPTION_Y + FB_DIV_GAP_Y + (FOUNDATION_HEIGHT + OPTION_GAP_Y) * i, tmpId));
             buildingButtons.get(i).setImg(SceneController.getInstance().imageController().tryGetImage(tmpPath));
-
-
         }
 
         //新增地基圖片
@@ -76,17 +74,6 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         //建築物選單圖片
         buildingOption_Img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().buildingOptionBg());
     }
-
-
-    //是否所有Button都false
-    public boolean checkMouseOnButtons() {
-        isMouseOnButtons = false;
-        for (int i = 0; i < BuildingTypeNum; i++) {
-            isMouseOnButtons |= buildingButtons.get(i).isMoveOnButton();
-        }
-        return isMouseOnButtons;
-    }
-
 
     //取得
     public BuildingButton get(int index) {
@@ -115,12 +102,12 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
             for (int i = 0; i < BuildingTypeNum; i++) {
                 //取得目前指到的按鈕
                 if (buildingButtons.get(i).isEntered(x, y)) {
-                    return currentMoveOnButton = buildingButtons.get(i);
+                    return buildingButtons.get(i);
                 }
             }
         }
 
-        return currentMoveOnButton=null;
+        return null;
     }
 
     @Override
@@ -149,8 +136,6 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
     @Override
     public void update() {
-        //印出update ，取得當前按鈕
-        //boolean isOnButtons = checkMouseOnButtons();
         for (int i = 0; i < BuildingTypeNum; i++) {
             buildingButtons.get(i).update();
         }
@@ -159,7 +144,7 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-        getCurrentMoveOnButton(state,e.getX(),e.getY());
+        currentMoveOnButton=getCurrentMoveOnButton(state,e.getX(),e.getY());
 
         //呼叫所有建築物按鈕
         for (int i = 0; i < BuildingTypeNum; i++) {

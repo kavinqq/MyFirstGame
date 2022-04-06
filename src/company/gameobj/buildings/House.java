@@ -41,7 +41,7 @@ public class House extends Building {
     protected void init() {
         setId(1)
                 .setName("房屋")
-                .setBuildTime(2)
+                .setBuildTime(3)
                 .setUpgradeTime(3)
                 .setLevelC(0)
                 .setTechLevelNeedBuild(1)

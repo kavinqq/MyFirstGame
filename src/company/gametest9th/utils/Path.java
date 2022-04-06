@@ -352,6 +352,10 @@ public class Path {
             public String tarmac() {
                 return this + "/tarmac.png";
             }
+
+            public String magic(){
+                return this+"/magic.png";
+            }
         }
 
         public Actors actors() {

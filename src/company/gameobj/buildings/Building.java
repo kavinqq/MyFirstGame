@@ -264,11 +264,11 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
      */
     private int hp;
     //當前hp
-    private int currentHp;
+    private float currentHp;
 
     //取得當前血量
     public int getCurrentHp(){
-        return currentHp;
+        return (int)currentHp;
     }
 
     //設置當前血量
@@ -278,7 +278,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
     //移除自己
     public boolean isRemoveSelf(){
-        if(this.currentHp<0){
+        if(this.currentHp<=0){
             return true;
         }
         return false;
@@ -381,6 +381,8 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         this.isUpgrading = false;
         //建築物 剛建造完的時間 (那一個moment)，用來計算建築生產(和buildTime gameTime去做計算)
         this.createTime = -1;
+
+        currentHp=1;
 
         underConstructionImg = SceneController.getInstance().imageController().tryGetImage(new Path().img().building().ingBuild());
 
@@ -759,7 +761,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
     //換成血量百分比
     public void addHpPercent() {
         percentHp += (double) 1 / buildTime ;
-        currentHp += percentHp * hp;
+        currentHp += (float) 1 / buildTime * hp;
         if(currentHp > hp){
             currentHp =hp;
         }
@@ -879,7 +881,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         g.setColor(Color.red);
         g.fillRect(painter().left(), painter().bottom(), painter().width(), Global.HP_HEIGHT);
         g.setColor(Color.green);
-        g.fillRect(painter().left(), painter().bottom(), (int) (currentHp * painter().width())/hp, Global.HP_HEIGHT);
+        g.fillRect(painter().left(), painter().bottom(),  (int)(currentHp * painter().width())/hp, Global.HP_HEIGHT);
 
         g.setColor(Color.black);
     }
