@@ -4,7 +4,6 @@ import company.Global;
 
 import company.gameobj.GameObject;
 import company.gametest9th.utils.*;
-import oldMain.Resource;
 
 import java.awt.*;
 
@@ -361,6 +360,5 @@ public class Citizen extends Human {   //市民
     public static int getMaxCarrySteel() {
         return maxCarrySteel;
     }
-
 
 }

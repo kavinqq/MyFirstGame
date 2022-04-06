@@ -14,7 +14,7 @@ public class ResourceSystem {
 
     // 初始樹木資源XY
     private static final int INIT_TREE_X = 350;
-    private static final int INIT_TREE_Y = 350;
+    private static final int INIT_TREE_Y = 400;
 
     // 初始鋼鐵資源XY
     private static final int INIT_STEEL_X = 1300;

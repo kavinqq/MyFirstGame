@@ -220,8 +220,11 @@ public class ZombieKingdom implements GameKernel.GameInterface{
 
         public ZombieTroop() {
             Zombie zombieGenre;
+
             landTroop = new ArrayList<Zombie>();
+
             airTroop = new ArrayList<Zombie>();
+
             for (Map.Entry<Zombie, ArrayList<? extends Zombie>> entry : zombies.entrySet()) {
                 zombieGenre = entry.getKey();
 //                System.out.println(entry.getValue().size());

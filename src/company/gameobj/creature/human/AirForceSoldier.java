@@ -41,6 +41,7 @@ public class AirForceSoldier extends Soldier{
         getAnimator().update();
 
         //TODO:???
+
     }
 
     @Override

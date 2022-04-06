@@ -418,6 +418,10 @@ public class Path {
             return this + "/constructionComplete.wav";
         }
 
+        public String soldierWhat3() { return this + "/SoldierWhat3.wav";}
+
+        public String soldierWhat4() { return this + "/SoldierWhat4.wav";}
+
         public String underAttack() {
             return this + "/underAttack.wav";
         }

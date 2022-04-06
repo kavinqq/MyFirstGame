@@ -9,12 +9,11 @@ import java.awt.*;
 
 public class ArmySoldier extends Soldier  {  //士兵
 
-    private static final int painterWidth = 50;
-    private static final int painterHeight = 50;
-    private static final int colliderWidth = 50;
-    private static final int colliderHeight = 50;
+    private static final int painterWidth = 64;
+    private static final int painterHeight = 64;
+    private static final int colliderWidth = 64;
+    private static final int colliderHeight = 64;
     private static final int SPEED = 4;
-
 
 
     /**
@@ -33,6 +32,7 @@ public class ArmySoldier extends Soldier  {  //士兵
 
         //動畫更新
         getAnimator().update();
+
 
         //TODO:???
     }
