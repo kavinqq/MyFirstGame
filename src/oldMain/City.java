@@ -656,13 +656,22 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
     public List<Human> getBoxSelectionObjs(GameObject box){
 
-        boxSelection = citizens.getBoxCitizens(box);
+        //每次框選前 先清空
+        boxSelection.clear();
 
-        if(boxSelection.size() > 0) {
-            return boxSelection;
+        List<Human> tmpList;
+
+        tmpList = citizens.getBoxCitizens(box);
+
+        for(Human human: tmpList){
+            boxSelection.add(human);
         }
 
-        boxSelection = military.getBoxSelectSoldier(box);
+        tmpList = military.getBoxSelectSoldier(box);
+
+        for(Human human: tmpList){
+            boxSelection.add(human);
+        }
 
         return boxSelection;
     }

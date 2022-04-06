@@ -29,15 +29,6 @@ public class ArmySoldier extends Soldier  {  //士兵
         setWalkingDir(Global.Direction.DOWN);
     }
 
-    @Override
-    public void update() {
-
-        //動畫更新
-        getAnimator().update();
-
-
-        //TODO:???
-    }
 
     @Override
     public void stop() {

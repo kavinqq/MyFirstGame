@@ -138,7 +138,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         city = new City();
         zombieKingdom = new ZombieKingdom();
         //TODO:
-        zombieNormal = new ZombieNormal(100, 700);
+        zombieNormal = new ZombieNormal(100, 800);
 
         // 測試: 預設有 ? 個 村民
 
@@ -293,6 +293,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             fogOfWar.cameraMove();
 
             zombieNormal.cameraMove();
+
+            zombieKingdom.cameraMove();
+
+            for(Effect effect:effects){
+                effect.resetObjectXY();
+            }
 
             // Reset 鏡頭移動量
             CAMERA_MOVE_VX = 0;
@@ -533,7 +539,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                  */
                 if (count != 0 && !(isGoingToCollect && human instanceof Citizen)) {
                     if (Global.random(0, 2) == 1) {
-
                         targetX += 74;
                     } else {
                         targetY += 74;
@@ -1171,6 +1176,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             buildingArea.buildingAreaResetPosition();
 
             fogOfWar.resetObjectXY();
+
+            zombieKingdom.resetObjectXY();
+
+            zombieNormal.resetObjectXY();
+
+            for(Effect effect:effects){
+                effect.resetObjectXY();
+            }
 
             Global.resetSumOfCameraMove();
         }
