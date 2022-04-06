@@ -310,6 +310,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             // 迷霧移動
             fogOfWar.cameraMove();
 
+            zombieNormal.cameraMove();
+
             // Reset 鏡頭移動量
             CAMERA_MOVE_VX = 0;
             CAMERA_MOVE_VY = 0;
@@ -322,6 +324,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //City更新
         city.update();
+        zombieKingdom.update();
 
 
 
@@ -799,6 +802,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //TODO: del
         zombieNormal.update();
         if(zombieNormal.isCollision(base)){
+            System.out.println();
             switch (zombieNormal.getWalkingDir()){
                 case LEFT:{
                     if(zombieNormal.touchRightOf(base)){
