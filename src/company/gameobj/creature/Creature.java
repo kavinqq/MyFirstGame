@@ -52,7 +52,7 @@ public abstract class Creature extends GameObject {
 
     private Delay delay;
 
-    private Effect fightEffect;
+
 
 
     public Creature(int x, int y, int targetX, int targetY, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility, Animator.State moveStatus) {
@@ -169,6 +169,9 @@ public abstract class Creature extends GameObject {
 
     public void setAttackTargetToNull(){
         this.attackTarget = null;
+        if(!this.isAtTarget()){
+            this.setMoveStatus(Animator.State.WALK);
+        }
     }
 
 
@@ -652,13 +655,7 @@ public abstract class Creature extends GameObject {
         return delay;
     }
 
-    public Effect getFightEffect() {
-        return fightEffect;
-    }
 
-    public void setFightEffect(Effect fightEffect) {
-        this.fightEffect = fightEffect;
-    }
 
     @Override
     public void paintComponent(Graphics g) {

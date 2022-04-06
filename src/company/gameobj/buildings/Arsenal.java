@@ -163,5 +163,9 @@ public class Arsenal extends Building {
         g.fillRect(painter().left(), painter().bottom(), (int) (getCurrentHp() * painter().width())/getHp(), Global.HP_HEIGHT);
         //復原
         g.setColor(Color.black);
+
+        if(this.getFightEffect()!=null){
+            this.getFightEffect().paintComponent(g);
+        }
     }
 }

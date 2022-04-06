@@ -1,6 +1,7 @@
 package company.gameobj;
 
 import company.Global;
+import company.gametest9th.utils.Effect;
 import company.gametest9th.utils.GameKernel;
 
 import java.awt.*;
@@ -16,6 +17,8 @@ public abstract class GameObject implements GameKernel.GameInterface {
     private Rect detectRange;
     private Rect painter;
     private Rect tmpDetectRange;
+
+    private Effect fightEffect;
 
 
     public GameObject(int x, int y, int width, int height) {
@@ -322,6 +325,14 @@ public abstract class GameObject implements GameKernel.GameInterface {
 
     public void setBuildingOriginalY(int sumOfVY) {
         originalY -= sumOfVY;
+    }
+
+    public Effect getFightEffect() {
+        return fightEffect;
+    }
+
+    public void setFightEffect(Effect fightEffect) {
+        this.fightEffect = fightEffect;
     }
 
 }

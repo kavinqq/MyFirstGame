@@ -15,10 +15,12 @@ import company.gameobj.FogOfWar;
 import company.gameobj.Rect;
 import company.gameobj.buildings.Arsenal;
 import company.gameobj.buildings.Building;
+import company.gameobj.creature.Creature;
+import company.gameobj.creature.enemy.Enemy;
+import company.gameobj.creature.enemy.zombies.Zombie;
 import company.gameobj.creature.enemy.zombies.ZombieKingdom;
 import company.gameobj.creature.enemy.zombies.ZombieNormal;
-import company.gameobj.creature.human.ArmySoldier;
-import company.gameobj.creature.human.Soldier;
+import company.gameobj.creature.human.*;
 import company.gameobj.resourceObjs.ResourceObj;
 import company.gameobj.resourceObjs.ResourceSystem;
 import company.gameobj.message.ToastController;
@@ -26,12 +28,12 @@ import company.gametest9th.utils.*;
 import company.gameobj.GameObject;
 import company.gameobj.background.Background;
 import company.gameobj.background.component.*;
-import company.gameobj.creature.human.Citizen;
-import company.gameobj.creature.human.Human;
 
 import oldMain.City;
+import oldMain.Military;
 
 import java.awt.*;
+import java.util.function.BiConsumer;
 
 import static company.Global.*;
 import static company.gameobj.BuildingController.BuildingType.values;
@@ -255,6 +257,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         StatusBar.instance().setTimeString(startTime);
         StatusBar.instance().updateResource(city.getResource().getTotalWood(), city.getResource().getTotalSteel(), city.getResource().getTotalGas(), city.getTotalCitizen());
 
+        /*
         // 處理鏡頭移動
         if ((currentMouseX >= SCREEN_WIDTH || currentMouseX <= 8) || (currentMouseY <= 0 || currentMouseY >= SCREEN_HEIGHT - 8)) {
 
@@ -305,6 +308,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             CAMERA_MOVE_VY = 0;
         }
 
+         */
 
         //建築物相關測試
         buildingOption.update();
@@ -969,6 +973,185 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 //        for (BuildingType value:values()) {
 //            for (int j = 0; j < value.list().size(); j++) {
 //                Building AllBuildings=value.list().get(j).getBuilding();
+
+        for(ArmySoldier armySoldier : city.getMilitary().getArmy()){
+            if(armySoldier.getAttackTarget()==null){
+                for(Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()) {
+                    armySoldier.detect(zombie);
+                    if(armySoldier.getAttackTarget()!=null) {
+                        break;
+                    }
+                }
+            }
+
+            if(armySoldier.getAttackTarget()!=null){
+                if(armySoldier.isCollision(armySoldier.getAttackTarget())){
+                    Enemy enemy = (Enemy) armySoldier.getAttackTarget();
+                    enemy.stop();
+                    armySoldier.stop();
+
+                    if(enemy.getFightEffect()==null){
+                        enemy.setFightEffect(new FightEffect(armySoldier.painter().centerX(), armySoldier.painter().centerY()));
+                        enemy.getAttacked(armySoldier.getValue());
+                    }
+                    else{
+                        if(armySoldier.getFightEffect().isDue()){
+                            enemy.setFightEffect(null);
+                            if(!enemy.isAlive()) {
+                                armySoldier.setAttackTargetToNull();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        for(AirForceSoldier airForceSoldier : city.getMilitary().getAirForce()){
+            if(airForceSoldier.getAttackTarget()==null){
+                for(Zombie zombie : zombieKingdom.getZombieTroop().getAirTroop()) {
+                    airForceSoldier.detect(zombie);
+                    if(airForceSoldier.getAttackTarget()!=null) {
+                        break;
+                    }
+                }
+            }
+
+            if(airForceSoldier.getAttackTarget()!=null){
+                if(airForceSoldier.isCollision(airForceSoldier.getAttackTarget())){
+                    Enemy enemy = (Enemy) airForceSoldier.getAttackTarget();
+                    enemy.stop();
+                    airForceSoldier.stop();
+
+                    if(enemy.getFightEffect()==null){
+                        enemy.setFightEffect(new FightEffect(airForceSoldier.painter().centerX(), airForceSoldier.painter().centerY()));
+                        enemy.getAttacked(airForceSoldier.getValue());
+                    }
+                    else{
+                        if(airForceSoldier.getFightEffect().isDue()){
+                            enemy.setFightEffect(null);
+                            if(!enemy.isAlive()) {
+                                airForceSoldier.setAttackTargetToNull();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        for(Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()){
+            if(!zombie.isAlive()) {
+                continue;
+            }
+
+            if(zombie.getAttackTarget()==null){
+                for(Citizen citizen : city.getCitizens().getAllCitizens()) {
+                    if(zombie.getAttackTarget()==null) {
+                        zombie.detect(citizen);
+                    }
+                    else {
+                        break;
+                    }
+                }
+
+                for(ArmySoldier armySoldier : city.getMilitary().getArmy()) {
+                    if(zombie.getAttackTarget()==null) {
+                        zombie.detect(armySoldier);
+                    }
+                    else {
+                        break;
+                    }
+                }
+
+                for(BuildingType value:values()) {
+                    if(zombie.getAttackTarget()==null) {
+                        for (int i = 0; i < value.list().size(); i++) {
+                            if (zombie.getAttackTarget() == null) {
+                                Building building = value.list().get(i).getBuilding();
+                                zombie.detect(building);
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+
+            if(zombie.getAttackTarget()!=null){
+                if(zombie.isCollision(zombie.getAttackTarget())){
+                    zombie.stop();
+                    if(zombie.getAttackTarget() instanceof Creature){
+                        ((Creature) zombie.getAttackTarget()).stop();
+                    }
+
+                    GameObject gameObject = zombie.getAttackTarget();
+                    if(gameObject.getFightEffect()==null){
+                        gameObject.setFightEffect(new FightEffect(gameObject.painter().centerX(),gameObject.painter().centerY()));
+                    }
+                    else{
+                        if(gameObject.getFightEffect().isDue()){
+                            gameObject.setFightEffect(null);
+                        }
+                    }
+
+                    if(zombie.getAttackTarget() instanceof Building) {
+                        Building building = (Building) zombie.getAttackTarget();
+                        building.getDamage(zombie.getValue());
+                        if(building.getCurrentHp()<=0) {
+                            zombie.setAttackTargetToNull();
+                        }
+                    }
+                    else if(zombie.getAttackTarget() instanceof Human) {
+                        Human human = (Human) zombie.getAttackTarget();
+                        human.stop();
+                        human.getAttacked(zombie.getValue());
+                        if(!human.isAlive()) {
+                            zombie.setAttackTargetToNull();
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        /*
+        if (zombie.isCollision(base)) {
+            switch (zombie.getWalkingDir()) {
+                case LEFT: {
+                    if (zombie.touchRightOf(base)) {
+                        zombie.translateX(base.painter().right() - zombie.painter().left());
+                    }
+                    break;
+                }
+                case RIGHT: {
+                    if (zombie.touchLeftOf(base)) {
+                        zombie.translateX(zombie.painter().right() - base.painter().left());
+                    }
+                    break;
+                }
+                case UP: {
+                    if (zombie.touchBottomOf(base)) {
+                        zombie.translateY(base.painter().bottom() - zombie.painter().top());
+                    }
+                    break;
+                }
+                case DOWN: {
+                    if (zombie.touchTopOf(base)) {
+                        zombie.translateY(zombie.painter().bottom() - base.painter().top());
+                    }
+                    break;
+                }
+            }
+            zombie.stop();
+        }
+        }
+
+
+         */
 
         //TODO: del
         zombieNormal.update();
