@@ -29,15 +29,15 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
     /**
      * 飛機升級時間
      */
-    public static final int PLANE_LEVEL_UPGRADE_TIME = 20; //48
+    public static final int PLANE_LEVEL_UPGRADE_TIME = 48; //48
     /**
      * 士兵升級時間
      */
-    public static final int SOLDIER_LEVEL_UPGRADE_TIME = 20; //48
+    public static final int SOLDIER_LEVEL_UPGRADE_TIME = 48; //48
     /**
      * 科技升級時間
      */
-    public static final int TECH_LEVEL_UPGRADE_TIME = 5; //24
+    public static final int TECH_LEVEL_UPGRADE_TIME = 24; //24
     /**
      * 此回合有升級科技
      */
@@ -91,7 +91,12 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
             //  enum裡面 => public LinkedList<BuildingNode> list()
             for (int j = 0; j < value.list.size(); j++) {
                 value.list().get(j).update();
+                if(value.list().get(j).getBuilding().isRemoveSelf()){
+                    value.list().remove(j);
+                    j--;
+                }
             }
+
         }
     }
 

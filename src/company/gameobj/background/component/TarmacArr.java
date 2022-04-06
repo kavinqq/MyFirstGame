@@ -9,8 +9,7 @@ import company.gametest9th.utils.Path;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static company.Global.BUILDING_HEIGHT;
-import static company.Global.BUILDING_WIDTH;
+import static company.Global.*;
 import static company.gameobj.BuildingController.BuildingType.values;
 
 public class TarmacArr {
@@ -25,7 +24,7 @@ public class TarmacArr {
             tarmacs.add(new ArrayList<>());
             for (int j = 0; j < Global.BUILDING_AREA_NUMX; j++) {
                 if ((i == 0 || i == Global.BUILDING_AREA_NUMY - 1) && (j == 0 || j == Global.BUILDING_AREA_NUMX - 1)) {
-                    tarmacs.get(i).add(new Tarmac((BUILDING_WIDTH) / 2 + Global.BUILDING_AREA_X + Global.BUILDING_AREA_DISTANCE_X * j, (BUILDING_HEIGHT) / 2 + Global.BUILDING_AREA_Y + Global.BUILDING_AREA_DISTANCE_Y * i));
+                    tarmacs.get(i).add(new Tarmac(+ Global.BUILDING_AREA_X + Global.BUILDING_AREA_DISTANCE_X * j,  + Global.BUILDING_AREA_Y + Global.BUILDING_AREA_DISTANCE_Y * i));
                 }
             }
         }
@@ -36,11 +35,11 @@ public class TarmacArr {
         private Image tarmac_img;
 
         public Tarmac(int x, int y) {
-            super(x, y, BUILDING_WIDTH, BUILDING_HEIGHT);
+            super(x, y, BUILDING_GRID_WIDTH, BUILDING_GRID_HEIGHT);
             setBuildingOriginalX(Global.SUM_OF_CAMERA_MOVE_VX);
             setBuildingOriginalY(Global.SUM_OF_CAMERA_MOVE_VY);
 
-            tarmac_img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().tarmac());
+            tarmac_img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().magic());
         }
 
         @Override

@@ -140,7 +140,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         city = new City();
         zombieKingdom = new ZombieKingdom();
         //TODO:
-        zombieNormal = new ZombieNormal(100, 700);
+        zombieNormal = new ZombieNormal(100, 800);
 
         // 測試: 預設有 ? 個 村民
 
@@ -148,7 +148,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
         //設定遊戲時間 120偵為遊戲一小時(oldMain的流動一小時)
-        gameTimeSpeed = 120;
+        gameTimeSpeed = 60;
         gameDelay = new Delay(gameTimeSpeed);
         gameDelay.loop();
 
@@ -205,18 +205,17 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         if (currentObj != null && currentObj.getVisible()) {
 
             g.setColor(Color.RED);
-            g.fillRect(currentObj.painter().left(), currentObj.painter().bottom() + 3, currentObj.painter().width(), 10);
+            g.fillRect(currentObj.painter().left(), currentObj.painter().bottom() + 3, currentObj.painter().width(), HP_HEIGHT);
             g.setColor(Color.black);
         }
 
         // 如果現在框選的遊戲物件列表有東西 而且 也沒有單一操控某個物件時
         if (!controlHumans.isEmpty()) {
             for (Human human : controlHumans) {
-
                 // 如果該物件現在能看的到 才畫他
                 if (human.getVisible()) {
                     g.setColor(Color.GREEN);
-                    g.fillRect(human.painter().left(), human.painter().bottom() + 3, human.painter().width(), 10);
+                    g.fillRect(human.painter().left(), human.painter().bottom() + 3, human.painter().width(), HP_HEIGHT);
                     g.setColor(Color.black);
                 }
             }
@@ -298,6 +297,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             zombieNormal.cameraMove();
 
+            zombieKingdom.cameraMove();
+
+            for(Effect effect:effects){
+                effect.resetObjectXY();
+            }
+
             // Reset 鏡頭移動量
             CAMERA_MOVE_VX = 0;
             CAMERA_MOVE_VY = 0;
@@ -357,8 +362,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                         redRects.add(tmpRect);
                                     }
                                 }
-                                if (redRects != null && redRects.size() >= 1) {
+                                if (currentButton.isDragging() && redRects != null && redRects.size() >= 1) {
                                     currentButton.setRedRects(redRects.toArray(new Rect[redRects.size()]));
+                                }else{
+                                    currentButton.setRedRects(null);
                                 }
                             }
                         }
@@ -459,6 +466,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 currentBuildNode.getBuilding().shutAllUpdateIconCan();
             }
         }
+
 
 
         // 框選Box狀態on
@@ -1213,6 +1221,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 return;
             }
 
+            buildingOption.mouseTrig(e, state, trigTime);
+
             // 紀錄當下的滑鼠位置
             currentMouseX = e.getX();
             currentMouseY = e.getY();
@@ -1223,7 +1233,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             //如果現在沒有框選
             if (!canUseBoxSelection) {
                 // 選單控制
-                buildingOption.mouseTrig(e, state, trigTime);
+
             }
 
             // 如果現在可以使用框選系統
@@ -1342,8 +1352,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             city.resetObjectXY();
 
-//            base.resetObjectXY();
-
             tarmacArr.resetObjectXY();
 
             resourceSystem.resetObjectXY();
@@ -1351,6 +1359,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             buildingArea.buildingAreaResetPosition();
 
             fogOfWar.resetObjectXY();
+
+            zombieKingdom.resetObjectXY();
+
+            zombieNormal.resetObjectXY();
+
+            for(Effect effect:effects){
+                effect.resetObjectXY();
+            }
 
             Global.resetSumOfCameraMove();
         }

@@ -25,6 +25,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
      */
     //private final Map<Zombie, Integer> zombies;
     private final Map<Zombie, ArrayList<? extends Zombie>> zombies;
+
     /**
      * 各種殭屍
      */
@@ -174,6 +175,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
 
     @Override
     public void paint(Graphics g) {
+
         for(Zombie zombie : zombieTroop.getLandTroop()){
             zombie.paint(g);
         }
@@ -183,25 +185,31 @@ public class ZombieKingdom implements GameKernel.GameInterface{
     }
 
     public void cameraMove(){
-        for(Zombie zombie : zombieTroop.getLandTroop()){
-            zombie.cameraMove();
+
+        for(int i = 0; i < zombieTroop.getLandTroop().size(); i++){
+            zombieTroop.getLandTroop().get(i).cameraMove();
         }
-        for(Zombie zombie : zombieTroop.getAirTroop()){
-            zombie.cameraMove();
+
+        for(int i = 0; i < zombieTroop.getAirTroop().size(); i++){
+            zombieTroop.getAirTroop().get(i).cameraMove();
         }
+
     }
 
     public void resetObjectXY(){
-        for(Zombie zombie : zombieTroop.getLandTroop()){
-            zombie.resetObjectXY();
+
+        for(int i = 0; i < zombieTroop.getLandTroop().size(); i++){
+            zombieTroop.getLandTroop().get(i).resetObjectXY();
         }
-        for(Zombie zombie : zombieTroop.getAirTroop()){
-            zombie.resetObjectXY();
+
+        for(int i = 0; i < zombieTroop.getAirTroop().size(); i++){
+            zombieTroop.getAirTroop().get(i).resetObjectXY();
         }
     }
 
     @Override
     public void update() {
+
         //timePass();
         for(int i=0; i<zombieTroop.getLandTroop().size(); i++){
             if(!zombieTroop.getLandTroop().get(i).isAlive()){

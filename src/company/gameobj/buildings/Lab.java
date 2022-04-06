@@ -91,7 +91,7 @@ public class Lab extends Building {
     public void paintComponent(Graphics g) {
         //升級中及完成顯示白色
         g.setColor(Color.white);
-
+        g.setFont(new Font("Dialog",Font.BOLD,Global.FONT_SIZE));
 
         if (getLevel() == 0) { //畫出建造中的建築物 !isWorking() && !readyToUpgrade && !isUpgrading
             g.drawImage(getUnderConstructionImg(), painter().left(), painter().top(), painter().width(), painter().height(), null);
@@ -111,7 +111,7 @@ public class Lab extends Building {
         //畫出升級中
         } else if (isTechLevelUpgrading) {
             g.drawImage(getUnderConstructionImg(), painter().left(), painter().top(), painter().width(), painter().height(), null);
-            g.drawString("升級科技等級中", painter().width() / 2 + painter().left() - Global.FONT_SIZE * 2, painter().top() - showStringHeight());
+            g.drawString("升級科技等級", painter().width() / 2 + painter().left() - Global.FONT_SIZE * 2, painter().top() - showStringHeight());
             //升級進度條
             g.setColor(Color.yellow);
             g.fillRect(painter().left(), painter().bottom()+Global.HP_HEIGHT+2, (int) (techUpgradePercent * painter().width()), Global.HP_HEIGHT);

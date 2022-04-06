@@ -31,7 +31,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
      */
 
     public final int DEFAULT_CITIZEN = 20;
-    public final int MAX_CAN_BUILD = 14; //TODO 不確定建築物損壞後有沒有減掉當前建築物數量
+    public final int MAX_CAN_BUILD = 15; //TODO 不確定建築物損壞後有沒有減掉當前建築物數量
     public final int ZOMBIE_TYPE = 6;
 
     //停機坪
@@ -656,13 +656,22 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
     public List<Human> getBoxSelectionObjs(GameObject box){
 
-        boxSelection = citizens.getBoxCitizens(box);
+        //每次框選前 先清空
+        boxSelection.clear();
 
-        if(boxSelection.size() > 0) {
-            return boxSelection;
+        List<Human> tmpList;
+
+        tmpList = citizens.getBoxCitizens(box);
+
+        for(Human human: tmpList){
+            boxSelection.add(human);
         }
 
-        boxSelection = military.getBoxSelectSoldier(box);
+        tmpList = military.getBoxSelectSoldier(box);
+
+        for(Human human: tmpList){
+            boxSelection.add(human);
+        }
 
         return boxSelection;
     }

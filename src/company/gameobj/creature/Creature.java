@@ -148,7 +148,9 @@ public abstract class Creature extends GameObject {
 
     public void setAttackTarget(GameObject attackTarget) {
         this.attackTarget = attackTarget;
+
         ArrayList<Global.Direction> availableInitialDirs = new ArrayList<>();
+
         if(attackTarget.painter().centerX()>targetX){
             availableInitialDirs.add(Global.Direction.RIGHT);
         }
