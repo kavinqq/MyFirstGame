@@ -18,7 +18,7 @@ public class ZombieTypeI extends Zombie {
     }
 
     public ZombieTypeI() {
-        super(-1000, -1000, painterWidth, painterHeight, colliderWidth, colliderHeight, 10, new Path().img().zombies().zombieTypeI(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_TYPE_I);
+        super( painterWidth, painterHeight, colliderWidth, colliderHeight, 10, new Path().img().zombies().zombieTypeI(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_TYPE_I);
     }
 
 

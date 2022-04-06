@@ -21,7 +21,7 @@ public class ZombieFlying extends Zombie {
     }
 
     public ZombieFlying() {
-        super(-1000, -1000, painterWidth, painterHeight, colliderWidth, colliderHeight, 2, new Path().img().zombies().zombieFlying(), FLY_ABILITY.CAN_FLY, ZOMBIE_TYPE.ZOMBIE_FLYING);
+        super( painterWidth, painterHeight, colliderWidth, colliderHeight, 2, new Path().img().zombies().zombieFlying(), FLY_ABILITY.CAN_FLY, ZOMBIE_TYPE.ZOMBIE_FLYING);
     }
 
     @Override

@@ -48,6 +48,13 @@ public abstract class Zombie extends Enemy {
         this.setAnimator(new ZombieAnimator(this.zombieType.getValue(), Animator.State.WALK));
     }
 
+    public Zombie(int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, String img, FLY_ABILITY flyAbility, ZOMBIE_TYPE zombieType) {
+        //TODO: set targetX and targetY to correct parameter
+        super(Global.random(Global.MAP_LEFT, Global.MAP_RIGHT), Global.random(Global.MAP_TOP, Global.MAP_BOTTOM), painterWidth, painterHeight, colliderWidth, colliderHeight, value, SPEED, img, flyAbility, Animator.State.WALK);
+        this.zombieType = zombieType;
+        this.setAnimator(new ZombieAnimator(this.zombieType.getValue(), Animator.State.WALK));
+    }
+
     /**
      * 殭屍數量成長
      *
