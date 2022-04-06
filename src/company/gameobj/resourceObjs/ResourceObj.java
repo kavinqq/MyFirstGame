@@ -15,7 +15,9 @@ abstract public class ResourceObj extends GameObject {
      */
     public enum ResourceType {
         WOOD("WOOD"),
-        STEEL("STEEL");
+        STEEL("STEEL"),
+        SPECIAL_TREE("SPECIAL_WOOD"),
+        SPECIAL_STEEL("SPECIAL_STEEL");
 
         private String resourceTypeStr;
 

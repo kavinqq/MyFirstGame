@@ -25,7 +25,7 @@ public class Military {
         this.airForceLevel = 0;
         this.armyValue = 0;
         this.airForceValue = 0;
-        this.addArmy(INITIAL_ARMY_SIZE);
+        this.addArmy(INITIAL_ARMY_SIZE,200,300);
         upDateArmyValue();
         upDateAirForceValue();
     }
@@ -34,12 +34,12 @@ public class Military {
      * add certain number of army soldiers to the army
      * @param num
      */
-    public void addArmy(int num){
+    public void addArmy(int num,int x,int y){
 
         ArmySoldier armySoldier;
 
         for(int i=0; i<num; i++){
-            armySoldier = new ArmySoldier( 900, 700, this.armyLevel);
+            armySoldier = new ArmySoldier( x, y, this.armyLevel);
             this.armyValue += armySoldier.getValue();
             this.army.add(armySoldier);
         }

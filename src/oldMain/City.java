@@ -188,7 +188,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             }
             int numOfNewArmySoldiers = buildings.getNewArmyNum(resource);
             if (numOfNewArmySoldiers > 0) {
-                this.military.addArmy(numOfNewArmySoldiers); //Base.BASE_X+225,Base.BASE_Y
+                this.military.addArmy(numOfNewArmySoldiers,Base.BASE_X+225,Base.BASE_Y); //Base.BASE_X+225,Base.BASE_Y
                 //System.out.printf("第%d回合 有 %d 個新戰士出生,目前一共有%d個戰士\n", getGameTime() + 1, numOfNewArmySoldiers, military.getNumOfArmySoldier());
             }
             int numOfNewAirMen = buildings.getNewPlaneNum(resource);
@@ -646,7 +646,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
         citizens.paintAll(g);
 
-        military.paintAll(g);
+//        military.paintAll(g);
     }
 
     @Override
@@ -657,7 +657,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
         citizens.updateAll();
 
-        military.updateAll();
+//        military.updateAll();
     }
 
     /**

@@ -1,9 +1,5 @@
 package company;
 
-import company.gameobj.buildings.Base;
-
-import java.awt.*;
-
 public class Global {
 
     /**
@@ -54,7 +50,6 @@ public class Global {
     public static final int SCREEN_HEIGHT = WINDOW_HEIGHT - 31 - 8;
 
     //地圖大小
-
     public static final int MAP_LEFT = (WINDOW_WIDTH - 8 - 8) * -1;
     public static final int MAP_RIGHT = (WINDOW_WIDTH - 8 - 8) * 2;
     public static final int MAP_TOP = (WINDOW_WIDTH - 8 - 8) * -1;
@@ -66,10 +61,10 @@ public class Global {
 
     //選單大小
     public static final int BUILDING_OPTION_WIDTH = 150;
-    public static final int BUILDING_OPTION_HEIGHT = WINDOW_HEIGHT-STATUS_BAR_HEIGHT;
+    public static final int BUILDING_OPTION_HEIGHT = WINDOW_HEIGHT - STATUS_BAR_HEIGHT;
     public static final int OPTION_GAP_Y = 1;
     public static final int OPTION_GAP_X = (BUILDING_OPTION_WIDTH - FOUNDATION_WIDTH) / 2;
-    public static final int BUILDING_OPTION_X =SCREEN_WIDTH - BUILDING_OPTION_WIDTH;
+    public static final int BUILDING_OPTION_X = SCREEN_WIDTH - BUILDING_OPTION_WIDTH;
     public static final int BUILDING_OPTION_Y = STATUS_BAR_HEIGHT;
 
     //領地大小
@@ -99,20 +94,17 @@ public class Global {
     public final static int BUILDING_AREA_NUMY = 4;
     public final static int BUILDING_AREA_NUMX = 7;
 
-
-
-
-    //StatusBar Icon相關設定
+    // StatusBar Icon相關設定
     public static final int ICON_START_X = 2;
     public static final int ICON_START_Y = 14;
     public static final int ICON_WIDTH = 60;
     public static final int ICON_HEIGHT = 50;
     public static final int ICON_GAP = 300;
 
-    //建築
+    // 建築
     public final static int BuildingTypeNum = 8;
 
-    //建築Icon
+    // 建築Icon
     public static final int BUILDING_ICON_WIDTH = 25;
     public static final int BUILDING_ICON_HEIGHT = 25;
     public static final int BUILDING_ICON_GAP_X = 20;
@@ -127,8 +119,7 @@ public class Global {
     public static final int ESC = 6;
 
     // 鏡頭移動的速度
-
-    public static final int CAMERA_SPEED = 15;
+    public static final int CAMERA_SPEED = 20;
 
     // 鏡頭移動量 X 跟 Y
     public static int CAMERA_MOVE_VX = 0;
@@ -139,10 +130,10 @@ public class Global {
     public static int SUM_OF_CAMERA_MOVE_VY = 0;
 
     //文字大小
-    public static int FONT_SIZE = 23 ;
+    public static int FONT_SIZE = 23;
 
     //血量的高度
-    public static int HP_HEIGHT=10;
+    public static int HP_HEIGHT = 10;
 
     /**
      * 輸出範圍內的隨機數字
@@ -169,13 +160,17 @@ public class Global {
 
     public static void setCameraMoveVX(int vx) {
 
+        // 邊界緩衝量 讓他提前一點碰到邊界
+        int BOUND_BUFFERED = 100;
+
+
         CAMERA_MOVE_VX = vx; // 這次的鏡頭X移動量
         SUM_OF_CAMERA_MOVE_VX += vx;// 目前為止的鏡頭X移動量[尚未按下Space reset前]
 
-        if (SUM_OF_CAMERA_MOVE_VX * -1 <= (MAP_LEFT + 100)) { // 如果鏡頭向左移動量 已經到了左邊界 無法前進
+        if (SUM_OF_CAMERA_MOVE_VX * -1 <= (MAP_LEFT + BOUND_BUFFERED)) { // 如果鏡頭向左移動量 已經到了左邊界 無法前進
             SUM_OF_CAMERA_MOVE_VX -= vx;// 把加的移動量 減回來
             CAMERA_MOVE_VX = 0;// 這次X移動量 = 0
-        } else if (SUM_OF_CAMERA_MOVE_VX * -1 >= (MAP_RIGHT - (SCREEN_WIDTH - BUILDING_OPTION_WIDTH) - 100)) { // 如果鏡頭向右移動量 已經到了右邊界 無法前進
+        } else if (SUM_OF_CAMERA_MOVE_VX * -1 >= (MAP_RIGHT - (SCREEN_WIDTH - BUILDING_OPTION_WIDTH) - BOUND_BUFFERED)) { // 如果鏡頭向右移動量 已經到了右邊界 無法前進
             SUM_OF_CAMERA_MOVE_VX -= vx;// 把加的移動量 減回來
             CAMERA_MOVE_VX = 0;// 這次X移動量 = 0
         }
@@ -188,14 +183,18 @@ public class Global {
      */
 
     public static void setCameraMoveVY(int vy) {
+
+        // 邊界緩衝量 讓他提前一點碰到邊界
+        int BOUND_BUFFERED = 100;
+
         CAMERA_MOVE_VY = vy; // 這次的鏡頭Y移動量
         SUM_OF_CAMERA_MOVE_VY += vy;// 目前為止的鏡頭Y移動量[尚未按下Space reset前]
 
-        if (SUM_OF_CAMERA_MOVE_VY * -1 <= (MAP_TOP + 100)) {// 如果鏡頭向上移動量 已經到了上邊界 無法前進
+        if (SUM_OF_CAMERA_MOVE_VY * -1 <= (MAP_TOP + BOUND_BUFFERED)) {// 如果鏡頭向上移動量 已經到了上邊界 無法前進
 
             SUM_OF_CAMERA_MOVE_VY -= vy; // 把加的移動量 減回來
             CAMERA_MOVE_VY = 0;// 這次Y移動量 = 0
-        } else if (SUM_OF_CAMERA_MOVE_VY * -1 >= (MAP_BOTTOM - SCREEN_HEIGHT - 100)) {// 如果鏡頭向下移動量 已經到下邊界 無法前進(向下移動量極限 = 整當地圖的下邊界 - 視窗下邊界)
+        } else if (SUM_OF_CAMERA_MOVE_VY * -1 >= (MAP_BOTTOM - SCREEN_HEIGHT - BOUND_BUFFERED)) {// 如果鏡頭向下移動量 已經到下邊界 無法前進(向下移動量極限 = 整當地圖的下邊界 - 視窗下邊界)
 
             SUM_OF_CAMERA_MOVE_VY -= vy;// 把加的移動量 減回來
             CAMERA_MOVE_VY = 0;// 這次Y移動量 = 0

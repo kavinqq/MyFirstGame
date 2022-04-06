@@ -1,5 +1,8 @@
 package company.gameobj;
 
+import company.controllers.SceneController;
+import company.gametest9th.utils.Path;
+
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,9 +16,16 @@ public class FogOfWar {
      */
     private class Fog extends GameObject {
 
+        // 迷霧的圖片
+        private Image img;
+
         // 迷霧建構子(碰撞範圍很大)
         public Fog(int x, int y) {
+
             super(x, y, 250, 250);
+
+            img = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().fog());
+
         }
 
 
@@ -23,8 +33,7 @@ public class FogOfWar {
         @Override
         public void paintComponent(Graphics g) {
 
-            g.setColor(Color.BLACK);
-            g.fillRect(painter().left(), painter().top(), 150, 150);
+            g.drawImage(img, painter().left(), painter().top(),150,150,null);
         }
 
         @Override
@@ -35,9 +44,10 @@ public class FogOfWar {
 
     private List<Fog> fogs;
 
+
     public FogOfWar() {
 
-        // 初始化LinkedList(因為要常常刪除節點)
+        // 初始化LinkedList(因為要常常刪除節點所以用LinkedList)
         fogs = new LinkedList<>();
 
         // 加入迷霧
@@ -62,7 +72,11 @@ public class FogOfWar {
         }
     }
 
-
+    /**
+     * 迷霧主要的更新
+     *
+     * @param object 傳入一個遊戲物件
+     */
     public void update(GameObject object) {
 
         // 我把人類的MistDetectRange 和 迷霧 做 碰撞
