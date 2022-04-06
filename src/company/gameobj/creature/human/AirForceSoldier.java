@@ -35,15 +35,6 @@ public class AirForceSoldier extends Soldier{
         getAnimator().paint(getWalkingDir(), painter().left(), painter().top(), painter().right(), painter().bottom(), g);
     }
 
-    @Override
-    public void update() {
-
-        //動畫更新
-        getAnimator().update();
-
-        //TODO:???
-
-    }
 
     @Override
     public void stop() {
