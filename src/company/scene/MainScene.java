@@ -88,7 +88,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     private boolean preCanBuild;
 
-
     // 資源
     private ResourceSystem resourceSystem;
 
@@ -185,17 +184,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 背景
         background.paint(g);
 
-        //畫出戰爭迷霧
-        fogOfWar.paint(g);
-
         // 建築物基座
         buildingArea.paint(g);
 
         //停機坪
         tarmacArr.paint(g);
-
-        //建築物選單
-        buildingOption.paint(g);
 
         //城市
         city.paint(g);
@@ -206,9 +199,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 主堡
         base.paint(g);
-
-        // 畫出每一個村民
-//        city.getCitizens().paintAll(g);
 
 
         // 如果現在可以使用框選
@@ -241,9 +231,16 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //畫出遊戲內所有的資源堆
         resourceSystem.paint(g);
 
+        //畫出戰爭迷霧
+        fogOfWar.paint(g);
+
+
+        //建築物選單
+        buildingOption.paint(g);
+
+
         //畫出城市所有已建造建築物
         city.paint(g);
-
 
         // 狀態欄
         StatusBar.instance().paint(g);
@@ -794,6 +791,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //TODO: del
         zombieNormal.update();
+
         if(zombieNormal.isCollision(base)){
             switch (zombieNormal.getWalkingDir()){
                 case LEFT:{

@@ -80,15 +80,15 @@ public class Path {
 
             //TODO
 
-            public String zombieNormal(){
+            public String zombieNormal() {
                 return this + "/monster.png";
             }
 
-            public String zombieBig(){
+            public String zombieBig() {
                 return this + "/monster.png";
             }
 
-            public String zombieTypeI(){
+            public String zombieTypeI() {
                 return this + "/monster.png";
 
             }
@@ -98,24 +98,23 @@ public class Path {
             }
 
 
-            public String zombieKing(){
+            public String zombieKing() {
                 return this + "/monster.png";
             }
 
-            public String zombieWitch(){
+            public String zombieWitch() {
                 return this + "/monster.png";
             }
 
-            public String zombieFlying(){
+            public String zombieFlying() {
                 return this + "/monster.png";
             }
 
-            public String zombieFlyingBig(){
+            public String zombieFlyingBig() {
                 return this + "/monster.png";
 
             }
         }
-
 
 
         public static class Effects extends Flow {
@@ -123,7 +122,7 @@ public class Path {
                 super(flow, "/effects");
             }
 
-            public String SwordShadow(){
+            public String SwordShadow() {
                 return this + "/SwordShadow.png";
             }
         }
@@ -149,20 +148,15 @@ public class Path {
 
             private Objs(Flow flow) {
                 super(flow, "/objs");
-
             }
 
             public String start() {
                 return this + "/start.png";
             }
 
-            ;
-
             public String exit() {
                 return this + "/exit.png";
             }
-
-            ;
 
             public String box() {
                 return this + "/box.png";
@@ -216,7 +210,7 @@ public class Path {
             }
 
             public String specialTree() {
-                return this + "/SpecialTree.png";
+                return this + "/specialTree.png";
             }
 
             public String steel() {
@@ -226,6 +220,12 @@ public class Path {
             public String specialSteel() {
                 return this + "/specialSteel.png";
             }
+
+            public String fog() {return this + "/fog.png";}
+
+            public String fog2() {return this + "/fog2.jpg";}
+
+            public String fog3() {return this + "/fog3.jpg";}
 
         }
 
@@ -378,7 +378,7 @@ public class Path {
             return new Background(this);
         }
 
-        public Effects effects(){
+        public Effects effects() {
             return new Effects(this);
         }
 
@@ -406,7 +406,7 @@ public class Path {
             return this + "/What.wav";
         }
 
-        public String what2(){
+        public String what2() {
             return this + "/What2.wav";
         }
 

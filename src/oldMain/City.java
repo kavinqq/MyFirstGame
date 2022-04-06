@@ -637,7 +637,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
         citizens.paintAll(g);
 
-        military.paintAll(g);
+//        military.paintAll(g);
     }
 
     @Override
@@ -647,7 +647,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
         citizens.updateAll();
 
-        military.updateAll();
+//        military.updateAll();
     }
 
     /**

@@ -50,6 +50,9 @@ public class Citizen extends Human {   //市民
     private static int maxCarryWood;
     private static int maxCarrySteel;
 
+    // 特殊資源的加成
+    private static final int specialResourcePlus = 5;
+
 
     /**
      * 建構子 預設市民數值為1 , 不能打架 , 初始設定為閒人
@@ -207,13 +210,13 @@ public class Citizen extends Human {   //市民
         this.baseX = baseX;
         this.baseY = baseY;
 
-
         // 開始計時 (消失1秒)
         visibleDelay.play();
 
         // 消失ing
         setVisible(false);
 
+        // 設定村民身上攜帶的資源類型(MainScene告知的)
         setCarryFromResourceTypeStr(resourceTypeStr);
     }
 
@@ -232,6 +235,20 @@ public class Citizen extends Human {   //市民
         // 如果這次採集的是鋼鐵
         if(resourceTypeStr.equals("STEEL")){
             resourceNum = maxCarrySteel;
+            resourceType = Resource.STEEL;
+        }
+
+        // 如果這次採集的是特殊木頭
+        if(resourceTypeStr.equals("SPECIAL_WOOD")){
+            // 那麼單次採集數量 直接五倍
+            resourceNum = maxCarrySteel * specialResourcePlus;
+            resourceType = Resource.STEEL;
+        }
+
+        // 如果這次採集的是特殊鋼鐵
+        if(resourceTypeStr.equals("SPECIAL_STEEL")){
+            // 那麼單次採集數量 直接五倍
+            resourceNum = maxCarrySteel * specialResourcePlus;
             resourceType = Resource.STEEL;
         }
     }
