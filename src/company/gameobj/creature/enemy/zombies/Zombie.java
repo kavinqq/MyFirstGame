@@ -1,6 +1,8 @@
 package company.gameobj.creature.enemy.zombies;
 
 import company.Global;
+import company.gameobj.GameObject;
+import company.gameobj.buildings.Building;
 import company.gameobj.creature.Creature;
 import company.gameobj.creature.enemy.Enemy;
 import company.gameobj.creature.human.Human;
@@ -90,9 +92,15 @@ public abstract class Zombie extends Enemy {
     }
 
 
-    public void isSeeing(Human human){
+    public void detect(Human human){
         if(this.detectRange().overlap(human.painter())){
             this.setAttackTarget(human);
+        }
+    }
+
+    public void detect(Building building){
+        if(this.detectRange().overlap(building.painter())){
+            this.setAttackTarget(building);
         }
     }
 }

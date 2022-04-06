@@ -1,6 +1,7 @@
 package company.gameobj.creature.human;
 
 import company.gameobj.GameObject;
+import company.gameobj.creature.enemy.Enemy;
 import company.gametest9th.utils.Animator;
 
 /**
@@ -42,9 +43,9 @@ public abstract class Soldier extends Human{
         return (this.soldierType == SOLDIER_TYPE.AIR_FORCE);
     }
 
-    public void detect(GameObject gameObject){
-        if(this.detectRange().overlap(gameObject.painter())){
-            this.setAttackTarget(gameObject);
+    public void detect(Enemy enemy){
+        if(enemy.isAlive() && this.detectRange().overlap(enemy.painter())){
+            this.setAttackTarget(enemy);
         }
     }
 

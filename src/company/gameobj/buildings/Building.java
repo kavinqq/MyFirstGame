@@ -882,6 +882,10 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
         g.fillRect(painter().left(), painter().bottom(), (int) (currentHp * painter().width())/hp, Global.HP_HEIGHT);
 
         g.setColor(Color.black);
+
+        if(this.getFightEffect()!=null){
+            this.getFightEffect().paintComponent(g);
+        }
     }
 
 
