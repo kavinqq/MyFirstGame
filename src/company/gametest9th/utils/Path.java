@@ -407,7 +407,7 @@ public class Path {
         }
 
         public String what2(){
-            return this + "/what2.wav";
+            return this + "/What2.wav";
         }
 
         public String building() {
