@@ -5,10 +5,10 @@ import company.gametest9th.utils.Path;
 import java.awt.*;
 
 public class ZombieKing extends Zombie {
-    private static final int painterWidth = 50;
-    private static final int painterHeight = 50;
-    private static final int colliderWidth = 50;
-    private static final int colliderHeight = 50;
+    private static final int painterWidth = 128;
+    private static final int painterHeight = 128;
+    private static final int colliderWidth = 128;
+    private static final int colliderHeight = 128;
 
     /**
      * 這種殭屍的預設攻擊力

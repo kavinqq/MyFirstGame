@@ -295,6 +295,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             zombieNormal.cameraMove();
 
+            zombieKingdom.cameraMove();
+
             // Reset 鏡頭移動量
             CAMERA_MOVE_VX = 0;
             CAMERA_MOVE_VY = 0;
@@ -1159,8 +1161,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             city.resetObjectXY();
 
-//            base.resetObjectXY();
-
             tarmacArr.resetObjectXY();
 
             resourceSystem.resetObjectXY();
@@ -1168,6 +1168,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             buildingArea.buildingAreaResetPosition();
 
             fogOfWar.resetObjectXY();
+
+            zombieKingdom.resetObjectXY();
 
             Global.resetSumOfCameraMove();
         }
