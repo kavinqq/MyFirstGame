@@ -144,11 +144,6 @@ public class Citizen extends Human {   //市民
     @Override
     public void update() {
 
-        if (Global.CAMERA_MOVE_VX != 0 || Global.CAMERA_MOVE_VY != 0) {
-
-        }
-
-
         // 隱形時間到
         if (visibleDelay.count()) {
 
