@@ -1,5 +1,6 @@
 package company.gametest9th.utils;
 
+import company.controllers.AudioResourceController;
 import company.controllers.SceneController;
 import company.gameobj.GameObject;
 
@@ -23,11 +24,14 @@ public abstract class Effect extends GameObject {
 
     @Override
     public void paintComponent(Graphics g) {
+
         if(delay.count()){
             show = !show;
         }
         if(show){
             g.drawImage(img,this.painter().left(), this.painter().top(),null);
+
+            AudioResourceController.getInstance().play(new Path().sound().fight());
         }
     }
 

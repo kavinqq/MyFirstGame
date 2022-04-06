@@ -425,6 +425,8 @@ public class Path {
         public String underAttack() {
             return this + "/underAttack.wav";
         }
+
+        public String fight(){ return this + "/fight.wav";}
     }
 
 
