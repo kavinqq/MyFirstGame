@@ -1,12 +1,18 @@
 package oldMain;
 
 import company.Global;
+import company.gameobj.background.component.TarmacArr;
+import company.gameobj.buildings.Base;
 import company.gameobj.creature.human.AirForceSoldier;
 import company.gameobj.creature.human.ArmySoldier;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import static company.Global.BUILDING_HEIGHT;
+import static company.Global.BUILDING_WIDTH;
 
 public class Military {
     private List<AirForceSoldier> airForce;
@@ -17,15 +23,15 @@ public class Military {
     private int armyValue;
     private int airForceValue;
 
-
     public Military(){
+
         this.airForce = new LinkedList<>();
         this.army = new LinkedList<>();
         this.armyLevel = 0;
         this.airForceLevel = 0;
         this.armyValue = 0;
         this.airForceValue = 0;
-        this.addArmy(INITIAL_ARMY_SIZE,200,300);
+        this.addArmy(INITIAL_ARMY_SIZE, Base.BASE_X+250,Base.BASE_Y);
         upDateArmyValue();
         upDateAirForceValue();
     }
@@ -35,7 +41,9 @@ public class Military {
      * @param num
      */
     public void addArmy(int num,int x,int y){
-
+        if(num <= 0){
+            return;
+        }
         ArmySoldier armySoldier;
 
         for(int i=0; i<num; i++){
@@ -49,17 +57,27 @@ public class Military {
      * add certain number of air force soldiers to the air force
      * @param num
      */
-    public void addAirForce(int num){
-
+    public void addAirForce(int num,int x,int y){
+        if(num <= 0){
+            return;
+        }
         AirForceSoldier airForceSoldier;
 
         for(int i=0; i<num; i++){
-
-            airForceSoldier = new AirForceSoldier(800, 700, this.airForceLevel);//TODO: use the correct x and y
+            //飛機不能超過4台
+            if(airForce.size()>4){
+                break;
+            }
+            airForceSoldier = new AirForceSoldier(x, y, this.airForceLevel);//TODO: use the correct x and y
 
             this.airForceValue += airForceSoldier.getValue();
             this.airForce.add(airForceSoldier);
         }
+    }
+
+    //取得飛行士兵的數量
+    public int getAirForceNum(){
+        return airForce.size();
     }
 
     /**
@@ -203,6 +221,26 @@ public class Military {
 
         for(AirForceSoldier airForceSoldier: airForce){
             airForceSoldier.paintComponent(g);
+        }
+    }
+
+    public void cameraMove(){
+        for(ArmySoldier armySoldier: army){
+            armySoldier.cameraMove();
+        }
+
+        for(AirForceSoldier airForceSoldier: airForce){
+            airForceSoldier.cameraMove();
+        }
+    }
+
+    public void resetObjectXY(){
+        for(ArmySoldier armySoldier: army){
+            armySoldier.resetObjectXY();
+        }
+
+        for(AirForceSoldier airForceSoldier: airForce){
+            airForceSoldier.resetObjectXY();
         }
     }
 

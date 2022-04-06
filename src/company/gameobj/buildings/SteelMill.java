@@ -53,18 +53,14 @@ public class SteelMill extends Building{
                 .setImgPath(new Path().img().building().SteelMill());
         imgInit();
     }
-    /**
-     * 生產鋼鐵
-     */
-    public int steelSpeed(){
-        return getLevel()+1;
-    }
 
     @Override
     public String toString() {
         return "增加村民最大採集量";
     }//(每房屋等級+2)
-
+    /**
+     * 生產鋼鐵
+     */
     public int getSteelSpeed(){
         return (1 + (super.getLevel()-1)*2);
     }

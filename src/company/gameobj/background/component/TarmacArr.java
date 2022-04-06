@@ -45,7 +45,7 @@ public class TarmacArr {
 
         @Override
         public void paintComponent(Graphics g) {
-            g.drawImage(tarmac_img,painter().left(),painter().top(),painter().width(), painter().height(),null);
+            g.drawImage(tarmac_img, painter().left(), painter().top(), painter().width(), painter().height(), null);
         }
 
         @Override
@@ -82,12 +82,41 @@ public class TarmacArr {
         }
     }
 
-    public void paint(Graphics g){
+    public void paint(Graphics g) {
         for (int i = 0; i < tarmacs.size(); i++) {
             for (Tarmac tarmac : tarmacs.get(i)) {
                 //返回停機坪
                 tarmac.paint(g);
             }
         }
+    }
+
+    //取得停機坪位置
+    public Tarmac get(int x, int y) {
+        return tarmacs.get(x).get(y);
+    }
+
+    public Tarmac get(int index) {
+        if(index < 0){
+            return null;
+        }
+        int count=0;
+        for (int i = 0; i < tarmacs.size(); i++) {
+            for (int j = 0; j < tarmacs.get(i).size(); j++) {
+                if(count==index){
+                    return tarmacs.get(i).get(j);
+                }
+                count++;
+            }
+        }
+        return null;
+    }
+
+    public int getX(int index){
+        return get(index).painter().left();
+    }
+
+    public int getY(int index){
+        return get(index).painter().top();
     }
 }

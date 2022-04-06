@@ -5,6 +5,8 @@ import company.Global;
 import company.gametest9th.utils.Path;
 
 public class House extends Building {
+    public static int makeTime=24;
+
     public House(int x, int y) {
         super(x, y);
         init();

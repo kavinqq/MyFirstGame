@@ -2,6 +2,7 @@ package oldMain;
 
 import company.Global;
 import company.gameobj.BuildingController;
+import company.gameobj.GameObject;
 import company.gameobj.background.component.TarmacArr;
 import company.gameobj.buildings.Base;
 import company.gameobj.buildings.Building;
@@ -181,21 +182,21 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 //            gainResource();
             gainGas();
             //建物.生成人()
-            int numOfNewCitizens = buildings.getNewCitizenNum(resource);
-            if (numOfNewCitizens > 0) {
-                this.citizens.add(numOfNewCitizens, Base.BASE_X-225,Base.BASE_Y);
-                //System.out.printf("第%d回合 有新市民出生 ,閒置人數:%d\n", getGameTime() + 1, citizens.getNumOfFreeCitizens());
+            this.citizens.add(buildings.getNewCitizenNum(resource), Base.BASE_X+Global.SUM_OF_CAMERA_MOVE_VX-225,Base.BASE_Y+Global.SUM_OF_CAMERA_MOVE_VY);
+            this.military.addArmy(buildings.getNewArmyNum(resource),Base.BASE_X+Global.SUM_OF_CAMERA_MOVE_VX+Base.BASE_WIDTH+225,Base.BASE_Y+Global.SUM_OF_CAMERA_MOVE_VY); //Base.BASE_X+225,Base.BASE_Y
+
+            //升成戰士
+            int currentPlaneNum=military.getAirForceNum();
+            int addPlaneNum = buildings.getNewPlaneNum(resource);
+            for (int i = currentPlaneNum; i < currentPlaneNum+addPlaneNum; i++) {
+                if(i >= 4){
+                    break;
+                }
+                this.military.addAirForce(1,tarmacArr.getX(i)+AirForceSoldier.colliderWidth/2,tarmacArr.getY(i)+AirForceSoldier.colliderHeight/2);
             }
-            int numOfNewArmySoldiers = buildings.getNewArmyNum(resource);
-            if (numOfNewArmySoldiers > 0) {
-                this.military.addArmy(numOfNewArmySoldiers,Base.BASE_X+225,Base.BASE_Y); //Base.BASE_X+225,Base.BASE_Y
-                //System.out.printf("第%d回合 有 %d 個新戰士出生,目前一共有%d個戰士\n", getGameTime() + 1, numOfNewArmySoldiers, military.getNumOfArmySoldier());
-            }
-            int numOfNewAirMen = buildings.getNewPlaneNum(resource);
-            if (numOfNewAirMen > 0) {
-                this.military.addAirForce(numOfNewAirMen); //tarmacArr
-                //System.out.printf("第%d回合 有 %d 架新飛機產生,目前一共有%d架飛機\n", getGameTime() + 1, numOfNewAirMen, military.getNumOfAirmen());
-            }
+
+
+
             //完成建築的升級和建造，科技等級提升
             buildings.completeJob();
 
@@ -646,7 +647,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
         citizens.paintAll(g);
 
-//        military.paintAll(g);
+        military.paintAll(g);
     }
 
     @Override
@@ -657,7 +658,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
         citizens.updateAll();
 
-//        military.updateAll();
+        military.updateAll();
     }
 
     /**
@@ -670,6 +671,8 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         citizens.cameraMove();
 
         buildings.cameraMove();
+
+        military.cameraMove();
     }
 
     /**
@@ -683,6 +686,8 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         citizens.resetObjectXY();
 
         buildings.resetObjectXY();
+
+        military.resetObjectXY();
     }
 
     @Override

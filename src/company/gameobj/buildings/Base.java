@@ -53,16 +53,16 @@ public class Base extends Building {
         setId(9)
                 .setName("主堡")
                 .setBuildTime(0)
-                .setUpgradeTime(30)
+                .setUpgradeTime(0)
                 .setLevelC(1)  //初始等級為1
                 .setTechLevelNeedUpgrade(2)
                 .setHp(100)
-                .setWoodCostCreate(99)
-                .setSteelCostCreate(99)
-                .setGasCostCreate(99)
-                .setWoodCostLevelUpC(99)
-                .setSteelCostLevelUpC(99)
-                .setGasCostLevelup(99)
+                .setWoodCostCreate(0)
+                .setSteelCostCreate(0)
+                .setGasCostCreate(0)
+                .setWoodCostLevelUpC(0)
+                .setSteelCostLevelUpC(0)
+                .setGasCostLevelup(0)
                 .setImgPath(new Path().img().building().Base());
 
         imgInit();

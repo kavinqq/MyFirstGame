@@ -4,6 +4,7 @@ package company.gameobj;
 import company.controllers.AudioResourceController;
 import company.gameobj.buildings.Building;
 import company.gameobj.buildings.*;
+import company.gameobj.creature.human.Soldier;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
 import company.gametest9th.utils.Path;
@@ -817,7 +818,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         for (BuildingController.BuildingNode buildingNode : HOUSE.list) {
             //如果建築在運作
             if (buildingNode.building.isWorking() && buildingNode.building instanceof House) {
-                if ((City.getGameTime() - buildingNode.updateStartTime) % 24 == 0) {
+                if ((City.getGameTime() - buildingNode.updateStartTime) % House.makeTime == 0) {
                     House house = (House) buildingNode.building;
                     newPeopleCount += house.produceCitizen();
                     if (!buildingNode.building.isEnoughProduction(resource)) {
@@ -843,7 +844,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
             //如果建築在運作
             if (buildingNode.building.isWorking() && buildingNode.building instanceof Barracks) {
                 //當前時間-上次啟動的時間 滿3小時->生產士兵
-                if ((City.getGameTime() - buildingNode.updateStartTime) % 3 == 0) {
+                if ((City.getGameTime() - buildingNode.updateStartTime) % Barracks.makeTime == 0) {
                     Barracks barracks = (Barracks) buildingNode.building;
                     newSoldierCount += barracks.produceSoldier();
                     if (!buildingNode.building.isEnoughProduction(resource)) {
@@ -867,8 +868,8 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         int newPlaneCount = 0;
         for (BuildingController.BuildingNode buildingNode : AIRPLANE_MILL.list) {
             //如果建築在運作
-            if (buildingNode.building.isWorking() && buildingNode.building instanceof House) {
-                if ((City.getGameTime() - buildingNode.updateStartTime) % 3 == 0) {
+            if (buildingNode.building.isWorking() && buildingNode.building instanceof AirplaneMill) {
+                if ((City.getGameTime() - buildingNode.updateStartTime) % AirplaneMill.makeTime == 0) {
                     AirplaneMill airPlaneMill = (AirplaneMill) buildingNode.building;
                     newPlaneCount += airPlaneMill.produceAirPlane();
                     if (!buildingNode.building.isEnoughProduction(resource)) {
@@ -915,13 +916,6 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         return sum;
     }
 
-//        if (STEEL_MILL.list.size() != 0) {
-//            if (STEEL_MILL.list.get(0).building instanceof SteelMill) {
-//                //取最高等級的採集速度
-//                SteelMill steelMill = (SteelMill) STEEL_MILL.list.get(0).building;
-//                return steelMill.steelSpeed();
-//            }
-//        }
 
     /**
      * 取得瓦斯生產量

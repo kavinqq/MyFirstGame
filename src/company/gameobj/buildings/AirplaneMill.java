@@ -4,6 +4,8 @@ import company.Global;
 import company.gametest9th.utils.Path;
 
 public class AirplaneMill extends Building {
+    //製作時間
+    public static int makeTime =3;
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工場)
@@ -25,8 +27,8 @@ public class AirplaneMill extends Building {
     public AirplaneMill(int x, int y) {
         super(x, y);
         init();
-        getIcons().add(new UpGradeIcon(getIcons().size(),"升級飛機"));
-        getIcons().add(new WorkingIcon(getIcons().size(),"飛機"));
+        getIcons().add(new UpGradeIcon(getIcons().size(),"升級機器士兵"));
+        getIcons().add(new WorkingIcon(getIcons().size(),"機器士兵"));
     }
 
     public AirplaneMill() {
@@ -38,27 +40,30 @@ public class AirplaneMill extends Building {
      * @return 生產的飛機數(含升級)
      */
     public int produceAirPlane(){
-        return getLevel()+1;
+        return getLevel();
     }
 
     @Override
     public String toString(){
-        return "定時自動產生飛機";
+        return "自動產生機器士兵";
     }//每3小時花費5瓦斯產生1台戰鬥機(每等級可以使工作量+1)
 
     @Override
     public String buildingDetail(int level){
-        return "飛機工廠：每3小時花費" + super.getLevel() *5 + "瓦斯生產" + (super.getLevel()+1) + "台飛機";
+        return "機器士兵：每3小時花費" + super.getLevel() *5 + "瓦斯生產" + (super.getLevel()+1) + "台飛機";
     }
+
+
+
     //初始化
     @Override
     protected void init() {
         setId(8)
-                .setName("飛機工廠")
+                .setName("機器工廠")
                 .setBuildTime(2)
                 .setUpgradeTime(30)
                 .setLevelC(0)
-                .setTechLevelNeedBuild(2)
+                .setTechLevelNeedBuild(1)
                 .setTechLevelNeedUpgrade(2)
                 .setHp(50)
                 .setWoodCostCreate(15)

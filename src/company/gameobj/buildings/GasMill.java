@@ -56,7 +56,7 @@ public class GasMill extends Building{
      * @return 瓦斯場整體產生的瓦斯量(含升級效果)
      */
     public int getProduceGasNum(){
-        return (getLevel()-1)+1;
+        return (getLevel());
     }
 
     @Override

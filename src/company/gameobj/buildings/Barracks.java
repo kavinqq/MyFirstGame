@@ -5,6 +5,8 @@ import company.Global;
 import company.gametest9th.utils.Path;
 
 public class Barracks extends Building{
+    //製作時間
+    public static int makeTime =3;
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工場)
@@ -34,7 +36,7 @@ public class Barracks extends Building{
      * @return 增加的士兵數
      */
     public int produceSoldier(){
-        return getLevel()*2-1;
+        return getLevel()*1;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class Barracks extends Building{
     }//
 
     public String buildingDetail(int level){
-        return "軍營：每3小時消耗2木材、2鋼鐵生產" + (super.getLevel() * 2 + 1) + "位士兵";
+        return "軍營：每3小時消耗2木材、2鋼鐵生產" + produceSoldier() + "位士兵";
     }
     //初始化
     @Override

@@ -40,7 +40,7 @@ public class Arsenal extends Building {
 
         init();
         getIcons().add(new UpGradeIcon(getIcons().size(),"升級士兵"));
-        getIcons().add(new UpGradeIcon(getIcons().size(),"升級飛機"));
+        getIcons().add(new UpGradeIcon(getIcons().size(),"升級機器士兵"));
         }
 
     public Arsenal() {

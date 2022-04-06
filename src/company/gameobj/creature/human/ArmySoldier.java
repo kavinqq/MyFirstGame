@@ -24,6 +24,8 @@ public class ArmySoldier extends Soldier  {  //士兵
 
         super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight, 2 + 3*level, SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY, SOLDIER_TYPE.ARMY);
 
+        setBuildingOriginalX(Global.SUM_OF_CAMERA_MOVE_VX);
+        setBuildingOriginalY(Global.SUM_OF_CAMERA_MOVE_VY);
         // 預設人物出生方向朝下
         setWalkingDir(Global.Direction.DOWN);
     }

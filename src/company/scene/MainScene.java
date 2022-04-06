@@ -145,11 +145,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 測試: 預設有 ? 個 村民
 
-        city.setCitizens(4);
+        city.setCitizens(3);
 
-        // 測試: 預設有 ? 個 士兵
-        //city.getMilitary().addArmy(1);
-        city.getMilitary().addAirForce(1);
 
         //設定遊戲時間 120偵為遊戲一小時(oldMain的流動一小時)
         gameTimeSpeed = 120;
