@@ -4,6 +4,7 @@ import company.Global;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 import static company.Global.*;
@@ -35,6 +36,17 @@ public class Base extends Building {
         cameraMove();
     }
 
+    @Override
+    public void paintComponent(Graphics g){
+        g.drawImage(getImg(),painter().left(),painter().top(),painter().width(),painter().height(),null);
+
+        //血量條
+        g.setColor(Color.red);
+        g.fillRect(painter().left(), painter().bottom(), painter().width(), Global.HP_HEIGHT);
+        g.setColor(Color.green);
+        g.fillRect(painter().left(), painter().bottom(), (int) (getCurrentHp() * painter().width())/getHp(), Global.HP_HEIGHT);
+    }
+
     //初始化
     @Override
     protected void init() {
@@ -54,13 +66,15 @@ public class Base extends Building {
                 .setImgPath(new Path().img().building().Base());
 
         imgInit();
+        setCurrentHp(getHp());
     }
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+        super.mouseTrig(e,state,trigTime);
         switch (state) {
             case DRAGGED: {
-                setPainterStartFromTopLeft(e.getX(), e.getY());
+//                setPainterStartFromTopLeft(e.getX(), e.getY());
                 break;
             }
         }
@@ -68,7 +82,7 @@ public class Base extends Building {
 
     @Override
     public String toString() {
-        return "我被催毀遊戲結束";
+        return "主堡";
     }
 
     public String buildingDetail(int level) {

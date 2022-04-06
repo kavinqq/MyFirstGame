@@ -87,7 +87,6 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
     public void update() {
 
         for (BuildingType value:values()) {
-
             //  enum裡面 => public LinkedList<BuildingNode> list()
             for (int j = 0; j < value.list.size(); j++) {
                 value.list().get(j).update();

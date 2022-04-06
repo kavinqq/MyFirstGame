@@ -156,13 +156,9 @@ public class Path {
                 return this + "/start.png";
             }
 
-            ;
-
             public String exit() {
                 return this + "/exit.png";
             }
-
-            ;
 
             public String box() {
                 return this + "/box.png";
