@@ -63,7 +63,7 @@ public class AirplaneMill extends Building {
                 .setBuildTime(2)
                 .setUpgradeTime(30)
                 .setLevelC(0)
-                .setTechLevelNeedBuild(1)
+                .setTechLevelNeedBuild(2)
                 .setTechLevelNeedUpgrade(2)
                 .setHp(50)
                 .setWoodCostCreate(15)
