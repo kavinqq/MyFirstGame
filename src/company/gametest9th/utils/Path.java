@@ -411,7 +411,7 @@ public class Path {
         }
 
         public String building() {
-            return this + "/building.wav";
+            return this + "/buildingSound.wav";
         }
 
         public String constructionComplete() {
