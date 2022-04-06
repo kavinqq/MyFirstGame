@@ -74,7 +74,9 @@ public class Citizens {
      * @param num 要加幾個村民
      */
     public void add(int num,int x,int y) {
-
+        if(num <= 0){
+            return;
+        }
         // 新的村民宣告
         Citizen citizen;
 

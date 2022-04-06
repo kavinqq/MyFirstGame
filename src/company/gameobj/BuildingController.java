@@ -610,6 +610,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
             Lab.resetTechUpgradePercent();
         //正在升級 時間未到
         }else if(isUpgradingTech){
+            //增加進度條
             Lab.addPercentTechUpgrade(canUseNum(LAB));
         }
 
