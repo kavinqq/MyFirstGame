@@ -531,7 +531,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                  */
                 if (count != 0 && !(isGoingToCollect && human instanceof Citizen)) {
                     if (Global.random(0, 2) == 1) {
-
                         targetX += 74;
                     } else {
                         targetY += 74;

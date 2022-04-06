@@ -1,6 +1,7 @@
 package company.gameobj.creature.human;
 
 import company.gameobj.GameObject;
+import company.gametest9th.utils.Animator;
 
 /**
  * @author Lillian
@@ -45,5 +46,17 @@ public abstract class Soldier extends Human{
         if(this.detectRange().overlap(gameObject.painter())){
             this.setAttackTarget(gameObject);
         }
+    }
+
+    @Override
+    public void update() {
+
+        // 如果我的MoveStatue 是 walk
+        if (getMoveStatus() == Animator.State.WALK) {
+            walk();
+        }
+
+        // 動畫更新[換圖片]
+        getAnimator().update();
     }
 }
