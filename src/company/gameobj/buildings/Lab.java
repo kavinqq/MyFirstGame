@@ -120,7 +120,7 @@ public class Lab extends Building {
         g.setColor(Color.red);
         g.fillRect(painter().left(), painter().bottom(), painter().width(), Global.HP_HEIGHT);
         g.setColor(Color.green);
-        g.fillRect(painter().left(), painter().bottom(), (int) ((getPercentHp()) * painter().width()), Global.HP_HEIGHT);
+        g.fillRect(painter().left(), painter().bottom(), (int)(getCurrentHp() * painter().width())/getHp(), Global.HP_HEIGHT);
         //復原
         g.setColor(Color.black);
     }

@@ -314,7 +314,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         city.update();
         zombieKingdom.update();
 
-
         //判斷現在有無選取按鈕
         if (currentButton != null) {
 
@@ -358,10 +357,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                         redRects.add(tmpRect);
                                     }
                                 }
-                                if (currentButton.isDragging() && redRects != null && redRects.size() >= 1) {
+                                if (redRects != null && redRects.size() >= 1) {
                                     currentButton.setRedRects(redRects.toArray(new Rect[redRects.size()]));
-                                }else{
-                                    currentButton.setRedRects(null);
                                 }
                             }
                         }
@@ -1103,6 +1100,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                             if (currentObj instanceof Citizen) {
                                 if (Math.random() < 0.5) {
+
                                     AudioResourceController.getInstance().play(new Path().sound().what());
                                 } else {
                                     AudioResourceController.getInstance().play(new Path().sound().what2());

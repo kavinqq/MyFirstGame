@@ -89,7 +89,6 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     public BuildingButton getCurrentButton(int x, int y) {
         for (int i = 0; i < buildingButtons.size(); i++) {
             if (buildingButtons.get(i).isEntered(x, y)) {
-
                 return buildingButtons.get(i);
             }
         }
