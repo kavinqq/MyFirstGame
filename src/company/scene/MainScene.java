@@ -13,6 +13,11 @@ import company.controllers.AudioResourceController;
 import company.gameobj.BuildingController;
 import company.gameobj.FogOfWar;
 import company.gameobj.Rect;
+import company.gameobj.creature.enemy.zombies.Zombie;
+import company.gameobj.creature.enemy.zombies.ZombieKing;
+import company.gameobj.creature.enemy.zombies.ZombieKingdom;
+import company.gameobj.creature.enemy.zombies.ZombieNormal;
+import company.gameobj.creature.human.ArmySoldier;
 import company.gameobj.resourceObjs.ResourceObj;
 import company.gameobj.resourceObjs.ResourceSystem;
 import company.gameobj.message.ToastController;
@@ -60,6 +65,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     //與建築相關
     City city; //城市
+    ZombieKingdom zombieKingdom;
+    //TODO: del
+    ZombieNormal zombieNormal;
 
     private BuildingArea buildingArea; //可建造區
 
@@ -87,6 +95,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     // 戰爭迷霧
 
     private FogOfWar fogOfWar;
+
+    private List<Effect> effects = new ArrayList<>();
 
 
     @Override
@@ -125,6 +135,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // city本體
         city = new City();
+        zombieKingdom = new ZombieKingdom();
+        //TODO:
+        zombieNormal = new ZombieNormal(100,700);
+
         //city.build(BuildingType.BASE,SCREEN_X / 2 - Base.BASE_WIDTH, SCREEN_Y / 2 - Base.BASE_HEIGHT);
 
         // 測試: 預設有 ? 個 村民
@@ -186,6 +200,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //城市
         city.paint(g);
 
+        zombieKingdom.paint(g);
+
+        zombieNormal.paint(g);
+
         // 主堡
         base.paint(g);
 
@@ -237,6 +255,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //提示框
         ToastController.instance().paint(g);
+
+        for(Effect effect: effects){
+            effect.paint(g);
+        }
     }
 
 
@@ -248,7 +270,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         StatusBar.instance().updateResource(city.getResource().getTotalWood(), city.getResource().getTotalSteel(), city.getResource().getTotalGas(), city.getTotalCitizen());
 
         // 處理鏡頭移動
-
         if ((currentMouseX >= SCREEN_WIDTH || currentMouseX <= 8) || (currentMouseY <= 0 || currentMouseY >= SCREEN_HEIGHT - 8)) {
 
 
@@ -297,6 +318,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //City更新
         city.update();
+
+
 
         //判斷現在有無選取按鈕
         if (currentButton != null) {
@@ -728,6 +751,78 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     break;
                 }
             }
+        }
+
+        for (ArmySoldier armySoldier : city.getMilitary().getArmy()){
+            if(armySoldier.getAttackTarget()==null){
+                //System.out.println("army null");
+                armySoldier.detect(zombieNormal);
+            }
+            else{
+                //temp cause not zombie group yet
+                if(!zombieNormal.isAlive()){
+                    continue;
+                }
+                else if(armySoldier.isCollision(zombieNormal)){
+                    System.out.println("stop");
+                    zombieNormal.stop();
+                    armySoldier.stop();
+
+                    if(armySoldier.getFightEffect()==null){
+                        armySoldier.setFightEffect(new FightEffect(armySoldier.painter().centerX(), armySoldier.painter().centerY()));
+                    }
+                    else{
+                        if(armySoldier.getFightEffect().isDue()){
+                            armySoldier.setFightEffect(null);
+                        }
+                    }
+                    zombieNormal.getAttacked(armySoldier.getValue());
+                    if(zombieNormal.isAlive()){
+                        armySoldier.getAttacked(zombieNormal.getValue());
+                    }
+                    else{
+                        //armySoldier.setAttackTargetToNull();
+                        //armySoldier.setMoveStatus(Animator.State.WALK);
+                    }
+                    System.out.println(zombieNormal.getValue());
+                    System.out.println(armySoldier.getValue());
+                }
+//                System.out.println("army not null");
+            }
+        }
+
+
+        //TODO: del
+        zombieNormal.update();
+        if(zombieNormal.isCollision(base)){
+            switch (zombieNormal.getWalkingDir()){
+                case LEFT:{
+                    if(zombieNormal.touchRightOf(base)){
+                        zombieNormal.translateX(base.painter().right()-zombieNormal.painter().left());
+                    }
+                    break;
+                }
+                case RIGHT:{
+                    if(zombieNormal.touchLeftOf(base)){
+                        zombieNormal.translateX(zombieNormal.painter().right()-base.painter().left());
+                    }
+                    break;
+                }
+                case UP:{
+                    if(zombieNormal.touchBottomOf(base)){
+                        System.out.println("AAAA");
+                        zombieNormal.translateY(base.painter().bottom()-zombieNormal.painter().top());
+                    }
+                    break;
+                }
+                case DOWN:{
+                    if(zombieNormal.touchTopOf(base)){
+                        zombieNormal.translateY(zombieNormal.painter().bottom()-base.painter().top());
+                    }
+                    break;
+                }
+            }
+            zombieNormal.stop();
         }
 
         // 更新迷霧狀況

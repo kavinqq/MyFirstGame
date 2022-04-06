@@ -75,40 +75,56 @@ public class Path {
         public static class Zombies extends Flow {
 
             private Zombies(Flow flow) {
-                super(flow, "/Zombie");
+                super(flow, "/zombies");
             }
 
             //TODO
-            public String zombieNormal() {
-                return this + "/monster3.png";
+
+            public String zombieNormal(){
+                return this + "/monster.png";
             }
 
-            public String zombieBig() {
-                return this + "/monster3.png";
+            public String zombieBig(){
+                return this + "/monster.png";
             }
 
-            public String zombieTypeI() {
-                return this + "/monster3.png";
+            public String zombieTypeI(){
+                return this + "/monster.png";
+
             }
 
             public String zombieTypeII() {
-                return this + "/monster3.png";
+                return this + "/monster.png";
             }
 
-            public String zombieKing() {
-                return this + "/monster3.png";
+
+            public String zombieKing(){
+                return this + "/monster.png";
             }
 
-            public String zombieWitch() {
-                return this + "/monster3.png";
+            public String zombieWitch(){
+                return this + "/monster.png";
             }
 
-            public String zombieFlying() {
-                return this + "/monster3.png";
+            public String zombieFlying(){
+                return this + "/monster.png";
             }
 
-            public String zombieFlyingBig() {
-                return this + "/monster3.png";
+            public String zombieFlyingBig(){
+                return this + "/monster.png";
+
+            }
+        }
+
+
+
+        public static class Effects extends Flow {
+            private Effects(Flow flow) {
+                super(flow, "/effects");
+            }
+
+            public String SwordShadow(){
+                return this + "/SwordShadow.png";
             }
         }
 
@@ -360,6 +376,10 @@ public class Path {
 
         public Background background() {
             return new Background(this);
+        }
+
+        public Effects effects(){
+            return new Effects(this);
         }
 
     }

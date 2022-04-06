@@ -646,6 +646,8 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         buildings.update();
 
         citizens.updateAll();
+
+        military.updateAll();
     }
 
     /**

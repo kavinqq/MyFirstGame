@@ -11,7 +11,7 @@ import java.util.List;
 public class Military {
     private List<AirForceSoldier> airForce;
     private List<ArmySoldier> army;
-    private static final int INITIAL_ARMY_SIZE = 10;
+    private static final int INITIAL_ARMY_SIZE = 1;//10;
     private int armyLevel;
     private int airForceLevel;
     private int armyValue;
@@ -203,6 +203,40 @@ public class Military {
 
         for(AirForceSoldier airForceSoldier: airForce){
             airForceSoldier.paintComponent(g);
+        }
+    }
+
+    public List<AirForceSoldier> getAirForce() {
+        return airForce;
+    }
+
+    public List<ArmySoldier> getArmy() {
+        return army;
+    }
+
+    public void updateAll(){
+        ArmySoldier armySoldier;
+        for(int i=0; i<army.size(); i++){
+            armySoldier = army.get(i);
+            if(armySoldier.isAlive()){
+                armySoldier.update();
+            }
+            else{
+                army.remove(i);
+                i--;
+            }
+        }
+
+        AirForceSoldier airForceSoldier;
+        for(int i=0; i<airForce.size(); i++){
+            airForceSoldier = airForce.get(i);
+            if(airForceSoldier.isAlive()){
+                airForceSoldier.update();
+            }
+            else{
+                airForce.remove(i);
+                i--;
+            }
         }
     }
 }

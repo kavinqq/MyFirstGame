@@ -14,11 +14,11 @@ public class ZombieTypeI extends Zombie {
      * 這種殭屍的預設攻擊力
      */
     public ZombieTypeI(int x, int y) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 10, new Path().img().zombies().zombieTypeI(), FLY_ABILITY.CANNOT_FLY);
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 10, new Path().img().zombies().zombieTypeI(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_TYPE_I);
     }
 
     public ZombieTypeI() {
-        super(-1000, -1000, painterWidth, painterHeight, colliderWidth, colliderHeight, 10, new Path().img().zombies().zombieTypeI(), FLY_ABILITY.CANNOT_FLY);
+        super(-1000, -1000, painterWidth, painterHeight, colliderWidth, colliderHeight, 10, new Path().img().zombies().zombieTypeI(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_TYPE_I);
     }
 
 
@@ -27,10 +27,6 @@ public class ZombieTypeI extends Zombie {
         return (round * 4) / 12;
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        g.drawImage(this.getImg(), this.painter().left(), this.painter().top(), null);
-    }
 
     @Override
     public void update() {

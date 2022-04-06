@@ -160,15 +160,15 @@ public class Citizen extends Human {   //市民
         // 如果我的MoveStatue 是 walk
         if (getMoveStatus() == Animator.State.WALK) {
 
-            // 改成行走動畫
-            getAnimator().setState(Animator.State.WALK);
+//            // 改成行走動畫
+//            getAnimator().setState(Animator.State.WALK);
 
             // 行走
             walk();
         } else {
 
-            // 改成站立動畫
-            getAnimator().setState(Animator.State.STAND);
+//            // 改成站立動畫
+//            getAnimator().setState(Animator.State.STAND);
         }
 
         // 動畫更新[換圖片]
