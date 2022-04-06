@@ -42,7 +42,7 @@ public abstract class Building extends GameObject implements CommandSolver.Mouse
 
 
         public Icon(int id, String message) {
-            super(Building.this.painter().right() ,Building.this.painter().top()+ id * Global.BUILDING_ICON_HEIGHT, Global.BUILDING_ICON_WIDTH, Global.BUILDING_ICON_HEIGHT);
+            super(Building.this.painter().left() - Global.BUILDING_ICON_WIDTH,Building.this.painter().top()+ id * Global.BUILDING_ICON_HEIGHT, Global.BUILDING_ICON_WIDTH, Global.BUILDING_ICON_HEIGHT);
             setBuildingOriginalX(Global.SUM_OF_CAMERA_MOVE_VX);
             setBuildingOriginalY(Global.SUM_OF_CAMERA_MOVE_VY);
             hintDialog = new HintDialog();

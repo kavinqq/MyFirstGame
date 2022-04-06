@@ -2,6 +2,7 @@ package company.gameobj.creature.human;
 
 import company.Global;
 import company.gameobj.GameObject;
+import company.gameobj.buildings.Base;
 import oldMain.OldMain;
 
 import java.awt.*;
@@ -54,7 +55,7 @@ public class Citizens {
 
         this.numOfMiningCitizens = 0;
 
-        this.add(defaultNumOfCitizens);
+        this.add(defaultNumOfCitizens, Base.BASE_X-100,Base.BASE_Y);
 
 
         // 上限10個
@@ -72,7 +73,7 @@ public class Citizens {
      *
      * @param num 要加幾個村民
      */
-    public void add(int num) {
+    public void add(int num,int x,int y) {
 
         // 新的村民宣告
         Citizen citizen;
@@ -83,7 +84,7 @@ public class Citizens {
         // 下面是新增村民之後 他的出生地點 [所有XY數值都是測試用 沒意義]
         for (int i = 0; i < num; i++) {
 //            citizen = new Citizen(Global.SCREEN_X/2, Global.SCREEN_Y/2);//TODO: set the correct x and y
-            citizen = new Citizen(100, 400 + i * 74);
+            citizen = new Citizen(x, y + i * 74); //100 ->x 400-y
             this.valueOfCitizens += citizen.getValue();
             this.citizens.add(citizen);
         }

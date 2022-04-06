@@ -18,26 +18,24 @@ public class SawMill extends Building{
     public SawMill() {
         init();
     }
+
+    @Override
+    public String toString() {
+        return "每小時採集量+1";
+    }//(每房屋等級+2)
+
     /**
      * 生產的木頭量
      * @return
      */
-    public int woodSpeed() {
-        return (getLevel() + 1) * 2;
-    }
-
-    @Override
-    public String toString() {
-        return "伐木場:每小時採集量+1(每房屋等級+2)";
-    }
-
     public int getSawSpeed(){
-        return (2 + (super.getLevel()-1)*4);
+        return (2 + (super.getLevel()-1)*2);
     }
 
     public String buildingDetail(int level){
         return "伐木廠：市民每小時木材採集量提升至" + getSawSpeed() + "單位木材";
     }
+
     //初始化
     @Override
     protected void init() {

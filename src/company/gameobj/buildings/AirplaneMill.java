@@ -43,8 +43,8 @@ public class AirplaneMill extends Building {
 
     @Override
     public String toString(){
-        return "飛機工廠:每3小時花費5瓦斯產生1台戰鬥機(每等級可以使工作量+1)";
-    }
+        return "產生戰鬥機";
+    }//每3小時花費5瓦斯產生1台戰鬥機(每等級可以使工作量+1)
 
     @Override
     public String buildingDetail(int level){

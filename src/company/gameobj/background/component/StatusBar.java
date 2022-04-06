@@ -108,8 +108,8 @@ public class StatusBar {
         g.drawString("" + totalSteel, ICON_START_X + ICON_WIDTH / 2 + ICON_GAP + 100, ICON_START_Y + 50 + moveY);
 
         // 瓦斯資源(Icon + 數量)
-        g.drawImage(gasIcon, ICON_START_X + ICON_GAP * 2, ICON_START_Y + moveY, ICON_WIDTH, ICON_HEIGHT, null);
-//        g.drawString("" + totalGas, ICON_START_X + ICON_WIDTH / 2 + ICON_GAP + 100, ICON_START_Y + 50);
+        g.drawImage(gasIcon, ICON_START_X + ICON_GAP *2, ICON_START_Y + moveY, ICON_WIDTH, ICON_HEIGHT, null);
+        g.drawString("" + totalGas, ICON_START_X * 2 + ICON_WIDTH / 2 + ICON_GAP*2 + 100, ICON_START_Y + 50);
 
         // 市民數量(Icon + 數量)
         g.drawImage(citizenNumIcon, ICON_START_X + ICON_GAP * 3, ICON_START_Y + moveY, ICON_WIDTH, ICON_HEIGHT, null);

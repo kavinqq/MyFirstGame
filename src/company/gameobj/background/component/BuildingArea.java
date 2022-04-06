@@ -15,13 +15,13 @@ public class BuildingArea implements GameKernel.GameInterface {
         buildingGrids=new ArrayList<>();
 //        buildingGrids=new ArrayList();
 
-        for (int i = 0; i < Global.numY; i++) {
+        for (int i = 0; i < Global.BUILDING_AREA_NUMY; i++) {
             buildingGrids.add(new ArrayList<>());
-            for (int j = 0; j < Global.numX; j++) {
+            for (int j = 0; j < Global.BUILDING_AREA_NUMX; j++) {
                 //做方形
-                if(i==0 || i== Global.numY-1 || j==0 || j==Global.numX-1){
+                if(i==0 || i== Global.BUILDING_AREA_NUMY-1 || j==0 || j==Global.BUILDING_AREA_NUMX-1){
                     //挖掉四角
-                    if(!((i==0 || i==Global.numY-1) && (j==0 || j==Global.numX-1))){
+                    if(!((i==0 || i==Global.BUILDING_AREA_NUMY-1) && (j==0 || j==Global.BUILDING_AREA_NUMX-1))){
                         buildingGrids.get(i).add(new BuildingGrid(Global.BUILDING_AREA_X+Global.BUILDING_AREA_DISTANCE_X*j,Global.BUILDING_AREA_Y+Global.BUILDING_AREA_DISTANCE_Y*i));
                     }
                 }

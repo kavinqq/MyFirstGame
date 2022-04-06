@@ -128,6 +128,10 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
     public void gainResource() {
         resource.addWood(buildings.getWoodSpeed() * citizens.getNumOfLoggingCitizens());
         resource.addSteel(buildings.getSteelSpeed() * citizens.getNumOfMiningCitizens());
+//        resource.addGas(buildings.getGasProduceNum());
+    }
+
+    public void gainGas(){
         resource.addGas(buildings.getGasProduceNum());
     }
 
@@ -168,11 +172,12 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             //遊戲時間 流動 1小時
             timePass();
             //生產 木&鋼
-            //gainResource();
+//            gainResource();
+            gainGas();
             //建物.生成人()
             int numOfNewCitizens = buildings.getNewCitizenNum(resource);
             if (numOfNewCitizens != 0) {
-                this.citizens.add(numOfNewCitizens);
+                this.citizens.add(numOfNewCitizens,0,0);
                 //System.out.printf("第%d回合 有新市民出生 ,閒置人數:%d\n", getGameTime() + 1, citizens.getNumOfFreeCitizens());
             }
             int numOfNewArmySoldiers = buildings.getNewArmyNum(resource);

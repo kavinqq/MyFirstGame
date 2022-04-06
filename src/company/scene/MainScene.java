@@ -39,7 +39,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private Base base;  // 主堡
     private Background background; // 背景
     private BuildingOption buildingOption; // 建築物選單
-
+    private TarmacArr tarmacArr; //停機坪
     private GameObject currentObj; // 當前操控的物件(單選)
     private BuildingButton currentButton; //當前操控按鈕
     private BuildingController.BuildingNode currentBuildNode; //操控當前建築物結點
@@ -105,6 +105,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //建築物選單
         buildingOption = new BuildingOption();
+
+        //停機坪
+        tarmacArr = new TarmacArr();
 
         //可建築區
         buildingArea = new BuildingArea();
@@ -173,6 +176,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 建築物基座
         buildingArea.paint(g);
+
+        //停機坪
+        tarmacArr.paint(g);
 
         //建築物選單
         buildingOption.paint(g);
@@ -264,6 +270,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             // 下面就是移動地圖上每一個物件
             base.cameraMove();
 
+            //停機坪
+            tarmacArr.cameraMove();
+
             // city裡面所有東西移動
             city.cameraMove();
 
@@ -300,20 +309,18 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 currentButton.decCountPressed();
                 if (city.getBuildingNum() >= city.MAX_CAN_BUILD) {
                     canBuild = false;
-                    currentButton.setCanDragging(false);
                     ToastController.instance().print("建造-建築物已蓋滿 最大建築物量為" + city.MAX_CAN_BUILD);
                 } else if (City.getTechLevel() < type.instance().getTechLevelNeedBuild()) {
                     canBuild = false;
-                    currentButton.setCanDragging(false);
                     ToastController.instance().print("建造-科技等級不足 科技等級需要" + type.instance().getTechLevelNeedBuild() + "級");
                 } else if (!type.instance().isEnoughBuild(city.getResource())) {
                     canBuild = false;
-                    currentButton.setCanDragging(false);
                     ToastController.instance().print("建造-物資不足 " + type.instance().showBuildCost());
                 } else {
                     canBuild = true;
-                    currentButton.setCanDragging(true);
                 }
+                //當建築物不能建造時不可拖曳
+                currentButton.setCanDragging(canBuild);
             }
 
             //建造階段
@@ -398,7 +405,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                             if (city.isUpgradingTech(currentBuildNode)) {
                                 ToastController.instance().print("升級-科技已在升級中，請等待此次升級結束");
                             } else {
-                                //currentBuildNode.getBuilding().setTechUpgrading(true);
                                 city.upgradeTechLevel();
                                 ToastController.instance().print("升級-科技開始升級");
                             }
@@ -740,6 +746,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             StartScene startScene = new StartScene(); //還沒有結束畫面已此充當結束遊戲
             //SceneController.getInstance().change(startScene);
         }
+
     }
 
 
@@ -815,7 +822,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         if (currentObj != null) {
                             AudioResourceController.getInstance().play(new Path().sound().what());
                         }
-
                     }
 
 
@@ -875,6 +881,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             city.resetObjectXY();
 
             base.resetObjectXY();
+
+            tarmacArr.resetObjectXY();
 
             resourceSystem.resetObjectXY();
 

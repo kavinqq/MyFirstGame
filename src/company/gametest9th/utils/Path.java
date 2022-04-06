@@ -3,8 +3,8 @@ package company.gametest9th.utils;
 public class Path {
 
     /**
-     *  檔案的流程
-      */
+     * 檔案的流程
+     */
     public static abstract class Flow {
         private String path;
 
@@ -34,7 +34,7 @@ public class Path {
     }
 
     /**
-     *  Resources資料夾 => Img資料夾
+     * Resources資料夾 => Img資料夾
      */
 
     public static class Img extends Flow {
@@ -58,6 +58,7 @@ public class Path {
             public String airForceSoldier() {
                 return this + "/Solider.png";
             }
+
             //TODO
             public String citizen() {
                 return this + "/citizen.png";
@@ -70,6 +71,7 @@ public class Path {
             }
             */
         }
+
         public static class Zombies extends Flow {
 
             private Zombies(Flow flow) {
@@ -77,15 +79,15 @@ public class Path {
             }
 
             //TODO
-            public String zombieNormal(){
+            public String zombieNormal() {
                 return this + "/monster3.png";
             }
 
-            public String zombieBig(){
+            public String zombieBig() {
                 return this + "/monster3.png";
             }
 
-            public String zombieTypeI(){
+            public String zombieTypeI() {
                 return this + "/monster3.png";
             }
 
@@ -93,24 +95,22 @@ public class Path {
                 return this + "/monster3.png";
             }
 
-            public String zombieKing(){
+            public String zombieKing() {
                 return this + "/monster3.png";
             }
 
-            public String zombieWitch(){
+            public String zombieWitch() {
                 return this + "/monster3.png";
             }
 
-            public String zombieFlying(){
+            public String zombieFlying() {
                 return this + "/monster3.png";
             }
 
-            public String zombieFlyingBig(){
+            public String zombieFlyingBig() {
                 return this + "/monster3.png";
             }
         }
-
-
 
 
         // Resource => img => Actors
@@ -136,42 +136,80 @@ public class Path {
 
             }
 
-            public String start() { return this + "/start.png";};
+            public String start() {
+                return this + "/start.png";
+            }
 
-            public String exit() { return this + "/exit.png";};
+            ;
 
-            public String box() { return this + "/box.png";}
+            public String exit() {
+                return this + "/exit.png";
+            }
 
-            public String whiteGrayOpacity() { return this + "/whiteGrayOpacitySeventy.png";}
+            ;
 
-            public String green() { return this + "/green.png";}
+            public String box() {
+                return this + "/box.png";
+            }
 
-            public String red() { return this + "/red.png";}
+            public String whiteGrayOpacity() {
+                return this + "/whiteGrayOpacitySeventy.png";
+            }
+
+            public String green() {
+                return this + "/green.png";
+            }
+
+            public String red() {
+                return this + "/red.png";
+            }
 
             // UI
-            public String resourceBarUI() { return this + "/resourceBarUI.png";}
+            public String resourceBarUI() {
+                return this + "/resourceBarUI.png";
+            }
 
             // Icon
-            public String treeIcon() { return this + "/TreeIcon.png";}
+            public String treeIcon() {
+                return this + "/TreeIcon.png";
+            }
 
-            public String steelIcon() {return this + "/SteelResourceIcon.png";}
+            public String steelIcon() {
+                return this + "/SteelResourceIcon.png";
+            }
 
-            public String citizenNumIcon() { return this + "/citizenNumIcon.png";}
+            public String citizenNumIcon() {
+                return this + "/citizenNumIcon.png";
+            }
 
-            public String soldierNumIcon() { return this + "/soldierNumIcon.png";}
+            public String soldierNumIcon() {
+                return this + "/soldierNumIcon.png";
+            }
 
-            public String gasIcon() { return this + "/gasIcon.png";}
+            public String gasIcon() {
+                return this + "/gasIcon.png";
+            }
 
-            public String timeIcon() { return this + "/timeIcon.png";}
+            public String timeIcon() {
+                return this + "/timeIcon.png";
+            }
 
             // 資源圖片
-            public String tree() { return this + "/Tree.png";}
+            public String tree() {
+                return this + "/Tree.png";
+            }
 
-            public String specialTree() { return this + "/SpecialTree.png";}
+            public String specialTree() {
+                return this + "/SpecialTree.png";
+            }
 
-            public String steel() { return this + "/normalSteel.png";}
+            public String steel() {
+                return this + "/normalSteel.png";
+            }
 
-            public String specialSteel() { return this + "/specialSteel.png";}
+            public String specialSteel() {
+                return this + "/specialSteel.png";
+            }
 
         }
 
@@ -183,32 +221,64 @@ public class Path {
 
             }
 
-            public String House() { return this + "/house.png";}
+            public String House() {
+                return this + "/house.png";
+            }
 
-            public String Lab() { return this + "/lab.png";}
+            public String Lab() {
+                return this + "/lab.png";
+            }
 
-            public String SawMill() { return this + "/sawmill.png";}
+            public String SawMill() {
+                return this + "/sawmill.png";
+            }
 
-            public String SteelMill() { return this + "/steelmill.png";};
+            public String SteelMill() {
+                return this + "/steelmill.png";
+            }
 
-            public String Barracks() { return this + "/barracks.png";};
+            ;
 
-            public String GasMill() { return this + "/gasmill.png";}
+            public String Barracks() {
+                return this + "/barracks.png";
+            }
 
-            public String AirplanemIll() { return this + "/airplanemIll.png";}
+            ;
 
-            public String Base() { return this + "/BaseAndFoundation.png";};
+            public String GasMill() {
+                return this + "/gasmill.png";
+            }
 
-            public String Arsenal(){ return this + "/arsenal.png";}
+            public String AirplanemIll() {
+                return this + "/airplanemIll.png";
+            }
 
-            public String ingBuild(){return this+"/ingBuild.png";}
+            public String Base() {
+                return this + "/BaseAndFoundation.png";
+            }
+
+            ;
+
+            public String Arsenal() {
+                return this + "/arsenal.png";
+            }
+
+            public String ingBuild() {
+                return this + "/ingBuild.png";
+            }
 
             //建築物所需Icon
-            public String noWorkingIcon(){return this+"/stop.png";}
+            public String noWorkingIcon() {
+                return this + "/stop.png";
+            }
 
-            public String workingIcon(){return this+"/play.png";}
+            public String workingIcon() {
+                return this + "/play.png";
+            }
 
-            public String upGradeIcon(){return this+"/plus2.png";}
+            public String upGradeIcon() {
+                return this + "/plus2.png";
+            }
 
         }
 
@@ -219,29 +289,53 @@ public class Path {
                 super(flow, "/backgrounds");
             }
 
-            public String background(){
+            public String background() {
                 return this + "/bg4.jpg";
             }
 
-            public String grassBG() { return this + "/grassBG.png";}
+            public String hintUI() {
+                return this + "/HintUI.png";
+            }
 
-            public String foundation(){ return this + "/foundationNew.png";}
+            public String grassBG() {
+                return this + "/grassBG.png";
+            }
 
-            public String buttonFoundation(){ return this + "/buttonFoundation.png";}
+            public String foundation() {
+                return this + "/foundationNew.png";
+            }
 
-            public String buildingOptionBg(){return this + "/sea.png";}
+            public String buttonFoundation() {
+                return this + "/buttonFoundation.png";
+            }
 
-            public String road(){ return this + "/road1.png";}
+            public String buildingOptionBg() {
+                return this + "/buttonBg.png";
+            }
 
-            public String area(){return this +"/area.jpg";}
+            public String road() {
+                return this + "/road1.png";
+            }
 
-            public String grass(){return this +"/grass.png";}
+            public String area() {
+                return this + "/area.jpg";
+            }
 
-            public String airport(){return this+"airport.png";}
+            public String grass() {
+                return this + "/grass.png";
+            }
 
-            public String darkBackground(){return this +"/darkbj4.png";}
+            public String airport() {
+                return this + "airport.png";
+            }
 
-            public String tarmac(){return this +"/tarmac.png";}
+            public String darkBackground() {
+                return this + "/darkbj4.png";
+            }
+
+            public String tarmac() {
+                return this + "/tarmac.png";
+            }
         }
 
         public Actors actors() {
@@ -260,7 +354,7 @@ public class Path {
             return new Objs(this);
         }
 
-        public Building building(){
+        public Building building() {
             return new Building(this);
         }
 
@@ -280,16 +374,23 @@ public class Path {
             super(new Resources(), "/sounds");
         }
 
-        public String mainSceneBGM() {return this + "/MainSceneBGM.wav";}
+        public String mainSceneBGM() {
+            return this + "/MainSceneBGM.wav";
+        }
 
-        public String readyToWork() {return this + "/ReadyToWork.wav";}
+        public String readyToWork() {
+            return this + "/ReadyToWork.wav";
+        }
 
-        public String what() {return this + "/What.wav";}
+        public String what() {
+            return this + "/What.wav";
+        }
     }
 
 
     /**
      * 把圖片路徑往上傳
+     *
      * @return 圖片檔的路徑
      */
     public Img img() {
@@ -299,6 +400,7 @@ public class Path {
 
     /**
      * 把聲音路徑往上傳
+     *
      * @return 音效檔的路徑
      */
 

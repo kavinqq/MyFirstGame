@@ -4,6 +4,7 @@ import company.Global;
 import company.controllers.SceneController;
 import company.gameobj.Rect;
 import company.gameobj.message.HintDialog;
+import company.gameobj.message.MultiIHintDialog;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
 import company.gametest9th.utils.Path;
@@ -33,22 +34,24 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
     BuildingType type;
 
     private int pressCount;
+
     //建築物選單與地基差值X
-    private int optionbgFoundationGapX;
+    private int optionBgFoundationGapX;
+
     //建築物地基位置
     private int foundationX;
 
     //建築物按鈕x位置
     private int buttonX;
 
-
+    private BuildingButton currentMoveOnButton;
 
 
     public BuildingOption() {
         //建築物選單與地基左邊間距
-        optionbgFoundationGapX = (BUILDING_OPTION_WIDTH - FOUNDATION_WIDTH) / 2;
+        optionBgFoundationGapX = (BUILDING_OPTION_WIDTH - FOUNDATION_WIDTH) / 2;
 
-        foundationX = BUILDING_OPTION_X + optionbgFoundationGapX;
+        foundationX = BUILDING_OPTION_X + optionBgFoundationGapX;
 
         buttonX = BUILDING_OPTION_X + (BUILDING_OPTION_WIDTH - BUILDING_WIDTH) / 2;
 
@@ -64,6 +67,8 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
             buildingButtons.add(new BuildingButton(buttonX, BUILDING_OPTION_Y + FB_DIV_GAP_Y + (FOUNDATION_HEIGHT + OPTION_GAP_Y) * i, tmpId));
             buildingButtons.get(i).setImg(SceneController.getInstance().imageController().tryGetImage(tmpPath));
+
+
         }
 
         //新增地基圖片
@@ -93,14 +98,29 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         return buildingButtons.size();
     }
 
-
+    //取得現在位置按鈕
     public BuildingButton getCurrentButton(int x, int y) {
         for (int i = 0; i < buildingButtons.size(); i++) {
             if (buildingButtons.get(i).isEntered(x, y)) {
+
                 return buildingButtons.get(i);
             }
         }
         return null;
+    }
+
+    //取得目前移動時滑鼠下方的按鈕
+    private BuildingButton getCurrentMoveOnButton(CommandSolver.MouseState state,int x,int y){
+        if(state == CommandSolver.MouseState.MOVED){
+            for (int i = 0; i < BuildingTypeNum; i++) {
+                //取得目前指到的按鈕
+                if (buildingButtons.get(i).isEntered(x, y)) {
+                    return currentMoveOnButton = buildingButtons.get(i);
+                }
+            }
+        }
+
+        return currentMoveOnButton=null;
     }
 
     @Override
@@ -119,6 +139,10 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         for (int i = 0; i < BuildingTypeNum; i++) {
             //畫按鈕
             buildingButtons.get(i).paint(g);
+
+        }
+        if (currentMoveOnButton != null) {
+            currentMoveOnButton.getMultiIHintDialog().paint(g);
         }
     }
 
@@ -128,16 +152,6 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
         //印出update ，取得當前按鈕
         //boolean isOnButtons = checkMouseOnButtons();
         for (int i = 0; i < BuildingTypeNum; i++) {
-            //移出時不要有文字
-            if (!checkMouseOnButtons()) {
-                buildingButtons.get(i).getHintDialog().setHintMessage("");
-            }
-//            else if (isOnButtons) {
-//                type = BuildingType.getBuildingTypeByInt(buildingButtons.get(i).getId());
-//                buildingButtons.get(i).getHintDialog().setHintAbsolutePosition(-775 + buildingButtons.get(i).painter().left(), +30 + buildingButtons.get(i).painter().top());
-//                buildingButtons.get(i).getHintDialog().setHintMessage(type.instance().getName() + "：資源需求：木材:" + type.instance().getWoodCostCreate() + ", 鋼鐵:" + type.instance().getSteelCostCreate() + ", 瓦斯:" + type.instance().getGasCostCreate() + "，科技等級需求：" + type.instance().getTechLevelNeedBuild());
-//            }
-//            buildingButtons.get(i).getHintDialog().update();
             buildingButtons.get(i).update();
         }
     }
@@ -145,6 +159,8 @@ public class BuildingOption implements GameKernel.GameInterface, CommandSolver.M
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
+        getCurrentMoveOnButton(state,e.getX(),e.getY());
+
         //呼叫所有建築物按鈕
         for (int i = 0; i < BuildingTypeNum; i++) {
             //呼叫按鈕的滑鼠功能(傳入現在的滑鼠監聽)

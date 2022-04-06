@@ -1,5 +1,7 @@
 package company;
 
+import company.gameobj.buildings.Base;
+
 import java.awt.*;
 
 public class Global {
@@ -43,7 +45,7 @@ public class Global {
     public static final int STATUS_BAR_X = 0;
     public static final int STATUS_BAR_Y = 0;
     public static final int STATUS_BAR_WIDTH = WINDOW_WIDTH;
-    public static final int STATUS_BAR_HEIGHT = 60;
+    public static final int STATUS_BAR_HEIGHT = 80;
 
     //遊戲視窗大小
     public static final int SCREEN_X = 0;
@@ -65,7 +67,7 @@ public class Global {
     //選單大小
     public static final int BUILDING_OPTION_WIDTH = 150;
     public static final int BUILDING_OPTION_HEIGHT = WINDOW_HEIGHT-STATUS_BAR_HEIGHT;
-    public static final int OPTION_GAP_Y = 0;
+    public static final int OPTION_GAP_Y = 1;
     public static final int OPTION_GAP_X = (BUILDING_OPTION_WIDTH - FOUNDATION_WIDTH) / 2;
     public static final int BUILDING_OPTION_X =SCREEN_WIDTH - BUILDING_OPTION_WIDTH;
     public static final int BUILDING_OPTION_Y = STATUS_BAR_HEIGHT;
@@ -94,8 +96,10 @@ public class Global {
     public static final int BUILDING_GRID_WIDTH = BUILDING_WIDTH * 3 / 2;
     public static final int BUILDING_GRID_HEIGHT = BUILDING_WIDTH * 3 / 2;
 
-    public final static int numY = 4;
-    public final static int numX = 7;
+    public final static int BUILDING_AREA_NUMY = 4;
+    public final static int BUILDING_AREA_NUMX = 7;
+
+
 
 
     //StatusBar Icon相關設定
@@ -135,7 +139,7 @@ public class Global {
     public static int SUM_OF_CAMERA_MOVE_VY = 0;
 
     //文字大小
-    public static int FONT_SIZE = 25 ;
+    public static int FONT_SIZE = 23 ;
 
     //血量的高度
     public static int HP_HEIGHT=10;

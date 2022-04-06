@@ -5,6 +5,7 @@ import company.controllers.SceneController;
 import company.gameobj.GameObject;
 import company.gameobj.Rect;
 import company.gameobj.message.HintDialog;
+import company.gameobj.message.MultiIHintDialog;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 
@@ -62,20 +63,39 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
     //外部控制 若按下是不能建造，則不能拖曳
     private boolean canDragging;
 
-    private HintDialog hintDialog;
-
+    private MultiIHintDialog multiIHintDialog;
     private Rect[] redRects; //最底層紅
     private Rect greenRect;
 
 
     public BuildingButton(int x, int y,int id) {
         super(x, y, Global.BUILDING_WIDTH, Global.BUILDING_HEIGHT);
-        hintDialog=new HintDialog();
         canDragging=false;
         this.id=id;
         ox=x;
         oy=y;
         isMoveOnButton =false;
+        //多行文字
+        multiIHintDialog=new MultiIHintDialog(HintDialog.State.ABSOLUTE,painter().left()-300,painter().top());
+
+        type = BuildingType.getBuildingTypeByInt(getId());
+
+        multiIHintDialog.add("建築物名稱\t:"+type.instance().getName());
+        multiIHintDialog.add("");
+        multiIHintDialog.add(type.instance().toString());
+        multiIHintDialog.add("");
+        multiIHintDialog.add("建造所需木材\t:"+type.instance().getWoodCostCreate());
+        multiIHintDialog.add("");
+        multiIHintDialog.add("建造所需鋼鐵:\t"+type.instance().getSteelCostCreate());
+        multiIHintDialog.add("");
+        multiIHintDialog.add("建造所需瓦斯:\t"+type.instance().getGasCostCreate());
+        multiIHintDialog.add("");
+        multiIHintDialog.add("升級所需木材:\t"+type.instance().getWoodCostLevelUp());
+        multiIHintDialog.add("");
+        multiIHintDialog.add("升級所需鋼鐵:\t"+type.instance().getSteelCostLevelUp());
+        multiIHintDialog.add("");
+        multiIHintDialog.add("升級所需瓦斯:\t"+type.instance().getGasCostLevelUp());
+
     }
 
     public int getCountPressed() {
@@ -153,10 +173,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         return redRects;
     }
 
-    //顯示建築物資訊
-    public HintDialog getHintDialog() {
-        return hintDialog;
-    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -186,22 +202,20 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
         }
         //畫出建造中建築物
         g.drawImage(img,+painter().left(),painter().top(),painter().width(), painter().height(), null);
-        hintDialog.paint(g);
+    }
+
+    public MultiIHintDialog getMultiIHintDialog(){
+        return multiIHintDialog;
     }
 
     @Override
     public void update() {
-        if (isMoveOnButton) {
-            type = BuildingType.getBuildingTypeByInt(getId());
-            getHintDialog().setHintAbsolutePosition(-775 + painter().left(), +30 + painter().top());
-            getHintDialog().setHintMessage(type.instance().getName() + "：資源需求：木材:" + type.instance().getWoodCostCreate() + ", 鋼鐵:" + type.instance().getSteelCostCreate() + ", 瓦斯:" + type.instance().getGasCostCreate() + "，科技等級需求：" + type.instance().getTechLevelNeedBuild());
-        }
-        hintDialog.update();
+        multiIHintDialog.update();
     }
 
     @Override
     public void mouseTrig(MouseEvent e, CommandSolver.MouseState state, long trigTime) {
-        hintDialog.mouseTrig(e,state,trigTime);
+        multiIHintDialog.mouseTrig(e,state,trigTime);
         switch (state){
             case MOVED: {
                 //若移開不能拖曳

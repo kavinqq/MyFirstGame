@@ -39,8 +39,8 @@ public class Barracks extends Building{
 
     @Override
     public String toString() {
-        return "軍營:每3小時消耗2木材2鋼鐵產生1位士兵(每房屋等級+2人)";
-    }
+        return "產生士兵";
+    }//
 
     public String buildingDetail(int level){
         return "軍營：每3小時消耗2木材、2鋼鐵生產" + (super.getLevel() * 2 + 1) + "位士兵";

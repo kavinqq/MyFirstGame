@@ -56,16 +56,16 @@ public class GasMill extends Building{
      * @return 瓦斯場整體產生的瓦斯量(含升級效果)
      */
     public int getProduceGasNum(){
-        return (getLevel())+5;
+        return (getLevel()-1)+1;
     }
 
     @Override
     public String toString(){
-        return "瓦斯廠:每小時生產5瓦斯(每房屋等級+1)";
-    }
+        return "生產瓦斯";
+    }//(每過一段時間 每房屋等級+1)
 
     public String buildingDetail(int level){
-        return String.format("瓦斯廠：每小時生產%d瓦斯",getLevel()+5);
+        return String.format("瓦斯廠：每小時生產%d瓦斯",getProduceGasNum());
     }
 
 
