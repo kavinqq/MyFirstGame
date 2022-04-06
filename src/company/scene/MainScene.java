@@ -915,7 +915,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         currentObj = city.getCitizens().getCitizen(e.getX(), e.getY());
 
                         if (currentObj != null) {
-                            AudioResourceController.getInstance().play(new Path().sound().what());
+                            if(Math.random() < 0.5) {
+                                AudioResourceController.getInstance().play(new Path().sound().what());
+                            } else {
+                                AudioResourceController.getInstance().play(new Path().sound().what2());
+                            }
                         }
                     }
 
