@@ -15,11 +15,10 @@ import company.gameobj.FogOfWar;
 import company.gameobj.Rect;
 import company.gameobj.buildings.Arsenal;
 import company.gameobj.buildings.Building;
-import company.gameobj.creature.enemy.zombies.Zombie;
-import company.gameobj.creature.enemy.zombies.ZombieKing;
 import company.gameobj.creature.enemy.zombies.ZombieKingdom;
 import company.gameobj.creature.enemy.zombies.ZombieNormal;
 import company.gameobj.creature.human.ArmySoldier;
+import company.gameobj.creature.human.Soldier;
 import company.gameobj.resourceObjs.ResourceObj;
 import company.gameobj.resourceObjs.ResourceSystem;
 import company.gameobj.message.ToastController;
@@ -28,7 +27,6 @@ import company.gameobj.GameObject;
 import company.gameobj.background.Background;
 import company.gameobj.background.component.*;
 import company.gameobj.creature.human.Citizen;
-import company.gameobj.buildings.Base;
 import company.gameobj.creature.human.Human;
 
 import oldMain.City;
@@ -67,6 +65,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     //與建築相關
     City city; //城市
+
     ZombieKingdom zombieKingdom;
     //TODO: del
     ZombieNormal zombieNormal;
@@ -130,7 +129,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
         //base先不刪下面有些東西與base連接
-        base = new Arsenal(200,300);
+        base = new Arsenal(200, 300);
 
         //上一幀是否可建造
         preCanBuild = true;
@@ -139,9 +138,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         city = new City();
         zombieKingdom = new ZombieKingdom();
         //TODO:
-        zombieNormal = new ZombieNormal(100,700);
-
-        //city.build(BuildingType.BASE,SCREEN_X / 2 - Base.BASE_WIDTH, SCREEN_Y / 2 - Base.BASE_HEIGHT);
+        zombieNormal = new ZombieNormal(100, 700);
 
         // 測試: 預設有 ? 個 村民
 
@@ -195,12 +192,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         zombieNormal.paint(g);
 
-//        //停機坪
-//        tarmacArr.paint(g);
-//        // 主堡
-//        base.paint(g);
-
-
         // 如果現在可以使用框選
         if (canUseBoxSelection) {
 
@@ -210,6 +201,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 用血量條來判斷操控哪個人物
         if (currentObj != null && currentObj.getVisible()) {
+
             g.setColor(Color.RED);
             g.fillRect(currentObj.painter().left(), currentObj.painter().bottom() + 3, currentObj.painter().width(), 10);
             g.setColor(Color.black);
@@ -234,13 +226,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //畫出戰爭迷霧
         fogOfWar.paint(g);
 
+        //畫出城市所有已建造建築物
+        city.paint(g);
 
         //建築物選單
         buildingOption.paint(g);
-
-
-        //畫出城市所有已建造建築物
-        city.paint(g);
 
         // 狀態欄
         StatusBar.instance().paint(g);
@@ -253,7 +243,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //提示框
         ToastController.instance().paint(g);
 
-        for(Effect effect: effects){
+        for (Effect effect : effects) {
             effect.paint(g);
         }
     }
@@ -318,7 +308,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //City更新
         city.update();
         zombieKingdom.update();
-
 
 
         //判斷現在有無選取按鈕
@@ -468,33 +457,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         // 框選Box狀態on
         if (canUseBoxSelection) {
 
@@ -502,7 +464,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             boxSelection.update();
 
             // 把框到的市民 加入到 tmpControlHumans
-            List<Human> tmpControlHumans = city.getCitizens().getBoxCitizens(boxSelection.getBox());
+            List<Human> tmpControlHumans = city.getBoxSelectionObjs(boxSelection.getBox());
 
             // 如果新的框選有人(一個也可以) => 把框選的List換過去
             if (!tmpControlHumans.isEmpty()) {
@@ -520,7 +482,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             if (currentObj instanceof Human) {
 
                 ((Human) currentObj).setTarget(targetX, targetY);
-                AudioResourceController.getInstance().play(new Path().sound().readyToWork());
+
+                if(currentObj instanceof Citizen) {
+                    AudioResourceController.getInstance().play(new Path().sound().readyToWork());
+                } else if(currentObj instanceof Soldier){
+                    AudioResourceController.getInstance().play(new Path().sound().soldierWhat4());
+                }
             }
 
             // reset boolean
@@ -582,10 +549,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             // reset boolean
             hasSetTarget = false;
         }
+
         // 走路狀態
-        for (BuildingType value:values()) {
+        for (BuildingType value : values()) {
             for (int j = 0; j < value.list().size(); j++) {
-                Building allBuildings=value.list().get(j).getBuilding();
+                Building allBuildings = value.list().get(j).getBuilding();
+
                 for (Citizen citizen : city.getCitizens().getAllCitizens()) {
 
                     //如果人物走到與建築重疊了，將其拉回剛好接觸但不重疊的位置並且讓人物知道這個方向被擋住了，換個方向
@@ -768,8 +737,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         }
                     }
                 }
-
-
 
 
                 /*base版
@@ -958,34 +925,30 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 */
 
 
-                for (ArmySoldier armySoldier : city.getMilitary().getArmy()){
-                    if(armySoldier.getAttackTarget()==null){
+                for (ArmySoldier armySoldier : city.getMilitary().getArmy()) {
+                    if (armySoldier.getAttackTarget() == null) {
                         //System.out.println("army null");
                         armySoldier.detect(zombieNormal);
-                    }
-                    else{
+                    } else {
                         //temp cause not zombie group yet
-                        if(!zombieNormal.isAlive()){
+                        if (!zombieNormal.isAlive()) {
                             continue;
-                        }
-                        else if(armySoldier.isCollision(zombieNormal)){
+                        } else if (armySoldier.isCollision(zombieNormal)) {
                             System.out.println("stop");
                             zombieNormal.stop();
                             armySoldier.stop();
 
-                            if(armySoldier.getFightEffect()==null){
+                            if (armySoldier.getFightEffect() == null) {
                                 armySoldier.setFightEffect(new FightEffect(armySoldier.painter().centerX(), armySoldier.painter().centerY()));
-                            }
-                            else{
-                                if(armySoldier.getFightEffect().isDue()){
+                            } else {
+                                if (armySoldier.getFightEffect().isDue()) {
                                     armySoldier.setFightEffect(null);
                                 }
                             }
                             zombieNormal.getAttacked(armySoldier.getValue());
-                            if(zombieNormal.isAlive()){
+                            if (zombieNormal.isAlive()) {
                                 armySoldier.getAttacked(zombieNormal.getValue());
-                            }
-                            else{
+                            } else {
                                 //armySoldier.setAttackTargetToNull();
                                 //armySoldier.setMoveStatus(Animator.State.WALK);
                             }
@@ -1002,40 +965,40 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 //        for (BuildingType value:values()) {
 //            for (int j = 0; j < value.list().size(); j++) {
 //                Building AllBuildings=value.list().get(j).getBuilding();
-                //TODO: del
-                zombieNormal.update();
-                if(zombieNormal.isCollision(base)){
-                    switch (zombieNormal.getWalkingDir()){
-                        case LEFT:{
-                            if(zombieNormal.touchRightOf(base)){
-                                zombieNormal.translateX(base.painter().right()-zombieNormal.painter().left());
-                            }
-                            break;
-                        }
-                        case RIGHT:{
-                            if(zombieNormal.touchLeftOf(base)){
-                                zombieNormal.translateX(zombieNormal.painter().right()-base.painter().left());
-                            }
-                            break;
-                        }
-                        case UP:{
-                            if(zombieNormal.touchBottomOf(base)){
-                                zombieNormal.translateY(base.painter().bottom()-zombieNormal.painter().top());
-                            }
-                            break;
-                        }
-                        case DOWN:{
-                            if(zombieNormal.touchTopOf(base)){
-                                zombieNormal.translateY(zombieNormal.painter().bottom()-base.painter().top());
-                            }
-                            break;
-                        }
+
+        //TODO: del
+        zombieNormal.update();
+        if (zombieNormal.isCollision(base)) {
+            switch (zombieNormal.getWalkingDir()) {
+                case LEFT: {
+                    if (zombieNormal.touchRightOf(base)) {
+                        zombieNormal.translateX(base.painter().right() - zombieNormal.painter().left());
                     }
-                    zombieNormal.stop();
+                    break;
                 }
+                case RIGHT: {
+                    if (zombieNormal.touchLeftOf(base)) {
+                        zombieNormal.translateX(zombieNormal.painter().right() - base.painter().left());
+                    }
+                    break;
+                }
+                case UP: {
+                    if (zombieNormal.touchBottomOf(base)) {
+                        zombieNormal.translateY(base.painter().bottom() - zombieNormal.painter().top());
+                    }
+                    break;
+                }
+                case DOWN: {
+                    if (zombieNormal.touchTopOf(base)) {
+                        zombieNormal.translateY(zombieNormal.painter().bottom() - base.painter().top());
+                    }
+                    break;
+                }
+            }
+            zombieNormal.stop();
+        }
 //            }
 //        }
-
 
 
         // 更新迷霧狀況
@@ -1125,13 +1088,18 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         controlHumans.clear();
 
                         // 現在控製的Obj 換成這個 (現在先檢查所有村民而已)
-                        currentObj = city.getCitizens().getCitizen(e.getX(), e.getY());
+                        currentObj = city.getSingleObjectByXY(currentMouseX, currentMouseY);
 
                         if (currentObj != null) {
-                            if(Math.random() < 0.5) {
-                                AudioResourceController.getInstance().play(new Path().sound().what());
-                            } else {
-                                AudioResourceController.getInstance().play(new Path().sound().what2());
+
+                            if (currentObj instanceof Citizen) {
+                                if (Math.random() < 0.5) {
+                                    AudioResourceController.getInstance().play(new Path().sound().what());
+                                } else {
+                                    AudioResourceController.getInstance().play(new Path().sound().what2());
+                                }
+                            } else if (currentObj instanceof Soldier) {
+                                AudioResourceController.getInstance().play(new Path().sound().soldierWhat3());
                             }
                         }
                     }

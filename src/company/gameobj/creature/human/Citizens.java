@@ -1,6 +1,5 @@
 package company.gameobj.creature.human;
 
-import company.Global;
 import company.gameobj.GameObject;
 import company.gameobj.buildings.Base;
 import oldMain.OldMain;
@@ -284,7 +283,7 @@ public class Citizens {
      * @return 一個村民
      */
 
-    public Citizen getCitizen(int x, int y) {
+    public Citizen getSingleCitizenByXY(int x, int y) {
 
         // 尋訪每一個村民
         for (Citizen citizen : citizens) {

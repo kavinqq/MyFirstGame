@@ -182,6 +182,24 @@ public class ZombieKingdom implements GameKernel.GameInterface{
         }
     }
 
+    public void cameraMove(){
+        for(Zombie zombie : zombieTroop.getLandTroop()){
+            zombie.cameraMove();
+        }
+        for(Zombie zombie : zombieTroop.getAirTroop()){
+            zombie.cameraMove();
+        }
+    }
+
+    public void resetObjectXY(){
+        for(Zombie zombie : zombieTroop.getLandTroop()){
+            zombie.resetObjectXY();
+        }
+        for(Zombie zombie : zombieTroop.getAirTroop()){
+            zombie.resetObjectXY();
+        }
+    }
+
     @Override
     public void update() {
         //timePass();
@@ -220,8 +238,11 @@ public class ZombieKingdom implements GameKernel.GameInterface{
 
         public ZombieTroop() {
             Zombie zombieGenre;
+
             landTroop = new ArrayList<Zombie>();
+
             airTroop = new ArrayList<Zombie>();
+
             for (Map.Entry<Zombie, ArrayList<? extends Zombie>> entry : zombies.entrySet()) {
                 zombieGenre = entry.getKey();
 //                System.out.println(entry.getValue().size());
@@ -255,6 +276,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
         public ArrayList<Zombie> getAirTroop() {
             return this.airTroop;
         }
+
 
 //        @Override
 //        public String toString() {

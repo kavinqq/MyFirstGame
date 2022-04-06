@@ -20,6 +20,8 @@ public abstract class GameObject implements GameKernel.GameInterface {
 
     public GameObject(int x, int y, int width, int height) {
 
+        isVisible = true;
+
         detectRange = new Rect(x, y, width, height);
         painter = new Rect(x, y, width, height);
 
@@ -28,6 +30,8 @@ public abstract class GameObject implements GameKernel.GameInterface {
     }
 
     public GameObject(int x, int y, int width, int height, int x2, int y2, int width2, int height2) {
+
+        isVisible = true;
 
         detectRange = new Rect(x, y, width, height);
         painter = new Rect(x2, y2, width2, height2);
@@ -40,6 +44,8 @@ public abstract class GameObject implements GameKernel.GameInterface {
 
     public GameObject(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight) {
 
+        isVisible = true;
+
         painter = new Rect(x, y, painterWidth, painterHeight);
         painter.setCenter(x, y);
 
@@ -51,6 +57,8 @@ public abstract class GameObject implements GameKernel.GameInterface {
     }
 
     public GameObject(Rect rect) {
+
+        isVisible = true;
 
         painter = rect.clone();
         detectRange = rect.clone();

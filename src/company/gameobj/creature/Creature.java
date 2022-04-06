@@ -76,8 +76,8 @@ public abstract class Creature extends GameObject {
         this.moveStatus = moveStatus;
 
         // 原本的位置
-        sumOfCameraMoveX = 0;
-        sumOfCameraMoveY = 0;
+
+
 
         // 若無初始目的地的話預設人物出生方向朝下
         if(this.isAtTarget()){

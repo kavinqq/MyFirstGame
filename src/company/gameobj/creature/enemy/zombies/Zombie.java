@@ -17,7 +17,7 @@ public abstract class Zombie extends Enemy {
         ZOMBIE_FLYING(2),
         ZOMBIE_FLYING_BIG(2),
         ZOMBIE_KING(2),
-        ZOMBIE_NORMAL(2),
+        ZOMBIE_NORMAL(4),
         ZOMBIE_TYPE_I(2),
         ZOMBIE_TYPE_II(2),
         ZOMBIE_WITCH(2);

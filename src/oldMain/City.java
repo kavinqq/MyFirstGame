@@ -17,6 +17,7 @@ import company.gameobj.BuildingController.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import static company.gameobj.BuildingController.BuildingType.*;
 import static company.gameobj.BuildingController.*;
@@ -76,6 +77,8 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
      */
     private Resource resource;
 
+    private List<Human> boxSelection;
+
     /**
      * 城市的建構子 建構初始的 人民/殭屍/建築物陣列
      */
@@ -87,6 +90,8 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         citizens = null;
         military = new Military();
         buildings.build(BASE,resource,Base.BASE_X,Base.BASE_Y); //等mainScene 解決
+
+        boxSelection = new ArrayList<>();
     }
 
     /**
@@ -182,7 +187,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 //            gainResource();
             gainGas();
             //建物.生成人()
-            this.citizens.add(buildings.getNewCitizenNum(resource), Base.BASE_X+Global.SUM_OF_CAMERA_MOVE_VX-225,Base.BASE_Y+Global.SUM_OF_CAMERA_MOVE_VY);
+            this.citizens.add(buildings.getNewCitizenNum(resource), Base.BASE_X+ Global.SUM_OF_CAMERA_MOVE_VX-225,Base.BASE_Y+Global.SUM_OF_CAMERA_MOVE_VY);
             this.military.addArmy(buildings.getNewArmyNum(resource),Base.BASE_X+Global.SUM_OF_CAMERA_MOVE_VX+Base.BASE_WIDTH+225,Base.BASE_Y+Global.SUM_OF_CAMERA_MOVE_VY); //Base.BASE_X+225,Base.BASE_Y
 
             //升成戰士
@@ -637,6 +642,33 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
     }
 
 
+    public GameObject getSingleObjectByXY(int x, int y){
+        GameObject currentObj = null;
+
+        currentObj = citizens.getSingleCitizenByXY(x, y);
+
+        if(currentObj == null){
+            currentObj = military.getSingleSoldierByXY(x, y);
+        }
+
+        return currentObj;
+    }
+
+    public List<Human> getBoxSelectionObjs(GameObject box){
+
+        boxSelection = citizens.getBoxCitizens(box);
+
+        if(boxSelection.size() > 0) {
+            return boxSelection;
+        }
+
+        boxSelection = military.getBoxSelectSoldier(box);
+
+        return boxSelection;
+    }
+
+
+
     @Override
     public void paint(Graphics g) {
 
@@ -673,6 +705,8 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         buildings.cameraMove();
 
         military.cameraMove();
+
+        zombies.cameraMove();
     }
 
     /**
@@ -688,6 +722,8 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         buildings.resetObjectXY();
 
         military.resetObjectXY();
+
+        zombies.resetObjectXY();
     }
 
     @Override
