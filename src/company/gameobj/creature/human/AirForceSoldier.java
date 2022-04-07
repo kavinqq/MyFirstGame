@@ -15,8 +15,8 @@ public class AirForceSoldier extends Soldier{
 
     private static final int painterWidth = 64;
     private static final int painterHeight = 64;
-    public static final int colliderWidth = 256;
-    public static final int colliderHeight = 256;
+    public static final int colliderWidth = 400;
+    public static final int colliderHeight = 400;
     private static final int SPEED = 10;
 
     public AirForceSoldier(int x, int y, int level){

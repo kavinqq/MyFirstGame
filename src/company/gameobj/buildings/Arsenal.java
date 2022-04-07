@@ -105,17 +105,17 @@ public class Arsenal extends Building {
     protected void init() {
         setId(6)
                 .setName("兵工廠")
-                .setBuildTime(3)
+                .setBuildTime(5)
                 .setUpgradeTime(48)
                 .setLevelC(0)
                 .setTechLevelNeedBuild(2)
                 .setTechLevelNeedUpgrade(2)
                 .setHp(800)
-                .setWoodCostCreate(30)
-                .setSteelCostCreate(10)
+                .setWoodCostCreate(80)
+                .setSteelCostCreate(50)
                 .setGasCostCreate(0)
-                .setWoodCostLevelUpC(70)
-                .setSteelCostLevelUpC(40)
+                .setWoodCostLevelUpC(100)
+                .setSteelCostLevelUpC(70)
                 .setGasCostLevelup(0)
                 .setImgPath(new Path().img().building().Arsenal());
         imgInit();
