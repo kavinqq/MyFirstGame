@@ -39,12 +39,12 @@ public class TarmacArr {
             setBuildingOriginalX(Global.SUM_OF_CAMERA_MOVE_VX);
             setBuildingOriginalY(Global.SUM_OF_CAMERA_MOVE_VY);
 
-            tarmac_img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().magic());
+//            tarmac_img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().magic());
         }
 
         @Override
         public void paintComponent(Graphics g) {
-            g.drawImage(tarmac_img, painter().left(), painter().top(), painter().width(), painter().height(), null);
+//            g.drawImage(tarmac_img, painter().left(), painter().top(), painter().width(), painter().height(), null);
         }
 
         @Override

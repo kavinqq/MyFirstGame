@@ -82,15 +82,14 @@ public class Citizen extends Human {   //市民
         resourceTargetY = 0;
 
         // 預設採集量
-        maxCarryWood = 3;
-        maxCarrySteel = 1;
+        maxCarryWood = 0;
+        maxCarrySteel = 0;
     }
 
     /**
      * 派遣村民去採木頭
      */
     public void startToLog() {
-
         workStatus = WORK_STATUS.WOOD;
         this.toolDelay.loop();
     }

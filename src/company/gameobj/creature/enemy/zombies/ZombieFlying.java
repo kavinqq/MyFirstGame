@@ -17,11 +17,13 @@ public class ZombieFlying extends Zombie {
      * 這種殭屍的預設攻擊力
      */
     public ZombieFlying(int x, int y) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 2, new Path().img().zombies().zombieFlying(), FLY_ABILITY.CAN_FLY, ZOMBIE_TYPE.ZOMBIE_FLYING);
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 5, new Path().img().zombies().zombieFlying(), FLY_ABILITY.CAN_FLY, ZOMBIE_TYPE.ZOMBIE_FLYING);
+        setMaxHp(50);
     }
 
     public ZombieFlying() {
-        super( painterWidth, painterHeight, colliderWidth, colliderHeight, 2, new Path().img().zombies().zombieFlying(), FLY_ABILITY.CAN_FLY, ZOMBIE_TYPE.ZOMBIE_FLYING);
+        super( painterWidth, painterHeight, colliderWidth, colliderHeight, 5, new Path().img().zombies().zombieFlying(), FLY_ABILITY.CAN_FLY, ZOMBIE_TYPE.ZOMBIE_FLYING);
+        setMaxHp(50);
     }
 
     @Override

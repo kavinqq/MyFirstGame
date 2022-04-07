@@ -13,16 +13,16 @@ public class Resource {
     /**
      * 目前 木材和鋼鐵 的採集效率 續升級直接改此  (預設 市民可採 (3 木/時) 或 (1 鐵/時) )
      */
-    public static int DEFAULT_WOOD_SPEED = 3;
-    public static int DEFAULT_STEEL_SPEED = 1;
+    public static int DEFAULT_WOOD_SPEED = 5;
+    public static int DEFAULT_STEEL_SPEED = 3;
 
     /**
      * Resource建構子 用來把 一開始的 木/鋼鐵 資源歸0
      */
     public Resource() {
-        totalSteel = 3000;
-        totalWood = 3000;
-        totalGas = 300;
+        totalSteel = 0;
+        totalWood = 0;
+        totalGas = 0;
     }
 
     /**
