@@ -21,7 +21,7 @@ public class AirForceSoldier extends Soldier{
 
     public AirForceSoldier(int x, int y, int level){
 
-        super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight, 2 + 2*level, SPEED, new Path().img().actors().Actor2(),FLY_ABILITY.CAN_FLY, SOLDIER_TYPE.AIR_FORCE);
+        super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight, 2 + 2*level + 100, SPEED, new Path().img().actors().Actor2(),FLY_ABILITY.CAN_FLY, SOLDIER_TYPE.AIR_FORCE);
         setMaxHp(600);
         setBuildingOriginalX(Global.SUM_OF_CAMERA_MOVE_VX);
         setBuildingOriginalY(Global.SUM_OF_CAMERA_MOVE_VY);

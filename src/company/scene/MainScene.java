@@ -827,7 +827,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             if (armySoldier.getAttackTarget() == null) {
                 for (Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()) {
 
-                    //armySoldier.detect(zombie);
+                    armySoldier.detect(zombie);
                     if (armySoldier.getAttackTarget() != null) {
                         break;
                     }
@@ -861,7 +861,23 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //飛行士兵打殭屍
         for (AirForceSoldier airForceSoldier : city.getMilitary().getAirForce()) {
             if (airForceSoldier.getAttackTarget() == null) {
-                for (Zombie zombie : zombieKingdom.getZombieTroop().getAirTroop()) {
+                ArrayList<Zombie> allZombie = new ArrayList<>();
+                allZombie.addAll(zombieKingdom.getZombieTroop().getAirTroop());
+                allZombie.addAll(zombieKingdom.getZombieTroop().getLandTroop());
+//                for (Zombie zombie : zombieKingdom.getZombieTroop().getAirTroop()) {
+//                    airForceSoldier.detect(zombie);
+//                    if (airForceSoldier.getAttackTarget() != null) {
+//                        break;
+//                    }
+//                }
+//
+//                for (Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()){
+//                    airForceSoldier.detect(zombie);
+//                    if (airForceSoldier.getAttackTarget() != null) {
+//                        break;
+//                    }
+//                }
+                for (Zombie zombie : allZombie){
                     airForceSoldier.detect(zombie);
                     if (airForceSoldier.getAttackTarget() != null) {
                         break;
@@ -878,13 +894,16 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         enemy.setFightEffect(new FightEffect(enemy.painter().centerX(), enemy.painter().centerY()));
                         enemy.getAttacked(airForceSoldier.getValue());
                     } else {
-                        if (airForceSoldier.getFightEffect().isDue()) {
+                        if (enemy.getFightEffect().isDue()) {
                             enemy.setFightEffect(null);
                             if (!enemy.isAlive()) {
                                 airForceSoldier.setAttackTargetToNull();
                             }
                         }
                     }
+                }
+                else{
+                    airForceSoldier.setMoveStatus(Animator.State.WALK);
                 }
             }
         }

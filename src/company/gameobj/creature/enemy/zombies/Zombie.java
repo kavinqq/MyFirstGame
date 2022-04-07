@@ -94,10 +94,27 @@ public abstract class Zombie extends Enemy {
         if(this.getFightEffect()!=null && this.getFightEffect().isDue()){
             this.setFightEffect(null);
         }
+
+
+        if(getAttackTarget() instanceof Building){
+            if(((Building) getAttackTarget()).getHp()<0){
+                this.setAttackTargetToNull();
+            }
+        }
+        else if(getAttackTarget() instanceof Human){
+            if(!((Human) getAttackTarget()).isAlive()){
+                this.setAttackTargetToNull();
+            }
+        }
         if(getAttackTarget() != null) {
-            setTargetXY(getAttackTarget().painter().centerX(),getAttackTarget().painter().centerY());
-        }else{
-            setTargetXY(Base.BASE_X+Base.BASE_WIDTH/2+Global.SUM_OF_CAMERA_MOVE_VX,Base.BASE_Y+Base.BASE_HEIGHT/2+Global.SUM_OF_CAMERA_MOVE_VY);
+                if(this.targetX()!=getAttackTarget().painter().centerX()||this.targetY()!=getAttackTarget().painter().centerY()){
+                    setTargetXY(getAttackTarget().painter().centerX(),getAttackTarget().painter().centerY());
+                }
+        }
+        if(getAttackTarget()==null){
+            if(this.targetX()!=Base.BASE_X+Base.BASE_WIDTH/2+Global.SUM_OF_CAMERA_MOVE_VX||this.targetY()!=Base.BASE_X+Base.BASE_WIDTH/2+Global.SUM_OF_CAMERA_MOVE_VY){
+                setTargetXY(Base.BASE_X+Base.BASE_WIDTH/2+Global.SUM_OF_CAMERA_MOVE_VX,Base.BASE_Y+Base.BASE_HEIGHT/2+Global.SUM_OF_CAMERA_MOVE_VY);
+            }
         }
     }
 
