@@ -132,7 +132,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //圖片
         chooseUnit = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().chooseUnit());
 
-        target = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().target());
 
         //base先不刪下面有些東西與base連接
         base = new Arsenal(200, 300);
@@ -174,10 +173,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 迷霧
         fogOfWar = new FogOfWar();
-
-        canDrawTarget = false;
-
-        targetDelay = new Delay(30);
 
 //        AudioResourceController.getInstance().loop(new Path().sound().mainSceneBGM(), 2);
     }
@@ -515,8 +510,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             if (currentObj instanceof Human) {
 
                 currentObj.setTarget(targetX, targetY);
-
-                canDrawTarget = true;
 
                 if (currentObj instanceof Citizen) {
                     AudioResourceController.getInstance().play(new Path().sound().readyToWork());
