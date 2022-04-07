@@ -2,6 +2,7 @@ package company.gameobj.creature.enemy.zombies;
 
 import company.Global;
 import company.gameobj.GameObject;
+import company.gameobj.buildings.Base;
 import company.gameobj.buildings.Building;
 import company.gameobj.creature.Creature;
 import company.gameobj.creature.enemy.Enemy;
@@ -95,6 +96,8 @@ public abstract class Zombie extends Enemy {
         }
         if(getAttackTarget() != null) {
             setTargetXY(getAttackTarget().painter().centerX(),getAttackTarget().painter().centerY());
+        }else{
+            setTargetXY(Base.BASE_X+Base.BASE_WIDTH/2+Global.SUM_OF_CAMERA_MOVE_VX,Base.BASE_Y+Base.BASE_HEIGHT/2+Global.SUM_OF_CAMERA_MOVE_VY);
         }
     }
 

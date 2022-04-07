@@ -5,7 +5,7 @@ import company.Global;
 import company.gametest9th.utils.Path;
 
 public class House extends Building {
-    public static int makeTime=10;
+    public static int makeTime=48;
 
     public House(int x, int y) {
         super(x, y);
@@ -46,7 +46,7 @@ public class House extends Building {
                 .setLevelC(0)
                 .setTechLevelNeedBuild(1)
                 .setTechLevelNeedUpgrade(1)
-                .setHp(300)
+                .setHp(50)
                 .setWoodCostCreate(10)
                 .setSteelCostCreate(0)
                 .setGasCostCreate(0)

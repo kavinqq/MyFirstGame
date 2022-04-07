@@ -33,7 +33,7 @@ public class Base extends Building {
 
     @Override
     public void update() {
-        cameraMove();
+
     }
 
     @Override

@@ -307,7 +307,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
 
-        // 如果這一帧的鏡頭移動量 != 0 [必須移動]
+//         如果這一帧的鏡頭移動量 != 0 [必須移動]
         if (CAMERA_MOVE_VX != 0 || CAMERA_MOVE_VY != 0) {
 
             // 下面就是移動地圖上每一個物件
