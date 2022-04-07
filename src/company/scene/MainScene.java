@@ -779,12 +779,13 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         break;
                     }
                 }
-            } else if (armySoldier.getAttackTarget() != null) {
+            } if (armySoldier.getAttackTarget() != null) {
                 if (armySoldier.isCollision(armySoldier.getAttackTarget())) {
                     Enemy enemy = (Enemy) armySoldier.getAttackTarget();
                     enemy.stop();
                     armySoldier.stop();
 
+                    //下面四行應該刪掉
                     enemy.getAttacked(armySoldier.getValue());
                     if (!enemy.isAlive()) {
                         armySoldier.setAttackTargetToNull();
@@ -804,7 +805,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             }
         }
-
+        //飛行士兵打殭屍
         for (AirForceSoldier airForceSoldier : city.getMilitary().getAirForce()) {
             if (airForceSoldier.getAttackTarget() == null) {
                 for (Zombie zombie : zombieKingdom.getZombieTroop().getAirTroop()) {
@@ -814,12 +815,16 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     }
                 }
             }
-
             if (airForceSoldier.getAttackTarget() != null) {
                 if (airForceSoldier.isCollision(airForceSoldier.getAttackTarget())) {
                     Enemy enemy = (Enemy) airForceSoldier.getAttackTarget();
                     enemy.stop();
                     airForceSoldier.stop();
+//下面四行應該刪掉
+                    enemy.getAttacked(airForceSoldier.getValue());
+                    if (!enemy.isAlive()) {
+                        airForceSoldier.setAttackTargetToNull();
+                    }
 
                     if (enemy.getFightEffect() == null) {
                         enemy.setFightEffect(new FightEffect(airForceSoldier.painter().centerX(), airForceSoldier.painter().centerY()));
