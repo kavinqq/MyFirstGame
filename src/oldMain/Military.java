@@ -103,6 +103,7 @@ public class Military {
      */
     public void upgradeArmy() {
         this.armyLevel++;
+
     }
 
     /**

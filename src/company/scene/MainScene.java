@@ -386,17 +386,19 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         currentButton.setGreenRect(greenRect);
                         if (currentButton.getGreenRect() != null) {
                             //若有蓋好的建築物，將redRects給currentButton 一個
+                            ArrayList<Rect> redRects = new ArrayList<>();
                             for (BuildingType value : values()) {
-                                ArrayList<Rect> redRects = new ArrayList<>();
+
                                 for (int k = 0; k < value.list().size(); k++) {
                                     Rect tmpRect = value.list().get(k).getBuilding().overlapRect(currentButton.getGreenRect());
                                     if (tmpRect != null) {
                                         redRects.add(tmpRect);
                                     }
                                 }
-                                if (!redRects.isEmpty()) {
-                                    currentButton.setRedRects(redRects.toArray(new Rect[redRects.size()]));
-                                }
+
+                            }
+                            if (!redRects.isEmpty()) {
+                                currentButton.setRedRects(redRects.toArray(new Rect[redRects.size()]));
                             }
                         }
 
