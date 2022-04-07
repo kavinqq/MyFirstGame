@@ -330,26 +330,26 @@ public abstract class Creature extends GameObject {
             } else {
                 switch (this.getWalkingDir()) {
                     case LEFT: {
-                        if (targetX() > this.painter().centerX()) {
-                            this.setWalkingDir((this.targetY() < this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
+                        if (this.getAttackTarget().painter().centerX() > this.painter().centerX()) {
+                            this.setWalkingDir((this.getAttackTarget().painter().centerY() < this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
                         }
                         break;
                     }
                     case RIGHT: {
-                        if (targetX() < this.painter().centerX()) {
-                            this.setWalkingDir((this.targetY() < this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
+                        if (this.getAttackTarget().painter().centerX() < this.painter().centerX()) {
+                            this.setWalkingDir((this.getAttackTarget().painter().centerY() < this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
                         }
                         break;
                     }
                     case UP: {
-                        if (targetY() > this.painter().centerY()) {
-                            this.setWalkingDir((this.targetX() < this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
+                        if (this.getAttackTarget().painter().centerY() > this.painter().centerY()) {
+                            this.setWalkingDir((this.getAttackTarget().painter().centerX() < this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
                         }
                         break;
                     }
                     case DOWN: {
-                        if (targetY() < this.painter().centerY()) {
-                            this.setWalkingDir((this.targetX() < this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
+                        if (this.getAttackTarget().painter().centerY() < this.painter().centerY()) {
+                            this.setWalkingDir((this.getAttackTarget().painter().centerX() < this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
                         }
                         break;
                     }

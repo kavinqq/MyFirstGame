@@ -642,8 +642,8 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
     }
 
 
-    public GameObject getSingleObjectByXY(int x, int y){
-        GameObject currentObj = null;
+    public Human getSingleObjectByXY(int x, int y){
+        Human currentObj = null;
 
         currentObj = citizens.getSingleCitizenByXY(x, y);
 

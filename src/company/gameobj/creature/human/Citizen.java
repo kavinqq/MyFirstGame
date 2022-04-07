@@ -3,6 +3,7 @@ package company.gameobj.creature.human;
 import company.Global;
 
 import company.gameobj.GameObject;
+import company.gameobj.creature.Creature;
 import company.gametest9th.utils.*;
 
 import java.awt.*;
@@ -157,9 +158,18 @@ public class Citizen extends Human {   //市民
         if (getMoveStatus() == Animator.State.WALK) {
             walk();
         }
+        else{
+            if(getAttackTarget() != null && ((Creature) getAttackTarget()).isAlive()){
+                setAttackTargetToNull();
+            }
+        }
 
         // 動畫更新[換圖片]
         getAnimator().update();
+
+        if(this.getFightEffect()!=null && this.getFightEffect().isDue()){
+            this.setFightEffect(null);
+        }
     }
 
     /**

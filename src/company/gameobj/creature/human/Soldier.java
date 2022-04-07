@@ -78,5 +78,9 @@ public abstract class Soldier extends Human{
 
         // 動畫更新[換圖片]
         getAnimator().update();
+
+        if(this.getFightEffect()!=null && this.getFightEffect().isDue()){
+            this.setFightEffect(null);
+        }
     }
 }

@@ -16,12 +16,12 @@ public abstract class Effect extends GameObject {
         this.totalDelay = totalDelay;
         totalDelay.play();
         this.img = SceneController.getInstance().imageController().tryGetImage(img);
+        AudioResourceController.getInstance().play(new Path().sound().fight());
     }
 
     @Override
     public void paintComponent(Graphics g) {
         g.drawImage(img,this.painter().left(), this.painter().top(),null);
-        AudioResourceController.getInstance().play(new Path().sound().fight());
     }
 
     @Override

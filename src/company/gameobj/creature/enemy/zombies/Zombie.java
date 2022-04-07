@@ -90,6 +90,13 @@ public abstract class Zombie extends Enemy {
 
         // 動畫更新[換圖片]
         getAnimator().update();
+
+        if(this.getFightEffect()!=null && this.getFightEffect().isDue()){
+            this.setFightEffect(null);
+        }
+        if(getAttackTarget() != null) {
+            setTargetXY(getAttackTarget().painter().centerX(),getAttackTarget().painter().centerY());
+        }
     }
 
 

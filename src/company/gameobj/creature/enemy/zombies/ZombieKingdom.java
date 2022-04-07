@@ -40,7 +40,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
 
     public ZombieKingdom() {
         this.zombieTime = 0;
-        this.attackRound = 5;
+        this.attackRound = 1;
         zombies = new HashMap<>();
 //        this.zombies.put(zombieBig, 0);
 //        this.zombies.put(zombieKing, 0);
