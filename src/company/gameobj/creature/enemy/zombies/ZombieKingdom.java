@@ -131,7 +131,9 @@ public class ZombieKingdom implements GameKernel.GameInterface{
                 //zombies.put(zombieFlyingBig, currentNum);
             }
         }
-        this.zombieTroop = new ZombieTroop();
+//        ZombieTroop tmp = new ZombieTroop();
+//        this.zombieTroop.getLandTroop().addAll(tmp.getLandTroop());
+//        this.zombieTroop.getAirTroop().addAll(tmp.getAirTroop());
     }
 
     /**
@@ -229,6 +231,10 @@ public class ZombieKingdom implements GameKernel.GameInterface{
             else{
                 zombieTroop.getAirTroop().get(i).update();
             }
+        }
+
+        if(zombieTroop.getLandTroop().isEmpty() && zombieTroop.getAirTroop().isEmpty()){
+            this.zombieTroop = new ZombieTroop();
         }
     }
 

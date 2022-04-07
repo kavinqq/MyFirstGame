@@ -26,10 +26,4 @@ public class ZombieWitch extends Zombie {
     public int currentRoundCount(int round) {
         return round / 10;
     }
-
-
-    @Override
-    public void update() {
-
-    }
 }

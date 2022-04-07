@@ -73,7 +73,6 @@ public abstract class Zombie extends Enemy {
 
     @Override
     public void update() {
-
         // 如果我的MoveStatue 是 walk
         switch (getMoveStatus()){
             case STAND:{

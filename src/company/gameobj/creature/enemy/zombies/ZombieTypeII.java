@@ -26,10 +26,4 @@ public class ZombieTypeII extends Zombie {
     public int currentRoundCount(int round) {
         return (round * 3) / 12;
     }
-
-
-    @Override
-    public void update() {
-
-    }
 }

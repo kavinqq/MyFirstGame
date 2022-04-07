@@ -25,10 +25,4 @@ public class ZombieFlyingBig extends Zombie {
         }
         return (round - 7) / 2;
     }
-
-
-    @Override
-    public void update() {
-
-    }
 }
