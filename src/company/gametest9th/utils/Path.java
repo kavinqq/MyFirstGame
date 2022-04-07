@@ -227,6 +227,10 @@ public class Path {
 
             public String fog3() {return this + "/fog3.jpg";}
 
+            public String chooseUnit() { return this + "/chooseUnit.png";}
+
+            public String target() { return this + "/target.png";}
+
         }
 
 

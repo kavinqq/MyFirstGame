@@ -4,6 +4,8 @@ import company.Global;
 
 
 import java.awt.event.MouseEvent;
+import java.awt.image.ImageObserver;
+import java.text.AttributedCharacterIterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -20,7 +22,6 @@ import company.gameobj.creature.Creature;
 import company.gameobj.creature.enemy.Enemy;
 import company.gameobj.creature.enemy.zombies.Zombie;
 import company.gameobj.creature.enemy.zombies.ZombieKingdom;
-import company.gameobj.creature.enemy.zombies.ZombieNormal;
 import company.gameobj.creature.human.*;
 import company.gameobj.resourceObjs.ResourceObj;
 import company.gameobj.resourceObjs.ResourceSystem;
@@ -31,10 +32,9 @@ import company.gameobj.background.Background;
 import company.gameobj.background.component.*;
 
 import oldMain.City;
-import oldMain.Military;
 
 import java.awt.*;
-import java.util.function.BiConsumer;
+
 
 import static company.Global.*;
 import static company.gameobj.BuildingController.BuildingType.values;
@@ -100,6 +100,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
     private List<Effect> effects = new ArrayList<>();
 
+    // 點選 命令 圖示
+    private Image chooseUnit;
 
     @Override
     public void sceneBegin() {
@@ -127,8 +129,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //當前操控的按鈕
         currentButton = null;
 
-        //主堡
+        //圖片
+        chooseUnit = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().chooseUnit());
 
+        target = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().target());
 
         //base先不刪下面有些東西與base連接
         base = new Arsenal(200, 300);
@@ -170,6 +174,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 迷霧
         fogOfWar = new FogOfWar();
+
+        canDrawTarget = false;
+
+        targetDelay = new Delay(30);
+
 //        AudioResourceController.getInstance().loop(new Path().sound().mainSceneBGM(), 2);
     }
 
@@ -192,7 +201,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         controlHumans = null;
 
-        background =null;
+        background = null;
 
         city = null;
 
@@ -211,14 +220,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         buildingArea.paint(g);
 
 
-
         // 如果現在可以使用框選
         if (canUseBoxSelection) {
 
             // 畫出框選
             boxSelection.paint(g);
         }
-
 
 
         //畫出遊戲內所有的資源堆
@@ -235,10 +242,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 用血量條來判斷操控哪個人物
         if (currentObj != null && currentObj.getVisible()) {
-            g.setColor(Color.red);
-            int circleR=10;
-            g.fillOval(currentObj.painter().left()+currentObj.painter().width()/2-circleR/2, currentObj.painter().top() -20, circleR, circleR);
-            g.setColor(Color.black);
+            g.drawImage(chooseUnit, currentObj.painter().left(), currentObj.painter().top() - 20, chooseUnit.getWidth(null), 20, null);
         }
 
 
@@ -247,13 +251,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             for (Human human : controlHumans) {
                 // 如果該物件現在能看的到 才畫他
                 if (human.getVisible()) {
-                    g.setColor(Color.red);
-                    int circleR=10;
-                    g.fillOval(human.painter().left()+human.painter().width()/2-circleR/2, human.painter().top() -20, circleR, circleR);
-                    g.setColor(Color.black);
+                    g.drawImage(chooseUnit, human.painter().left(), human.painter().top() - 20, chooseUnit.getWidth(null), 20, null);
                 }
             }
         }
+
 
         //建築物選單
         buildingOption.paint(g);
@@ -512,7 +514,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
              */
             if (currentObj instanceof Human) {
 
-                ((Human) currentObj).setTarget(targetX, targetY);
+                currentObj.setTarget(targetX, targetY);
+
+                canDrawTarget = true;
 
                 if (currentObj instanceof Citizen) {
                     AudioResourceController.getInstance().play(new Path().sound().readyToWork());
@@ -778,7 +782,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         break;
                     }
                 }
-            } if (armySoldier.getAttackTarget() != null) {
+            }
+            if (armySoldier.getAttackTarget() != null) {
                 if (armySoldier.isCollision(armySoldier.getAttackTarget())) {
                     Enemy enemy = (Enemy) armySoldier.getAttackTarget();
                     enemy.stop();
@@ -905,8 +910,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                     break;
                 }
-            }
-            else{
+            } else {
                 //zombie.setTargetXY(SCREEN_X/2,SCREEN_Y/2);
             }
         }
@@ -995,13 +999,13 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             fogOfWar.update(human);
         }
 
-        if(currentObj!=null){
+        if (currentObj != null) {
             currentObj = (currentObj.isAlive()) ? currentObj : null;
         }
 
-        for(int i=0; i<controlHumans.size(); i++){
+        for (int i = 0; i < controlHumans.size(); i++) {
             Human human = controlHumans.get(i);
-            if(!human.isAlive()){
+            if (!human.isAlive()) {
                 controlHumans.remove(i);
                 i--;
             }
@@ -1013,20 +1017,18 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             city.doCityWorkAndTimePass(thisRoundTimePass);
         }
         //20分鐘後結束 或主堡死去 或巫妖王死去
-        if (!city.isAlive()|| StatusBar.instance().getTime()>20*60) {//
+        if (!city.isAlive() || StatusBar.instance().getTime() > 20 * 60) {//
 
             EndScene endScene = new EndScene(); //還沒有結束畫面已此充當結束遊戲
             //如果城市活者
             if (city.isAlive()) {
                 endScene.setWin(true);
-            }else{
+            } else {
                 endScene.setWin(false);
             }
 //            SceneController.getInstance().change(endScene);
         }
     }
-
-
 
 
     @Override
@@ -1099,7 +1101,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                         // 現在控製的Obj 換成這個 (現在先檢查所有村民而已)
                         currentObj = city.getSingleObjectByXY(currentMouseX, currentMouseY);
-
 
 
                         if (currentObj != null) {
@@ -1213,14 +1214,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     }
 
     //生物一 是否視生物二為攻擊目標
-    public Creature attackTarget(Creature creature1,Creature creature2){
+    public Creature attackTarget(Creature creature1, Creature creature2) {
 
         //已有鎖定目標
         if (creature1.getAttackTarget() == null) {
             creature1.detect(creature2);
             if (creature1.getAttackTarget() == null) {
                 return creature1;
-            }else{
+            } else {
                 return creature1;
             }
         }
@@ -1228,14 +1229,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     }
 
     public void attackEachOther(Creature creature1) {
-        if(creature1.getAttackTarget() == null){
+        if (creature1.getAttackTarget() == null) {
             return;
         }
         if (creature1.isCollision(creature1.getAttackTarget())) {
             Creature enemy;
-            if(creature1.getAttackTarget() instanceof Creature){
+            if (creature1.getAttackTarget() instanceof Creature) {
                 enemy = (Creature) creature1.getAttackTarget();
-            }else{
+            } else {
                 return;
             }
 
