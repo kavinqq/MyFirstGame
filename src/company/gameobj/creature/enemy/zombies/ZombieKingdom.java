@@ -19,7 +19,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
     /**
      * 攻擊頻率
      */
-    private static final int attackRate = 400;
+    private static final int attackRate = 1200;
     /**
      * 儲存殭屍數量的map
      */
@@ -39,7 +39,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
     private final ZombieFlyingBig zombieFlyingBig = new ZombieFlyingBig();
 
     public ZombieKingdom() {
-        this.zombieTime = 1;
+        this.zombieTime = 0;
         this.attackRound = 1;
         zombies = new HashMap<>();
         this.zombies.put(zombieBig, new ArrayList<ZombieBig>());
@@ -62,7 +62,6 @@ public class ZombieKingdom implements GameKernel.GameInterface{
             Zombie currentType = entry.getKey();
             //該殭屍種類數量增加
             int currentNum = currentType.currentRoundCount(this.attackRound);
-            System.out.println(currentNum);
             //更新殭屍數量
             if (currentType instanceof ZombieBig) {
                 ArrayList<ZombieBig> arr = new ArrayList<ZombieBig>();
@@ -125,23 +124,14 @@ public class ZombieKingdom implements GameKernel.GameInterface{
     }
 
     /**
-     * 是否要進攻了
-     *
-     * @return 是否要進攻了
-     */
-    public boolean isAttacking() {
-        return (this.zombieTime % 16 == 0);
-    }
-
-    /**
      * 計算僵屍的時間往前
      */
     public void timePass() {
-//        this.zombieTime++;
-//        if (this.zombieTime % attackRate == 0) {
-//            this.troopLevelUp();
-//            this.zombieTroop.update();
-//        }
+        this.zombieTime++;
+        if (this.zombieTime % attackRate == 0) {
+            this.troopLevelUp();
+            this.zombieTroop.update();
+        }
     }
 
 //    public void showTroopValue(){
@@ -257,6 +247,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
 
         public void update(){
             Zombie zombieGenre;
+            //TODO : delete comment
             for (Map.Entry<Zombie, ArrayList<? extends Zombie>> entry : zombies.entrySet()) {
                 zombieGenre = entry.getKey();
                 if(zombieGenre.isFlyable()){

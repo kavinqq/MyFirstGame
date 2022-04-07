@@ -671,7 +671,6 @@ public abstract class Creature extends GameObject {
 
     public void detect(Creature creature){
         if(creature.isAlive() && this.detectRange().overlap(creature.painter())){
-            getDelay().firstNoDelay();
             this.setAttackTarget(creature);
         }
     }
@@ -685,7 +684,8 @@ public abstract class Creature extends GameObject {
         g.setColor(Color.green);
         g.fillRect(painter().left(),painter().bottom(),painter().width()*hp/maxHp,Global.HP_HEIGHT);
         if (this.getFightEffect() != null) {
-            this.getFightEffect().paintComponent(g);
+            //this.getFightEffect().paintComponent(g);
+            this.getFightEffect().paintEffect(g, this.painter().centerX(), this.painter().centerY());
         }
     }
 
