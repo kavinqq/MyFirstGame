@@ -993,9 +993,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             city.doCityWorkAndTimePass(thisRoundTimePass);
         }
         //20分鐘後結束 或主堡死去 或巫妖王死去
-        if (!city.isAlive() || StatusBar.instance().getTime()>20*60) {
+        if (!city.isAlive() ) { // 時間到遊戲結束|| StatusBar.instance().getTime()>20*60
             StartScene startScene = new StartScene(); //還沒有結束畫面已此充當結束遊戲
-            SceneController.getInstance().change(startScene);
+//            SceneController.getInstance().change(startScene);
         }
 
     }
