@@ -173,8 +173,32 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 //        AudioResourceController.getInstance().loop(new Path().sound().mainSceneBGM(), 2);
     }
 
+    /**
+     * 釋放此場景資源
+     */
+
     @Override
     public void sceneEnd() {
+
+        buildingArea = null;
+
+        buildingOption = null;
+
+        currentButton = null;
+
+        currentBuildNode = null;
+
+        currentObj = null;
+
+        controlHumans = null;
+
+        background =null;
+
+        city = null;
+
+        zombieKingdom = null;
+
+        fogOfWar = null;
     }
 
     @Override

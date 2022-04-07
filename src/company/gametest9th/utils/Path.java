@@ -313,8 +313,8 @@ public class Path {
                 return this + "/HintUI.png";
             }
 
-            public String grassBG() {
-                return this + "/grassBG.png";
+            public String gameStart() {
+                return this + "/gameStart.png";
             }
 
             public String foundation() {

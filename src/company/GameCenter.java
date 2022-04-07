@@ -13,7 +13,7 @@ import java.awt.event.MouseEvent;
 public class GameCenter implements GameKernel.GameInterface, CommandSolver.MouseCommandListener, CommandSolver.KeyListener {
 
     public GameCenter() {
-        SceneController.getInstance().change(new MainScene());
+        SceneController.getInstance().change(new StartScene());
     }
 
     @Override
