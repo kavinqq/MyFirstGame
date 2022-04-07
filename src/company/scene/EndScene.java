@@ -11,45 +11,56 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.EventListener;
 
-public class EndScene extends Scene{
-    private Image bgImg;
+public class EndScene extends Scene implements CommandSolver.KeyListener {
 
-    private boolean isWin;
+    private final int timeStrMove = 300;
 
-    public void setWin(boolean isWin){
-        this.isWin=isWin;
+    private Image img;
+
+    private long startTime;
+
+    private long nowTime;
+
+    private String outputTimeStr;
+
+    public EndScene(long startTime, boolean isWin){
+
+        this.startTime = startTime;
+
+        if(isWin){
+            img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().victory());
+        }else{
+            img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().lose());
+        }
     }
+
 
     @Override
     public void sceneBegin() {
-        bgImg = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().background());
+
+        // 把 毫秒 換算回 秒 (1秒 = 10的9次方 * 1毫秒)
+        nowTime = Math.round((System.nanoTime() - startTime) / 1000000000);
+
+        // 如果 < 60 => 只顯示秒   (應該不可能有人玩一小時吧)
+        if (nowTime < 60) {
+            outputTimeStr = nowTime + " 秒";
+        } else { // 否則 顯示分&&秒
+            outputTimeStr = nowTime / 60 + " 分 " + nowTime % 60 + " 秒";
+        }
     }
 
     @Override
     public void sceneEnd() {
-        bgImg=null;
+        img = null;
     }
 
     @Override
     public void paint(Graphics g) {
-        int fontSize=25;
-        g.setFont(new Font("Dialog",1,fontSize));
-        g.drawImage(bgImg,0,0, Global.SCREEN_WIDTH,Global.SCREEN_HEIGHT,null);
-        //遊玩時間
-        String str="遊玩時間:"+StatusBar.instance().getTime();
-        g.drawString(str,Global.SCREEN_WIDTH/2-100,Global.SCREEN_HEIGHT/2-50);
-        //若贏了
-        if(isWin){
-            String resultStr="YOU WIN";
-            g.drawString(resultStr,Global.SCREEN_WIDTH/2-100,Global.SCREEN_HEIGHT/2);
-            //若輸了
-        }else{
-            String resultStr="YOU LOSE";
-            g.drawString(resultStr,Global.SCREEN_WIDTH/2-100,Global.SCREEN_HEIGHT/2);
-        }
-        //回主畫面
-        str ="點擊任意鍵回到主畫面";
-        g.drawString(str,Global.SCREEN_WIDTH/2-180,Global.SCREEN_HEIGHT/2+300);
+        g.drawImage(img, 0,0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT, null);
+
+        g.setColor(Color.black);
+        g.setFont(new Font("TimeRoman", Font.BOLD, 50));
+        g.drawString("總遊玩時間: " + outputTimeStr, Global.SCREEN_WIDTH / 2 - timeStrMove, Global.SCREEN_HEIGHT / 2);
     }
 
     @Override
@@ -77,5 +88,20 @@ public class EndScene extends Scene{
     @Override
     public CommandSolver.KeyListener keyListener() {
         return null;
+    }
+
+    @Override
+    public void keyPressed(int commandCode, long trigTime) {
+        SceneController.getInstance().change(new StartScene());
+    }
+
+    @Override
+    public void keyReleased(int commandCode, long trigTime) {
+
+    }
+
+    @Override
+    public void keyTyped(char c, long trigTime) {
+
     }
 }
