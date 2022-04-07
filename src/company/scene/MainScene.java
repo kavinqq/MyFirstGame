@@ -1140,7 +1140,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             if (state == null) {
                 return;
             }
-
+            // 選單控制
             buildingOption.mouseTrig(e, state, trigTime);
 
             // 紀錄當下的滑鼠位置
@@ -1152,7 +1152,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             city.mouseTrig(e, state, trigTime);
             //如果現在沒有框選
             if (!canUseBoxSelection) {
-                // 選單控制
+
 
             }
 
