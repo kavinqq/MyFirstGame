@@ -3,6 +3,7 @@ package company.gameobj.creature;
 import company.Global;
 import company.controllers.SceneController;
 import company.gameobj.GameObject;
+import company.gameobj.creature.enemy.Enemy;
 import company.gameobj.creature.human.Human;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.Delay;
@@ -41,6 +42,10 @@ public abstract class Creature extends GameObject {
     private boolean isAbleToGoUp = true;
     private boolean isAbleToGoDown = true;
 
+    private int hp;
+    private int maxHp;
+
+
     private Global.Direction walkingDir;
     private Global.Direction blockedDir;
 
@@ -50,10 +55,8 @@ public abstract class Creature extends GameObject {
     private Animator animator;// 人物動畫物件
     private GameObject collidingObject;
 
-    private Delay delay;
-
-
-
+    private Delay attackDelay;
+    private int attackDelaySpeed;
 
     public Creature(int x, int y, int targetX, int targetY, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, int speed, String img, FLY_ABILITY flyAbility, Animator.State moveStatus) {
 
@@ -78,30 +81,44 @@ public abstract class Creature extends GameObject {
         // 原本的位置
 
 
-
         // 若無初始目的地的話預設人物出生方向朝下
-        if(this.isAtTarget()){
+        if (this.isAtTarget()) {
             this.setWalkingDir(Global.Direction.DOWN);
         }
         //不然則依據其目的地所在方向進行隨機
-        else{
+        else {
             ArrayList<Global.Direction> availableInitialDirs = new ArrayList<>();
-            if(x>targetX){
+            if (x > targetX) {
                 availableInitialDirs.add(Global.Direction.LEFT);
             }
-            if(x<targetX){
+            if (x < targetX) {
                 availableInitialDirs.add(Global.Direction.RIGHT);
             }
-            if(y>targetY){
+            if (y > targetY) {
                 availableInitialDirs.add(Global.Direction.UP);
             }
-            if(y<targetY) {
+            if (y < targetY) {
                 availableInitialDirs.add(Global.Direction.DOWN);
             }
-            this.setWalkingDir(availableInitialDirs.get(Global.random(0,availableInitialDirs.size()-1)));
+            this.setWalkingDir(availableInitialDirs.get(Global.random(0, availableInitialDirs.size() - 1)));
         }
 
-        this.delay = new Delay(120);
+        this.attackDelay = new Delay(attackDelaySpeed);
+        attackDelay.loop();
+    }
+
+
+    protected void setMaxHp(int hp) {
+        this.maxHp=hp;
+        this.hp = maxHp;
+    }
+
+    public int getMaxHp(){
+        return maxHp;
+    }
+
+    public int getHp() {
+        return hp;
     }
 
 
@@ -112,11 +129,15 @@ public abstract class Creature extends GameObject {
      */
 
     public int getValue() {      //獲取目前數值
-        return value;
+        //做冷卻時間
+        if (attackDelay.count()) {
+            return value;
+        }
+        return 0;
     }
 
     public void getAttacked(int value) {
-        this.value -= value;
+        this.hp -= value;
     }
 
     public void setFlyAbility(FLY_ABILITY flyAbility) {
@@ -132,7 +153,7 @@ public abstract class Creature extends GameObject {
     }
 
     public boolean isAlive() {
-        return (this.value > 0);
+        return (getHp() > 0);
     }
 
 
@@ -151,25 +172,25 @@ public abstract class Creature extends GameObject {
 
         ArrayList<Global.Direction> availableInitialDirs = new ArrayList<>();
 
-        if(attackTarget.painter().centerX()>targetX){
+        if (attackTarget.painter().centerX() > targetX) {
             availableInitialDirs.add(Global.Direction.RIGHT);
         }
-        if(attackTarget.painter().centerX()<targetX){
+        if (attackTarget.painter().centerX() < targetX) {
             availableInitialDirs.add(Global.Direction.LEFT);
         }
-        if(attackTarget.painter().centerY()>targetY){
+        if (attackTarget.painter().centerY() > targetY) {
             availableInitialDirs.add(Global.Direction.DOWN);
         }
-        if(attackTarget.painter().centerY()<targetY) {
+        if (attackTarget.painter().centerY() < targetY) {
             availableInitialDirs.add(Global.Direction.UP);
         }
-        this.setWalkingDir(availableInitialDirs.get(Global.random(0,availableInitialDirs.size()-1)));
+        this.setWalkingDir(availableInitialDirs.get(Global.random(0, availableInitialDirs.size() - 1)));
         this.setMoveStatus(Animator.State.WALK);
     }
 
-    public void setAttackTargetToNull(){
+    public void setAttackTargetToNull() {
         this.attackTarget = null;
-        if(!this.isAtTarget()){
+        if (!this.isAtTarget()) {
             this.setMoveStatus(Animator.State.WALK);
         }
     }
@@ -223,7 +244,7 @@ public abstract class Creature extends GameObject {
      */
 
     public void setTargetXY(int x, int y) {
-        if (!this.isAt(x,y)){
+        if (!this.isAt(x, y)) {
             setTargetX(x);
             setTargetY(y);
             if (x != painter().centerX() && y != painter().centerY()) {
@@ -255,7 +276,6 @@ public abstract class Creature extends GameObject {
     public void setTargetY(int targetY) {
         this.targetY = targetY;
     }
-
 
 
     /**
@@ -298,135 +318,127 @@ public abstract class Creature extends GameObject {
 //        }
         int speed = (int) speed();
 
-        if(this.getAttackTarget()!=null){
+        if (this.getAttackTarget() != null) {
 //            if(this instanceof Human){
 //                System.out.println("Walk not null");
 //            }
 
-            if (getAttackTarget().painter().centerX() == painter().centerX()){
+            if (getAttackTarget().painter().centerX() == painter().centerX()) {
                 this.setWalkingDir((getAttackTarget().painter().centerY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP);
             } else if (getAttackTarget().painter().centerY() == painter().centerY()) {
                 this.setWalkingDir((getAttackTarget().painter().centerX() > painter().centerX()) ? Global.Direction.RIGHT : Global.Direction.LEFT);
-            }
-            else{
-                switch (this.getWalkingDir()){
-                    case LEFT:{
-                        if(targetX()>this.painter().centerX()){
-                            this.setWalkingDir((this.targetY()<this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
+            } else {
+                switch (this.getWalkingDir()) {
+                    case LEFT: {
+                        if (targetX() > this.painter().centerX()) {
+                            this.setWalkingDir((this.targetY() < this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
                         }
                         break;
                     }
-                    case RIGHT:{
-                        if(targetX()<this.painter().centerX()){
-                            this.setWalkingDir((this.targetY()<this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
+                    case RIGHT: {
+                        if (targetX() < this.painter().centerX()) {
+                            this.setWalkingDir((this.targetY() < this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
                         }
                         break;
                     }
-                    case UP:{
-                        if(targetY()>this.painter().centerY()){
-                            this.setWalkingDir((this.targetX()<this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
+                    case UP: {
+                        if (targetY() > this.painter().centerY()) {
+                            this.setWalkingDir((this.targetX() < this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
                         }
                         break;
                     }
-                    case DOWN:{
-                        if(targetY()<this.painter().centerY()){
-                            this.setWalkingDir((this.targetX()<this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
+                    case DOWN: {
+                        if (targetY() < this.painter().centerY()) {
+                            this.setWalkingDir((this.targetX() < this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
                         }
                         break;
                     }
                 }
             }
-            if(this.getWalkingDir()== Global.Direction.LEFT || this.getWalkingDir()== Global.Direction.RIGHT){
+            if (this.getWalkingDir() == Global.Direction.LEFT || this.getWalkingDir() == Global.Direction.RIGHT) {
                 speed = Math.min(speed, Math.abs(getAttackTarget().painter().centerX() - painter().centerX()));
-            }
-            else if(this.getWalkingDir()== Global.Direction.UP || this.getWalkingDir()== Global.Direction.DOWN){
+            } else if (this.getWalkingDir() == Global.Direction.UP || this.getWalkingDir() == Global.Direction.DOWN) {
                 speed = Math.min(speed, Math.abs(getAttackTarget().painter().centerX() - painter().centerY()));
             }
-        }
-        else{
+        } else {
 //            if(this instanceof Human) {
 //                System.out.println("Walk null");
 //            }
             //System.out.println("BBBB");
-            if(this.isAtTarget()){
+            if (this.isAtTarget()) {
                 this.setMoveStatus(Animator.State.STAND);
                 return;
             }
 
             //沒有任何方向是被擋住的時候
-            if(this.getBlockedDir()==null){
+            if (this.getBlockedDir() == null) {
                 //System.out.println("Walk: no blocked direction");
 
-                if (targetX() == painter().centerX()){
+                if (targetX() == painter().centerX()) {
                     this.setWalkingDir((targetY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP);
                 } else if (targetY() == painter().centerY()) {
                     this.setWalkingDir((targetX() > painter().centerX()) ? Global.Direction.RIGHT : Global.Direction.LEFT);
-                }
-                else{//for 剛離開障礙物的 case
-                    switch (this.getWalkingDir()){
-                        case LEFT:{
-                            if(targetX()>this.painter().centerX()){
-                                this.setWalkingDir((this.targetY()<this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
+                } else {//for 剛離開障礙物的 case
+                    switch (this.getWalkingDir()) {
+                        case LEFT: {
+                            if (targetX() > this.painter().centerX()) {
+                                this.setWalkingDir((this.targetY() < this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
                             }
                             break;
                         }
-                        case RIGHT:{
-                            if(targetX()<this.painter().centerX()){
-                                this.setWalkingDir((this.targetY()<this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
+                        case RIGHT: {
+                            if (targetX() < this.painter().centerX()) {
+                                this.setWalkingDir((this.targetY() < this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
                             }
                             break;
                         }
-                        case UP:{
-                            if(targetY()>this.painter().centerY()){
-                                this.setWalkingDir((this.targetX()<this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
+                        case UP: {
+                            if (targetY() > this.painter().centerY()) {
+                                this.setWalkingDir((this.targetX() < this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
                             }
                             break;
                         }
-                        case DOWN:{
-                            if(targetY()<this.painter().centerY()){
-                                this.setWalkingDir((this.targetX()<this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
+                        case DOWN: {
+                            if (targetY() < this.painter().centerY()) {
+                                this.setWalkingDir((this.targetX() < this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
                             }
                             break;
                         }
                     }
                 }
-                if(this.getWalkingDir()== Global.Direction.LEFT || this.getWalkingDir()== Global.Direction.RIGHT){
+                if (this.getWalkingDir() == Global.Direction.LEFT || this.getWalkingDir() == Global.Direction.RIGHT) {
                     speed = Math.min(speed, Math.abs(targetX() - painter().centerX()));
-                }
-                else if(this.getWalkingDir()== Global.Direction.UP || this.getWalkingDir()== Global.Direction.DOWN){
+                } else if (this.getWalkingDir() == Global.Direction.UP || this.getWalkingDir() == Global.Direction.DOWN) {
                     speed = Math.min(speed, Math.abs(targetY() - painter().centerY()));
                 }
-            }
-            else if(this.getBlockedDir()!=null){
-                switch (this.getBlockedDir()){
+            } else if (this.getBlockedDir() != null) {
+                switch (this.getBlockedDir()) {
                     case LEFT:
                     case RIGHT:
                         //第一次撞到的時候
-                        if(this.getWalkingDir()==this.getBlockedDir()){
+                        if (this.getWalkingDir() == this.getBlockedDir()) {
                             //當在往左或往右的時候撞到障礙物且已經來到目標的Ｙ做標時隨機選擇一個方向去走
-                            if(this.painter().centerY()==targetY()){
-                                this.setWalkingDir((Global.random(0,1)==0) ? Global.Direction.UP : Global.Direction.DOWN);
+                            if (this.painter().centerY() == targetY()) {
+                                this.setWalkingDir((Global.random(0, 1) == 0) ? Global.Direction.UP : Global.Direction.DOWN);
                             }
                             //當在往左或往右的時候撞到障礙物且尚未來到目標的Ｙ做標時選擇會靠近目標的方向去走
-                            else{
-                                this.setWalkingDir((targetY()<this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
+                            else {
+                                this.setWalkingDir((targetY() < this.painter().centerY()) ? Global.Direction.UP : Global.Direction.DOWN);
                             }
-                        }
-                        else if(this.getBlockedDir() != this.getWalkingDir()){
+                        } else if (this.getBlockedDir() != this.getWalkingDir()) {
                             //因為 blocked direction != walking direction && 是有被擋住的, 所以人物一定是在沿著邊或是與被阻擋的相反方向走的
                             //如果目標跟人物在障礙物的同一側的話
-                            if((this.getBlockedDir() == Global.Direction.LEFT && targetX() >= this.painter().centerX()) || (this.getBlockedDir() == Global.Direction.RIGHT && targetX() <= this.painter().centerX())){
+                            if ((this.getBlockedDir() == Global.Direction.LEFT && targetX() >= this.painter().centerX()) || (this.getBlockedDir() == Global.Direction.RIGHT && targetX() <= this.painter().centerX())) {
 
-                                if (targetX() == painter().centerX()){
+                                if (targetX() == painter().centerX()) {
                                     this.setWalkingDir((targetY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP);
                                 } else if (targetY() == painter().centerY()) {
                                     this.setWalkingDir((targetX() > painter().centerX()) ? Global.Direction.RIGHT : Global.Direction.LEFT);
                                 }
 
-                                if(this.getWalkingDir()== Global.Direction.LEFT || this.getWalkingDir()== Global.Direction.RIGHT){
+                                if (this.getWalkingDir() == Global.Direction.LEFT || this.getWalkingDir() == Global.Direction.RIGHT) {
                                     speed = Math.min(speed, Math.abs(targetX() - painter().centerX()));
-                                }
-                                else if(this.getWalkingDir()== Global.Direction.UP || this.getWalkingDir()== Global.Direction.DOWN){
+                                } else if (this.getWalkingDir() == Global.Direction.UP || this.getWalkingDir() == Global.Direction.DOWN) {
                                     speed = Math.min(speed, Math.abs(targetY() - painter().centerY()));
                                 }
                             }
@@ -435,7 +447,7 @@ public abstract class Creature extends GameObject {
                     case UP:
                     case DOWN: {
                         //第一次撞到的時候
-                        if(this.getWalkingDir() == this.getBlockedDir()){
+                        if (this.getWalkingDir() == this.getBlockedDir()) {
                             // 當在往上或往下的時候撞到障礙物且已經來到目標的Ｘ做標時隨機選擇一個方向去走
                             if (this.painter().centerX() == this.painter().centerX()) {
                                 this.setWalkingDir((Global.random(0, 1) == 0) ? Global.Direction.LEFT : Global.Direction.RIGHT);
@@ -444,22 +456,20 @@ public abstract class Creature extends GameObject {
                             else {
                                 this.setWalkingDir((targetX() < this.painter().centerX()) ? Global.Direction.LEFT : Global.Direction.RIGHT);
                             }
-                        }
-                        else if(this.getWalkingDir() != this.getBlockedDir()){
+                        } else if (this.getWalkingDir() != this.getBlockedDir()) {
                             //因為 blocked direction != walking direction && 是有被擋住的, 所以人物一定是在沿著邊或是與被阻擋的相反方向走的
                             //如果目標跟人物在障礙物的同一側的話
-                            if((this.getBlockedDir() == Global.Direction.UP && targetY() >= this.painter().centerY()) || (this.getBlockedDir() == Global.Direction.DOWN && targetY() <= this.painter().centerY())){
+                            if ((this.getBlockedDir() == Global.Direction.UP && targetY() >= this.painter().centerY()) || (this.getBlockedDir() == Global.Direction.DOWN && targetY() <= this.painter().centerY())) {
 
-                                if (targetX() == painter().centerX()){
+                                if (targetX() == painter().centerX()) {
                                     this.setWalkingDir((targetY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP);
                                 } else if (targetY() == painter().centerY()) {
                                     this.setWalkingDir((targetX() > painter().centerX()) ? Global.Direction.RIGHT : Global.Direction.LEFT);
                                 }
 
-                                if(this.getWalkingDir()== Global.Direction.LEFT || this.getWalkingDir()== Global.Direction.RIGHT){
+                                if (this.getWalkingDir() == Global.Direction.LEFT || this.getWalkingDir() == Global.Direction.RIGHT) {
                                     speed = Math.min(speed, Math.abs(targetX() - painter().centerX()));
-                                }
-                                else if(this.getWalkingDir()== Global.Direction.UP || this.getWalkingDir()== Global.Direction.DOWN){
+                                } else if (this.getWalkingDir() == Global.Direction.UP || this.getWalkingDir() == Global.Direction.DOWN) {
                                     speed = Math.min(speed, Math.abs(targetY() - painter().centerY()));
                                 }
                             }
@@ -471,9 +481,9 @@ public abstract class Creature extends GameObject {
                 //System.out.println("-------------------------");
             }
         }
-        switch (this.getWalkingDir()){
-            case LEFT:{
-                this.translateX(-1*speed);
+        switch (this.getWalkingDir()) {
+            case LEFT: {
+                this.translateX(-1 * speed);
                 break;
             }
             case RIGHT: {
@@ -489,7 +499,7 @@ public abstract class Creature extends GameObject {
                 break;
             }
         }
-        if (this.getAttackTarget()==null && this.isAtTarget()) {
+        if (this.getAttackTarget() == null && this.isAtTarget()) {
             System.out.println("At target");
             this.stop();
         }
@@ -605,9 +615,9 @@ public abstract class Creature extends GameObject {
     }
 
 
-
     /**
-     *  回傳生物的animator
+     * 回傳生物的animator
+     *
      * @return
      */
     public Animator getAnimator() {
@@ -616,6 +626,7 @@ public abstract class Creature extends GameObject {
 
     /**
      * 將生物的animator設定成指定的animator
+     *
      * @param animator
      */
     public void setAnimator(Animator animator) {
@@ -627,7 +638,7 @@ public abstract class Creature extends GameObject {
         setMoveStatus(Animator.State.STAND);
     }
 
-    public void brake(){
+    public void brake() {
         this.speed = Math.max(this.speed - 0.1, 0);
     }
 
@@ -639,7 +650,7 @@ public abstract class Creature extends GameObject {
         this.speed = speed;
     }
 
-    public void setSpeedToDefault(){
+    public void setSpeedToDefault() {
         this.speed = defaultSpeed;
     }
 
@@ -652,17 +663,30 @@ public abstract class Creature extends GameObject {
     }
 
     public Delay getDelay() {
-        return delay;
+        return attackDelay;
     }
 
+    public int setDelaySpeed() {
+        return attackDelaySpeed;
+    }
 
+    public void detect(Creature creature){
+        if(creature.isAlive() && this.detectRange().overlap(creature.painter())){
+            getDelay().firstNoDelay();
+            this.setAttackTarget(creature);
+        }
+    }
 
     @Override
     public void paintComponent(Graphics g) {
         //畫出動畫
         getAnimator().paint(getWalkingDir(), painter().left(), painter().top(), painter().right(), painter().bottom(), g);
-        if(this.getFightEffect()!=null){
-            this.getFightEffect().paintComponent(g);
-        }
+        g.setColor(Color.red);
+        g.fillRect(painter().left(),painter().bottom(),painter().width(),Global.HP_HEIGHT);
+        g.setColor(Color.green);
+        g.fillRect(painter().left(),painter().bottom(),painter().width()*hp/maxHp,Global.HP_HEIGHT);
+//        if (this.getFightEffect() != null) {
+//            this.getFightEffect().paintComponent(g);
+//        }
     }
 }

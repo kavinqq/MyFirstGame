@@ -43,14 +43,30 @@ public abstract class Soldier extends Human{
         return (this.soldierType == SOLDIER_TYPE.AIR_FORCE);
     }
 
+    public void getDamaged(int value){
+        setMaxHp(getHp()-value);
+
+    }
+
+    public boolean isDead(){
+        if(getHp()<=0){
+            return true;
+        }
+        return false;
+    }
+
     public void detect(Enemy enemy){
         if(enemy.isAlive() && this.detectRange().overlap(enemy.painter())){
+            getDelay().firstNoDelay();
             this.setAttackTarget(enemy);
         }
     }
 
     @Override
     public void update() {
+        if(getAttackTarget() != null){
+            setTarget(getAttackTarget().painter().centerX(),getAttackTarget().painter().centerY());
+        }
 
         // 如果我的MoveStatue 是 walk
         if (getMoveStatus() == Animator.State.WALK) {

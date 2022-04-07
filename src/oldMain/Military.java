@@ -239,11 +239,11 @@ public class Military {
     public void paintAll(Graphics g) {
 
         for (ArmySoldier armySoldier : army) {
-            armySoldier.paintComponent(g);
+            armySoldier.paint(g);
         }
 
         for (AirForceSoldier airForceSoldier : airForce) {
-            airForceSoldier.paintComponent(g);
+            airForceSoldier.paint(g);
         }
     }
 

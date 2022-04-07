@@ -13,6 +13,15 @@ public class Delay {
         isLoop = false;
     }
 
+    //將第一次攻擊無Delay
+    public void firstNoDelay(){
+        count=countLimit-1;
+    }
+
+    public void resetDelay(){
+        count=0;
+    }
+
     public void setLimit(int limit) {
         this.countLimit = limit;
     }

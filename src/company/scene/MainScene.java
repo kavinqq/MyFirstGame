@@ -204,8 +204,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 用血量條來判斷操控哪個人物
         if (currentObj != null && currentObj.getVisible()) {
 
-            g.setColor(Color.RED);
-            g.fillRect(currentObj.painter().left(), currentObj.painter().bottom() + 3, currentObj.painter().width(), HP_HEIGHT);
+//            g.setColor(Color.RED);
+//            g.fillRect(currentObj.painter().left(), currentObj.painter().bottom() + 3, currentObj.painter().width(), HP_HEIGHT);
             g.setColor(Color.black);
         }
 
@@ -257,7 +257,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         StatusBar.instance().setTimeString(startTime);
         StatusBar.instance().updateResource(city.getResource().getTotalWood(), city.getResource().getTotalSteel(), city.getResource().getTotalGas(), city.getTotalCitizen());
 
-        /*
+
         // 處理鏡頭移動
         if ((currentMouseX >= SCREEN_WIDTH || currentMouseX <= 8) || (currentMouseY <= 0 || currentMouseY >= SCREEN_HEIGHT - 8)) {
 
@@ -299,7 +299,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             zombieKingdom.cameraMove();
 
-            for(Effect effect:effects){
+            for (Effect effect : effects) {
                 effect.resetObjectXY();
             }
 
@@ -308,7 +308,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             CAMERA_MOVE_VY = 0;
         }
 
-         */
 
         //建築物相關測試
         buildingOption.update();
@@ -465,7 +464,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
 
-
         // 框選Box狀態on
         if (canUseBoxSelection) {
 
@@ -492,9 +490,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                 ((Human) currentObj).setTarget(targetX, targetY);
 
-                if(currentObj instanceof Citizen) {
+                if (currentObj instanceof Citizen) {
                     AudioResourceController.getInstance().play(new Path().sound().readyToWork());
-                } else if(currentObj instanceof Soldier){
+                } else if (currentObj instanceof Soldier) {
                     AudioResourceController.getInstance().play(new Path().sound().soldierWhat4());
                 }
             }
@@ -953,8 +951,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                     armySoldier.setFightEffect(null);
                                 }
                             }
+
                             zombieNormal.getAttacked(armySoldier.getValue());
                             if (zombieNormal.isAlive()) {
+
                                 armySoldier.getAttacked(zombieNormal.getValue());
                             } else {
                                 //armySoldier.setAttackTargetToNull();
@@ -969,35 +969,33 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
-
 //        for (BuildingType value:values()) {
 //            for (int j = 0; j < value.list().size(); j++) {
 //                Building AllBuildings=value.list().get(j).getBuilding();
 
-        for(ArmySoldier armySoldier : city.getMilitary().getArmy()){
-            if(armySoldier.getAttackTarget()==null){
-                for(Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()) {
+        //士兵打殭屍
+        for (ArmySoldier armySoldier : city.getMilitary().getArmy()) {
+            if (armySoldier.getAttackTarget() == null) {
+                for (Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()) {
+
                     armySoldier.detect(zombie);
-                    if(armySoldier.getAttackTarget()!=null) {
+                    if (armySoldier.getAttackTarget() != null) {
                         break;
                     }
                 }
-            }
-
-            if(armySoldier.getAttackTarget()!=null){
-                if(armySoldier.isCollision(armySoldier.getAttackTarget())){
+            } else if (armySoldier.getAttackTarget() != null) {
+                if (armySoldier.isCollision(armySoldier.getAttackTarget())) {
                     Enemy enemy = (Enemy) armySoldier.getAttackTarget();
                     enemy.stop();
                     armySoldier.stop();
 
-                    if(enemy.getFightEffect()==null){
-                        enemy.setFightEffect(new FightEffect(armySoldier.painter().centerX(), armySoldier.painter().centerY()));
+                    if (enemy.getFightEffect() == null) {
+//                        enemy.setFightEffect(new FightEffect(armySoldier.painter().centerX(), armySoldier.painter().centerY()));
                         enemy.getAttacked(armySoldier.getValue());
-                    }
-                    else{
-                        if(armySoldier.getFightEffect().isDue()){
+                    } else {
+                        if (armySoldier.getFightEffect().isDue()) {
                             enemy.setFightEffect(null);
-                            if(!enemy.isAlive()) {
+                            if (!enemy.isAlive()) {
                                 armySoldier.setAttackTargetToNull();
                             }
                         }
@@ -1005,31 +1003,44 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             }
         }
-        
-        for(AirForceSoldier airForceSoldier : city.getMilitary().getAirForce()){
-            if(airForceSoldier.getAttackTarget()==null){
-                for(Zombie zombie : zombieKingdom.getZombieTroop().getAirTroop()) {
+        //士兵打殭屍
+//        for (ArmySoldier armySoldier : city.getMilitary().getArmy()) {
+//            for (Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()) {
+//                if (armySoldier.getAttackTarget() == null) {
+//                    armySoldier.detect(zombie);
+//                    if (armySoldier.getAttackTarget() != null) {
+//                        break;
+//                    }
+////                zombie=(Zombie) attackTarget(zombie,armySoldier);
+////                if(zombie.getAttackTarget() != null){
+//                    attackEachOther(zombie);
+//                }
+//            }
+//        }
+
+        for (AirForceSoldier airForceSoldier : city.getMilitary().getAirForce()) {
+            if (airForceSoldier.getAttackTarget() == null) {
+                for (Zombie zombie : zombieKingdom.getZombieTroop().getAirTroop()) {
                     airForceSoldier.detect(zombie);
-                    if(airForceSoldier.getAttackTarget()!=null) {
+                    if (airForceSoldier.getAttackTarget() != null) {
                         break;
                     }
                 }
             }
 
-            if(airForceSoldier.getAttackTarget()!=null){
-                if(airForceSoldier.isCollision(airForceSoldier.getAttackTarget())){
+            if (airForceSoldier.getAttackTarget() != null) {
+                if (airForceSoldier.isCollision(airForceSoldier.getAttackTarget())) {
                     Enemy enemy = (Enemy) airForceSoldier.getAttackTarget();
                     enemy.stop();
                     airForceSoldier.stop();
 
-                    if(enemy.getFightEffect()==null){
+                    if (enemy.getFightEffect() == null) {
                         enemy.setFightEffect(new FightEffect(airForceSoldier.painter().centerX(), airForceSoldier.painter().centerY()));
                         enemy.getAttacked(airForceSoldier.getValue());
-                    }
-                    else{
-                        if(airForceSoldier.getFightEffect().isDue()){
+                    } else {
+                        if (airForceSoldier.getFightEffect().isDue()) {
                             enemy.setFightEffect(null);
-                            if(!enemy.isAlive()) {
+                            if (!enemy.isAlive()) {
                                 airForceSoldier.setAttackTargetToNull();
                             }
                         }
@@ -1039,76 +1050,75 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
 
-        for(Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()){
-            if(!zombie.isAlive()) {
+        for (Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()) {
+            if (!zombie.isAlive()) {
                 continue;
             }
 
-            if(zombie.getAttackTarget()==null){
-                for(Citizen citizen : city.getCitizens().getAllCitizens()) {
-                    if(zombie.getAttackTarget()==null) {
+            if (zombie.getAttackTarget() == null) {
+                for (Citizen citizen : city.getCitizens().getAllCitizens()) {
+                    if (zombie.getAttackTarget() == null) {
                         zombie.detect(citizen);
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
 
-                for(ArmySoldier armySoldier : city.getMilitary().getArmy()) {
-                    if(zombie.getAttackTarget()==null) {
+                for (ArmySoldier armySoldier : city.getMilitary().getArmy()) {
+                    if (zombie.getAttackTarget() == null) {
                         zombie.detect(armySoldier);
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
 
-                for(BuildingType value:values()) {
-                    if(zombie.getAttackTarget()==null) {
+                for (BuildingType value : values()) {
+                    if (zombie.getAttackTarget() == null) {
                         for (int i = 0; i < value.list().size(); i++) {
                             if (zombie.getAttackTarget() == null) {
+
                                 Building building = value.list().get(i).getBuilding();
                                 zombie.detect(building);
                             } else {
                                 break;
                             }
                         }
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
             }
 
-            if(zombie.getAttackTarget()!=null){
-                if(zombie.isCollision(zombie.getAttackTarget())){
+            if (zombie.getAttackTarget() != null) {
+                if (zombie.isCollision(zombie.getAttackTarget())) {
                     zombie.stop();
-                    if(zombie.getAttackTarget() instanceof Creature){
+                    if (zombie.getAttackTarget() instanceof Creature) {
                         ((Creature) zombie.getAttackTarget()).stop();
                     }
 
                     GameObject gameObject = zombie.getAttackTarget();
-                    if(gameObject.getFightEffect()==null){
-                        gameObject.setFightEffect(new FightEffect(gameObject.painter().centerX(),gameObject.painter().centerY()));
-                    }
-                    else{
-                        if(gameObject.getFightEffect().isDue()){
+                    if (gameObject.getFightEffect() == null) {
+                        gameObject.setFightEffect(new FightEffect(gameObject.painter().centerX(), gameObject.painter().centerY()));
+                    } else {
+                        if (gameObject.getFightEffect().isDue()) {
                             gameObject.setFightEffect(null);
                         }
                     }
 
-                    if(zombie.getAttackTarget() instanceof Building) {
+                    if (zombie.getAttackTarget() instanceof Building) {
+
                         Building building = (Building) zombie.getAttackTarget();
                         building.getDamage(zombie.getValue());
-                        if(building.getCurrentHp()<=0) {
+                        if (building.getCurrentHp() <= 0) {
                             zombie.setAttackTargetToNull();
                         }
-                    }
-                    else if(zombie.getAttackTarget() instanceof Human) {
+
+
+                    } else if (zombie.getAttackTarget() instanceof Human) {
                         Human human = (Human) zombie.getAttackTarget();
                         human.stop();
                         human.getAttacked(zombie.getValue());
-                        if(!human.isAlive()) {
+                        if (!human.isAlive()) {
                             zombie.setAttackTargetToNull();
                         }
                     }
@@ -1329,7 +1339,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         };
     }
 
-
     @Override
     public CommandSolver.KeyListener keyListener() {
         return this;
@@ -1362,7 +1371,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             zombieNormal.resetObjectXY();
 
-            for(Effect effect:effects){
+            for (Effect effect : effects) {
                 effect.resetObjectXY();
             }
 
@@ -1391,4 +1400,46 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
     }
+
+    //生物一 是否視生物二為攻擊目標
+    public Creature attackTarget(Creature creature1,Creature creature2){
+
+        //已有鎖定目標
+        if (creature1.getAttackTarget() == null) {
+            creature1.detect(creature2);
+            if (creature1.getAttackTarget() == null) {
+                return creature1;
+            }else{
+                return creature1;
+            }
+        }
+        return creature1;
+    }
+
+    public void attackEachOther(Creature creature1) {
+        if(creature1.getAttackTarget() == null){
+            return;
+        }
+        if (creature1.isCollision(creature1.getAttackTarget())) {
+            Creature enemy;
+            if(creature1.getAttackTarget() instanceof Creature){
+                enemy = (Creature) creature1.getAttackTarget();
+            }else{
+                return;
+            }
+
+            enemy.stop();
+            creature1.stop();
+
+//            if (enemy.getFightEffect() == null) {
+//                enemy.setFightEffect(new FightEffect(creature1.painter().centerX(), creature1.painter().centerY()));
+            enemy.getAttacked(creature1.getValue());
+            if (!enemy.isAlive()) {
+                creature1.setAttackTargetToNull();
+            }
+//                if (creature1.getFightEffect().isDue()) {
+//                    enemy.setFightEffect(null);
+        }
+    }
 }
+

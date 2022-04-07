@@ -26,7 +26,7 @@ public class Background extends GameObject implements GameKernel.GameInterface, 
 
         bg_img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().background());
 
-        shutDetectRange();
+//        shutDetectRange();
     }
 
     @Override

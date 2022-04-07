@@ -5,6 +5,7 @@ import company.gametest9th.utils.Path;
 import java.awt.*;
 
 public class ZombieBig extends Zombie {
+
     private static final int painterWidth = 64;
     private static final int painterHeight = 64;
     private static final int colliderWidth = 64;
