@@ -225,6 +225,10 @@ public abstract class GameObject implements GameKernel.GameInterface {
         }
     }
 
+    public boolean touches(GameObject gameObject){
+        return (this.touchLeftOf(gameObject)||this.touchTopOf(gameObject)||this.touchRightOf(gameObject)||this.touchBottomOf(gameObject));
+    }
+
     public void shutDetectRange() {
         tmpDetectRange = detectRange.clone();
         detectRange = new Rect(0, 0, 0, 0);

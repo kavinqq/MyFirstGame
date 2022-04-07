@@ -1,6 +1,7 @@
 package company.gameobj.creature.human;
 
 import company.Global;
+import company.gameobj.GameObject;
 import company.gameobj.creature.Creature;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.HumanAnimator;
@@ -22,6 +23,8 @@ public abstract class Human extends Creature {
     private HUMAN_TYPE humanType;
 
     private int upgradePoint;
+
+    private GameObject blockingObject;
 
 
 
@@ -351,6 +354,14 @@ public abstract class Human extends Creature {
     public void stop() {
         setTarget(painter().centerX(), painter().centerY());
         setMoveStatus(Animator.State.STAND);
+    }
+
+    public GameObject getBlockingObject() {
+        return blockingObject;
+    }
+
+    public void setBlockingObject(GameObject blockingObject) {
+        this.blockingObject = blockingObject;
     }
 }
 
