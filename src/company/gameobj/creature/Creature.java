@@ -500,7 +500,6 @@ public abstract class Creature extends GameObject {
             }
         }
         if (this.getAttackTarget() == null && this.isAtTarget()) {
-            System.out.println("At target");
             this.stop();
         }
     }

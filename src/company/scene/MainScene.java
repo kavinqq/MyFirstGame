@@ -210,10 +210,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 建築物基座
         buildingArea.paint(g);
 
-        //城市
-        city.paint(g);
-
-        zombieKingdom.paint(g);
 
 
         // 如果現在可以使用框選
@@ -228,8 +224,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //畫出遊戲內所有的資源堆
         resourceSystem.paint(g);
 
+
+        //城市
+        city.paint(g);
+
+        zombieKingdom.paint(g);
+
         //畫出戰爭迷霧
-        //fogOfWar.paint(g);
+        fogOfWar.paint(g);
 
         // 用血量條來判斷操控哪個人物
         if (currentObj != null && currentObj.getVisible()) {
@@ -781,7 +783,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     Enemy enemy = (Enemy) armySoldier.getAttackTarget();
                     enemy.stop();
                     armySoldier.stop();
-                    
+
                     if (enemy.getFightEffect() == null) {
                         enemy.setFightEffect(new FightEffect(armySoldier.painter().centerX(), armySoldier.painter().centerY()));
                         enemy.getAttacked(armySoldier.getValue());
@@ -811,11 +813,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     Enemy enemy = (Enemy) airForceSoldier.getAttackTarget();
                     enemy.stop();
                     airForceSoldier.stop();
-//下面四行應該刪掉
-                    enemy.getAttacked(airForceSoldier.getValue());
-                    if (!enemy.isAlive()) {
-                        airForceSoldier.setAttackTargetToNull();
-                    }
 
                     if (enemy.getFightEffect() == null) {
                         enemy.setFightEffect(new FightEffect(airForceSoldier.painter().centerX(), airForceSoldier.painter().centerY()));
