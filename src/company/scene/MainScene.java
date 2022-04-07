@@ -206,9 +206,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //畫出戰爭迷霧
         //fogOfWar.paint(g);
 
-        //畫出城市所有已建造建築物
-        city.paint(g);
-
         // 用血量條來判斷操控哪個人物
         if (currentObj != null && currentObj.getVisible()) {
             g.setColor(Color.red);
@@ -989,11 +986,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     enemy.stop();
                     armySoldier.stop();
 
-                    enemy.getAttacked(armySoldier.getValue());
-                    if (!enemy.isAlive()) {
-                        armySoldier.setAttackTargetToNull();
-                    }
-
                     if (enemy.getFightEffect() == null) {
                         enemy.setFightEffect(new FightEffect(armySoldier.painter().centerX(), armySoldier.painter().centerY()));
                         enemy.getAttacked(armySoldier.getValue());
@@ -1130,6 +1122,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                     break;
                 }
+            }
+            else{
+                //zombie.setTargetXY(SCREEN_X/2,SCREEN_Y/2);
             }
         }
 
