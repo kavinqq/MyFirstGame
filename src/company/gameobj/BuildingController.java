@@ -37,7 +37,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
     /**
      * 科技升級時間
      */
-    public static final int TECH_LEVEL_UPGRADE_TIME = 24; //24
+    public static final int TECH_LEVEL_UPGRADE_TIME = 48; //24
     /**
      * 此回合有升級科技
      */
@@ -91,11 +91,11 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
             //  enum裡面 => public LinkedList<BuildingNode> list()
             for (int j = 0; j < value.list.size(); j++) {
                 value.list().get(j).update();
-                if(value.list().get(j).getBuilding().isRemoveSelf()){
-                    value.list().remove(j);
-                    j--;
+                if(value.list.get(j).building.isRemoveSelf()){
+                    value.list().remove(j--);
+                    buildingNum--;
                 }
-            }
+             }
 
         }
     }
@@ -1225,11 +1225,11 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
 
     /**
      * 建築受到傷害
-     *
+     *就得可刪
      * @param damage 傷害值
      */
     public void getDamage(int damage) {
-        ArrayList<Building> hpZeroBuilding = new ArrayList<>();
+//        ArrayList<Building> hpZeroBuilding = new ArrayList<>();
 
         //走訪每個BuildingType
         for (int i = 0; i < BuildingType.values().length; i++) {
@@ -1242,16 +1242,16 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
                     //讓建築受到傷害
                     building.getDamage(damage);
                     //建築hp為0就從鏈表刪除
-                    if (building.getHp() <= 0) {
+                    if (building.getCurrentHp() <= 1) {
                         //將爆掉的建築進列表中紀錄
-                        hpZeroBuilding.add(building);
+//                        hpZeroBuilding.add(building);
                         type.list.remove(k--);
                         buildingNum--;
                     }
                 }
             }
         }
-        damageBuilding = hpZeroBuilding;
+//        damageBuilding = hpZeroBuilding;
     }
 
     /**

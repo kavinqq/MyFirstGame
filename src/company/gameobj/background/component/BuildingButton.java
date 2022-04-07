@@ -157,9 +157,6 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
 
     //從綠色方形上在覆蓋紅色方形
     public void setRedRects(Rect[] rects){
-        if(rects == null){
-            return;
-        }
         this.redRects=rects;
     }
 

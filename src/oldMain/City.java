@@ -331,7 +331,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 
     /**
      * 只派軍隊去防禦殭屍
-     *
+     * 舊的可刪
      * @param zombieTroop 所要防禦的殭屍群
      */
     public void fightZombies(ZombieKingdom.ZombieTroop zombieTroop) {
@@ -382,16 +382,6 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             buildings.getDamage(landAttack);
             //landAttack = 0;
         }
-
-//        if (this.isAlive()) {//還有人活著 遊戲繼續
-//            if (military.isAllDead()) {
-//                System.out.println("不平靜的夜晚過去了\n你活了下來 但是\n戰士們為了拯救你 流光了鮮血\n");
-//            } else {
-//                System.out.println("不平靜的夜晚過去了\n你也活下來了\n");
-//            }
-//        } else {//全死 遊戲結束
-//            System.out.println("不平靜的夜晚終於過去了 但你再也撐不住了，這裡只剩廢墟...\n");
-//        }
     }
 
     /**
