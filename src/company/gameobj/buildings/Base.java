@@ -56,7 +56,7 @@ public class Base extends Building {
                 .setUpgradeTime(0)
                 .setLevelC(1)  //初始等級為1
                 .setTechLevelNeedUpgrade(2)
-                .setHp(1000)
+                .setHp(3000)
                 .setWoodCostCreate(0)
                 .setSteelCostCreate(0)
                 .setGasCostCreate(0)

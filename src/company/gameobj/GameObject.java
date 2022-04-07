@@ -163,7 +163,7 @@ public abstract class GameObject implements GameKernel.GameInterface {
     }
 
     public final boolean isEntered(int x, int y) {
-        return (detectRange.left() < x && detectRange.right() > x && detectRange.top() < y && detectRange.bottom() > y);
+        return (painter.left() < x && painter.right() > x && painter.top() < y && painter.bottom() > y);
     }
 
     public final boolean isCovering(int x, int y) {

@@ -1246,6 +1246,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
                         //將爆掉的建築進列表中紀錄
                         hpZeroBuilding.add(building);
                         type.list.remove(k--);
+                        buildingNum--;
                     }
                 }
             }

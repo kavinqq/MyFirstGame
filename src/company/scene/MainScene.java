@@ -136,9 +136,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         chooseUnit = SceneController.getInstance().imageController().tryGetImage(new Path().img().objs().chooseUnit());
 
 
-        //base先不刪下面有些東西與base連接
-        base = new Arsenal(200, 300);
-
         //上一幀是否可建造
         preCanBuild = true;
 
@@ -310,9 +307,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 //         如果這一帧的鏡頭移動量 != 0 [必須移動]
         if (CAMERA_MOVE_VX != 0 || CAMERA_MOVE_VY != 0) {
 
-            // 下面就是移動地圖上每一個物件
-            base.cameraMove();
-
             //停機坪
             tarmacArr.cameraMove();
 
@@ -388,15 +382,15 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                             //若有蓋好的建築物，將redRects給currentButton 一個
                             ArrayList<Rect> redRects = new ArrayList<>();
                             for (BuildingType value : values()) {
-
                                 for (int k = 0; k < value.list().size(); k++) {
                                     Rect tmpRect = value.list().get(k).getBuilding().overlapRect(currentButton.getGreenRect());
                                     if (tmpRect != null) {
                                         redRects.add(tmpRect);
                                     }
                                 }
-
                             }
+
+
                             if (!redRects.isEmpty()) {
                                 currentButton.setRedRects(redRects.toArray(new Rect[redRects.size()]));
                             }
