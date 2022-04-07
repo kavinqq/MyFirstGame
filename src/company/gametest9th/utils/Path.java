@@ -435,6 +435,10 @@ public class Path {
         }
 
         public String fight(){ return this + "/fight.wav";}
+
+        public String airForceWhat() { return this + "/airForceWhat.wav";}
+
+        public String airForceYes() { return this + "/airForceYes.wav";}
     }
 
 

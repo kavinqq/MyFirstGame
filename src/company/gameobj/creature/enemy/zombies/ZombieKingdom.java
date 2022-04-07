@@ -223,7 +223,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
     }
 
     /**
-     * 殭屍族群
+     * 殭屍族群ga
      */
     public class ZombieTroop {
         /**

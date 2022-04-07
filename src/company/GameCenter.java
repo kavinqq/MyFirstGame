@@ -3,7 +3,6 @@ package company;
 import company.controllers.SceneController;
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.GameKernel;
-import company.scene.MainScene;
 import company.scene.StartScene;
 
 
