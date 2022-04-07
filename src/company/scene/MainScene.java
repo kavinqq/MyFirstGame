@@ -889,7 +889,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
+        //殭屍偵測所有遊戲物件
         for (Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()) {
+
+//            System.out.println("殭屍ID:"+zombie);
+
             if (!zombie.isAlive()) {
                 continue;
             }
@@ -898,6 +902,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 for (Citizen citizen : city.getCitizens().getAllCitizens()) {
                     if (zombie.getAttackTarget() == null) {
                         zombie.detect(citizen);
+
                     } else {
                         break;
                     }
@@ -906,6 +911,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 for (ArmySoldier armySoldier : city.getMilitary().getArmy()) {
                     if (zombie.getAttackTarget() == null) {
                         zombie.detect(armySoldier);
+//                        System.out.println("殭屍鎖定陸軍:"+zombie);
+
                     } else {
                         break;
                     }
@@ -927,6 +934,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     }
                 }
             }
+
 
             if (zombie.getAttackTarget() != null) {
                 if (zombie.isCollision(zombie.getAttackTarget())) {
@@ -961,8 +969,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                             zombie.setAttackTargetToNull();
                         }
                     }
-
-                    break;
                 }
                 else{
                     zombie.setMoveStatus(Animator.State.WALK);

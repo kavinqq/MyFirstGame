@@ -41,6 +41,10 @@ public class Military {
         this.airForceValue = 0;
 
         this.addArmy(INITIAL_ARMY_SIZE, Base.BASE_X+250+Base.BASE_WIDTH,Base.BASE_Y);
+        this.addArmy(INITIAL_ARMY_SIZE, Base.BASE_X+250+Base.BASE_WIDTH,Base.BASE_Y);
+
+        this.addAirForce(INITIAL_ARMY_SIZE, Base.BASE_X+335+Base.BASE_WIDTH,Base.BASE_Y);
+        this.addAirForce(INITIAL_ARMY_SIZE, Base.BASE_X+335+Base.BASE_WIDTH,Base.BASE_Y);
 
         upDateArmyValue();
         upDateAirForceValue();
