@@ -27,10 +27,4 @@ public class ZombieBig extends Zombie {
     public int currentRoundCount(int round) {
         return (round*5)/12;
     }
-
-
-    @Override
-    public void update() {
-
-    }
 }

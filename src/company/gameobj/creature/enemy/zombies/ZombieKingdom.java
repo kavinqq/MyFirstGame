@@ -40,7 +40,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
 
     public ZombieKingdom() {
         this.zombieTime = 0;
-        this.attackRound = 5;
+        this.attackRound = 10;
         zombies = new HashMap<>();
 //        this.zombies.put(zombieBig, 0);
 //        this.zombies.put(zombieKing, 0);
@@ -71,6 +71,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
             Zombie currentType = entry.getKey();
             //該殭屍種類數量增加
             int currentNum = currentType.currentRoundCount(this.attackRound);
+            System.out.println(currentNum);
             //更新殭屍數量
             if (currentType instanceof ZombieBig) {
                 ArrayList<ZombieBig> arr = new ArrayList<ZombieBig>();
@@ -130,7 +131,9 @@ public class ZombieKingdom implements GameKernel.GameInterface{
                 //zombies.put(zombieFlyingBig, currentNum);
             }
         }
-        this.zombieTroop = new ZombieTroop();
+//        ZombieTroop tmp = new ZombieTroop();
+//        this.zombieTroop.getLandTroop().addAll(tmp.getLandTroop());
+//        this.zombieTroop.getAirTroop().addAll(tmp.getAirTroop());
     }
 
     /**
@@ -228,6 +231,10 @@ public class ZombieKingdom implements GameKernel.GameInterface{
             else{
                 zombieTroop.getAirTroop().get(i).update();
             }
+        }
+
+        if(zombieTroop.getLandTroop().isEmpty() && zombieTroop.getAirTroop().isEmpty()){
+            this.zombieTroop = new ZombieTroop();
         }
     }
 

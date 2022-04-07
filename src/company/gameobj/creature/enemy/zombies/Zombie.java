@@ -16,14 +16,14 @@ public abstract class Zombie extends Enemy {
 
     //TODO: 設定各個殭屍角色的圖片
     public enum ZOMBIE_TYPE{
-        ZOMBIE_BIG(2),
-        ZOMBIE_FLYING(2),
-        ZOMBIE_FLYING_BIG(2),
-        ZOMBIE_KING(2),
-        ZOMBIE_NORMAL(4),
+        ZOMBIE_BIG(3),
+        ZOMBIE_FLYING(0),
+        ZOMBIE_FLYING_BIG(4),
+        ZOMBIE_KING(7),
+        ZOMBIE_NORMAL(1),
         ZOMBIE_TYPE_I(2),
-        ZOMBIE_TYPE_II(2),
-        ZOMBIE_WITCH(2);
+        ZOMBIE_TYPE_II(5),
+        ZOMBIE_WITCH(6);
 
         private int value;
         ZOMBIE_TYPE(int value){
@@ -73,7 +73,6 @@ public abstract class Zombie extends Enemy {
 
     @Override
     public void update() {
-
         // 如果我的MoveStatue 是 walk
         switch (getMoveStatus()){
             case STAND:{
@@ -90,6 +89,13 @@ public abstract class Zombie extends Enemy {
 
         // 動畫更新[換圖片]
         getAnimator().update();
+
+        if(this.getFightEffect()!=null && this.getFightEffect().isDue()){
+            this.setFightEffect(null);
+        }
+        if(getAttackTarget() != null) {
+            setTargetXY(getAttackTarget().painter().centerX(),getAttackTarget().painter().centerY());
+        }
     }
 
 

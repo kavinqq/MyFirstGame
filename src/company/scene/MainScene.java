@@ -48,7 +48,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
     private Background background; // 背景
     private BuildingOption buildingOption; // 建築物選單
     private TarmacArr tarmacArr; //停機坪
-    private GameObject currentObj; // 當前操控的物件(單選)
+    private Human currentObj; // 當前操控的物件(單選)
     private BuildingButton currentButton; //當前操控按鈕
     private BuildingController.BuildingNode currentBuildNode; //操控當前建築物結點
 
@@ -205,7 +205,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         resourceSystem.paint(g);
 
         //畫出戰爭迷霧
-        fogOfWar.paint(g);
+        //fogOfWar.paint(g);
 
         //畫出城市所有已建造建築物
         city.paint(g);
@@ -973,6 +973,18 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         for (Human human : city.getMilitary().getAirForce()) {
             fogOfWar.update(human);
+        }
+
+        if(currentObj!=null){
+            currentObj = (currentObj.isAlive()) ? currentObj : null;
+        }
+
+        for(int i=0; i<controlHumans.size(); i++){
+            Human human = controlHumans.get(i);
+            if(!human.isAlive()){
+                controlHumans.remove(i);
+                i--;
+            }
         }
 
         // 時間自然流動
