@@ -173,9 +173,32 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 //        AudioResourceController.getInstance().loop(new Path().sound().mainSceneBGM(), 2);
     }
 
+    /**
+     * 釋放此場景資源
+     */
+
     @Override
     public void sceneEnd() {
 
+        buildingArea = null;
+
+        buildingOption = null;
+
+        currentButton = null;
+
+        currentBuildNode = null;
+
+        currentObj = null;
+
+        controlHumans = null;
+
+        background =null;
+
+        city = null;
+
+        zombieKingdom = null;
+
+        fogOfWar = null;
     }
 
     @Override
@@ -207,9 +230,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         //畫出戰爭迷霧
         //fogOfWar.paint(g);
-
-        //畫出城市所有已建造建築物
-        city.paint(g);
 
         // 用血量條來判斷操控哪個人物
         if (currentObj != null && currentObj.getVisible()) {
@@ -761,13 +781,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     Enemy enemy = (Enemy) armySoldier.getAttackTarget();
                     enemy.stop();
                     armySoldier.stop();
-
-                    //下面四行應該刪掉
-                    enemy.getAttacked(armySoldier.getValue());
-                    if (!enemy.isAlive()) {
-                        armySoldier.setAttackTargetToNull();
-                    }
-
+                    
                     if (enemy.getFightEffect() == null) {
                         enemy.setFightEffect(new FightEffect(armySoldier.painter().centerX(), armySoldier.painter().centerY()));
                         enemy.getAttacked(armySoldier.getValue());
@@ -894,6 +908,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                     break;
                 }
+            }
+            else{
+                //zombie.setTargetXY(SCREEN_X/2,SCREEN_Y/2);
             }
         }
 

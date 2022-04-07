@@ -19,7 +19,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
     /**
      * 攻擊頻率
      */
-    private static final int attackRate = 16;
+    private static final int attackRate = 1200;
     /**
      * 儲存殭屍數量的map
      */
@@ -39,17 +39,9 @@ public class ZombieKingdom implements GameKernel.GameInterface{
     private final ZombieFlyingBig zombieFlyingBig = new ZombieFlyingBig();
 
     public ZombieKingdom() {
-        this.zombieTime = 0;
-        this.attackRound = 10;
+        this.zombieTime = 1;
+        this.attackRound = 1;
         zombies = new HashMap<>();
-//        this.zombies.put(zombieBig, 0);
-//        this.zombies.put(zombieKing, 0);
-//        this.zombies.put(zombieWitch, 0);
-//        this.zombies.put(zombieNormal, 1);
-//        this.zombies.put(zombieTypeI, 0);
-//        this.zombies.put(zombieTypeII, 0);
-//        this.zombies.put(zombieFlying, 0);
-//        this.zombies.put(zombieFlyingBigger, 0);
         this.zombies.put(zombieBig, new ArrayList<ZombieBig>());
         this.zombies.put(zombieKing, new ArrayList<ZombieKing>());
         this.zombies.put(zombieWitch, new ArrayList<ZombieWitch>());
@@ -58,7 +50,6 @@ public class ZombieKingdom implements GameKernel.GameInterface{
         this.zombies.put(zombieTypeII, new ArrayList<ZombieTypeII>());
         this.zombies.put(zombieFlying, new ArrayList<ZombieFlying>());
         this.zombies.put(zombieFlyingBig, new ArrayList<ZombieFlyingBig>());
-        this.troopLevelUp();
         this.zombieTroop = new ZombieTroop();
     }
 
@@ -131,9 +122,6 @@ public class ZombieKingdom implements GameKernel.GameInterface{
                 //zombies.put(zombieFlyingBig, currentNum);
             }
         }
-//        ZombieTroop tmp = new ZombieTroop();
-//        this.zombieTroop.getLandTroop().addAll(tmp.getLandTroop());
-//        this.zombieTroop.getAirTroop().addAll(tmp.getAirTroop());
     }
 
     /**
@@ -149,10 +137,11 @@ public class ZombieKingdom implements GameKernel.GameInterface{
      * 計算僵屍的時間往前
      */
     public void timePass() {
-        this.zombieTime++;
-        if (this.zombieTime % attackRate == 0) {
-            this.troopLevelUp();
-        }
+//        this.zombieTime++;
+//        if (this.zombieTime % attackRate == 0) {
+//            this.troopLevelUp();
+//            this.zombieTroop.update();
+//        }
     }
 
 //    public void showTroopValue(){
@@ -213,6 +202,9 @@ public class ZombieKingdom implements GameKernel.GameInterface{
     @Override
     public void update() {
 
+//        System.out.println(zombieTroop.getLandTroop().size());
+//        System.out.println(zombieTroop.getAirTroop().size());
+//        System.out.println("=====");
         //timePass();
         for(int i=0; i<zombieTroop.getLandTroop().size(); i++){
             if(!zombieTroop.getLandTroop().get(i).isAlive()){
@@ -233,8 +225,10 @@ public class ZombieKingdom implements GameKernel.GameInterface{
             }
         }
 
-        if(zombieTroop.getLandTroop().isEmpty() && zombieTroop.getAirTroop().isEmpty()){
-            this.zombieTroop = new ZombieTroop();
+        this.zombieTime++;
+        if (this.zombieTime % attackRate == 0) {
+            this.troopLevelUp();
+            this.zombieTroop.update();
         }
     }
 
@@ -252,17 +246,19 @@ public class ZombieKingdom implements GameKernel.GameInterface{
         private ArrayList<Zombie> airTroop;
 
         public ZombieTroop() {
-            Zombie zombieGenre;
 
             landTroop = new ArrayList<Zombie>();
 
             airTroop = new ArrayList<Zombie>();
 
+            update();
+
+        }
+
+        public void update(){
+            Zombie zombieGenre;
             for (Map.Entry<Zombie, ArrayList<? extends Zombie>> entry : zombies.entrySet()) {
                 zombieGenre = entry.getKey();
-//                System.out.println(entry.getValue().size());
-//                System.out.println(entry.getValue());
-//                System.out.println("======");
                 if(zombieGenre.isFlyable()){
                     if(!entry.getValue().isEmpty()){
                         airTroop.addAll(entry.getValue());

@@ -28,7 +28,4 @@ public class ZombieKing extends Zombie {
     public int currentRoundCount(int round) {
         return (round * 2) / 12;
     }
-
-
-
 }
