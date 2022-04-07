@@ -204,7 +204,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         resourceSystem.paint(g);
 
         //畫出戰爭迷霧
-        fogOfWar.paint(g);
+        //fogOfWar.paint(g);
 
         //畫出城市所有已建造建築物
         city.paint(g);

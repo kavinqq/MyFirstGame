@@ -40,7 +40,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
 
     public ZombieKingdom() {
         this.zombieTime = 0;
-        this.attackRound = 1;
+        this.attackRound = 10;
         zombies = new HashMap<>();
 //        this.zombies.put(zombieBig, 0);
 //        this.zombies.put(zombieKing, 0);
@@ -71,6 +71,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
             Zombie currentType = entry.getKey();
             //該殭屍種類數量增加
             int currentNum = currentType.currentRoundCount(this.attackRound);
+            System.out.println(currentNum);
             //更新殭屍數量
             if (currentType instanceof ZombieBig) {
                 ArrayList<ZombieBig> arr = new ArrayList<ZombieBig>();
