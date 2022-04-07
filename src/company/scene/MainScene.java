@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import static company.gameobj.BuildingController.*;
 
 import company.controllers.AudioResourceController;
+import company.controllers.SceneController;
 import company.gameobj.BuildingController;
 import company.gameobj.FogOfWar;
 import company.gameobj.Rect;
@@ -145,7 +146,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         city.setCitizens(3);
 
 
-        //設定遊戲時間 120偵為遊戲一小時(oldMain的流動一小時)
+        //設定遊戲時間 60偵為遊戲一小時(oldMain的流動一小時)
         gameTimeSpeed = 60;
         gameDelay = new Delay(gameTimeSpeed);
         gameDelay.loop();
@@ -172,8 +173,32 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 //        AudioResourceController.getInstance().loop(new Path().sound().mainSceneBGM(), 2);
     }
 
+    /**
+     * 釋放此場景資源
+     */
+
     @Override
     public void sceneEnd() {
+
+        buildingArea = null;
+
+        buildingOption = null;
+
+        currentButton = null;
+
+        currentBuildNode = null;
+
+        currentObj = null;
+
+        controlHumans = null;
+
+        background =null;
+
+        city = null;
+
+        zombieKingdom = null;
+
+        fogOfWar = null;
     }
 
     @Override
@@ -357,7 +382,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                         redRects.add(tmpRect);
                                     }
                                 }
-                                if (redRects != null && redRects.size() >= 1) {
+                                if (!redRects.isEmpty()) {
                                     currentButton.setRedRects(redRects.toArray(new Rect[redRects.size()]));
                                 }
                             }
@@ -554,421 +579,192 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
         // 走路狀態
-        for (BuildingType value : values()) {
-            for (int j = 0; j < value.list().size(); j++) {
-                Building allBuildings = value.list().get(j).getBuilding();
+//        for (BuildingType value : values()) {
+//            for (int j = 0; j < value.list().size(); j++) {
+//                Building allBuildings = value.list().get(j).getBuilding();
+        Building allBuildings = BuildingType.BASE.instance();
+        for (Citizen citizen : city.getCitizens().getAllCitizens()) {
 
-                for (Citizen citizen : city.getCitizens().getAllCitizens()) {
+            //如果人物走到與建築重疊了，將其拉回剛好接觸但不重疊的位置並且讓人物知道這個方向被擋住了，換個方向
+            if (citizen.painter().overlap(allBuildings.painter())) {
 
-                    //如果人物走到與建築重疊了，將其拉回剛好接觸但不重疊的位置並且讓人物知道這個方向被擋住了，換個方向
-                    if (citizen.painter().overlap(allBuildings.painter())) {
+                // 如果村民 是 採集完成的狀態
+                if (citizen.getResourceNum() != 0) {
 
-                        // 如果村民 是 採集完成的狀態
-                        if (citizen.getResourceNum() != 0) {
+                    // 呼叫city的方法去實際放資源
+                    city.gainResource(citizen.getResourceNum(), citizen.getResourceType());
 
-                            // 呼叫city的方法去實際放資源
-                            city.gainResource(citizen.getResourceNum(), citizen.getResourceType());
+                    // reset該位村民的 身上資源狀態
+                    citizen.setResourceNum();
+                    citizen.setResourceType();
 
-                            // reset該位村民的 身上資源狀態
-                            citizen.setResourceNum();
-                            citizen.setResourceType();
+                    // 返回採集點
+                    citizen.setTarget(citizen.getResourceTargetX(), citizen.getResourceTargetY());
 
-                            // 返回採集點
-                            citizen.setTarget(citizen.getResourceTargetX(), citizen.getResourceTargetY());
-
-                            continue;
-                        }
-
-                        if (allBuildings.isCovering(citizen.targetX(), citizen.targetY())) {
-                            citizen.stop();
-                        }
-
-                        switch (citizen.getWalkingDir()) {
-
-                            case RIGHT: {
-                                if (citizen.touchLeftOf(allBuildings)) {
-                                    citizen.translateX(-1 * (citizen.painter().right() - allBuildings.painter().left()));
-                                    citizen.setBlockedDir(Direction.RIGHT);
-                                }
-                                break;
-                            }
-                            case LEFT: {
-                                if (citizen.touchRightOf(allBuildings)) {
-                                    citizen.translateX(allBuildings.painter().right() - citizen.painter().left());
-                                    citizen.setBlockedDir(Direction.LEFT);
-                                }
-                                break;
-                            }
-                            case UP: {
-
-                                if (citizen.touchBottomOf(allBuildings)) {
-                                    citizen.translateY(allBuildings.painter().bottom() - citizen.painter().top());
-                                    citizen.setBlockedDir(Direction.UP);
-                                }
-                                break;
-                            }
-                            case DOWN: {
-                                if (citizen.touchTopOf(allBuildings)) {
-                                    citizen.translateY(-1 * (citizen.painter().bottom() - allBuildings.painter().top()));
-                                    citizen.setBlockedDir(Direction.DOWN);
-                                }
-                                break;
-                            }
-                        }
-                    } else if (citizen.getBlockedDir() != null) {
-                        switch (citizen.getBlockedDir()) {
-                            case LEFT: {
-                                if (!citizen.touchRightOf(allBuildings)) {
-                                    citizen.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                            case RIGHT: {
-                                if (!citizen.touchLeftOf(allBuildings)) {
-                                    citizen.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                            case UP: {
-                                if (!citizen.touchBottomOf(allBuildings)) {
-                                    citizen.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                            case DOWN: {
-                                if (!citizen.touchTopOf(allBuildings)) {
-                                    citizen.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                        }
-                    } else {
-
-                        // 遍尋一次 資源List
-                        for (int i = 0; i < resourceSystem.size(); i++) {
-
-                            // 先把資源堆記錄下來 不用每次都get一次
-                            ResourceObj resourceObj = resourceSystem.get(i);
-
-                            //如果和資源碰撞 && 我的目的地就是在資源裡面 && 村民看的到的話(沒寫這個條件 他會重複計算)
-                            if (citizen.isCollision(resourceObj) && citizen.isTargetInObj(resourceObj) && citizen.getVisible()) {
-
-                                // 把資源的位置記起來
-                                citizen.setResourceTargetX(resourceObj.painter().centerX());
-                                citizen.setResourceTargetY(resourceObj.painter().centerY());
-
-                                //開始採集
-
-                                if (resourceObj.getResourceTypeStr().equals("WOOD")) { // 如果採集的是木頭
-
-                                    // 資源堆被採集了(目前單次最大能採多少木頭數量)
-                                    resourceObj.beCollected(Citizen.getMaxCarryWood());
-                                } else if (resourceObj.getResourceTypeStr().equals("STEEL")) { // 如果採集的是鋼鐵
-
-                                    // 資源堆被採集了(目前單次最大能採多少鋼鐵數量)
-                                    resourceObj.beCollected(Citizen.getMaxCarrySteel());
-                                }
-
-                                // 如果資源採乾了
-                                if (resourceObj.getTotalNum() <= 0) {
-
-                                    // 移除他
-                                    resourceSystem.remove(i);
-
-                                    //因為是ArrayList 移除後 下一個會馬上接上來
-                                    i--;
-                                }
-
-                                // 村民開始採集
-                                citizen.collecting(allBuildings.painter().centerX(), allBuildings.painter().centerY(), resourceObj.getResourceTypeStr());
-                            }
-                        }
-                    }
-
-                    // 下面的switch 是碰到邊界的狀況
-                    switch (citizen.getWalkingDir()) {
-
-                        // 如果右邊碰到了邊界
-                        case RIGHT: {
-                            if (citizen.touchRight()) {
-
-                                // 把人物移動回來 與邊界切齊
-                                citizen.translateX(-1 * (citizen.painter().right() - SCREEN_WIDTH));
-
-                                // 人物停止移動
-                                citizen.stop();
-                            }
-                            break;
-                        }
-
-                        // 如果左邊碰到了邊界
-                        case LEFT: {
-                            if (citizen.touchLeft()) {
-
-                                // 把人物移動回來 與邊界切齊
-                                citizen.translateX(-1 * citizen.painter().left());
-
-                                // 人物停止移動
-                                citizen.stop();
-                            }
-                            break;
-                        }
-
-                        // 如果上面碰到了邊界
-                        case UP: {
-                            if (citizen.touchTop()) {
-
-                                // 把人物移動回來 與邊界切齊
-                                citizen.translateY(-1 * citizen.painter().top());
-
-                                // 人物停止移動
-                                citizen.stop();
-                            }
-                            break;
-                        }
-
-                        // 如果下面碰到了邊界
-                        case DOWN: {
-                            if (citizen.touchBottom()) {
-                                // 把人物移動回來 與邊界切齊
-                                citizen.translateY(-1 * (citizen.painter().bottom() - SCREEN_HEIGHT));
-
-                                // 人物停止移動
-                                citizen.stop();
-                            }
-                            break;
-                        }
-                    }
+                    continue;
                 }
 
+                if (allBuildings.isCovering(citizen.targetX(), citizen.targetY())) {
+                    citizen.stop();
+                }
 
-                /*base版
-                for (Citizen citizen : city.getCitizens().getAllCitizens()) {
+                switch (citizen.getWalkingDir()) {
 
-                    //如果人物走到與建築重疊了，將其拉回剛好接觸但不重疊的位置並且讓人物知道這個方向被擋住了，換個方向
-                    if (citizen.painter().overlap(base.painter())) {
-
-                        // 如果村民 是 採集完成的狀態
-                        if (citizen.getResourceNum() != 0) {
-
-                            // 呼叫city的方法去實際放資源
-                            city.gainResource(citizen.getResourceNum(), citizen.getResourceType());
-
-                            // reset該位村民的 身上資源狀態
-                            citizen.setResourceNum();
-                            citizen.setResourceType();
-
-                            // 返回採集點
-                            citizen.setTarget(citizen.getResourceTargetX(), citizen.getResourceTargetY());
-
-                            continue;
+                    case RIGHT: {
+                        if (citizen.touchLeftOf(allBuildings)) {
+                            citizen.translateX(-1 * (citizen.painter().right() - allBuildings.painter().left()));
+                            citizen.setBlockedDir(Direction.RIGHT);
                         }
-
-                        if (base.isCovering(citizen.targetX(), citizen.targetY())) {
-                            citizen.stop();
-                        }
-
-                        switch (citizen.getWalkingDir()) {
-
-                            case RIGHT: {
-                                if (citizen.touchLeftOf(base)) {
-                                    citizen.translateX(-1 * (citizen.painter().right() - base.painter().left()));
-                                    citizen.setBlockedDir(Direction.RIGHT);
-                                }
-                                break;
-                            }
-                            case LEFT: {
-                                if (citizen.touchRightOf(base)) {
-                                    citizen.translateX(base.painter().right() - citizen.painter().left());
-                                    citizen.setBlockedDir(Direction.LEFT);
-                                }
-                                break;
-                            }
-                            case UP: {
-
-                                if (citizen.touchBottomOf(base)) {
-                                    citizen.translateY(base.painter().bottom() - citizen.painter().top());
-                                    citizen.setBlockedDir(Direction.UP);
-                                }
-                                break;
-                            }
-                            case DOWN: {
-                                if (citizen.touchTopOf(base)) {
-                                    citizen.translateY(-1 * (citizen.painter().bottom() - base.painter().top()));
-                                    citizen.setBlockedDir(Direction.DOWN);
-                                }
-                                break;
-                            }
-                        }
-                    } else if (citizen.getBlockedDir() != null) {
-                        switch (citizen.getBlockedDir()) {
-                            case LEFT: {
-                                if (!citizen.touchRightOf(base)) {
-                                    citizen.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                            case RIGHT: {
-                                if (!citizen.touchLeftOf(base)) {
-                                    citizen.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                            case UP: {
-                                if (!citizen.touchBottomOf(base)) {
-                                    citizen.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                            case DOWN: {
-                                if (!citizen.touchTopOf(base)) {
-                                    citizen.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                        }
-                    } else {
-
-                        // 遍尋一次 資源List
-                        for (int i = 0; i < resourceSystem.size(); i++) {
-
-                            // 先把資源堆記錄下來 不用每次都get一次
-                            ResourceObj resourceObj = resourceSystem.get(i);
-
-                            //如果和資源碰撞 && 我的目的地就是在資源裡面 && 村民看的到的話(沒寫這個條件 他會重複計算)
-                            if (citizen.isCollision(resourceObj) && citizen.isTargetInObj(resourceObj) && citizen.getVisible()) {
-
-                                // 把資源的位置記起來
-                                citizen.setResourceTargetX(resourceObj.painter().centerX());
-                                citizen.setResourceTargetY(resourceObj.painter().centerY());
-
-                                //開始採集
-
-                                if (resourceObj.getResourceTypeStr().equals("WOOD")) { // 如果採集的是木頭
-
-                                    // 資源堆被採集了(目前單次最大能採多少木頭數量)
-                                    resourceObj.beCollected(Citizen.getMaxCarryWood());
-                                } else if (resourceObj.getResourceTypeStr().equals("STEEL")) { // 如果採集的是鋼鐵
-
-                                    // 資源堆被採集了(目前單次最大能採多少鋼鐵數量)
-                                    resourceObj.beCollected(Citizen.getMaxCarrySteel());
-                                }
-
-                                // 如果資源採乾了
-                                if (resourceObj.getTotalNum() <= 0) {
-
-                                    // 移除他
-                                    resourceSystem.remove(i);
-
-                                    //因為是ArrayList 移除後 下一個會馬上接上來
-                                    i--;
-                                }
-
-                                // 村民開始採集
-                                citizen.collecting(base.painter().centerX(), base.painter().centerY(), resourceObj.getResourceTypeStr());
-                            }
-                        }
+                        break;
                     }
-
-                    // 下面的switch 是碰到邊界的狀況
-                    switch (citizen.getWalkingDir()) {
-
-                        // 如果右邊碰到了邊界
-                        case RIGHT: {
-                            if (citizen.touchRight()) {
-
-                                // 把人物移動回來 與邊界切齊
-                                citizen.translateX(-1 * (citizen.painter().right() - SCREEN_WIDTH));
-
-                                // 人物停止移動
-                                citizen.stop();
-                            }
-                            break;
+                    case LEFT: {
+                        if (citizen.touchRightOf(allBuildings)) {
+                            citizen.translateX(allBuildings.painter().right() - citizen.painter().left());
+                            citizen.setBlockedDir(Direction.LEFT);
                         }
+                        break;
+                    }
+                    case UP: {
 
-                        // 如果左邊碰到了邊界
-                        case LEFT: {
-                            if (citizen.touchLeft()) {
-
-                                // 把人物移動回來 與邊界切齊
-                                citizen.translateX(-1 * citizen.painter().left());
-
-                                // 人物停止移動
-                                citizen.stop();
-                            }
-                            break;
+                        if (citizen.touchBottomOf(allBuildings)) {
+                            citizen.translateY(allBuildings.painter().bottom() - citizen.painter().top());
+                            citizen.setBlockedDir(Direction.UP);
                         }
-
-                        // 如果上面碰到了邊界
-                        case UP: {
-                            if (citizen.touchTop()) {
-
-                                // 把人物移動回來 與邊界切齊
-                                citizen.translateY(-1 * citizen.painter().top());
-
-                                // 人物停止移動
-                                citizen.stop();
-                            }
-                            break;
+                        break;
+                    }
+                    case DOWN: {
+                        if (citizen.touchTopOf(allBuildings)) {
+                            citizen.translateY(-1 * (citizen.painter().bottom() - allBuildings.painter().top()));
+                            citizen.setBlockedDir(Direction.DOWN);
                         }
-
-                        // 如果下面碰到了邊界
-                        case DOWN: {
-                            if (citizen.touchBottom()) {
-                                // 把人物移動回來 與邊界切齊
-                                citizen.translateY(-1 * (citizen.painter().bottom() - SCREEN_HEIGHT));
-
-                                // 人物停止移動
-                                citizen.stop();
-                            }
-                            break;
-                        }
+                        break;
                     }
                 }
-                */
+            } else if (citizen.getBlockedDir() != null) {
+                switch (citizen.getBlockedDir()) {
+                    case LEFT: {
+                        if (!citizen.touchRightOf(allBuildings)) {
+                            citizen.setNoBlockedDir();
+                        }
+                        break;
+                    }
+                    case RIGHT: {
+                        if (!citizen.touchLeftOf(allBuildings)) {
+                            citizen.setNoBlockedDir();
+                        }
+                        break;
+                    }
+                    case UP: {
+                        if (!citizen.touchBottomOf(allBuildings)) {
+                            citizen.setNoBlockedDir();
+                        }
+                        break;
+                    }
+                    case DOWN: {
+                        if (!citizen.touchTopOf(allBuildings)) {
+                            citizen.setNoBlockedDir();
+                        }
+                        break;
+                    }
+                }
+            } else {
 
+                // 遍尋一次 資源List
+                for (int i = 0; i < resourceSystem.size(); i++) {
 
-//                for (ArmySoldier armySoldier : city.getMilitary().getArmy()) {
-//                    if (armySoldier.getAttackTarget() == null) {
-//                        //System.out.println("army null");
-//                        armySoldier.detect(zombieNormal);
-//                    } else {
-//                        //temp cause not zombie group yet
-//                        if (!zombieNormal.isAlive()) {
-//                            continue;
-//                        } else if (armySoldier.isCollision(zombieNormal)) {
-//                            System.out.println("stop");
-//                            zombieNormal.stop();
-//                            armySoldier.stop();
-//
-//                            if (armySoldier.getFightEffect() == null) {
-//                                armySoldier.setFightEffect(new FightEffect(armySoldier.painter().centerX(), armySoldier.painter().centerY()));
-//                            } else {
-//                                if (armySoldier.getFightEffect().isDue()) {
-//                                    armySoldier.setFightEffect(null);
-//                                }
-//                            }
-//
-//                            zombieNormal.getAttacked(armySoldier.getValue());
-//                            if (zombieNormal.isAlive()) {
-//
-//                                armySoldier.getAttacked(zombieNormal.getValue());
-//                            } else {
-//                                //armySoldier.setAttackTargetToNull();
-//                                //armySoldier.setMoveStatus(Animator.State.WALK);
-//                            }
-//                            System.out.println(zombieNormal.getValue());
-//                            System.out.println(armySoldier.getValue());
-//                        }
-////                System.out.println("army not null");
-//                    }
-//                }
+                    // 先把資源堆記錄下來 不用每次都get一次
+                    ResourceObj resourceObj = resourceSystem.get(i);
+
+                    //如果和資源碰撞 && 我的目的地就是在資源裡面 && 村民看的到的話(沒寫這個條件 他會重複計算)
+                    if (citizen.isCollision(resourceObj) && citizen.isTargetInObj(resourceObj) && citizen.getVisible()) {
+
+                        // 把資源的位置記起來
+                        citizen.setResourceTargetX(resourceObj.painter().centerX());
+                        citizen.setResourceTargetY(resourceObj.painter().centerY());
+
+                        //開始採集
+
+                        if (resourceObj.getResourceTypeStr().equals("WOOD")) { // 如果採集的是木頭
+
+                            // 資源堆被採集了(目前單次最大能採多少木頭數量)
+                            resourceObj.beCollected(Citizen.getMaxCarryWood());
+                        } else if (resourceObj.getResourceTypeStr().equals("STEEL")) { // 如果採集的是鋼鐵
+
+                            // 資源堆被採集了(目前單次最大能採多少鋼鐵數量)
+                            resourceObj.beCollected(Citizen.getMaxCarrySteel());
+                        }
+
+                        // 如果資源採乾了
+                        if (resourceObj.getTotalNum() <= 0) {
+
+                            // 移除他
+                            resourceSystem.remove(i);
+
+                            //因為是ArrayList 移除後 下一個會馬上接上來
+                            i--;
+                        }
+
+                        // 村民開始採集
+                        citizen.collecting(allBuildings.painter().centerX(), allBuildings.painter().centerY(), resourceObj.getResourceTypeStr());
+                    }
+                }
+            }
+
+            // 下面的switch 是碰到邊界的狀況
+            switch (citizen.getWalkingDir()) {
+
+                // 如果右邊碰到了邊界
+                case RIGHT: {
+                    if (citizen.touchRight()) {
+
+                        // 把人物移動回來 與邊界切齊
+                        citizen.translateX(-1 * (citizen.painter().right() - SCREEN_WIDTH));
+
+                        // 人物停止移動
+                        citizen.stop();
+                    }
+                    break;
+                }
+
+                // 如果左邊碰到了邊界
+                case LEFT: {
+                    if (citizen.touchLeft()) {
+
+                        // 把人物移動回來 與邊界切齊
+                        citizen.translateX(-1 * citizen.painter().left());
+
+                        // 人物停止移動
+                        citizen.stop();
+                    }
+                    break;
+                }
+
+                // 如果上面碰到了邊界
+                case UP: {
+                    if (citizen.touchTop()) {
+
+                        // 把人物移動回來 與邊界切齊
+                        citizen.translateY(-1 * citizen.painter().top());
+
+                        // 人物停止移動
+                        citizen.stop();
+                    }
+                    break;
+                }
+
+                // 如果下面碰到了邊界
+                case DOWN: {
+                    if (citizen.touchBottom()) {
+                        // 把人物移動回來 與邊界切齊
+                        citizen.translateY(-1 * (citizen.painter().bottom() - SCREEN_HEIGHT));
+
+                        // 人物停止移動
+                        citizen.stop();
+                    }
+                    break;
+                }
             }
         }
-
-//        for (BuildingType value:values()) {
-//            for (int j = 0; j < value.list().size(); j++) {
-//                Building AllBuildings=value.list().get(j).getBuilding();
 
         //士兵打殭屍
         for (ArmySoldier armySoldier : city.getMilitary().getArmy()) {
@@ -980,12 +776,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         break;
                     }
                 }
-            } else if (armySoldier.getAttackTarget() != null) {
+            } if (armySoldier.getAttackTarget() != null) {
                 if (armySoldier.isCollision(armySoldier.getAttackTarget())) {
                     Enemy enemy = (Enemy) armySoldier.getAttackTarget();
                     enemy.stop();
                     armySoldier.stop();
-
+                    
                     if (enemy.getFightEffect() == null) {
                         enemy.setFightEffect(new FightEffect(armySoldier.painter().centerX(), armySoldier.painter().centerY()));
                         enemy.getAttacked(armySoldier.getValue());
@@ -1000,21 +796,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             }
         }
-        //士兵打殭屍
-//        for (ArmySoldier armySoldier : city.getMilitary().getArmy()) {
-//            for (Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()) {
-//                if (armySoldier.getAttackTarget() == null) {
-//                    armySoldier.detect(zombie);
-//                    if (armySoldier.getAttackTarget() != null) {
-//                        break;
-//                    }
-////                zombie=(Zombie) attackTarget(zombie,armySoldier);
-////                if(zombie.getAttackTarget() != null){
-//                    attackEachOther(zombie);
-//                }
-//            }
-//        }
-
+        //飛行士兵打殭屍
         for (AirForceSoldier airForceSoldier : city.getMilitary().getAirForce()) {
             if (airForceSoldier.getAttackTarget() == null) {
                 for (Zombie zombie : zombieKingdom.getZombieTroop().getAirTroop()) {
@@ -1024,12 +806,16 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     }
                 }
             }
-
             if (airForceSoldier.getAttackTarget() != null) {
                 if (airForceSoldier.isCollision(airForceSoldier.getAttackTarget())) {
                     Enemy enemy = (Enemy) airForceSoldier.getAttackTarget();
                     enemy.stop();
                     airForceSoldier.stop();
+//下面四行應該刪掉
+                    enemy.getAttacked(airForceSoldier.getValue());
+                    if (!enemy.isAlive()) {
+                        airForceSoldier.setAttackTargetToNull();
+                    }
 
                     if (enemy.getFightEffect() == null) {
                         enemy.setFightEffect(new FightEffect(airForceSoldier.painter().centerX(), airForceSoldier.painter().centerY()));
@@ -1229,10 +1015,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             thisRoundTimePass = 1;
             city.doCityWorkAndTimePass(thisRoundTimePass);
         }
-
-        if (!city.isAlive()) {
+        //20分鐘後結束 或主堡死去 或巫妖王死去
+        if (!city.isAlive() ) { // 時間到遊戲結束|| StatusBar.instance().getTime()>20*60
             StartScene startScene = new StartScene(); //還沒有結束畫面已此充當結束遊戲
-            //SceneController.getInstance().change(startScene);
+//            SceneController.getInstance().change(startScene);
         }
 
     }

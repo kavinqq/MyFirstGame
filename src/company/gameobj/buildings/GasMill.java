@@ -36,7 +36,7 @@ public class GasMill extends Building{
     public void init(){
         setId(7)
                 .setName("瓦斯場")
-                .setBuildTime(1)
+                .setBuildTime(2)
                 .setUpgradeTime(30)
                 .setLevelC(0)
                 .setTechLevelNeedBuild(2)

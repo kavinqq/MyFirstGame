@@ -398,15 +398,15 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             //landAttack = 0;
         }
 
-        if (this.isAlive()) {//還有人活著 遊戲繼續
-            if (military.isAllDead()) {
-                System.out.println("不平靜的夜晚過去了\n你活了下來 但是\n戰士們為了拯救你 流光了鮮血\n");
-            } else {
-                System.out.println("不平靜的夜晚過去了\n你也活下來了\n");
-            }
-        } else {//全死 遊戲結束
-            System.out.println("不平靜的夜晚終於過去了 但你再也撐不住了，這裡只剩廢墟...\n");
-        }
+//        if (this.isAlive()) {//還有人活著 遊戲繼續
+//            if (military.isAllDead()) {
+//                System.out.println("不平靜的夜晚過去了\n你活了下來 但是\n戰士們為了拯救你 流光了鮮血\n");
+//            } else {
+//                System.out.println("不平靜的夜晚過去了\n你也活下來了\n");
+//            }
+//        } else {//全死 遊戲結束
+//            System.out.println("不平靜的夜晚終於過去了 但你再也撐不住了，這裡只剩廢墟...\n");
+//        }
     }
 
     /**
@@ -596,7 +596,10 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
     }
 
     public boolean isAlive() {
-        return (!this.citizens.isAllDead() || !this.military.isAllDead() || !buildings.isAllDestroyed());
+        if(BuildingController.BuildingType.BASE.list().size()==1){
+            return true;
+        }
+        return false;
     }
 
 

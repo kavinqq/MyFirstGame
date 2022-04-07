@@ -14,11 +14,13 @@ public class ZombieTypeI extends Zombie {
      * 這種殭屍的預設攻擊力
      */
     public ZombieTypeI(int x, int y) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 10, new Path().img().zombies().zombieTypeI(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_TYPE_I);
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 2, new Path().img().zombies().zombieTypeI(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_TYPE_I);
+        setMaxHp(80);
     }
 
     public ZombieTypeI() {
-        super( painterWidth, painterHeight, colliderWidth, colliderHeight, 10, new Path().img().zombies().zombieTypeI(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_TYPE_I);
+        super( painterWidth, painterHeight, colliderWidth, colliderHeight, 2, new Path().img().zombies().zombieTypeI(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_TYPE_I);
+        setMaxHp(80);
     }
 
 

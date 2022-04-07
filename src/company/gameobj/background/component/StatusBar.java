@@ -62,6 +62,11 @@ public class StatusBar {
         // 鏡頭移動時的物件移動量
         moveY = 0;
     }
+    //取得現在時間
+    public long getTime(){
+        return nowTime;
+    }
+
 
     /**
      * 取得Status的實例

@@ -26,8 +26,6 @@ public abstract class Soldier extends Human{
         super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight, value, speed, img, flyAbility);
 
         this.setHumanType(HUMAN_TYPE.SOLDIER);
-
-
     }
 
 

@@ -11,11 +11,13 @@ public class ZombieFlyingBig extends Zombie {
     private static final int colliderHeight = 256;
 
     public ZombieFlyingBig(int x, int y) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 4, new Path().img().zombies().zombieFlyingBig(), FLY_ABILITY.CAN_FLY, ZOMBIE_TYPE.ZOMBIE_FLYING_BIG);
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 5, new Path().img().zombies().zombieFlyingBig(), FLY_ABILITY.CAN_FLY, ZOMBIE_TYPE.ZOMBIE_FLYING_BIG);
+        setMaxHp(100);
     }
 
     public ZombieFlyingBig() {
-        super(painterWidth, painterHeight, colliderWidth, colliderHeight, 2, new Path().img().zombies().zombieFlyingBig(), FLY_ABILITY.CAN_FLY, ZOMBIE_TYPE.ZOMBIE_FLYING_BIG);
+        super(painterWidth, painterHeight, colliderWidth, colliderHeight, 5, new Path().img().zombies().zombieFlyingBig(), FLY_ABILITY.CAN_FLY, ZOMBIE_TYPE.ZOMBIE_FLYING_BIG);
+        setMaxHp(400);
     }
 
     @Override
