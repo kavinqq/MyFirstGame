@@ -518,18 +518,16 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 如果 現在有操控單位(單選) && 有設定要前往的目標
         if (currentObj != null && hasSetTarget) {
 
-            /*
-            為什麼currentObj要特別判斷 是否是Human?
-            因為單選 可以是建築物 不一定會是個人
-             */
             if (currentObj instanceof Human) {
 
                 currentObj.setTarget(targetX, targetY);
 
                 if (currentObj instanceof Citizen) {
                     AudioResourceController.getInstance().play(new Path().sound().readyToWork());
-                } else if (currentObj instanceof Soldier) {
+                } else if (currentObj instanceof ArmySoldier) {
                     AudioResourceController.getInstance().play(new Path().sound().soldierWhat4());
+                } else {
+                    AudioResourceController.getInstance().play(new Path().sound().airForceYes());
                 }
             }
 
@@ -1200,8 +1198,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                 } else {
                                     AudioResourceController.getInstance().play(new Path().sound().what2());
                                 }
-                            } else if (currentObj instanceof Soldier) {
+                            } else if (currentObj instanceof ArmySoldier) {
                                 AudioResourceController.getInstance().play(new Path().sound().soldierWhat3());
+                            } else {
+                                AudioResourceController.getInstance().play(new Path().sound().airForceWhat());
                             }
                         }
                     }
