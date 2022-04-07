@@ -119,9 +119,9 @@ public abstract class GameObject implements GameKernel.GameInterface {
     public Rect overlapRect(Rect rect) {
         if (painter.overlap(rect)) {
             //已確認交疊情況下 排順序下 找到X、Y方向 第2第3為交疊正方形位置
-            int[] intsX = {detectRange.left(), rect.left(), detectRange.right(), rect.right()};
+            int[] intsX = {painter.left(), rect.left(), painter.right(), rect.right()};
             Arrays.sort(intsX);
-            int[] intsY = {detectRange.top(), rect.top(), detectRange.bottom(), rect.bottom()};
+            int[] intsY = {painter.top(), rect.top(), painter.bottom(), rect.bottom()};
             Arrays.sort(intsY);
             return new Rect(intsX[1], intsY[1], intsX[2] - intsX[1], intsY[2] - intsY[1]);
         }
@@ -130,9 +130,9 @@ public abstract class GameObject implements GameKernel.GameInterface {
     public Rect overlapObject(GameObject object) {
         if (painter.overlap(object.painter)) {
             //已確認交疊情況下 排順序下 找到X、Y方向 第2第3為交疊正方形位置
-            int[] intsX = {detectRange.left(), object.detectRange.left(), detectRange.right(), object.detectRange.right()};
+            int[] intsX = {painter.left(), object.painter.left(), painter.right(), object.painter.right()};
             Arrays.sort(intsX);
-            int[] intsY = {detectRange.top(), object.detectRange.top(), detectRange.bottom(), object.detectRange.bottom()};
+            int[] intsY = {painter.top(), object.painter.top(), painter.bottom(), object.painter.bottom()};
             Arrays.sort(intsY);
             return new Rect(intsX[1], intsY[1], intsX[2] - intsX[1], intsY[2] - intsY[1]);
         }

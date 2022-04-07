@@ -322,7 +322,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             // 迷霧移動
             fogOfWar.cameraMove();
 
-
             zombieKingdom.cameraMove();
 
             for (Effect effect : effects) {
@@ -389,30 +388,49 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                     }
                                 }
                             }
-
+                            for (Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()) {
+                                Rect tmpRect =zombie.overlapRect(currentButton.getGreenRect());
+                                if (tmpRect != null) {
+                                    redRects.add(tmpRect);
+                                }
+                            }
+                            for (Citizen citizen : city.getCitizens().getAllCitizens()) {
+                                Rect tmpRect =citizen.overlapRect(currentButton.getGreenRect());
+                                if (tmpRect != null) {
+                                    redRects.add(tmpRect);
+                                }
+                            }
+                            for (ArmySoldier armySoldier : city.getMilitary().getArmy()) {
+                                Rect tmpRect =armySoldier.overlapRect(currentButton.getGreenRect());
+                                if (tmpRect != null) {
+                                    redRects.add(tmpRect);
+                                }
+                            }
 
                             if (!redRects.isEmpty()) {
                                 currentButton.setRedRects(redRects.toArray(new Rect[redRects.size()]));
+                            }else{
+                                currentButton.setRedRects(null);
                             }
-                        }
 
 
-                        //滑鼠放開時，判斷滑鼠放開的上一偵是否在建造區中
-                        if (currentButton.isReleased && preDragging && buildingArea.get(i, j).isOnBuildGrid() && currentButton.getCanBuild()) {//
+
+                                        //滑鼠放開時，判斷滑鼠放開的上一偵是否在建造區中
+                                        if (currentButton.isReleased && preDragging && buildingArea.get(i, j).isOnBuildGrid() && currentButton.getCanBuild()) {//
 
 
-                            //建造房子
-                            city.build(type, currentMouseX - BUILDING_WIDTH / 2, currentMouseY - BUILDING_HEIGHT / 2);
-                            AudioResourceController.getInstance().play(new Path().sound().building());
-                            ToastController.instance().print("建造-" + type.instance().getName() + "成功");
+                                            //建造房子
+                                            city.build(type, currentMouseX - BUILDING_WIDTH / 2, currentMouseY - BUILDING_HEIGHT / 2);
+                                            AudioResourceController.getInstance().play(new Path().sound().building());
+                                            ToastController.instance().print("建造-" + type.instance().getName() + "成功");
 
+                                        }
+                                        //判斷是否蓋在建築區上
+                                        buildingArea.get(i, j).setOnBuildGrid(buildingArea.get(i, j).isCover(currentButton));
+                                    }
 
-                        }
-                        //判斷是否蓋在建築區上
-                        buildingArea.get(i, j).setOnBuildGrid(buildingArea.get(i, j).isCover(currentButton));
-                    }
-
-                }
+                                }
+                            }
 
             }
             //滑鼠放開瞬間 判斷上一偵是否是拖曳且不再區域內
@@ -901,6 +919,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 }
             }
         }
+
+
 
         //殭屍偵測所有遊戲物件
         for (Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()) {
