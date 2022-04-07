@@ -250,20 +250,35 @@ public class Military {
     public void cameraMove(){
         for(ArmySoldier armySoldier: army){
             armySoldier.cameraMove();
+            if(armySoldier.getFightEffect()!= null){
+                armySoldier.getFightEffect().cameraMove();
+            }
+
         }
 
         for(AirForceSoldier airForceSoldier: airForce){
             airForceSoldier.cameraMove();
+            if(airForceSoldier.getFightEffect() != null){
+                airForceSoldier.getFightEffect().cameraMove();
+            }
+
         }
     }
 
     public void resetObjectXY(){
         for(ArmySoldier armySoldier: army){
             armySoldier.resetObjectXY();
+            if(armySoldier.getFightEffect() != null){
+                armySoldier.getFightEffect().resetObjectXY();
+            }
+
         }
 
         for(AirForceSoldier airForceSoldier: airForce){
             airForceSoldier.resetObjectXY();
+            if(airForceSoldier.getFightEffect() != null){
+                airForceSoldier.getFightEffect().resetObjectXY();
+            }
         }
     }
 

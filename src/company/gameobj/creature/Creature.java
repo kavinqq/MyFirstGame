@@ -5,10 +5,7 @@ import company.controllers.SceneController;
 import company.gameobj.GameObject;
 import company.gameobj.creature.enemy.Enemy;
 import company.gameobj.creature.human.Human;
-import company.gametest9th.utils.Animator;
-import company.gametest9th.utils.Delay;
-import company.gametest9th.utils.Effect;
-import company.gametest9th.utils.HumanAnimator;
+import company.gametest9th.utils.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -130,10 +127,10 @@ public abstract class Creature extends GameObject {
 
     public int getValue() {      //獲取目前數值
         //做冷卻時間
-        if (attackDelay.count()) {
+//        if (attackDelay.count()) {
             return value;
-        }
-        return 0;
+//        }
+//        return 0;
     }
 
     public void getAttacked(int value) {
@@ -184,8 +181,11 @@ public abstract class Creature extends GameObject {
         if (attackTarget.painter().centerY() < targetY) {
             availableInitialDirs.add(Global.Direction.UP);
         }
-        this.setWalkingDir(availableInitialDirs.get(Global.random(0, availableInitialDirs.size() - 1)));
-        this.setMoveStatus(Animator.State.WALK);
+        if(!availableInitialDirs.isEmpty()){
+            this.setWalkingDir(availableInitialDirs.get(Global.random(0, availableInitialDirs.size() - 1)));
+            this.setMoveStatus(Animator.State.WALK);
+        }
+
     }
 
     public void setAttackTargetToNull() {
@@ -685,8 +685,10 @@ public abstract class Creature extends GameObject {
         g.fillRect(painter().left(),painter().bottom(),painter().width(),Global.HP_HEIGHT);
         g.setColor(Color.green);
         g.fillRect(painter().left(),painter().bottom(),painter().width()*hp/maxHp,Global.HP_HEIGHT);
-//        if (this.getFightEffect() != null) {
-//            this.getFightEffect().paintComponent(g);
-//        }
+        if (this.getFightEffect() != null) {
+            this.getFightEffect().paintComponent(g);
+        }
     }
+
+
 }

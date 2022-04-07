@@ -49,7 +49,7 @@ public class Lab extends Building {
                 .setLevelC(0)
                 .setTechLevelNeedBuild(1)
                 .setTechLevelNeedUpgrade(1)
-                .setHp(30)
+                .setHp(500)
                 .setWoodCostCreate(10)
                 .setSteelCostCreate(5)
                 .setGasCostCreate(0)

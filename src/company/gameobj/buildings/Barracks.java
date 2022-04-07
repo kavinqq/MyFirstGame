@@ -57,7 +57,7 @@ public class Barracks extends Building{
             .setLevelC(0)
                 .setTechLevelNeedBuild(1)
             .setTechLevelNeedUpgrade(2)
-            .setHp(30)
+            .setHp(500)
             .setWoodCostCreate(20)
             .setSteelCostCreate(10)
             .setGasCostCreate(0)

@@ -58,7 +58,7 @@ public class Citizen extends Human {   //市民
      */
     public Citizen(int x, int y) {
         super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, CITIZEN_INITIAL_VALUE, CITIZEN_INITIAL_SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY, HUMAN_TYPE.CITIZEN, 6);
-        setMaxHp(100);
+        setMaxHp(300);
         // 預設人物出生方向朝下
         setWalkingDir(Global.Direction.DOWN);
 

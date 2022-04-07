@@ -7,8 +7,8 @@ import java.awt.*;
 public class ZombieKing extends Zombie {
     private static final int painterWidth = 128;
     private static final int painterHeight = 128;
-    private static final int colliderWidth = 128;
-    private static final int colliderHeight = 128;
+    private static final int colliderWidth = 400;
+    private static final int colliderHeight = 400;
 
     /**
      * 這種殭屍的預設攻擊力

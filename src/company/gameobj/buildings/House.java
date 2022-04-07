@@ -46,7 +46,7 @@ public class House extends Building {
                 .setLevelC(0)
                 .setTechLevelNeedBuild(1)
                 .setTechLevelNeedUpgrade(1)
-                .setHp(10)
+                .setHp(300)
                 .setWoodCostCreate(10)
                 .setSteelCostCreate(0)
                 .setGasCostCreate(0)

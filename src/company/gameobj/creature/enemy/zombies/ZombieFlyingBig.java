@@ -7,8 +7,8 @@ import java.awt.*;
 public class ZombieFlyingBig extends Zombie {
     private static final int painterWidth = 64;
     private static final int painterHeight = 64;
-    private static final int colliderWidth = 64;
-    private static final int colliderHeight = 64;
+    private static final int colliderWidth = 256;
+    private static final int colliderHeight = 256;
 
     public ZombieFlyingBig(int x, int y) {
         super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 4, new Path().img().zombies().zombieFlyingBig(), FLY_ABILITY.CAN_FLY, ZOMBIE_TYPE.ZOMBIE_FLYING_BIG);

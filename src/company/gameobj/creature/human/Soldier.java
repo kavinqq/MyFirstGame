@@ -56,8 +56,11 @@ public abstract class Soldier extends Human{
     }
 
     public void detect(Enemy enemy){
+        if(enemy==null){
+            return;
+        }
         if(enemy.isAlive() && this.detectRange().overlap(enemy.painter())){
-            getDelay().firstNoDelay();
+
             this.setAttackTarget(enemy);
         }
     }

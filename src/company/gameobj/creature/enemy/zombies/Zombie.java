@@ -7,6 +7,7 @@ import company.gameobj.creature.Creature;
 import company.gameobj.creature.enemy.Enemy;
 import company.gameobj.creature.human.Human;
 import company.gametest9th.utils.Animator;
+import company.gametest9th.utils.Vector;
 import company.gametest9th.utils.ZombieAnimator;
 
 import java.awt.*;
@@ -42,7 +43,7 @@ public abstract class Zombie extends Enemy {
      */
     //TODO: allow each type of zombie to set their own speed
 
-    private static final int SPEED = 1;
+    private static final int SPEED = 2;
     public Zombie(int x, int y, int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, String img, FLY_ABILITY flyAbility, ZOMBIE_TYPE zombieType) {
         //TODO: set targetX and targetY to correct parameter
         super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, value, SPEED, img, flyAbility, Animator.State.WALK);
@@ -53,11 +54,14 @@ public abstract class Zombie extends Enemy {
 
     public Zombie(int painterWidth, int painterHeight, int colliderWidth, int colliderHeight, int value, String img, FLY_ABILITY flyAbility, ZOMBIE_TYPE zombieType) {
         //TODO: set targetX and targetY to correct parameter
-        super(Global.random(Global.MAP_LEFT, Global.MAP_RIGHT), Global.random(Global.MAP_TOP, Global.MAP_BOTTOM), painterWidth, painterHeight, colliderWidth, colliderHeight, value, SPEED, img, flyAbility, Animator.State.WALK);
+        super((int)Global.getRandom().vx(), (int) Global.getRandom().vy(), painterWidth, painterHeight, colliderWidth, colliderHeight, value, SPEED, img, flyAbility, Animator.State.WALK);
         setMaxHp(50);
         this.zombieType = zombieType;
         this.setAnimator(new ZombieAnimator(this.zombieType.getValue(), Animator.State.WALK));
     }
+
+
+
 
     /**
      * 殭屍數量成長
@@ -66,11 +70,6 @@ public abstract class Zombie extends Enemy {
      * @return 當前此類殭屍的數量
      */
     public abstract int currentRoundCount(int round);
-
-//    @Override
-//    public void paintComponent(Graphics g) {
-//        this.getAnimator().paint(getWalkingDir(), painter().left(), painter().top(), painter().right(), painter().bottom(), g);
-//    }
 
     @Override
     public void update() {

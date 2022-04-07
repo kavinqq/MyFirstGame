@@ -110,7 +110,7 @@ public class Arsenal extends Building {
                 .setLevelC(0)
                 .setTechLevelNeedBuild(2)
                 .setTechLevelNeedUpgrade(2)
-                .setHp(30)
+                .setHp(800)
                 .setWoodCostCreate(30)
                 .setSteelCostCreate(10)
                 .setGasCostCreate(0)

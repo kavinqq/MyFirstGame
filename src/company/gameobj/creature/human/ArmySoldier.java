@@ -21,7 +21,7 @@ public class ArmySoldier extends Soldier  {  //士兵
      */
     public ArmySoldier(int x, int y, int level){
 
-        super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight, 100 + 3*level, SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY, SOLDIER_TYPE.ARMY);
+        super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight, 2 + 3*level, SPEED, new Path().img().actors().Actor2(), FLY_ABILITY.CANNOT_FLY, SOLDIER_TYPE.ARMY);
         setMaxHp(300);
         setBuildingOriginalX(Global.SUM_OF_CAMERA_MOVE_VX);
         setBuildingOriginalY(Global.SUM_OF_CAMERA_MOVE_VY);

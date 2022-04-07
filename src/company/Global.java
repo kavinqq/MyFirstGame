@@ -1,5 +1,7 @@
 package company;
 
+import company.gametest9th.utils.Vector;
+
 public class Global {
 
     /**
@@ -207,5 +209,15 @@ public class Global {
     public static void resetSumOfCameraMove() {
         SUM_OF_CAMERA_MOVE_VX = 0;
         SUM_OF_CAMERA_MOVE_VY = 0;
+    }
+
+    public static Vector getRandom() {
+        Vector v;
+        do {
+            v = new Vector(Global.random(Global.MAP_LEFT, Global.MAP_RIGHT), Global.random(MAP_TOP, MAP_BOTTOM));
+        }
+        while (0 < v.vx() && v.vx() < SCREEN_WIDTH || 0 < v.vy() && v.vy() < SCREEN_HEIGHT);
+        return v;
+
     }
 }

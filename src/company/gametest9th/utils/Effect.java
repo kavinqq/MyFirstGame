@@ -8,7 +8,6 @@ import java.awt.*;
 
 public abstract class Effect extends GameObject {
     private Delay totalDelay;
-    private Delay delay;
     private Image img;
     private boolean show;
 
@@ -16,23 +15,13 @@ public abstract class Effect extends GameObject {
         super(x,y,width,height);
         this.totalDelay = totalDelay;
         totalDelay.play();
-        this.delay = delay;
-        delay.loop();
         this.img = SceneController.getInstance().imageController().tryGetImage(img);
-        this.show = true;
     }
 
     @Override
     public void paintComponent(Graphics g) {
-
-        if(delay.count()){
-            show = !show;
-        }
-        if(show){
-            g.drawImage(img,this.painter().left(), this.painter().top(),null);
-
-            AudioResourceController.getInstance().play(new Path().sound().fight());
-        }
+        g.drawImage(img,this.painter().left(), this.painter().top(),null);
+        AudioResourceController.getInstance().play(new Path().sound().fight());
     }
 
     @Override
@@ -43,4 +32,5 @@ public abstract class Effect extends GameObject {
     public boolean isDue(){
         return this.totalDelay.count();
     }
+
 }

@@ -10,8 +10,8 @@ import java.awt.*;
 public class ZombieFlying extends Zombie {
     private static final int painterWidth = 64;
     private static final int painterHeight = 64;
-    private static final int colliderWidth = 64;
-    private static final int colliderHeight = 64;
+    private static final int colliderWidth = 256;
+    private static final int colliderHeight = 256;
 
     /**
      * 這種殭屍的預設攻擊力
