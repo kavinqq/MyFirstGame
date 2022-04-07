@@ -432,14 +432,15 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
                 node.updateStartTime = City.getGameTime();
                 sum++;
                 //若建造的是研究所，閒置數+1
-                if (node.building instanceof Lab) {
-                    freeLabNum++;
-                }
-                if ((node.building instanceof Arsenal)) {
-                    freeArsenalNum++;
-                }
-                //建造完成也要加血量
+//                if (node.building instanceof Lab) {
+//                    freeLabNum++;
+//                }
+//                if ((node.building instanceof Arsenal)) {
+//                    freeArsenalNum++;
+//                }
+                //音效
                 AudioResourceController.getInstance().play(new Path().sound().constructionComplete());
+                //建造完成也要加血量
                 node.building.addHpPercent();
                 //隨著時間建造物加血量
             }else if(node.buildEndTime > City.getGameTime()){
@@ -1228,31 +1229,31 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
      *就得可刪
      * @param damage 傷害值
      */
-    public void getDamage(int damage) {
-//        ArrayList<Building> hpZeroBuilding = new ArrayList<>();
-
-        //走訪每個BuildingType
-        for (int i = 0; i < BuildingType.values().length; i++) {
-            BuildingController.BuildingType type = BuildingType.values()[i];
-            //如果type的鏈表的size不為0，依序開始攻擊建築
-            if (type.list.size() != 0) {
-                //走訪建築類別的鏈表
-                for (int k = 0; k < type.list.size(); k++) {
-                    Building building = type.list.get(k).building;
-                    //讓建築受到傷害
-                    building.getDamage(damage);
-                    //建築hp為0就從鏈表刪除
-                    if (building.getCurrentHp() <= 1) {
-                        //將爆掉的建築進列表中紀錄
-//                        hpZeroBuilding.add(building);
-                        type.list.remove(k--);
-                        buildingNum--;
-                    }
-                }
-            }
-        }
-//        damageBuilding = hpZeroBuilding;
-    }
+//    public void getDamage(int damage) {
+////        ArrayList<Building> hpZeroBuilding = new ArrayList<>();
+//
+//        //走訪每個BuildingType
+//        for (int i = 0; i < BuildingType.values().length; i++) {
+//            BuildingController.BuildingType type = BuildingType.values()[i];
+//            //如果type的鏈表的size不為0，依序開始攻擊建築
+//            if (type.list.size() != 0) {
+//                //走訪建築類別的鏈表
+//                for (int k = 0; k < type.list.size(); k++) {
+//                    Building building = type.list.get(k).building;
+//                    //讓建築受到傷害
+//                    building.getDamage(damage);
+//                    //建築hp為0就從鏈表刪除
+//                    if (building.getCurrentHp() <= 1) {
+//                        //將爆掉的建築進列表中紀錄
+////                        hpZeroBuilding.add(building);
+//                        type.list.remove(k--);
+//                        buildingNum--;
+//                    }
+//                }
+//            }
+//        }
+////        damageBuilding = hpZeroBuilding;
+//    }
 
     /**
      * 被炸毀的建築總數字串

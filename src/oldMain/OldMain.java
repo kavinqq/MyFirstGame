@@ -107,7 +107,7 @@ public class OldMain {
                         case BUILD_BUILD: {
                             //建造
                             //show出全部的房屋種類+功能+需要資源
-                            city.showCanBuildBuilding();
+//                            city.showCanBuildBuilding();
                             //取得要建造的種類
                             choose = inputInt("請選擇要建造的建築(-1離開)：", HOUSE.instance().getId(), AIRPLANE_MILL.instance().getId());
                             if (choose == LEAVE) {
