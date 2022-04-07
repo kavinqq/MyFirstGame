@@ -574,7 +574,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                 // 這個人前往目的地
                 human.setTarget(targetX, targetY);
-                AudioResourceController.getInstance().play(new Path().sound().readyToWork());
+
+                if(human instanceof Citizen) {
+                    AudioResourceController.getInstance().play(new Path().sound().readyToWork());
+                } else if(human instanceof ArmySoldier){
+                    AudioResourceController.getInstance().play(new Path().sound().soldierWhat4());
+                } else {
+                    AudioResourceController.getInstance().play(new Path().sound().airForceYes());
+                }
 
                 // 一旦有人到目的地 就++
                 count++;
