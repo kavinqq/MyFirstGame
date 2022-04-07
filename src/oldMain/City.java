@@ -330,61 +330,6 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
     }
 
     /**
-     * 只派軍隊去防禦殭屍
-     * 舊的可刪
-     * @param zombieTroop 所要防禦的殭屍群
-     */
-    public void fightZombies(ZombieKingdom.ZombieTroop zombieTroop) {
-        //這個數值是 最終結果 也就是 是否能夠抵擋這一波殭屍潮的判斷數 >0 死亡  <=0 存活
-
-        //將空中與地面的殭屍部隊攻擊分開看
-        int landAttack = zombieTroop.getLandAttack();
-        int airAttack = zombieTroop.getAirAttack();
-        //空中殭屍攻擊空中部隊
-        if (airAttack > 0 && airAttack >= military.getAirForceValue()) {
-            airAttack -= military.getAirForceValue();
-            military.getAirForceWipedOut();
-        } else {
-            military.getAirForceHarmed(airAttack);
-            airAttack = 0;
-        }
-        //空中殭屍攻擊平民
-        if (airAttack > 0 && airAttack >= citizens.getValueOfCitizens()) {
-            airAttack -= citizens.getValueOfCitizens();
-            citizens.getWipedOut();
-        } else {
-            citizens.getHarmed(airAttack);
-            airAttack = 0;
-        }
-        //空中殭屍攻擊建築
-        if (airAttack > 0) {
-            buildings.getDamage(airAttack);
-            airAttack = 0;
-        }
-        //地面殭屍攻擊地面部隊
-        if (landAttack > 0 && landAttack >= military.getArmyValue()) {
-            landAttack -= military.getArmyValue();
-            military.getArmyWipedOut();
-        } else {
-            military.getArmyHarmed(landAttack);
-            landAttack = 0;
-        }
-        //地面殭屍攻擊平民
-        if (landAttack > 0 && landAttack >= citizens.getValueOfCitizens()) {
-            landAttack -= citizens.getValueOfCitizens();
-            citizens.getWipedOut();
-        } else {
-            citizens.getHarmed(landAttack);
-            landAttack = 0;
-        }
-        //地面殭屍攻擊建築
-        if (landAttack > 0) {
-            buildings.getDamage(landAttack);
-            //landAttack = 0;
-        }
-    }
-
-    /**
      * 顯示目前城市的所有資訊
      */
     public void showInfo() {

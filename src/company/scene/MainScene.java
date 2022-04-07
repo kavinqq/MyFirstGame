@@ -17,6 +17,7 @@ import company.gameobj.BuildingController;
 import company.gameobj.FogOfWar;
 import company.gameobj.Rect;
 import company.gameobj.buildings.Arsenal;
+import company.gameobj.buildings.Base;
 import company.gameobj.buildings.Building;
 import company.gameobj.creature.Creature;
 import company.gameobj.creature.enemy.Enemy;
@@ -615,15 +616,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         humans.addAll(city.getMilitary().getArmy());
         for (BuildingType value : values()) {
             for (int j = 0; j < value.list().size(); j++) {
-                Building allBuildings = value.list().get(j).getBuilding();
+                Building building = value.list().get(j).getBuilding();
 
                 for (Human human : humans){
 
                     //如果人物走到與建築重疊了，將其拉回剛好接觸但不重疊的位置並且讓人物知道這個方向被擋住了，換個方向
-                    if (human.painter().overlap(allBuildings.painter())) {
-
+                    if (human.isCollision(building)) {
                         // 如果村民 是 採集完成的狀態
-                        if(human instanceof Citizen){
+                        if(human instanceof Citizen && BuildingType.BASE.list().get(0).getBuilding() instanceof Base && human.isCollision(BuildingType.BASE.list().get(0).getBuilding())){
                             Citizen citizen = (Citizen) human;
                             if (citizen.getResourceNum() != 0) {
 
@@ -641,37 +641,37 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                             }
                         }
 
-                        if (allBuildings.isCovering(human.targetX(), human.targetY())) {
+                        if (building.isCovering(human.targetX(), human.targetY())) {
                             human.stop();
                         }
 
                         switch (human.getWalkingDir()) {
 
                             case RIGHT: {
-                                if (human.touchLeftOf(allBuildings)) {
-                                    human.translateX(-1 * (human.painter().right() - allBuildings.painter().left()));
+                                if (human.touchLeftOf(building)) {
+                                    human.translateX(-1 * (human.painter().right() - building.painter().left()));
                                     human.setBlockedDir(Direction.RIGHT);
                                 }
                                 break;
                             }
                             case LEFT: {
-                                if (human.touchRightOf(allBuildings)) {
-                                    human.translateX(allBuildings.painter().right() - human.painter().left());
+                                if (human.touchRightOf(building)) {
+                                    human.translateX(building.painter().right() - human.painter().left());
                                     human.setBlockedDir(Direction.LEFT);
                                 }
                                 break;
                             }
                             case UP: {
 
-                                if (human.touchBottomOf(allBuildings)) {
-                                    human.translateY(allBuildings.painter().bottom() - human.painter().top());
+                                if (human.touchBottomOf(building)) {
+                                    human.translateY(building.painter().bottom() - human.painter().top());
                                     human.setBlockedDir(Direction.UP);
                                 }
                                 break;
                             }
                             case DOWN: {
-                                if (human.touchTopOf(allBuildings)) {
-                                    human.translateY(-1 * (human.painter().bottom() - allBuildings.painter().top()));
+                                if (human.touchTopOf(building)) {
+                                    human.translateY(-1 * (human.painter().bottom() - building.painter().top()));
                                     human.setBlockedDir(Direction.DOWN);
                                 }
                                 break;
@@ -680,25 +680,25 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     } else if (human.getBlockedDir() != null) {
                         switch (human.getBlockedDir()) {
                             case LEFT: {
-                                if (!human.touchRightOf(allBuildings)) {
+                                if (!human.touchRightOf(building)) {
                                     human.setNoBlockedDir();
                                 }
                                 break;
                             }
                             case RIGHT: {
-                                if (!human.touchLeftOf(allBuildings)) {
+                                if (!human.touchLeftOf(building)) {
                                     human.setNoBlockedDir();
                                 }
                                 break;
                             }
                             case UP: {
-                                if (!human.touchBottomOf(allBuildings)) {
+                                if (!human.touchBottomOf(building)) {
                                     human.setNoBlockedDir();
                                 }
                                 break;
                             }
                             case DOWN: {
-                                if (!human.touchTopOf(allBuildings)) {
+                                if (!human.touchTopOf(building)) {
                                     human.setNoBlockedDir();
                                 }
                                 break;
@@ -743,7 +743,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                 }
 
                                 // 村民開始採集
-                                citizen.collecting(allBuildings.painter().centerX(), allBuildings.painter().centerY(), resourceObj.getResourceTypeStr());
+                                citizen.collecting(building.painter().centerX(), building.painter().centerY(), resourceObj.getResourceTypeStr());
                             }
                         }
                     }
@@ -1003,7 +1003,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                     } else if (zombie.getAttackTarget() instanceof Human) {
                         Human human = (Human) zombie.getAttackTarget();
-                        human.stop();
+                        //human.stop();
                         human.getAttacked(zombie.getValue());
                         if (!human.isAlive()) {
                             zombie.setAttackTargetToNull();
