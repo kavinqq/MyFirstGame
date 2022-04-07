@@ -221,15 +221,25 @@ public class Path {
                 return this + "/specialSteel.png";
             }
 
-            public String fog() {return this + "/fog.png";}
+            public String fog() {
+                return this + "/fog.png";
+            }
 
-            public String fog2() {return this + "/fog2.jpg";}
+            public String fog2() {
+                return this + "/fog2.jpg";
+            }
 
-            public String fog3() {return this + "/fog3.jpg";}
+            public String fog3() {
+                return this + "/fog3.jpg";
+            }
 
-            public String chooseUnit() { return this + "/chooseUnit.png";}
+            public String chooseUnit() {
+                return this + "/chooseUnit.png";
+            }
 
-            public String target() { return this + "/target.png";}
+            public String target() {
+                return this + "/target.png";
+            }
 
         }
 
@@ -276,8 +286,6 @@ public class Path {
             public String Base() {
                 return this + "/BaseAndFoundation.png";
             }
-
-            ;
 
             public String Arsenal() {
                 return this + "/arsenal.png";
@@ -357,8 +365,16 @@ public class Path {
                 return this + "/tarmac.png";
             }
 
-            public String magic(){
-                return this+"/magic.png";
+            public String magic() {
+                return this + "/magic.png";
+            }
+
+            public String victory() {
+                return this + "/Victory.png";
+            }
+
+            public String lose() {
+                return this + "/Lose.png";
             }
         }
 
@@ -426,19 +442,29 @@ public class Path {
             return this + "/constructionComplete.wav";
         }
 
-        public String soldierWhat3() { return this + "/SoldierWhat3.wav";}
+        public String soldierWhat3() {
+            return this + "/SoldierWhat3.wav";
+        }
 
-        public String soldierWhat4() { return this + "/SoldierWhat4.wav";}
+        public String soldierWhat4() {
+            return this + "/SoldierWhat4.wav";
+        }
 
         public String underAttack() {
             return this + "/underAttack.wav";
         }
 
-        public String fight(){ return this + "/fight.wav";}
+        public String fight() {
+            return this + "/fight.wav";
+        }
 
-        public String airForceWhat() { return this + "/airForceWhat.wav";}
+        public String airForceWhat() {
+            return this + "/airForceWhat.wav";
+        }
 
-        public String airForceYes() { return this + "/airForceYes.wav";}
+        public String airForceYes() {
+            return this + "/airForceYes.wav";
+        }
     }
 
 
