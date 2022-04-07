@@ -15,12 +15,12 @@ public class ZombieWitch extends Zombie {
      */
     public ZombieWitch(int x, int y) {
         super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 5, new Path().img().zombies().zombieWitch(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_WITCH);
-        setMaxHp(400);
+        setMaxHp(800);
     }
 
     public ZombieWitch() {
         super( painterWidth, painterHeight, colliderWidth, colliderHeight, 5, new Path().img().zombies().zombieWitch(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_WITCH);
-        setMaxHp(400);
+        setMaxHp(800);
     }
 
 

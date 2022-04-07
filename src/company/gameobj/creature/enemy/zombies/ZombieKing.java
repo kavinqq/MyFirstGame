@@ -15,12 +15,12 @@ public class ZombieKing extends Zombie {
      */
     public ZombieKing(int x, int y) {
         super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 6, new Path().img().zombies().zombieKing(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_KING);
-        setMaxHp(800);
+        setMaxHp(400);
     }
 
     public ZombieKing() {
         super( painterWidth, painterHeight, colliderWidth, colliderHeight, 6, new Path().img().zombies().zombieKing(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_KING);
-        setMaxHp(800);
+        setMaxHp(400);
     }
 
 
@@ -30,8 +30,5 @@ public class ZombieKing extends Zombie {
     }
 
 
-    @Override
-    public void update() {
 
-    }
 }
