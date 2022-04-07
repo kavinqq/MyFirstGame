@@ -39,6 +39,5 @@ public class Main {
         frame.add(kernel);
         frame.setVisible(true);
         kernel.run(Global.IS_DEBUG);
-
     }
 }
