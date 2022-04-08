@@ -810,231 +810,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
-/*
-        for (BuildingType value : values()) {
-            for (int j = 0; j < value.list().size(); j++) {
-                Building building = value.list().get(j).getBuilding();
-
-                for (Human human : humans){
-
-                    //如果人物走到與建築重疊了，將其拉回剛好接觸但不重疊的位置並且讓人物知道這個方向被擋住了，換個方向
-                    if (human.isCollision(building)) {
-                        // 如果村民 是 採集完成的狀態
-                        if(human instanceof Citizen && BuildingType.BASE.list().get(0).getBuilding() instanceof Base && human.isCollision(BuildingType.BASE.list().get(0).getBuilding())){
-                            Citizen citizen = (Citizen) human;
-                            if (citizen.getResourceNum() != 0) {
-
-                                // 呼叫city的方法去實際放資源
-                                city.gainResource(citizen.getResourceNum(), citizen.getResourceType());
-
-                                // reset該位村民的 身上資源狀態
-                                citizen.setResourceNum();
-                                citizen.setResourceType();
-
-                                // 返回採集點
-                                citizen.setTarget(citizen.getResourceTargetX(), citizen.getResourceTargetY());
-                            }
-                        }
-                        else if (building.isCovering(human.targetX(), human.targetY())) {
-                            human.stop();
-                        }
-
-                        switch (human.getWalkingDir()) {
-                            case RIGHT: {
-                                if (human.touchLeftOf(building)) {
-                                    human.translateX(-1 * (human.painter().right() - building.painter().left()));
-                                    human.setBlockedDir(Direction.RIGHT);
-                                }
-                                break;
-                            }
-                            case LEFT: {
-                                if (human.touchRightOf(building)) {
-                                    human.translateX(building.painter().right() - human.painter().left());
-                                    human.setBlockedDir(Direction.LEFT);
-                                }
-                                break;
-                            }
-                            case UP: {
-
-                                if (human.touchBottomOf(building)) {
-                                    human.translateY(building.painter().bottom() - human.painter().top());
-                                    human.setBlockedDir(Direction.UP);
-                                }
-                                break;
-                            }
-                            case DOWN: {
-                                if (human.touchTopOf(building)) {
-                                    human.translateY(-1 * (human.painter().bottom() - building.painter().top()));
-                                    human.setBlockedDir(Direction.DOWN);
-                                }
-                                break;
-                            }
-                        }
-                    } else if (human.getBlockedDir() != null) {
-                        switch (human.getBlockedDir()) {
-                            case LEFT: {
-                                if (!human.touchRightOf(building)) {
-                                    human.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                            case RIGHT: {
-                                if (!human.touchLeftOf(building)) {
-                                    human.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                            case UP: {
-                                if (!human.touchBottomOf(building)) {
-                                    human.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                            case DOWN: {
-                                if (!human.touchTopOf(building)) {
-                                    human.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                        }
-                    } else if (human instanceof Citizen){
-                        Citizen citizen = (Citizen) human;
-
-                        // 遍尋一次 資源List
-                        for (int i = 0; i < resourceSystem.size(); i++) {
-
-                            // 先把資源堆記錄下來 不用每次都get一次
-                            ResourceObj resourceObj = resourceSystem.get(i);
-
-                            //如果和資源碰撞 && 我的目的地就是在資源裡面 && 村民看的到的話(沒寫這個條件 他會重複計算)
-                            if (citizen.isCollision(resourceObj) && citizen.isTargetInObj(resourceObj) && citizen.getVisible()) {
-
-                                // 把資源的位置記起來
-                                citizen.setResourceTargetX(resourceObj.painter().centerX());
-                                citizen.setResourceTargetY(resourceObj.painter().centerY());
-
-                                //開始採集
-
-                                if (resourceObj.getResourceTypeStr().equals("WOOD")) { // 如果採集的是木頭
-
-                                    // 資源堆被採集了(目前單次最大能採多少木頭數量)
-                                    resourceObj.beCollected(Citizen.getMaxCarryWood());
-                                } else if (resourceObj.getResourceTypeStr().equals("STEEL")) { // 如果採集的是鋼鐵
-
-                                    // 資源堆被採集了(目前單次最大能採多少鋼鐵數量)
-                                    resourceObj.beCollected(Citizen.getMaxCarrySteel());
-                                }
-
-                                // 如果資源採乾了
-                                if (resourceObj.getTotalNum() <= 0) {
-
-                                    // 移除他
-                                    resourceSystem.remove(i);
-
-                                    //因為是ArrayList 移除後 下一個會馬上接上來
-                                    i--;
-                                }
-
-                                // 村民開始採集
-                                citizen.collecting(building.painter().centerX(), building.painter().centerY(), resourceObj.getResourceTypeStr());
-                            }
-                        }
-                    }
-
-                    // 下面的switch 是碰到邊界的狀況
-                    switch (human.getWalkingDir()) {
-
-                        // 如果右邊碰到了邊界
-                        case RIGHT: {
-                            if (human.touchRight()) {
-
-                                // 把人物移動回來 與邊界切齊
-                                human.translateX(-1 * (human.painter().right() - SCREEN_WIDTH));
-
-                                // 人物停止移動
-                                human.stop();
-                            }
-                            break;
-                        }
-
-                        // 如果左邊碰到了邊界
-                        case LEFT: {
-                            if (human.touchLeft()) {
-
-                                // 把人物移動回來 與邊界切齊
-                                human.translateX(-1 * human.painter().left());
-
-                                // 人物停止移動
-                                human.stop();
-                            }
-                            break;
-                        }
-
-                        // 如果上面碰到了邊界
-                        case UP: {
-                            if (human.touchTop()) {
-
-                                // 把人物移動回來 與邊界切齊
-                                human.translateY(-1 * human.painter().top());
-
-                                // 人物停止移動
-                                human.stop();
-                            }
-                            break;
-                        }
-
-                        // 如果下面碰到了邊界
-                        case DOWN: {
-                            if (human.touchBottom()) {
-                                // 把人物移動回來 與邊界切齊
-                                human.translateY(-1 * (human.painter().bottom() - SCREEN_HEIGHT));
-
-                                // 人物停止移動
-                                human.stop();
-                            }
-                            break;
-                        }
-                    }
-                }
->>>>>>> 51107359ef59bd2bb135757459288dad8aaebca5
-            }
-        }
-
-
- */
-
-//        Building allBuildings = BuildingType.BASE.instance();
-
-        //TODO: Del
-//        for (ArmySoldier armySoldier : city.getMilitary().getArmy()){
-//            if (armySoldier.getAttackTarget() == null) {
-//                armySoldier.detect(zombieNormal);
-//            }
-//
-//            if (armySoldier.getAttackTarget() != null) {
-//                if (armySoldier.isCollision(armySoldier.getAttackTarget())) {
-//                    Enemy enemy = (Enemy) armySoldier.getAttackTarget();
-//                    enemy.stop();
-//                    armySoldier.stop();
-//
-//                    if (enemy.getFightEffect() == null) {
-//                        enemy.setFightEffect(new FightEffect(enemy.painter().left(), enemy.painter().top()));
-//                        enemy.getAttacked(armySoldier.getValue());
-//                        System.out.println("RRRRR");
-//                        System.out.println(enemy.getHp());
-//                    } else {
-//                        if (enemy.getFightEffect().isDue()) {
-//                            enemy.setFightEffect(null);
-//                            if (!enemy.isAlive()) {
-//                                armySoldier.setAttackTargetToNull();
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-
-
         //士兵打殭屍
         for (ArmySoldier armySoldier : city.getMilitary().getArmy()) {
             if(armySoldier.getAttackTarget()!=null && !((Creature) armySoldier.getAttackTarget()).isAlive()){
@@ -1056,16 +831,13 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     enemy.stop();
                     armySoldier.stop();
 
-                    if (enemy.getFightEffect() == null) {
+                    if(enemy.isAlive()){
                         enemy.setFightEffect(new FightEffect(enemy.painter().left(), enemy.painter().top()));
                         enemy.getAttacked(armySoldier.getValue());
-                    } else {
-                        if (enemy.getFightEffect().isDue()) {
-                            enemy.setFightEffect(null);
-                            if (!enemy.isAlive()) {
-                                armySoldier.setAttackTargetToNull();
-                            }
-                        }
+                    }
+
+                    if(!enemy.isAlive()){
+                        armySoldier.setAttackTargetToNull();
                     }
                 }
                 else{
@@ -1081,19 +853,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 ArrayList<Zombie> allZombie = new ArrayList<>();
                 allZombie.addAll(zombieKingdom.getZombieTroop().getAirTroop());
                 allZombie.addAll(zombieKingdom.getZombieTroop().getLandTroop());
-//                for (Zombie zombie : zombieKingdom.getZombieTroop().getAirTroop()) {
-//                    airForceSoldier.detect(zombie);
-//                    if (airForceSoldier.getAttackTarget() != null) {
-//                        break;
-//                    }
-//                }
-//
-//                for (Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()){
-//                    airForceSoldier.detect(zombie);
-//                    if (airForceSoldier.getAttackTarget() != null) {
-//                        break;
-//                    }
-//                }
+
                 for (Zombie zombie : allZombie){
                     airForceSoldier.detect(zombie);
                     if (airForceSoldier.getAttackTarget() != null) {
@@ -1107,16 +867,13 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     enemy.stop();
                     airForceSoldier.stop();
 
-                    if (enemy.getFightEffect() == null) {
-                        enemy.setFightEffect(new FightEffect(enemy.painter().centerX(), enemy.painter().centerY()));
+                    if(enemy.isAlive()){
+                        enemy.setFightEffect(new FightEffect(enemy.painter().left(), enemy.painter().top()));
                         enemy.getAttacked(airForceSoldier.getValue());
-                    } else {
-                        if (enemy.getFightEffect().isDue()) {
-                            enemy.setFightEffect(null);
-                            if (!enemy.isAlive()) {
-                                airForceSoldier.setAttackTargetToNull();
-                            }
-                        }
+                    }
+
+                    if(!enemy.isAlive()){
+                        airForceSoldier.setAttackTargetToNull();
                     }
                 }
                 else{
@@ -1177,33 +934,37 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             if (zombie.getAttackTarget() != null) {
                 if (zombie.isCollision(zombie.getAttackTarget())) {
                     zombie.stop();
+
                     if (zombie.getAttackTarget() instanceof Creature) {
                         ((Creature) zombie.getAttackTarget()).stop();
                     }
 
                     GameObject gameObject = zombie.getAttackTarget();
-                    if (gameObject.getFightEffect() == null) {
-                        gameObject.setFightEffect(new FightEffect(gameObject.painter().centerX(), gameObject.painter().centerY()));
-                    } else {
-                        if (gameObject.getFightEffect().isDue()) {
-                            gameObject.setFightEffect(null);
-                        }
-                    }
+//                    if (gameObject.getFightEffect() == null) {
+//                        gameObject.setFightEffect(new FightEffect(gameObject.painter().centerX(), gameObject.painter().centerY()));
+//                    } else {
+//                        if (gameObject.getFightEffect().isDue()) {
+//                            gameObject.setFightEffect(null);
+//                        }
+//                    }
+                    gameObject.setFightEffect(new FightEffect(gameObject.painter().centerX(), gameObject.painter().centerY()));
 
                     if (zombie.getAttackTarget() instanceof Building) {
 
                         Building building = (Building) zombie.getAttackTarget();
-                        building.getDamage(zombie.getValue());
-                        if (building.getCurrentHp() <= 0) {
+                        if(building.getCurrentHp()>0){
+                            building.getDamage(zombie.getValue());
+                        }
+                        else{
                             zombie.setAttackTargetToNull();
                         }
-
-
                     } else if (zombie.getAttackTarget() instanceof Human) {
                         Human human = (Human) zombie.getAttackTarget();
                         //human.stop();
-                        human.getAttacked(zombie.getValue());
-                        if (!human.isAlive()) {
+                        if(human.isAlive()){
+                            human.getAttacked(zombie.getValue());
+                        }
+                        else{
                             zombie.setAttackTargetToNull();
                         }
                     }

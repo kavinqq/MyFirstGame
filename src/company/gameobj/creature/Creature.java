@@ -684,10 +684,14 @@ public abstract class Creature extends GameObject {
         g.setColor(Color.green);
         g.fillRect(painter().left(),painter().bottom(),painter().width()*hp/maxHp,Global.HP_HEIGHT);
         if (this.getFightEffect() != null) {
-            //this.getFightEffect().paintComponent(g);
-            this.getFightEffect().paintEffect(g, this.painter().left(), this.painter().centerY());
+            if(this.getFightEffect().isDue()){
+                this.setFightEffect(null);
+            }
+            else{
+                this.getFightEffect().paintEffect(g, this.painter().left(), this.painter().centerY());
 //            this.getFightEffect().paintComponent(g);
 //            this.getFightEffect().setCenter(this.painter().centerX(), this.painter().centerY());
+            }
         }
     }
 
