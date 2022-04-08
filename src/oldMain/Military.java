@@ -31,6 +31,8 @@ public class Military {
     private int addPositionX;
     private int addPositionY;
 
+    // 總士兵數量
+    private int totalSoldier;
 
     private List<Human> soldiersInBox;
 
@@ -53,6 +55,8 @@ public class Military {
         upDateAirForceValue();
 
         soldiersInBox = new ArrayList<>();
+
+        totalSoldier = 0;
     }
 
     /**
@@ -368,5 +372,9 @@ public class Military {
                 i--;
             }
         }
+    }
+
+    public int getTotalSoldier(){
+        return army.size() + airForce.size();
     }
 }

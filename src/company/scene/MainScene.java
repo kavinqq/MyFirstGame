@@ -175,7 +175,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         // 迷霧
         fogOfWar = new FogOfWar();
 
-//        AudioResourceController.getInstance().loop(new Path().sound().mainSceneBGM(), 2);
+        AudioResourceController.getInstance().loop(new Path().sound().bgm2(), 3);
 
         //TODO: Del
 //        zombieNormal = new ZombieNormal(1500, 700);
@@ -286,7 +286,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 更新StatusBar 各項數據
         StatusBar.instance().setTimeString(startTime);
-        StatusBar.instance().updateResource(city.getResource().getTotalWood(), city.getResource().getTotalSteel(), city.getResource().getTotalGas(), city.getTotalCitizen());
+        StatusBar.instance().updateResource(city.getResource().getTotalWood(), city.getResource().getTotalSteel(), city.getResource().getTotalGas(), city.getTotalCitizen(), city.getTotalSoldier());
 
 
         // 處理鏡頭移動

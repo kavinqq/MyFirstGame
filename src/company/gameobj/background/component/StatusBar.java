@@ -34,6 +34,7 @@ public class StatusBar {
     private int totalSteel;// 當前鋼鐵總量
     private int totalGas;  // 當前瓦斯總量
     private int numOfCitizen;// 當前村民總量
+    private int numOfSoldier;// 當前士兵數量
 
     private int moveX;
     private int moveY;
@@ -58,6 +59,7 @@ public class StatusBar {
         totalSteel = 0;
         totalGas = 0;
         numOfCitizen = 0;
+        numOfSoldier = 0;
 
         // 鏡頭移動時的物件移動量
         moveY = 0;
@@ -122,6 +124,7 @@ public class StatusBar {
 
         // 士兵數量(Icon + 數量)
         g.drawImage(soldierNumIcon, ICON_START_X + ICON_GAP * 4, ICON_START_Y + moveY, ICON_WIDTH, ICON_HEIGHT, null);
+        g.drawString("" + numOfSoldier , ICON_START_X + ICON_WIDTH / 2 + ICON_GAP * 4 + 100, ICON_START_Y + 50 + moveY);
 
         //遊戲時間
         g.drawImage(timeIcon, ICON_START_X + ICON_GAP * 5, ICON_START_Y + moveY, ICON_WIDTH, ICON_HEIGHT, null);
@@ -163,10 +166,11 @@ public class StatusBar {
 //        System.out.println("StatusBar moveY: " + moveY);
 //    }
 
-    public void updateResource(int totalWood, int totalSteel, int totalGas, int numOfCitizen) {
+    public void updateResource(int totalWood, int totalSteel, int totalGas, int numOfCitizen, int numOfSoldier) {
         this.totalWood = totalWood;
         this.totalSteel = totalSteel;
         this.totalGas = totalGas;
         this.numOfCitizen = numOfCitizen;
+        this.numOfSoldier = numOfSoldier;
     }
 }
