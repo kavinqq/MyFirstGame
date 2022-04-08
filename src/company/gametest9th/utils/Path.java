@@ -491,6 +491,8 @@ public class Path {
 
         public String bgm2() { return this + "/BGM2.wav";}
 
+        public String victoryBGM() { return this + "/victoryBGM.wav";}
+
 
     }
 

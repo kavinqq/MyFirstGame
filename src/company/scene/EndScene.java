@@ -1,15 +1,14 @@
 package company.scene;
 
 import company.Global;
+import company.controllers.AudioResourceController;
 import company.controllers.SceneController;
-import company.gameobj.MenuChoice;
-import company.gameobj.background.component.StatusBar;
+
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.EventListener;
 
 public class EndScene extends Scene implements CommandSolver.KeyListener {
 
@@ -29,6 +28,7 @@ public class EndScene extends Scene implements CommandSolver.KeyListener {
 
         if(isWin){
             img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().victory());
+            AudioResourceController.getInstance().play(new Path().sound().victoryBGM());
         }else{
             img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().lose());
         }
@@ -51,6 +51,9 @@ public class EndScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void sceneEnd() {
+
+        AudioResourceController.getInstance().stop(new Path().sound().victoryBGM());
+
         img = null;
     }
 
