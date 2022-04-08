@@ -1,5 +1,6 @@
 package company.gameobj.creature.human;
 
+import company.Global;
 import company.gameobj.GameObject;
 import company.gameobj.buildings.Base;
 import oldMain.OldMain;
@@ -38,6 +39,9 @@ public class Citizens {
      */
     private int numOfMiningCitizens;
 
+    //3*5的位置不會重疊
+    private int addPositionX;
+    private int addPositionY;
 
     /**
      * 創建新的居民群體並將size設成城市所傳入的預設值
@@ -54,11 +58,8 @@ public class Citizens {
 
         this.numOfMiningCitizens = 0;
 
-        this.add(defaultNumOfCitizens, Base.BASE_X-100,Base.BASE_Y);
+        this.add(defaultNumOfCitizens, Base.BASE_X - 100, Base.BASE_Y);
 
-
-        // 上限10個
-        maxCitizen = 10;
 
         // 共有幾個村民
         count = 0;
@@ -72,8 +73,8 @@ public class Citizens {
      *
      * @param num 要加幾個村民
      */
-    public void add(int num,int x,int y) {
-        if(num <= 0){
+    public void add(int num, int x, int y) {
+        if (num <= 0) {
             return;
         }
         // 新的村民宣告
@@ -84,13 +85,17 @@ public class Citizens {
 
         // 下面是新增村民之後 他的出生地點 [所有XY數值都是測試用 沒意義]
         for (int i = 0; i < num; i++) {
-            if(i%6==5){
-                x=x-74;
+            if (addPositionY % 5 == 0) {
+                addPositionX++;
+            }
+            if (citizens.size() >= Global.CitizenMax) {
+                return;
             }
 //            citizen = new Citizen(Global.SCREEN_X/2, Global.SCREEN_Y/2);//TODO: set the correct x and y
-            citizen = new Citizen(x, y + i%5 * 74); //100 ->x 400-y
+            citizen = new Citizen(x - addPositionX % 3 * 74, y + addPositionY % 5 * 74); //100 ->x 400-y
             this.valueOfCitizens += citizen.getValue();
             this.citizens.add(citizen);
+            addPositionY++;
         }
     }
 
@@ -252,19 +257,18 @@ public class Citizens {
     public void updateAll() {
 
         Citizen citizen;
-        for (int i=0; i<citizens.size(); i++) {
+        for (int i = 0; i < citizens.size(); i++) {
             citizen = citizens.get(i);
-            if(citizen.isAlive()){
+            if (citizen.isAlive()) {
                 citizen.update();
-            }
-            else{
+            } else {
                 citizens.remove(i);
                 i--;
             }
         }
     }
 
-    public void cameraMove(){
+    public void cameraMove() {
         for (Citizen citizen : citizens) {
             citizen.cameraMove();
         }
