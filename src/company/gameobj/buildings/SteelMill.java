@@ -43,7 +43,7 @@ public class SteelMill extends Building{
                 .setTechLevelNeedBuild(1)
                 .setTechLevelNeedUpgrade(2)
                 .setLevelC(0)
-                .setHp(200)
+                .setHp(350)
                 .setWoodCostCreate(15)
                 .setSteelCostCreate(5)
                 .setGasCostCreate(0)

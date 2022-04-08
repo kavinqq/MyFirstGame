@@ -139,11 +139,14 @@ public class Global {
     public static int HP_HEIGHT = 10;
 
     //村民預設值
-    public static final int CitizenNum = 3;
-    public static final int CitizenMax = 5;
+    public static final int CitizenNum=3;
+    public static final int CitizenMax=6;
 
-    public static final int INITIAL_ARMY_SIZE = 1;//10;
-    public static final int ArmyMax = 10;
+
+
+    public static final int INITIAL_ARMY_SIZE = 3;//10;
+    public static final int ArmyMax=10;
+
 
     public static final int INITIAL_AIR_SIZE = 0;
 

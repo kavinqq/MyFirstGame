@@ -54,8 +54,8 @@ public class Lab extends Building {
                 .setWoodCostCreate(10)
                 .setSteelCostCreate(5)
                 .setGasCostCreate(0)
-                .setWoodCostLevelUpC(50)
-                .setSteelCostLevelUpC(20)
+                .setWoodCostLevelUpC(40)
+                .setSteelCostLevelUpC(25)
                 .setGasCostLevelup(0)
                 .setImgPath(new Path().img().building().Lab());
         imgInit();

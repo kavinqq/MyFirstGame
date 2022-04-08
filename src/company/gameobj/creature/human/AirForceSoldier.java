@@ -16,11 +16,11 @@ public class AirForceSoldier extends Soldier{
     private static final int painterHeight = 64;
     public static final int colliderWidth = 400;
     public static final int colliderHeight = 400;
-    private static final int SPEED = 10;
+    private static final int SPEED = 9;
 
     public AirForceSoldier(int x, int y, int level){
-        super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight, 2 + 2*level + 100, SPEED, new Path().img().actors().Actor2(),FLY_ABILITY.CAN_FLY, SOLDIER_TYPE.AIR_FORCE);
-        setMaxHp(600);
+        super(x,y, painterWidth, painterHeight, colliderWidth, colliderHeight, 100*level + 100, SPEED, new Path().img().actors().Actor2(),FLY_ABILITY.CAN_FLY, SOLDIER_TYPE.AIR_FORCE);
+        setMaxHp(800);
         setBuildingOriginalX(Global.SUM_OF_CAMERA_MOVE_VX);
         setBuildingOriginalY(Global.SUM_OF_CAMERA_MOVE_VY);
         // 預設人物出生方向朝下

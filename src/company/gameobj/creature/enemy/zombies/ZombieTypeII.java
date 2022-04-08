@@ -14,12 +14,12 @@ public class ZombieTypeII extends Zombie {
      * 這種殭屍的預設攻擊力
      */
     public ZombieTypeII(int x, int y) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 2, new Path().img().zombies().zombieTypeII(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_TYPE_II);
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 1, new Path().img().zombies().zombieTypeII(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_TYPE_II);
         setMaxHp(120);
     }
 
     public ZombieTypeII() {
-        super( painterWidth, painterHeight, colliderWidth, colliderHeight, 2, new Path().img().zombies().zombieTypeII(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_TYPE_II);
+        super( painterWidth, painterHeight, colliderWidth, colliderHeight, 1, new Path().img().zombies().zombieTypeII(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_TYPE_II);
         setMaxHp(120);
     }
 
