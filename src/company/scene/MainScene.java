@@ -604,6 +604,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         humans.addAll(city.getCitizens().getAllCitizens());
         humans.addAll(city.getMilitary().getArmy());
 
+
+        //檢查人物與房屋的碰撞情形
         for (Human human : humans) {
             boolean get = false;
             for (BuildingType value : values()) {
@@ -613,6 +615,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     if (human.getBlockedDir() == null && human.isCollision(building)) {
                         get = true;
                         human.setBlockingObject(building);
+
+                        //如果人物是市民且撞到的建築物是主堡 那就檢查是否需有採集的資源需要放下
                         if (human instanceof Citizen && BuildingType.BASE.list().get(0).getBuilding() instanceof Base && human.isCollision(BuildingType.BASE.list().get(0).getBuilding())) {
                             Citizen citizen = (Citizen) human;
                             if (building.isCovering(citizen.targetX(), citizen.targetY()) && citizen.getResourceNum() != 0) {
@@ -627,6 +631,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                 // 返回採集點
                                 citizen.setTarget(citizen.getResourceTargetX(), citizen.getResourceTargetY());
                             }
+                        //不然如果是目的地在房屋裡面的話就讓人物停止
                         } else if (building.isCovering(human.targetX(), human.targetY())) {
                             human.stop();
                         }
@@ -662,6 +667,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                 break;
                             }
                         }
+                    //當人物是有在某個方向被阻擋住 並且 已經脫離該阻擋物的時候
                     } else if (human.getBlockedDir() != null && !human.touches(human.getBlockingObject())) {
                         switch (human.getBlockedDir()) {
                             case LEFT: {
@@ -689,7 +695,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                 break;
                             }
                             default: {
-                                System.out.println("Default");
                                 break;
                             }
                         }
