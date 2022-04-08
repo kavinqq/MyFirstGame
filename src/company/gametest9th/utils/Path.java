@@ -49,27 +49,6 @@ public class Path {
                 super(flow, "/actors");
             }
 
-
-            public String armySoldier() {
-                return this + "/Solider.png";
-            }
-
-            //TODO
-            public String airForceSoldier() {
-                return this + "/Solider.png";
-            }
-
-            //TODO
-            public String citizen() {
-                return this + "/citizen.png";
-            }
-
-            //Or we can also use this method
-            /*
-            public Flow aircraft() {
-                return new Flow("/airplane1.png"){};
-            }
-            */
         }
 
         public static class Zombies extends Flow {
@@ -77,8 +56,6 @@ public class Path {
             private Zombies(Flow flow) {
                 super(flow, "/zombies");
             }
-
-            //TODO
 
             public String zombieNormal() {
                 return this + "/monster.png";
@@ -174,18 +151,6 @@ public class Path {
                 return this + "/box.png";
             }
 
-            public String whiteGrayOpacity() {
-                return this + "/whiteGrayOpacitySeventy.png";
-            }
-
-            public String green() {
-                return this + "/green.png";
-            }
-
-            public String red() {
-                return this + "/red.png";
-            }
-
             // UI
             public String resourceBarUI() {
                 return this + "/resourceBarUI.png";
@@ -237,22 +202,9 @@ public class Path {
                 return this + "/fog.png";
             }
 
-            public String fog2() {
-                return this + "/fog2.jpg";
-            }
-
-            public String fog3() {
-                return this + "/fog3.jpg";
-            }
-
             public String chooseUnit() {
                 return this + "/chooseUnit.png";
             }
-
-            public String target() {
-                return this + "/target.png";
-            }
-
         }
 
 
@@ -260,7 +212,6 @@ public class Path {
 
             private Building(Flow flow) {
                 super(flow, "/Building");
-
             }
 
             public String House() {
@@ -279,13 +230,9 @@ public class Path {
                 return this + "/steelmill.png";
             }
 
-            ;
-
             public String Barracks() {
                 return this + "/barracks.png";
             }
-
-            ;
 
             public String GasMill() {
                 return this + "/gasmill.png";
@@ -355,30 +302,6 @@ public class Path {
 
             public String road() {
                 return this + "/road1.png";
-            }
-
-            public String area() {
-                return this + "/area.jpg";
-            }
-
-            public String grass() {
-                return this + "/grass.png";
-            }
-
-            public String airport() {
-                return this + "airport.png";
-            }
-
-            public String darkBackground() {
-                return this + "/darkbj4.png";
-            }
-
-            public String tarmac() {
-                return this + "/tarmac.png";
-            }
-
-            public String magic() {
-                return this + "/magic.png";
             }
 
             public String victory() {
@@ -463,10 +386,6 @@ public class Path {
             return this + "/SoldierWhat4.wav";
         }
 
-        public String underAttack() {
-            return this + "/underAttack.wav";
-        }
-
         public String fight() {
             return this + "/fight.wav";
         }
@@ -487,7 +406,18 @@ public class Path {
             return this + "/airForceYes.wav";
         }
 
-        public String bgm2() { return this + "/BGM2.wav";}
+        public String bgm1() {
+            return this + "/BGM1.wav";
+        }
+
+        public String bgm2() {
+            return this + "/BGM2.wav";
+        }
+
+        public String victoryBGM() {
+            return this + "/victoryBGM.wav";
+        }
+
 
     }
 

@@ -743,7 +743,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
         switch (type) {
             //兵工廠直接升級士兵/飛機等級
             case ARSENAL: {
-                if (freeArsenalNum != 0 && ARSENAL.instance.isEnoughUpgrade(resource)) {
+                if (ARSENAL.instance.isEnoughUpgrade(resource)) {
                     return 1;
                 } else {
                     return 0;
@@ -751,7 +751,7 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
             }
             //研究所直接升級科技等級
             case LAB: {
-                if (freeLabNum != 0 && LAB.instance.isEnoughUpgrade(resource)) {
+                if (LAB.instance.isEnoughUpgrade(resource)) {
                     return 1;
                 } else {
                     return 0;

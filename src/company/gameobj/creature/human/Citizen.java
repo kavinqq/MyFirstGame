@@ -2,11 +2,9 @@ package company.gameobj.creature.human;
 
 import company.Global;
 
-import company.gameobj.GameObject;
 import company.gameobj.creature.Creature;
 import company.gametest9th.utils.*;
 
-import java.awt.*;
 
 public class Citizen extends Human {   //市民
 
@@ -124,17 +122,6 @@ public class Citizen extends Human {   //市民
     public boolean isFree() {
         return (this.workStatus == WORK_STATUS.FREE);
     }
-
-
-    /**
-     * 人物的每帧繪畫
-     *
-     * @param g
-     */
-//    @Override
-//    public void paintComponent(Graphics g) {
-//        getAnimator().paint(getWalkingDir(), painter().left(), painter().top(), painter().right(), painter().bottom(), g);
-//    }
 
 
     /**

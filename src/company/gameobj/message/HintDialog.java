@@ -26,7 +26,7 @@ public class HintDialog implements GameKernel.GameInterface, CommandSolver.Mouse
     //目前狀態
     private State status;
 
-    public String getMessage(){
+    public String getMessage() {
         return message;
     }
 

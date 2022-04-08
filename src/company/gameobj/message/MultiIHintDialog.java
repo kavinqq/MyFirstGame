@@ -21,7 +21,7 @@ public class MultiIHintDialog {
     public MultiIHintDialog(HintDialog.State state, int x, int y) {
         status = state;
         gapX = 5;
-        img_Width=270;
+        img_Width = 270;
         this.x = x;
         this.y = y;
         hintDialogs = new ArrayList<>();
@@ -42,14 +42,14 @@ public class MultiIHintDialog {
     }
 
     public void paint(Graphics g) {
-        if(touchBottom()){
-            y = y -Global.FONT_SIZE;
+        if (touchBottom()) {
+            y = y - Global.FONT_SIZE;
             for (int i = 0; i < hintDialogs.size(); i++) {
                 hintDialogs.get(i).offset(0, -Global.FONT_SIZE);
             }
         }
 
-        g.drawImage(messageBg, x, y, img_Width ,Global.FONT_SIZE * (hintDialogs.size() + 1), null);
+        g.drawImage(messageBg, x, y, img_Width, Global.FONT_SIZE * (hintDialogs.size() + 1), null);
         for (int i = 0; i < hintDialogs.size(); i++) {
             hintDialogs.get(i).paint(g);
         }

@@ -1,15 +1,14 @@
 package company.scene;
 
 import company.Global;
+import company.controllers.AudioResourceController;
 import company.controllers.SceneController;
-import company.gameobj.MenuChoice;
-import company.gameobj.background.component.StatusBar;
+
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.EventListener;
 
 public class EndScene extends Scene implements CommandSolver.KeyListener {
 
@@ -23,13 +22,14 @@ public class EndScene extends Scene implements CommandSolver.KeyListener {
 
     private String outputTimeStr;
 
-    public EndScene(long startTime, boolean isWin){
+    public EndScene(long startTime, boolean isWin) {
 
         this.startTime = startTime;
 
-        if(isWin){
+        if (isWin) {
             img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().victory());
-        }else{
+            AudioResourceController.getInstance().play(new Path().sound().victoryBGM());
+        } else {
             img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().lose());
         }
     }
@@ -51,12 +51,15 @@ public class EndScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void sceneEnd() {
+
+        AudioResourceController.getInstance().stop(new Path().sound().victoryBGM());
+
         img = null;
     }
 
     @Override
     public void paint(Graphics g) {
-        g.drawImage(img, 0,0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT, null);
+        g.drawImage(img, 0, 0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT, null);
 
         g.setColor(Color.black);
         g.setFont(new Font("TimeRoman", Font.BOLD, 50));
@@ -76,7 +79,7 @@ public class EndScene extends Scene implements CommandSolver.KeyListener {
 
                 // 滑鼠點擊
                 if (state == CommandSolver.MouseState.PRESSED) {
-                    Scene startScene= new StartScene();
+                    Scene startScene = new StartScene();
                     SceneController.getInstance().change(startScene);
                 }
             }

@@ -9,14 +9,10 @@ import company.gameobj.creature.human.ArmySoldier;
 import company.gameobj.GameObject;
 import company.gameobj.creature.human.*;
 
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import static company.Global.BUILDING_HEIGHT;
-import static company.Global.BUILDING_WIDTH;
 
 public class Military {
     private List<AirForceSoldier> airForce;
@@ -26,7 +22,7 @@ public class Military {
     private int airForceLevel;
     private int armyValue;
     private int airForceValue;
-    private static final int armyValueMax = 12;
+
     //3*5的位置不會重疊
     private int addPositionX;
     private int addPositionY;
@@ -72,7 +68,7 @@ public class Military {
         ArmySoldier armySoldier;
 
         for (int i = 0; i < num; i++) {
-            if (army.size() >= armyValueMax) {
+            if (army.size() >= Global.ArmyMax) {
                 return;
             }
             if (addPositionY % 5 == 0) {
