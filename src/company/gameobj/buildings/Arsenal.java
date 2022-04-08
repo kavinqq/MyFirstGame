@@ -123,6 +123,9 @@ public class Arsenal extends Building {
 
     @Override
     public void paintComponent(Graphics g) {
+        g.setColor(Color.white);
+        g.setFont(new Font("Dialog", Font.BOLD, Global.FONT_SIZE));
+        
         //升級中及完成顯示白色
         g.setColor(Color.white);
 
