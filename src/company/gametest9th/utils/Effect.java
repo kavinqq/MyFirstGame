@@ -8,15 +8,19 @@ import java.awt.*;
 
 public abstract class Effect extends GameObject {
     private Delay totalDelay;
-    private Image img;
+    private Image attackEffectImg;
     private boolean show;
 
     public Effect(int x,int y, int width, int height,Delay totalDelay, Delay delay,String img){
         super(x,y,width,height);
         this.totalDelay = totalDelay;
         totalDelay.play();
-        this.img = SceneController.getInstance().imageController().tryGetImage(img);
 
+        if(Math.random() < 0.5){
+            attackEffectImg = SceneController.getInstance().imageController().tryGetImage(new Path().img().effects().attackEffect());
+        } else{
+            attackEffectImg = SceneController.getInstance().imageController().tryGetImage(new Path().img().effects().attackEffect2());
+        }
 
         // 隨機音效
         if(Math.random() < 0.3) {
@@ -45,6 +49,6 @@ public abstract class Effect extends GameObject {
     }
 
     public Image getImg() {
-        return img;
+        return attackEffectImg;
     }
 }

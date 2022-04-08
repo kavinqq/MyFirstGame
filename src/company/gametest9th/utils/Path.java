@@ -125,6 +125,14 @@ public class Path {
             public String SwordShadow() {
                 return this + "/SwordShadow.png";
             }
+
+            public String attackEffect() {
+                return this + "/attackEffect.png";
+            }
+
+            public String attackEffect2() {
+                return this + "/attackEffect2.png";
+            }
         }
 
 
