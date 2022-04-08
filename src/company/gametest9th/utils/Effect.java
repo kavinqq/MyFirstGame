@@ -16,13 +16,21 @@ public abstract class Effect extends GameObject {
         this.totalDelay = totalDelay;
         totalDelay.play();
         this.img = SceneController.getInstance().imageController().tryGetImage(img);
-        AudioResourceController.getInstance().play(new Path().sound().fight());
+
+
+        // 隨機音效
+        if(Math.random() < 0.3) {
+            AudioResourceController.getInstance().play(new Path().sound().fight());
+        } else if(Math.random() < 0.6){
+            AudioResourceController.getInstance().play(new Path().sound().fight1());
+        } else {
+            AudioResourceController.getInstance().play(new Path().sound().fight2());
+        }
     }
 
     @Override
     public void paintComponent(Graphics g) {
-       // g.drawImage(img,this.painter().left(), this.painter().top(),null);
-        //paintEffect(g, this.painter().centerX(), this.painter().centerY());
+
     }
 
     public abstract void paintEffect(Graphics g, int x, int y);
