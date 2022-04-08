@@ -26,7 +26,7 @@ public class Military {
     private int airForceLevel;
     private int armyValue;
     private int airForceValue;
-    private static final int armyValueMax = 12;
+
     //3*5的位置不會重疊
     private int addPositionX;
     private int addPositionY;
@@ -68,7 +68,7 @@ public class Military {
         ArmySoldier armySoldier;
 
         for (int i = 0; i < num; i++) {
-            if (army.size() >= armyValueMax) {
+            if (army.size() >= Global.ArmyMax) {
                 return;
             }
             if (addPositionY % 5 == 0) {
