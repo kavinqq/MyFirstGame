@@ -3,8 +3,7 @@ package company.gameobj.creature;
 import company.Global;
 import company.controllers.SceneController;
 import company.gameobj.GameObject;
-import company.gameobj.creature.enemy.Enemy;
-import company.gameobj.creature.human.Human;
+
 import company.gametest9th.utils.*;
 
 import java.awt.*;
@@ -126,11 +125,7 @@ public abstract class Creature extends GameObject {
      */
 
     public int getValue() {      //獲取目前數值
-        //做冷卻時間
-//        if (attackDelay.count()) {
-            return value;
-//        }
-//        return 0;
+        return value;
     }
 
     public void getAttacked(int value) {
@@ -313,15 +308,10 @@ public abstract class Creature extends GameObject {
         if (this.getMoveStatus() == Animator.State.STAND) {
             return;
         }
-//        if(this instanceof Human){
-//            System.out.println("human");
-//        }
+
         int speed = (int) speed();
 
         if (this.getAttackTarget() != null) {
-//            if(this instanceof Human){
-//                System.out.println("Walk not null");
-//            }
 
             if (getAttackTarget().painter().centerX() == painter().centerX()) {
                 this.setWalkingDir((getAttackTarget().painter().centerY() > painter().centerY()) ? Global.Direction.DOWN : Global.Direction.UP);
@@ -684,10 +674,8 @@ public abstract class Creature extends GameObject {
         g.setColor(Color.green);
         g.fillRect(painter().left(),painter().bottom(),painter().width()*hp/maxHp,Global.HP_HEIGHT);
         if (this.getFightEffect() != null) {
-            //this.getFightEffect().paintComponent(g);
+
             this.getFightEffect().paintEffect(g, this.painter().left(), this.painter().centerY());
-//            this.getFightEffect().paintComponent(g);
-//            this.getFightEffect().setCenter(this.painter().centerX(), this.painter().centerY());
         }
     }
 

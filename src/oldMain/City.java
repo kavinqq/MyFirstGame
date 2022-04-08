@@ -569,9 +569,6 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         return military.getTotalSoldier();
     }
 
-
-
-
     public Human getSingleObjectByXY(int x, int y){
         Human currentObj = null;
 
@@ -670,6 +667,4 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         buildings.mouseTrig(e, state, trigTime);
         currentBuildingNode = getCuurentBuildingNode(e.getX(), e.getY());
     }
-
-
 }

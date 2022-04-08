@@ -4,7 +4,6 @@ import company.Global;
 import company.gametest9th.utils.Animator;
 import company.gametest9th.utils.Path;
 
-import java.awt.*;
 
 /**
  * @author Lillian
@@ -28,11 +27,6 @@ public class AirForceSoldier extends Soldier{
         setWalkingDir(Global.Direction.DOWN);
     }
 
-//    @Override
-//    public void paintComponent(Graphics g) {
-//        //畫出動畫
-//        getAnimator().paint(getWalkingDir(), painter().left(), painter().top(), painter().right(), painter().bottom(), g);
-//    }
 
 
     @Override

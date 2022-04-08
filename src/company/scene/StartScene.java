@@ -3,14 +3,13 @@ package company.scene;
 import company.Global;
 import company.controllers.AudioResourceController;
 import company.controllers.SceneController;
-import company.gameobj.MenuChoice;
-import company.gameobj.creature.human.Human;
+
 import company.gametest9th.utils.CommandSolver;
 import company.gametest9th.utils.Path;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+
 
 
 /**

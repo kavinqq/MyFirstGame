@@ -4,8 +4,7 @@ import company.Global;
 
 
 import java.awt.event.MouseEvent;
-import java.awt.image.ImageObserver;
-import java.text.AttributedCharacterIterator;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -17,7 +16,6 @@ import company.controllers.SceneController;
 import company.gameobj.BuildingController;
 import company.gameobj.FogOfWar;
 import company.gameobj.Rect;
-import company.gameobj.buildings.Arsenal;
 import company.gameobj.buildings.Base;
 import company.gameobj.buildings.Building;
 import company.gameobj.creature.Creature;
@@ -177,8 +175,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         AudioResourceController.getInstance().loop(new Path().sound().bgm2(), 3);
 
-        //TODO: Del
-//        zombieNormal = new ZombieNormal(1500, 700);
     }
 
     /**
@@ -208,8 +204,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         fogOfWar = null;
 
-        //TODO: Del
-//        zombieNormal = null;
     }
 
     @Override
@@ -238,8 +232,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         city.paint(g);
 
         zombieKingdom.paint(g);
-
-//        zombieNormal.paint(g);
 
         //畫出戰爭迷霧
         fogOfWar.paint(g);
@@ -304,7 +296,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         }
 
 
-//         如果這一帧的鏡頭移動量 != 0 [必須移動]
+        //如果這一帧的鏡頭移動量 != 0 [必須移動]
         if (CAMERA_MOVE_VX != 0 || CAMERA_MOVE_VY != 0) {
 
             //停機坪
@@ -389,19 +381,19 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                 }
                             }
                             for (Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()) {
-                                Rect tmpRect =zombie.overlapRect(currentButton.getGreenRect());
+                                Rect tmpRect = zombie.overlapRect(currentButton.getGreenRect());
                                 if (tmpRect != null) {
                                     redRects.add(tmpRect);
                                 }
                             }
                             for (Citizen citizen : city.getCitizens().getAllCitizens()) {
-                                Rect tmpRect =citizen.overlapRect(currentButton.getGreenRect());
+                                Rect tmpRect = citizen.overlapRect(currentButton.getGreenRect());
                                 if (tmpRect != null) {
                                     redRects.add(tmpRect);
                                 }
                             }
                             for (ArmySoldier armySoldier : city.getMilitary().getArmy()) {
-                                Rect tmpRect =armySoldier.overlapRect(currentButton.getGreenRect());
+                                Rect tmpRect = armySoldier.overlapRect(currentButton.getGreenRect());
                                 if (tmpRect != null) {
                                     redRects.add(tmpRect);
                                 }
@@ -409,26 +401,26 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                             if (!redRects.isEmpty()) {
                                 currentButton.setRedRects(redRects.toArray(new Rect[redRects.size()]));
-                            }else{
+                            } else {
                                 currentButton.setRedRects(null);
                             }
 
-                                        //滑鼠放開時，判斷滑鼠放開的上一偵是否在建造區中
-                                        if (currentButton.isReleased && preDragging && buildingArea.get(i, j).isOnBuildGrid() && currentButton.getCanBuild()) {//
+                            //滑鼠放開時，判斷滑鼠放開的上一偵是否在建造區中
+                            if (currentButton.isReleased && preDragging && buildingArea.get(i, j).isOnBuildGrid() && currentButton.getCanBuild()) {//
 
 
-                                            //建造房子
-                                            city.build(type, currentMouseX - BUILDING_WIDTH / 2, currentMouseY - BUILDING_HEIGHT / 2);
-                                            AudioResourceController.getInstance().play(new Path().sound().building());
-                                            ToastController.instance().print("建造-" + type.instance().getName() + "成功");
+                                //建造房子
+                                city.build(type, currentMouseX - BUILDING_WIDTH / 2, currentMouseY - BUILDING_HEIGHT / 2);
+                                AudioResourceController.getInstance().play(new Path().sound().building());
+                                ToastController.instance().print("建造-" + type.instance().getName() + "成功");
 
-                                        }
-                                        //判斷是否蓋在建築區上
-                                        buildingArea.get(i, j).setOnBuildGrid(buildingArea.get(i, j).isCover(currentButton));
-                                    }
-
-                                }
                             }
+                            //判斷是否蓋在建築區上
+                            buildingArea.get(i, j).setOnBuildGrid(buildingArea.get(i, j).isCover(currentButton));
+                        }
+
+                    }
+                }
 
             }
             //滑鼠放開瞬間 判斷上一偵是否是拖曳且不再區域內
@@ -465,44 +457,44 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                 }
 
-                    switch (type) {
-                        case LAB: {
-                            if (city.isUpgradingTech(currentBuildNode)) {
-                                ToastController.instance().print("升級-科技已在升級中，請等待此次升級結束");
+                switch (type) {
+                    case LAB: {
+                        if (city.isUpgradingTech(currentBuildNode)) {
+                            ToastController.instance().print("升級-科技已在升級中，請等待此次升級結束");
+                        } else {
+                            city.upgradeTechLevel();
+                            ToastController.instance().print("升級-科技開始升級");
+                        }
+                        break;
+                    }
+                    case ARSENAL: {
+                        //士兵已在升級中，請等待此次升級結束
+                        if (currentBuildNode.getCan(0)) {
+                            if (city.isUpgradingSoldier()) {
+                                ToastController.instance().print("士兵已在升級中，請等待此次升級結束");
                             } else {
-                                city.upgradeTechLevel();
-                                ToastController.instance().print("升級-科技開始升級");
+                                city.upgradeSoldier();
+                                ToastController.instance().print("士兵升級中");
                             }
-                            break;
                         }
-                        case ARSENAL: {
-                            //士兵已在升級中，請等待此次升級結束
-                            if (currentBuildNode.getCan(0)) {
-                                if (city.isUpgradingSoldier()) {
-                                    ToastController.instance().print("士兵已在升級中，請等待此次升級結束");
-                                } else {
-                                    city.upgradeSoldier();
-                                    ToastController.instance().print("士兵升級中");
-                                }
+                        if (currentBuildNode.getCan(1)) {
+                            if (city.isUpgradingPlane()) {
+                                ToastController.instance().print("飛機已在升級中");
+                            } else {
+                                city.upgradePlane();
+                                ToastController.instance().print("飛機升級中");
                             }
-                            if (currentBuildNode.getCan(1)) {
-                                if (city.isUpgradingPlane()) {
-                                    ToastController.instance().print("飛機已在升級中");
-                                } else {
-                                    city.upgradePlane();
-                                    ToastController.instance().print("飛機升級中");
-                                }
 
-                            }
-                            break;
                         }
-                        default: {
-                            if (currentBuildNode.getBuilding().getIcons().get(0).getPressed()) {
-                                city.upgrade(currentBuildNode);
-                                ToastController.instance().print("安排升級中");
-                            }
+                        break;
+                    }
+                    default: {
+                        if (currentBuildNode.getBuilding().getIcons().get(0).getPressed()) {
+                            city.upgrade(currentBuildNode);
+                            ToastController.instance().print("安排升級中");
                         }
                     }
+                }
 
                 //限制按鈕按一次 就變成false;
                 currentBuildNode.getBuilding().shutAllUpdateIconCan();
@@ -591,9 +583,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 // 這個人前往目的地
                 human.setTarget(targetX, targetY);
 
-                if(human instanceof Citizen) {
+                if (human instanceof Citizen) {
                     AudioResourceController.getInstance().play(new Path().sound().readyToWork());
-                } else if(human instanceof ArmySoldier){
+                } else if (human instanceof ArmySoldier) {
                     AudioResourceController.getInstance().play(new Path().sound().soldierWhat4());
                 } else {
                     AudioResourceController.getInstance().play(new Path().sound().airForceYes());
@@ -612,16 +604,16 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         humans.addAll(city.getCitizens().getAllCitizens());
         humans.addAll(city.getMilitary().getArmy());
 
-        for(Human human : humans){
+        for (Human human : humans) {
             boolean get = false;
             for (BuildingType value : values()) {
-                for (int j = 0; j < value.list().size() && get==false; j++) {
+                for (int j = 0; j < value.list().size() && get == false; j++) {
                     Building building = value.list().get(j).getBuilding();
 
-                    if(human.getBlockedDir()==null && human.isCollision(building)){
+                    if (human.getBlockedDir() == null && human.isCollision(building)) {
                         get = true;
                         human.setBlockingObject(building);
-                        if(human instanceof Citizen && BuildingType.BASE.list().get(0).getBuilding() instanceof Base && human.isCollision(BuildingType.BASE.list().get(0).getBuilding())){
+                        if (human instanceof Citizen && BuildingType.BASE.list().get(0).getBuilding() instanceof Base && human.isCollision(BuildingType.BASE.list().get(0).getBuilding())) {
                             Citizen citizen = (Citizen) human;
                             if (building.isCovering(citizen.targetX(), citizen.targetY()) && citizen.getResourceNum() != 0) {
 
@@ -635,8 +627,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                 // 返回採集點
                                 citizen.setTarget(citizen.getResourceTargetX(), citizen.getResourceTargetY());
                             }
-                        }
-                        else if (building.isCovering(human.targetX(), human.targetY())) {
+                        } else if (building.isCovering(human.targetX(), human.targetY())) {
                             human.stop();
                         }
 
@@ -671,8 +662,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                 break;
                             }
                         }
-                    }
-                    else if (human.getBlockedDir() != null && !human.touches(human.getBlockingObject())) {
+                    } else if (human.getBlockedDir() != null && !human.touches(human.getBlockingObject())) {
                         switch (human.getBlockedDir()) {
                             case LEFT: {
                                 if (!human.touchRightOf(human.getBlockingObject())) {
@@ -698,13 +688,13 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                 }
                                 break;
                             }
-                            default:{
+                            default: {
                                 System.out.println("Default");
                                 break;
                             }
                         }
                         human.setBlockingObject(null);
-                    } else if (human instanceof Citizen){
+                    } else if (human instanceof Citizen) {
                         Citizen citizen = (Citizen) human;
 
                         // 遍尋一次 資源List
@@ -749,7 +739,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         }
                     }
                 }
-                if(get){
+                if (get) {
                     break;
                 }
             }
@@ -809,234 +799,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
-/*
-        for (BuildingType value : values()) {
-            for (int j = 0; j < value.list().size(); j++) {
-                Building building = value.list().get(j).getBuilding();
-
-                for (Human human : humans){
-
-                    //如果人物走到與建築重疊了，將其拉回剛好接觸但不重疊的位置並且讓人物知道這個方向被擋住了，換個方向
-                    if (human.isCollision(building)) {
-                        // 如果村民 是 採集完成的狀態
-                        if(human instanceof Citizen && BuildingType.BASE.list().get(0).getBuilding() instanceof Base && human.isCollision(BuildingType.BASE.list().get(0).getBuilding())){
-                            Citizen citizen = (Citizen) human;
-                            if (citizen.getResourceNum() != 0) {
-
-                                // 呼叫city的方法去實際放資源
-                                city.gainResource(citizen.getResourceNum(), citizen.getResourceType());
-
-                                // reset該位村民的 身上資源狀態
-                                citizen.setResourceNum();
-                                citizen.setResourceType();
-
-                                // 返回採集點
-                                citizen.setTarget(citizen.getResourceTargetX(), citizen.getResourceTargetY());
-                            }
-                        }
-                        else if (building.isCovering(human.targetX(), human.targetY())) {
-                            human.stop();
-                        }
-
-                        switch (human.getWalkingDir()) {
-                            case RIGHT: {
-                                if (human.touchLeftOf(building)) {
-                                    human.translateX(-1 * (human.painter().right() - building.painter().left()));
-                                    human.setBlockedDir(Direction.RIGHT);
-                                }
-                                break;
-                            }
-                            case LEFT: {
-                                if (human.touchRightOf(building)) {
-                                    human.translateX(building.painter().right() - human.painter().left());
-                                    human.setBlockedDir(Direction.LEFT);
-                                }
-                                break;
-                            }
-                            case UP: {
-
-                                if (human.touchBottomOf(building)) {
-                                    human.translateY(building.painter().bottom() - human.painter().top());
-                                    human.setBlockedDir(Direction.UP);
-                                }
-                                break;
-                            }
-                            case DOWN: {
-                                if (human.touchTopOf(building)) {
-                                    human.translateY(-1 * (human.painter().bottom() - building.painter().top()));
-                                    human.setBlockedDir(Direction.DOWN);
-                                }
-                                break;
-                            }
-                        }
-                    } else if (human.getBlockedDir() != null) {
-                        switch (human.getBlockedDir()) {
-                            case LEFT: {
-                                if (!human.touchRightOf(building)) {
-                                    human.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                            case RIGHT: {
-                                if (!human.touchLeftOf(building)) {
-                                    human.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                            case UP: {
-                                if (!human.touchBottomOf(building)) {
-                                    human.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                            case DOWN: {
-                                if (!human.touchTopOf(building)) {
-                                    human.setNoBlockedDir();
-                                }
-                                break;
-                            }
-                        }
-                    } else if (human instanceof Citizen){
-                        Citizen citizen = (Citizen) human;
-
-                        // 遍尋一次 資源List
-                        for (int i = 0; i < resourceSystem.size(); i++) {
-
-                            // 先把資源堆記錄下來 不用每次都get一次
-                            ResourceObj resourceObj = resourceSystem.get(i);
-
-                            //如果和資源碰撞 && 我的目的地就是在資源裡面 && 村民看的到的話(沒寫這個條件 他會重複計算)
-                            if (citizen.isCollision(resourceObj) && citizen.isTargetInObj(resourceObj) && citizen.getVisible()) {
-
-                                // 把資源的位置記起來
-                                citizen.setResourceTargetX(resourceObj.painter().centerX());
-                                citizen.setResourceTargetY(resourceObj.painter().centerY());
-
-                                //開始採集
-
-                                if (resourceObj.getResourceTypeStr().equals("WOOD")) { // 如果採集的是木頭
-
-                                    // 資源堆被採集了(目前單次最大能採多少木頭數量)
-                                    resourceObj.beCollected(Citizen.getMaxCarryWood());
-                                } else if (resourceObj.getResourceTypeStr().equals("STEEL")) { // 如果採集的是鋼鐵
-
-                                    // 資源堆被採集了(目前單次最大能採多少鋼鐵數量)
-                                    resourceObj.beCollected(Citizen.getMaxCarrySteel());
-                                }
-
-                                // 如果資源採乾了
-                                if (resourceObj.getTotalNum() <= 0) {
-
-                                    // 移除他
-                                    resourceSystem.remove(i);
-
-                                    //因為是ArrayList 移除後 下一個會馬上接上來
-                                    i--;
-                                }
-
-                                // 村民開始採集
-                                citizen.collecting(building.painter().centerX(), building.painter().centerY(), resourceObj.getResourceTypeStr());
-                            }
-                        }
-                    }
-
-                    // 下面的switch 是碰到邊界的狀況
-                    switch (human.getWalkingDir()) {
-
-                        // 如果右邊碰到了邊界
-                        case RIGHT: {
-                            if (human.touchRight()) {
-
-                                // 把人物移動回來 與邊界切齊
-                                human.translateX(-1 * (human.painter().right() - SCREEN_WIDTH));
-
-                                // 人物停止移動
-                                human.stop();
-                            }
-                            break;
-                        }
-
-                        // 如果左邊碰到了邊界
-                        case LEFT: {
-                            if (human.touchLeft()) {
-
-                                // 把人物移動回來 與邊界切齊
-                                human.translateX(-1 * human.painter().left());
-
-                                // 人物停止移動
-                                human.stop();
-                            }
-                            break;
-                        }
-
-                        // 如果上面碰到了邊界
-                        case UP: {
-                            if (human.touchTop()) {
-
-                                // 把人物移動回來 與邊界切齊
-                                human.translateY(-1 * human.painter().top());
-
-                                // 人物停止移動
-                                human.stop();
-                            }
-                            break;
-                        }
-
-                        // 如果下面碰到了邊界
-                        case DOWN: {
-                            if (human.touchBottom()) {
-                                // 把人物移動回來 與邊界切齊
-                                human.translateY(-1 * (human.painter().bottom() - SCREEN_HEIGHT));
-
-                                // 人物停止移動
-                                human.stop();
-                            }
-                            break;
-                        }
-                    }
-                }
->>>>>>> 51107359ef59bd2bb135757459288dad8aaebca5
-            }
-        }
-
-
- */
-
-//        Building allBuildings = BuildingType.BASE.instance();
-
-        //TODO: Del
-//        for (ArmySoldier armySoldier : city.getMilitary().getArmy()){
-//            if (armySoldier.getAttackTarget() == null) {
-//                armySoldier.detect(zombieNormal);
-//            }
-//
-//            if (armySoldier.getAttackTarget() != null) {
-//                if (armySoldier.isCollision(armySoldier.getAttackTarget())) {
-//                    Enemy enemy = (Enemy) armySoldier.getAttackTarget();
-//                    enemy.stop();
-//                    armySoldier.stop();
-//
-//                    if (enemy.getFightEffect() == null) {
-//                        enemy.setFightEffect(new FightEffect(enemy.painter().left(), enemy.painter().top()));
-//                        enemy.getAttacked(armySoldier.getValue());
-//                        System.out.println("RRRRR");
-//                        System.out.println(enemy.getHp());
-//                    } else {
-//                        if (enemy.getFightEffect().isDue()) {
-//                            enemy.setFightEffect(null);
-//                            if (!enemy.isAlive()) {
-//                                armySoldier.setAttackTargetToNull();
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-
-
-        //士兵打殭屍
         for (ArmySoldier armySoldier : city.getMilitary().getArmy()) {
-            if(armySoldier.getAttackTarget()!=null && !((Creature) armySoldier.getAttackTarget()).isAlive()){
+            if (armySoldier.getAttackTarget() != null && !((Creature) armySoldier.getAttackTarget()).isAlive()) {
                 armySoldier.setAttackTargetToNull();
             }
 
@@ -1066,13 +830,10 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                             }
                         }
                     }
-                }
-                else{
+                } else {
                     armySoldier.setMoveStatus(Animator.State.WALK);
                 }
             }
-//            System.out.println("first");
-//            break;
         }
         //飛行士兵打殭屍
         for (AirForceSoldier airForceSoldier : city.getMilitary().getAirForce()) {
@@ -1080,20 +841,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 ArrayList<Zombie> allZombie = new ArrayList<>();
                 allZombie.addAll(zombieKingdom.getZombieTroop().getAirTroop());
                 allZombie.addAll(zombieKingdom.getZombieTroop().getLandTroop());
-//                for (Zombie zombie : zombieKingdom.getZombieTroop().getAirTroop()) {
-//                    airForceSoldier.detect(zombie);
-//                    if (airForceSoldier.getAttackTarget() != null) {
-//                        break;
-//                    }
-//                }
-//
-//                for (Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()){
-//                    airForceSoldier.detect(zombie);
-//                    if (airForceSoldier.getAttackTarget() != null) {
-//                        break;
-//                    }
-//                }
-                for (Zombie zombie : allZombie){
+
+                for (Zombie zombie : allZombie) {
                     airForceSoldier.detect(zombie);
                     if (airForceSoldier.getAttackTarget() != null) {
                         break;
@@ -1117,13 +866,11 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                             }
                         }
                     }
-                }
-                else{
+                } else {
                     airForceSoldier.setMoveStatus(Animator.State.WALK);
                 }
             }
         }
-
 
 
         //殭屍偵測所有遊戲物件
@@ -1148,7 +895,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 for (ArmySoldier armySoldier : city.getMilitary().getArmy()) {
                     if (zombie.getAttackTarget() == null) {
                         zombie.detect(armySoldier);
-//                        System.out.println("殭屍鎖定陸軍:"+zombie);
 
                     } else {
                         break;
@@ -1200,97 +946,20 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                     } else if (zombie.getAttackTarget() instanceof Human) {
                         Human human = (Human) zombie.getAttackTarget();
-                        //human.stop();
+
                         human.getAttacked(zombie.getValue());
                         if (!human.isAlive()) {
                             zombie.setAttackTargetToNull();
                         }
                     }
-                }
-                else{
+                } else {
                     zombie.setMoveStatus(Animator.State.WALK);
                 }
-            }
-            else{
+            } else {
                 zombie.setMoveStatus(Animator.State.WALK);
             }
         }
 
-
-
-
-        /*
-        if (zombie.isCollision(base)) {
-            switch (zombie.getWalkingDir()) {
-                case LEFT: {
-                    if (zombie.touchRightOf(base)) {
-                        zombie.translateX(base.painter().right() - zombie.painter().left());
-                    }
-                    break;
-                }
-                case RIGHT: {
-                    if (zombie.touchLeftOf(base)) {
-                        zombie.translateX(zombie.painter().right() - base.painter().left());
-                    }
-                    break;
-                }
-                case UP: {
-                    if (zombie.touchBottomOf(base)) {
-                        zombie.translateY(base.painter().bottom() - zombie.painter().top());
-                    }
-                    break;
-                }
-                case DOWN: {
-                    if (zombie.touchTopOf(base)) {
-                        zombie.translateY(zombie.painter().bottom() - base.painter().top());
-                    }
-                    break;
-                }
-            }
-            zombie.stop();
-        }
-        }
-
-
-         */
-
-        //TODO: del
-//        zombieNormal.update();
-//        if (zombieNormal.isCollision(base)) {
-//            switch (zombieNormal.getWalkingDir()) {
-//                case LEFT: {
-//                    if (zombieNormal.touchRightOf(base)) {
-//                        zombieNormal.translateX(base.painter().right() - zombieNormal.painter().left());
-//                    }
-//                    break;
-//                }
-//                case RIGHT: {
-//                    if (zombieNormal.touchLeftOf(base)) {
-//                        zombieNormal.translateX(zombieNormal.painter().right() - base.painter().left());
-//                    }
-//                    break;
-//                }
-//                case UP: {
-//                    if (zombieNormal.touchBottomOf(base)) {
-//                        zombieNormal.translateY(base.painter().bottom() - zombieNormal.painter().top());
-//                    }
-//                    break;
-//                }
-//                case DOWN: {
-//                    if (zombieNormal.touchTopOf(base)) {
-//                        zombieNormal.translateY(zombieNormal.painter().bottom() - base.painter().top());
-//                    }
-//                    break;
-//                }
-//            }
-//            zombieNormal.stop();
-//        }
-//            }
-//        }
-
-
-        // 更新迷霧狀況
-        // 先看看有沒有村民碰到了 迷霧
         for (Human human : city.getCitizens().getAllCitizens()) {
             fogOfWar.update(human);
         }
@@ -1364,15 +1033,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             // 根據不同的滑鼠事件去分類要做的事情
             switch (state) {
 
-                case DRAGGED: {
-//                    System.out.println("Drag " +trigTime);
-                    break;
-                }
-
                 // 滑鼠放開瞬間觸發
                 case RELEASED: {
-//                    System.out.println("RELEASED "+trigTime);
-
 
                     // 如果現在能用Box框選模式的話
                     if (canUseBoxSelection) {
@@ -1385,9 +1047,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
                 // 按下去就觸發
                 case PRESSED: {
-//                    System.out.println("PRESSED "+trigTime);
-
-
                     // 把座標丟給citizens 讓他 判斷有沒有村民 符合條件 (BUTTON1 : 左鍵)
                     if (e.getButton() == MouseEvent.BUTTON1) {
                         //單選 按鈕
@@ -1511,47 +1170,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     human.stop();
                 }
             }
-        }
-    }
-
-    //生物一 是否視生物二為攻擊目標
-    public Creature attackTarget(Creature creature1, Creature creature2) {
-
-        //已有鎖定目標
-        if (creature1.getAttackTarget() == null) {
-            creature1.detect(creature2);
-            if (creature1.getAttackTarget() == null) {
-                return creature1;
-            } else {
-                return creature1;
-            }
-        }
-        return creature1;
-    }
-
-    public void attackEachOther(Creature creature1) {
-        if (creature1.getAttackTarget() == null) {
-            return;
-        }
-        if (creature1.isCollision(creature1.getAttackTarget())) {
-            Creature enemy;
-            if (creature1.getAttackTarget() instanceof Creature) {
-                enemy = (Creature) creature1.getAttackTarget();
-            } else {
-                return;
-            }
-
-            enemy.stop();
-            creature1.stop();
-
-//            if (enemy.getFightEffect() == null) {
-//                enemy.setFightEffect(new FightEffect(creature1.painter().centerX(), creature1.painter().centerY()));
-            enemy.getAttacked(creature1.getValue());
-            if (!enemy.isAlive()) {
-                creature1.setAttackTargetToNull();
-            }
-//                if (creature1.getFightEffect().isDue()) {
-//                    enemy.setFightEffect(null);
         }
     }
 }

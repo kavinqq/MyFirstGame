@@ -22,14 +22,14 @@ public class EndScene extends Scene implements CommandSolver.KeyListener {
 
     private String outputTimeStr;
 
-    public EndScene(long startTime, boolean isWin){
+    public EndScene(long startTime, boolean isWin) {
 
         this.startTime = startTime;
 
-        if(isWin){
+        if (isWin) {
             img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().victory());
             AudioResourceController.getInstance().play(new Path().sound().victoryBGM());
-        }else{
+        } else {
             img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().lose());
         }
     }
@@ -59,7 +59,7 @@ public class EndScene extends Scene implements CommandSolver.KeyListener {
 
     @Override
     public void paint(Graphics g) {
-        g.drawImage(img, 0,0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT, null);
+        g.drawImage(img, 0, 0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT, null);
 
         g.setColor(Color.black);
         g.setFont(new Font("TimeRoman", Font.BOLD, 50));
@@ -79,7 +79,7 @@ public class EndScene extends Scene implements CommandSolver.KeyListener {
 
                 // 滑鼠點擊
                 if (state == CommandSolver.MouseState.PRESSED) {
-                    Scene startScene= new StartScene();
+                    Scene startScene = new StartScene();
                     SceneController.getInstance().change(startScene);
                 }
             }
