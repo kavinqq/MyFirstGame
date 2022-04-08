@@ -260,7 +260,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             }
         }
 
-
         //建築物選單
         buildingOption.paint(g);
 

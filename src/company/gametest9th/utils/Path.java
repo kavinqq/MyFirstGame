@@ -487,7 +487,10 @@ public class Path {
             return this + "/airForceYes.wav";
         }
 
+        public String bgm1() { return this + "/BGM1.wav";}
+
         public String bgm2() { return this + "/BGM2.wav";}
+
 
     }
 

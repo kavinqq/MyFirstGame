@@ -1,6 +1,7 @@
 package company.scene;
 
 import company.Global;
+import company.controllers.AudioResourceController;
 import company.controllers.SceneController;
 import company.gameobj.MenuChoice;
 import company.gameobj.creature.human.Human;
@@ -26,10 +27,13 @@ public class StartScene extends Scene {
         // 載入背景圖
         img = SceneController.getInstance().imageController().tryGetImage(new Path().img().background().gameStart());
 
+        AudioResourceController.getInstance().play(new Path().sound().bgm1());
     }
 
     @Override
     public void sceneEnd() {
+
+        AudioResourceController.getInstance().stop(new Path().sound().bgm1());
 
         img = null;
     }
@@ -39,7 +43,6 @@ public class StartScene extends Scene {
     public void paint(Graphics g) {
 
         g.drawImage(img, 0, 0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT, null);
-
     }
 
     @Override
