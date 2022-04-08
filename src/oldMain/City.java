@@ -329,8 +329,6 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
         buildings.upgradePlane(resource);
     }
 
-
-
     /**
      * 顯示目前城市的所有資訊
      */
