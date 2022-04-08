@@ -984,8 +984,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             city.doCityWorkAndTimePass(thisRoundTimePass);
         }
 
-        System.out.println("Z: " + zombieKingdom.getAttackRound());
-
         //判斷結束條件 => 主堡死去 或 打贏了最後一波殭屍王軍團
         if (!city.isAlive() || zombieKingdom.getAttackRound() > TOTAL_ZOMBIE_ROUND && zombieKingdom.isClear()) {
 
