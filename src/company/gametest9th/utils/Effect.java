@@ -16,7 +16,16 @@ public abstract class Effect extends GameObject {
         this.totalDelay = totalDelay;
         totalDelay.play();
         this.img = SceneController.getInstance().imageController().tryGetImage(img);
-        AudioResourceController.getInstance().play(new Path().sound().fight());
+
+
+        // 隨機音效
+        if(Math.random() < 0.3) {
+            AudioResourceController.getInstance().play(new Path().sound().fight());
+        } else if(Math.random() < 0.6){
+            AudioResourceController.getInstance().play(new Path().sound().fight1());
+        } else {
+            AudioResourceController.getInstance().play(new Path().sound().fight2());
+        }
     }
 
     @Override
