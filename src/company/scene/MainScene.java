@@ -615,23 +615,16 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         for(Human human : humans){
             boolean get = false;
-            System.out.println(human.getBlockedDir());
-            System.out.println("==========");
             for (BuildingType value : values()) {
                 for (int j = 0; j < value.list().size() && get==false; j++) {
                     Building building = value.list().get(j).getBuilding();
-                    if(human instanceof Citizen){
-
-                        System.out.println(human.touches(building));
-                        System.out.println("-------");
-                    }
 
                     if(human.getBlockedDir()==null && human.isCollision(building)){
                         get = true;
                         human.setBlockingObject(building);
                         if(human instanceof Citizen && BuildingType.BASE.list().get(0).getBuilding() instanceof Base && human.isCollision(BuildingType.BASE.list().get(0).getBuilding())){
                             Citizen citizen = (Citizen) human;
-                            if (citizen.getResourceNum() != 0) {
+                            if (building.isCovering(citizen.targetX(), citizen.targetY()) && citizen.getResourceNum() != 0) {
 
                                 // 呼叫city的方法去實際放資源
                                 city.gainResource(citizen.getResourceNum(), citizen.getResourceType());
@@ -681,8 +674,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         }
                     }
                     else if (human.getBlockedDir() != null && !human.touches(human.getBlockingObject())) {
-                        System.out.println("not null && not touches");
-                        System.out.println(human.getBlockedDir());
                         switch (human.getBlockedDir()) {
                             case LEFT: {
                                 if (!human.touchRightOf(human.getBlockingObject())) {

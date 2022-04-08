@@ -458,6 +458,14 @@ public class Path {
             return this + "/fight.wav";
         }
 
+        public String fight1() {
+            return this + "/fight1.wav";
+        }
+
+        public String fight2() {
+            return this + "/fight2.wav";
+        }
+
         public String airForceWhat() {
             return this + "/airForceWhat.wav";
         }
