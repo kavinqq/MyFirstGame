@@ -111,11 +111,11 @@ public class Arsenal extends Building {
                 .setTechLevelNeedBuild(2)
                 .setTechLevelNeedUpgrade(2)
                 .setHp(800)
-                .setWoodCostCreate(80)
-                .setSteelCostCreate(50)
+                .setWoodCostCreate(30)
+                .setSteelCostCreate(40)
                 .setGasCostCreate(0)
-                .setWoodCostLevelUpC(100)
-                .setSteelCostLevelUpC(70)
+                .setWoodCostLevelUpC(40)
+                .setSteelCostLevelUpC(50)
                 .setGasCostLevelup(0)
                 .setImgPath(new Path().img().building().Arsenal());
         imgInit();

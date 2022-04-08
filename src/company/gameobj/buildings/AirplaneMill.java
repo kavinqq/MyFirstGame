@@ -5,7 +5,7 @@ import company.gametest9th.utils.Path;
 
 public class AirplaneMill extends Building {
     //製作時間
-    public static int makeTime =12;
+    public static int makeTime =20;
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工場)
@@ -60,18 +60,18 @@ public class AirplaneMill extends Building {
     protected void init() {
         setId(8)
                 .setName("機器工廠")
-                .setBuildTime(10)
+                .setBuildTime(5)
                 .setUpgradeTime(30)
                 .setLevelC(0)
                 .setTechLevelNeedBuild(2)
                 .setTechLevelNeedUpgrade(2)
                 .setHp(500)
-                .setWoodCostCreate(100)
-                .setSteelCostCreate(80)
-                .setGasCostCreate(30)
-                .setWoodCostLevelUpC(120)
-                .setSteelCostLevelUpC(100)
-                .setGasCostLevelup(50)
+                .setWoodCostCreate(40)
+                .setSteelCostCreate(30)
+                .setGasCostCreate(20)
+                .setWoodCostLevelUpC(50)
+                .setSteelCostLevelUpC(40)
+                .setGasCostLevelup(10)
                 .setImgPath(new Path().img().building().AirplanemIll());
         imgInit();
     }

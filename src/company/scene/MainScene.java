@@ -1326,7 +1326,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
             boolean isWin = city.isAlive();
 
-            SceneController.getInstance().change(new EndScene(startTime, isWin));
+//            SceneController.getInstance().change(new EndScene(startTime, isWin));
         }
     }
 

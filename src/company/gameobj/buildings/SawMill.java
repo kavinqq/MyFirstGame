@@ -46,7 +46,7 @@ public class SawMill extends Building{
                 .setLevelC(0)
                 .setTechLevelNeedBuild(1)
                 .setTechLevelNeedUpgrade(2)
-                .setHp(200)
+                .setHp(350)
                 .setWoodCostCreate(15)
                 .setSteelCostCreate(0)
                 .setGasCostCreate(0)

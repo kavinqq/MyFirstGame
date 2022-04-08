@@ -14,13 +14,13 @@ public class ZombieKing extends Zombie {
      * 這種殭屍的預設攻擊力
      */
     public ZombieKing(int x, int y) {
-        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 6, new Path().img().zombies().zombieKing(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_KING);
-        setMaxHp(400);
+        super(x, y, painterWidth, painterHeight, colliderWidth, colliderHeight, 2, new Path().img().zombies().zombieKing(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_KING);
+        setMaxHp(1000);
     }
 
     public ZombieKing() {
-        super( painterWidth, painterHeight, colliderWidth, colliderHeight, 6, new Path().img().zombies().zombieKing(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_KING);
-        setMaxHp(400);
+        super( painterWidth, painterHeight, colliderWidth, colliderHeight, 2, new Path().img().zombies().zombieKing(), FLY_ABILITY.CANNOT_FLY, ZOMBIE_TYPE.ZOMBIE_KING);
+        setMaxHp(1000);
     }
 
 

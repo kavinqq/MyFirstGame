@@ -6,7 +6,7 @@ import company.gametest9th.utils.Path;
 
 public class Barracks extends Building{
     //製作時間
-    public static int makeTime =30;
+    public static int makeTime =15;
     /**
      * 父類建構子
      * id 建築物ID  (1.房屋 2.研究所 3.軍營 4.伐木場 5.煉鋼廠 6.兵工廠 7.瓦斯場 8.飛機工場)
@@ -58,8 +58,8 @@ public class Barracks extends Building{
                 .setTechLevelNeedBuild(1)
             .setTechLevelNeedUpgrade(2)
             .setHp(500)
-            .setWoodCostCreate(30)
-            .setSteelCostCreate(15)
+            .setWoodCostCreate(20)
+            .setSteelCostCreate(10)
             .setGasCostCreate(0)
             .setWoodCostLevelUpC(30)
             .setSteelCostLevelUpC(15)

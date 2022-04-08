@@ -29,15 +29,15 @@ public class BuildingController implements GameKernel.GameInterface, CommandSolv
     /**
      * 飛機升級時間
      */
-    public static final int PLANE_LEVEL_UPGRADE_TIME = 48; //48
+    public static final int PLANE_LEVEL_UPGRADE_TIME = 15; //48
     /**
      * 士兵升級時間
      */
-    public static final int SOLDIER_LEVEL_UPGRADE_TIME = 48; //48
+    public static final int SOLDIER_LEVEL_UPGRADE_TIME = 15; //48
     /**
      * 科技升級時間
      */
-    public static final int TECH_LEVEL_UPGRADE_TIME = 48; //24
+    public static final int TECH_LEVEL_UPGRADE_TIME = 15; //24
     /**
      * 此回合有升級科技
      */
