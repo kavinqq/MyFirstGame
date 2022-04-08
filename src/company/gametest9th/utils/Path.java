@@ -133,6 +133,10 @@ public class Path {
             public String attackEffect2() {
                 return this + "/attackEffect2.png";
             }
+
+            public String attackEffect3() {
+                return this + "/attackEffect3.png";
+            }
         }
 
 
@@ -422,6 +426,7 @@ public class Path {
      */
 
     public static class Sound extends Flow {
+
         private Sound() {
             super(new Resources(), "/sounds");
         }
@@ -481,6 +486,9 @@ public class Path {
         public String airForceYes() {
             return this + "/airForceYes.wav";
         }
+
+        public String bgm2() { return this + "/BGM2.wav";}
+
     }
 
 

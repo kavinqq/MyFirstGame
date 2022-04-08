@@ -124,7 +124,7 @@ public class StatusBar {
 
         // 士兵數量(Icon + 數量)
         g.drawImage(soldierNumIcon, ICON_START_X + ICON_GAP * 4, ICON_START_Y + moveY, ICON_WIDTH, ICON_HEIGHT, null);
-        g.drawString("" + numOfCitizen , ICON_START_X + ICON_WIDTH / 2 + ICON_GAP * 4 + 100, ICON_START_Y + 50 + moveY);
+        g.drawString("" + numOfSoldier , ICON_START_X + ICON_WIDTH / 2 + ICON_GAP * 4 + 100, ICON_START_Y + 50 + moveY);
 
         //遊戲時間
         g.drawImage(timeIcon, ICON_START_X + ICON_GAP * 5, ICON_START_Y + moveY, ICON_WIDTH, ICON_HEIGHT, null);
@@ -166,10 +166,11 @@ public class StatusBar {
 //        System.out.println("StatusBar moveY: " + moveY);
 //    }
 
-    public void updateResource(int totalWood, int totalSteel, int totalGas, int numOfCitizen) {
+    public void updateResource(int totalWood, int totalSteel, int totalGas, int numOfCitizen, int numOfSoldier) {
         this.totalWood = totalWood;
         this.totalSteel = totalSteel;
         this.totalGas = totalGas;
         this.numOfCitizen = numOfCitizen;
+        this.numOfSoldier = numOfSoldier;
     }
 }

@@ -16,10 +16,12 @@ public abstract class Effect extends GameObject {
         this.totalDelay = totalDelay;
         totalDelay.play();
 
-        if(Math.random() < 0.5){
+        if(Math.random() < 0.3){
             attackEffectImg = SceneController.getInstance().imageController().tryGetImage(new Path().img().effects().attackEffect());
-        } else{
+        } else if(Math.random() < 0.6){
             attackEffectImg = SceneController.getInstance().imageController().tryGetImage(new Path().img().effects().attackEffect2());
+        }  else {
+            attackEffectImg = SceneController.getInstance().imageController().tryGetImage(new Path().img().effects().attackEffect3());
         }
 
         // 隨機音效
@@ -34,7 +36,7 @@ public abstract class Effect extends GameObject {
 
     @Override
     public void paintComponent(Graphics g) {
-       g.drawImage(img,this.painter().left(), this.painter().top(),null);
+       g.drawImage(attackEffectImg,this.painter().left(), this.painter().top(),null);
         //paintEffect(g, this.painter().centerX(), this.painter().centerY());
     }
 

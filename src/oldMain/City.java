@@ -565,6 +565,13 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
     }
 
 
+    public int getTotalSoldier(){
+        return military.getTotalSoldier();
+    }
+
+
+
+
     public Human getSingleObjectByXY(int x, int y){
         Human currentObj = null;
 
