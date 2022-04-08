@@ -988,12 +988,12 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         if (!city.isAlive() || zombieKingdom.getAttackRound() > TOTAL_ZOMBIE_ROUND && zombieKingdom.isClear()) {
 
             // Win or Lose
-            boolean isWin = city.isAlive();
+            boolean isWin = !city.isAlive();
 
             if(!city.isAlive()){ // Lose
-                SceneController.getInstance().change(new EndScene(startTime, !isWin));
-            } else { // Win
                 SceneController.getInstance().change(new EndScene(startTime, isWin));
+            } else { // Win
+                SceneController.getInstance().change(new EndScene(startTime, !isWin));
             }
         }
     }

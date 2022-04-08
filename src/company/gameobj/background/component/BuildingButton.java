@@ -219,6 +219,7 @@ public class BuildingButton extends GameObject implements CommandSolver.MouseCom
                 isDragging = false;
                 //移動至上方顯示資訊
                 if (this.isEntered(e.getX(), e.getY())) {
+
                     isMoveOnButton = true;
                 } else {
                     isMoveOnButton = false;
