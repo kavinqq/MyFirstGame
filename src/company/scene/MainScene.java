@@ -147,7 +147,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
         // 測試: 預設有 ? 個 村民
 
-        city.setCitizens(1   );
+        city.setCitizens(Global.CitizenNum);
 
 
         //設定遊戲時間 60偵為遊戲一小時(oldMain的流動一小時)

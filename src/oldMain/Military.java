@@ -21,12 +21,15 @@ import static company.Global.BUILDING_WIDTH;
 public class Military {
     private List<AirForceSoldier> airForce;
     private List<ArmySoldier> army;
-    private static final int INITIAL_ARMY_SIZE = 3;//10;
-    private static final int INITIAL_AIR_SIZE = 0;
+
     private int armyLevel;
     private int airForceLevel;
     private int armyValue;
     private int airForceValue;
+    private static final int armyValueMax = 12;
+    //3*5的位置不會重疊
+    private int addPositionX;
+    private int addPositionY;
 
 
     private List<Human> soldiersInBox;
@@ -41,9 +44,10 @@ public class Military {
         this.armyValue = 0;
         this.airForceValue = 0;
 
-//        this.addArmy(INITIAL_ARMY_SIZE, Base.BASE_X + 115 + Base.BASE_WIDTH, Base.BASE_Y);
 
-//        this.addAirForce(INITIAL_AIR_SIZE, Base.BASE_X + 335 + Base.BASE_WIDTH, Base.BASE_Y);
+        this.addArmy(Global.INITIAL_ARMY_SIZE, Base.BASE_X + 115 + Base.BASE_WIDTH, Base.BASE_Y);
+
+        this.addAirForce(Global.INITIAL_AIR_SIZE, Base.BASE_X + 335 + Base.BASE_WIDTH, Base.BASE_Y);
 
         upDateArmyValue();
         upDateAirForceValue();
@@ -64,12 +68,16 @@ public class Military {
         ArmySoldier armySoldier;
 
         for (int i = 0; i < num; i++) {
-            if(i%6==5){
-                x=x+74;
+            if (army.size() >= armyValueMax) {
+                return;
             }
-            armySoldier = new ArmySoldier(x, y + i%5 * 74, this.armyLevel);
+            if (addPositionY % 5 == 0) {
+                addPositionX++;
+            }
+            armySoldier = new ArmySoldier(x + addPositionX % 3 * 74, y + addPositionY % 5 * 74, this.armyLevel);
             this.armyValue += armySoldier.getValue();
             this.army.add(armySoldier);
+            addPositionY++;
         }
     }
 

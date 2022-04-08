@@ -24,7 +24,7 @@ public class Citizen extends Human {   //市民
 
     private WORK_STATUS workStatus;
 
-    private static final int CITIZEN_INITIAL_VALUE = 1;
+    private static final int CITIZEN_INITIAL_VALUE = 3 ;
     private static final int CITIZEN_INITIAL_SPEED = 4;
     private static final int painterWidth = 64;
     private static final int painterHeight = 64;
