@@ -612,13 +612,14 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         humans.addAll(city.getCitizens().getAllCitizens());
         humans.addAll(city.getMilitary().getArmy());
 
-//            for (BuildingType value : values()) {
-//                for (int j = 0; j < value.list().size(); j++) {
+            for (BuildingType value : values()) {
+                for (int j = 0; j < value.list().size(); j++) {
                 Building allBuildings;
                 if(BuildingType.BASE.list().size()!=1){
 
                 }else{
-                    allBuildings = BuildingType.BASE.list().get(0).getBuilding();
+//                    allBuildings = BuildingType.BASE.list().get(0).getBuilding();
+                    allBuildings=value.list().get(j).getBuilding();
                     for (Human human : humans){
                         //如果人物走到與建築重疊了，將其拉回剛好接觸但不重疊的位置並且讓人物知道這個方向被擋住了，換個方向
                         if (human.painter().overlap(allBuildings.painter())) {
@@ -641,9 +642,9 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                                 }
                             }
 
-                            if (allBuildings.isCovering(human.targetX(), human.targetY())) {
-                                human.stop();
-                            }
+//                            if (allBuildings.isCovering(human.targetX(), human.targetY())) {
+//                                human.stop();
+//                            }
 
                             switch (human.getWalkingDir()) {
 
@@ -807,8 +808,8 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
 
-//            }
-//        }
+            }
+        }
 //        Building allBuildings = BuildingType.BASE.instance();
 
         //TODO: Del
