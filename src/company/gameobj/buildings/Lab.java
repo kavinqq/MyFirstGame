@@ -44,7 +44,7 @@ public class Lab extends Building {
     protected void init(){
         setId(2)
                 .setName("研究所")
-                .setBuildTime(3)
+                .setBuildTime(5)
                 .setUpgradeTime(3)
                 .setLevelC(0)
                 .setTechLevelNeedBuild(1)

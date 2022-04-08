@@ -21,7 +21,8 @@ import static company.Global.BUILDING_WIDTH;
 public class Military {
     private List<AirForceSoldier> airForce;
     private List<ArmySoldier> army;
-    private static final int INITIAL_ARMY_SIZE = 1;//10;
+    private static final int INITIAL_ARMY_SIZE = 3;//10;
+    private static final int INITIAL_AIR_SIZE = 0;
     private int armyLevel;
     private int airForceLevel;
     private int armyValue;
@@ -40,11 +41,9 @@ public class Military {
         this.armyValue = 0;
         this.airForceValue = 0;
 
-        this.addArmy(INITIAL_ARMY_SIZE, Base.BASE_X+250+Base.BASE_WIDTH,Base.BASE_Y);
-        this.addArmy(INITIAL_ARMY_SIZE, Base.BASE_X+250+Base.BASE_WIDTH,Base.BASE_Y);
+//        this.addArmy(INITIAL_ARMY_SIZE, Base.BASE_X + 115 + Base.BASE_WIDTH, Base.BASE_Y);
 
-        this.addAirForce(INITIAL_ARMY_SIZE, Base.BASE_X+335+Base.BASE_WIDTH,Base.BASE_Y);
-        this.addAirForce(INITIAL_ARMY_SIZE, Base.BASE_X+335+Base.BASE_WIDTH,Base.BASE_Y);
+//        this.addAirForce(INITIAL_AIR_SIZE, Base.BASE_X + 335 + Base.BASE_WIDTH, Base.BASE_Y);
 
         upDateArmyValue();
         upDateAirForceValue();
@@ -57,15 +56,18 @@ public class Military {
      *
      * @param num
      */
-    public void addArmy(int num,int x,int y){
-        if(num <= 0){
+    public void addArmy(int num, int x, int y) {
+        if (num <= 0) {
             return;
         }
 
         ArmySoldier armySoldier;
 
         for (int i = 0; i < num; i++) {
-            armySoldier = new ArmySoldier(x, y, this.armyLevel);
+            if(i%6==5){
+                x=x+74;
+            }
+            armySoldier = new ArmySoldier(x, y + i%5 * 74, this.armyLevel);
             this.armyValue += armySoldier.getValue();
             this.army.add(armySoldier);
         }
@@ -76,15 +78,15 @@ public class Military {
      *
      * @param num
      */
-    public void addAirForce(int num,int x,int y){
-        if(num <= 0){
+    public void addAirForce(int num, int x, int y) {
+        if (num <= 0) {
             return;
         }
         AirForceSoldier airForceSoldier;
 
-        for(int i=0; i<num; i++){
+        for (int i = 0; i < num; i++) {
             //飛機不能超過4台
-            if(airForce.size()>4){
+            if (airForce.size() > 4) {
                 break;
             }
             airForceSoldier = new AirForceSoldier(x, y, this.airForceLevel);//TODO: use the correct x and y
@@ -94,7 +96,7 @@ public class Military {
     }
 
     //取得飛行士兵的數量
-    public int getAirForceNum(){
+    public int getAirForceNum() {
         return airForce.size();
     }
 
@@ -252,36 +254,36 @@ public class Military {
         }
     }
 
-    public void cameraMove(){
-        for(ArmySoldier armySoldier: army){
+    public void cameraMove() {
+        for (ArmySoldier armySoldier : army) {
             armySoldier.cameraMove();
-            if(armySoldier.getFightEffect()!= null){
+            if (armySoldier.getFightEffect() != null) {
                 armySoldier.getFightEffect().cameraMove();
             }
 
         }
 
-        for(AirForceSoldier airForceSoldier: airForce){
+        for (AirForceSoldier airForceSoldier : airForce) {
             airForceSoldier.cameraMove();
-            if(airForceSoldier.getFightEffect() != null){
+            if (airForceSoldier.getFightEffect() != null) {
                 airForceSoldier.getFightEffect().cameraMove();
             }
 
         }
     }
 
-    public void resetObjectXY(){
-        for(ArmySoldier armySoldier: army){
+    public void resetObjectXY() {
+        for (ArmySoldier armySoldier : army) {
             armySoldier.resetObjectXY();
-            if(armySoldier.getFightEffect() != null){
+            if (armySoldier.getFightEffect() != null) {
                 armySoldier.getFightEffect().resetObjectXY();
             }
 
         }
 
-        for(AirForceSoldier airForceSoldier: airForce){
+        for (AirForceSoldier airForceSoldier : airForce) {
             airForceSoldier.resetObjectXY();
-            if(airForceSoldier.getFightEffect() != null){
+            if (airForceSoldier.getFightEffect() != null) {
                 airForceSoldier.getFightEffect().resetObjectXY();
             }
         }

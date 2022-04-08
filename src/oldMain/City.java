@@ -187,8 +187,8 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
 //            gainResource();
             gainGas();
             //建物.生成人()
-            this.citizens.add(buildings.getNewCitizenNum(resource), Base.BASE_X+ Global.SUM_OF_CAMERA_MOVE_VX-225,Base.BASE_Y+Global.SUM_OF_CAMERA_MOVE_VY);
-            this.military.addArmy(buildings.getNewArmyNum(resource),Base.BASE_X+Global.SUM_OF_CAMERA_MOVE_VX+Base.BASE_WIDTH+225,Base.BASE_Y+Global.SUM_OF_CAMERA_MOVE_VY); //Base.BASE_X+225,Base.BASE_Y
+            this.citizens.add(buildings.getNewCitizenNum(resource), Base.BASE_X+ Global.SUM_OF_CAMERA_MOVE_VX-151,Base.BASE_Y+Global.SUM_OF_CAMERA_MOVE_VY);
+            this.military.addArmy(buildings.getNewArmyNum(resource),Base.BASE_X+Global.SUM_OF_CAMERA_MOVE_VX+Base.BASE_WIDTH+151,Base.BASE_Y+Global.SUM_OF_CAMERA_MOVE_VY); //Base.BASE_X+225,Base.BASE_Y
 
             //升成戰士
             int currentPlaneNum=military.getAirForceNum();

@@ -60,18 +60,18 @@ public class AirplaneMill extends Building {
     protected void init() {
         setId(8)
                 .setName("機器工廠")
-                .setBuildTime(2)
+                .setBuildTime(10)
                 .setUpgradeTime(30)
                 .setLevelC(0)
                 .setTechLevelNeedBuild(2)
                 .setTechLevelNeedUpgrade(2)
                 .setHp(500)
-                .setWoodCostCreate(15)
-                .setSteelCostCreate(5)
-                .setGasCostCreate(5)
-                .setWoodCostLevelUpC(30)
-                .setSteelCostLevelUpC(15)
-                .setGasCostLevelup(5)
+                .setWoodCostCreate(100)
+                .setSteelCostCreate(80)
+                .setGasCostCreate(30)
+                .setWoodCostLevelUpC(120)
+                .setSteelCostLevelUpC(100)
+                .setGasCostLevelup(50)
                 .setImgPath(new Path().img().building().AirplanemIll());
         imgInit();
     }

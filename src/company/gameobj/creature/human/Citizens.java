@@ -84,8 +84,11 @@ public class Citizens {
 
         // 下面是新增村民之後 他的出生地點 [所有XY數值都是測試用 沒意義]
         for (int i = 0; i < num; i++) {
+            if(i%6==5){
+                x=x-74;
+            }
 //            citizen = new Citizen(Global.SCREEN_X/2, Global.SCREEN_Y/2);//TODO: set the correct x and y
-            citizen = new Citizen(x, y + i * 74); //100 ->x 400-y
+            citizen = new Citizen(x, y + i%5 * 74); //100 ->x 400-y
             this.valueOfCitizens += citizen.getValue();
             this.citizens.add(citizen);
         }

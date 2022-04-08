@@ -9,6 +9,7 @@ import java.text.AttributedCharacterIterator;
 import java.util.List;
 import java.util.ArrayList;
 
+import static company.Global.*;
 import static company.gameobj.BuildingController.*;
 
 import company.controllers.AudioResourceController;
@@ -37,7 +38,6 @@ import oldMain.City;
 import java.awt.*;
 
 
-import static company.Global.*;
 import static company.gameobj.BuildingController.BuildingType.values;
 
 /**
@@ -231,7 +231,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
 
 
         //畫出遊戲內所有的資源堆
-        //resourceSystem.paint(g);
+        resourceSystem.paint(g);
 
 
         //城市
@@ -379,7 +379,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         Rect greenRect = currentButton.overlapObject(buildingArea.get(i, j));
                         currentButton.setGreenRect(greenRect);
                         if (currentButton.getGreenRect() != null) {
-                            //若有蓋好的建築物，將redRects給currentButton 一個
+                            //若有蓋好的建築物，與所有不會飛的物件碰撞 redRects給currentButton 一個
                             ArrayList<Rect> redRects = new ArrayList<>();
                             for (BuildingType value : values()) {
                                 for (int k = 0; k < value.list().size(); k++) {
@@ -413,8 +413,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                             }else{
                                 currentButton.setRedRects(null);
                             }
-
-
 
                                         //滑鼠放開時，判斷滑鼠放開的上一偵是否在建造區中
                                         if (currentButton.isReleased && preDragging && buildingArea.get(i, j).isOnBuildGrid() && currentButton.getCanBuild()) {//
@@ -1000,6 +998,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         }
                     }
                 }
+>>>>>>> 51107359ef59bd2bb135757459288dad8aaebca5
             }
         }
 

@@ -24,6 +24,11 @@ public class Global {
         }
     }
 
+
+
+
+
+
     // 是否為Debug模式
     public static final boolean IS_DEBUG = true;
 

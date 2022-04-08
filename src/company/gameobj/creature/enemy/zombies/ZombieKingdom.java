@@ -19,7 +19,7 @@ public class ZombieKingdom implements GameKernel.GameInterface{
     /**
      * 攻擊頻率
      */
-    private static final int attackRate = 1200;
+    private static final int attackRate = 3600;
     /**
      * 儲存殭屍數量的map
      */
