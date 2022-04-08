@@ -6,7 +6,7 @@ import company.gametest9th.utils.*;
 import java.awt.*;
 
 /**
- *  場景的樣版
+ * 場景的樣版
  */
 
 public abstract class Scene {

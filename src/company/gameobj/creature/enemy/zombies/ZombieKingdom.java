@@ -20,10 +20,10 @@ public class ZombieKingdom implements GameKernel.GameInterface{
      * 攻擊頻率
      */
     private static final int attackRate = 3600;
+
     /**
      * 儲存殭屍數量的map
      */
-    //private final Map<Zombie, Integer> zombies;
     private final Map<Zombie, ArrayList<? extends Zombie>> zombies;
 
     /**
@@ -90,35 +90,35 @@ public class ZombieKingdom implements GameKernel.GameInterface{
                     arr.add(new ZombieNormal());
                 }
                 zombies.put(zombieNormal, arr);
-                //zombies.put(zombieNormal, currentNum);
+
             } else if (currentType instanceof ZombieTypeI) {
                 ArrayList<ZombieTypeI> arr = new ArrayList<ZombieTypeI>();
                 for(int i=0; i<currentNum; i++){
                     arr.add(new ZombieTypeI());
                 }
                 zombies.put(zombieTypeI, arr);
-                //zombies.put(zombieTypeI, currentNum);
+
             } else if (currentType instanceof ZombieTypeII) {
                 ArrayList<ZombieTypeII> arr = new ArrayList<ZombieTypeII>();
                 for(int i=0; i<currentNum; i++){
                     arr.add(new ZombieTypeII());
                 }
                 zombies.put(zombieTypeII, arr);
-                //zombies.put(zombieTypeII, currentNum);
+
             } else if (currentType instanceof ZombieFlying) {
                 ArrayList<ZombieFlying> arr = new ArrayList<ZombieFlying>();
                 for(int i=0; i<currentNum; i++){
                     arr.add(new ZombieFlying());
                 }
                 zombies.put(zombieFlying, arr);
-                //zombies.put(zombieFlying, currentNum);
+
             } else if (currentType instanceof ZombieFlyingBig) {
                 ArrayList<ZombieFlyingBig> arr = new ArrayList<ZombieFlyingBig>();
                 for(int i=0; i<currentNum; i++){
                     arr.add(new ZombieFlyingBig());
                 }
                 zombies.put(zombieFlyingBig, arr);
-                //zombies.put(zombieFlyingBig, currentNum);
+
             }
         }
     }
@@ -134,26 +134,6 @@ public class ZombieKingdom implements GameKernel.GameInterface{
         }
     }
 
-//    public void showTroopValue(){
-//        Zombie zombieGenre;
-//        int number;
-//        for (Map.Entry<Zombie, Integer> entry : zombies.entrySet()) {
-//            zombieGenre = entry.getKey();
-//            number = entry.getValue();
-//            System.out.println(zombieGenre.getClass());
-//            System.out.println(number);
-//            System.out.println("----------------");
-//        }
-//    }
-
-    //TODO
-//    public ArrayList<Zombie> getZombies(){
-//        ArrayList<Zombie> ans = new ArrayList<Zombie>();
-//        for(Map.Entry<Zombie, ArrayList<? extends Zombie>> entry: zombies.entrySet()){
-//            ans.addAll(entry.getValue());
-//        }
-//        return ans;
-//    }
 
     @Override
     public void paint(Graphics g) {
@@ -192,10 +172,6 @@ public class ZombieKingdom implements GameKernel.GameInterface{
     @Override
     public void update() {
 
-//        System.out.println(zombieTroop.getLandTroop().size());
-//        System.out.println(zombieTroop.getAirTroop().size());
-//        System.out.println("=====");
-        //timePass();
         for(int i=0; i<zombieTroop.getLandTroop().size(); i++){
             if(!zombieTroop.getLandTroop().get(i).isAlive()){
                 zombieTroop.getLandTroop().remove(i);
@@ -279,12 +255,6 @@ public class ZombieKingdom implements GameKernel.GameInterface{
             return this.airTroop;
         }
 
-
-//        @Override
-//        public String toString() {
-//            return "空中攻擊力：" + airAttack +
-//                    ", 地面攻擊力：" + landAttack;
-//        }
     }
 
     /**

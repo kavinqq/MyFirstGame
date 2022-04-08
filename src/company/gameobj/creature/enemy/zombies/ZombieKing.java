@@ -2,7 +2,6 @@ package company.gameobj.creature.enemy.zombies;
 
 import company.gametest9th.utils.Path;
 
-import java.awt.*;
 
 public class ZombieKing extends Zombie {
     private static final int painterWidth = 128;

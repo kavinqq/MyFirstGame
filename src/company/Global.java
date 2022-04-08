@@ -25,10 +25,6 @@ public class Global {
     }
 
 
-
-
-
-
     // 是否為Debug模式
     public static final boolean IS_DEBUG = true;
 
@@ -151,8 +147,8 @@ public class Global {
     public static final int INITIAL_ARMY_SIZE = 3;//10;
     public static final int ArmyMax=10;
 
-    public static final int INITIAL_AIR_SIZE = 0;
 
+    public static final int INITIAL_AIR_SIZE = 0;
 
 
     /**

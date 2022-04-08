@@ -9,14 +9,10 @@ import company.gameobj.creature.human.ArmySoldier;
 import company.gameobj.GameObject;
 import company.gameobj.creature.human.*;
 
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import static company.Global.BUILDING_HEIGHT;
-import static company.Global.BUILDING_WIDTH;
 
 public class Military {
     private List<AirForceSoldier> airForce;
