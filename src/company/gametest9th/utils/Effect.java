@@ -21,7 +21,7 @@ public abstract class Effect extends GameObject {
 
     @Override
     public void paintComponent(Graphics g) {
-       // g.drawImage(img,this.painter().left(), this.painter().top(),null);
+       g.drawImage(img,this.painter().left(), this.painter().top(),null);
         //paintEffect(g, this.painter().centerX(), this.painter().centerY());
     }
 

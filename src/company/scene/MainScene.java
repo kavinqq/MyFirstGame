@@ -674,8 +674,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                         }
                     }
                     else if (human.getBlockedDir() != null && !human.touches(human.getBlockingObject())) {
-                        System.out.println("not null && not touches");
-                        System.out.println(human.getBlockedDir());
                         switch (human.getBlockedDir()) {
                             case LEFT: {
                                 if (!human.touchRightOf(human.getBlockingObject())) {

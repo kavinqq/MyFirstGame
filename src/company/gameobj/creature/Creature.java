@@ -686,6 +686,8 @@ public abstract class Creature extends GameObject {
         if (this.getFightEffect() != null) {
             //this.getFightEffect().paintComponent(g);
             this.getFightEffect().paintEffect(g, this.painter().centerX(), this.painter().centerY());
+//            this.getFightEffect().paintComponent(g);
+//            this.getFightEffect().setCenter(this.painter().centerX(), this.painter().centerY());
         }
     }
 
