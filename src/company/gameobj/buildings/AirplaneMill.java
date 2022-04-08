@@ -27,7 +27,7 @@ public class AirplaneMill extends Building {
     public AirplaneMill(int x, int y) {
         super(x, y);
         init();
-        getIcons().add(new UpGradeIcon(getIcons().size(),"升級機器士兵"));
+        getIcons().add(new UpGradeIcon(getIcons().size(),"增加產量"));
         getIcons().add(new WorkingIcon(getIcons().size(),"機器士兵"));
     }
 

@@ -138,17 +138,15 @@ public class Global {
     //血量的高度
     public static int HP_HEIGHT = 10;
 
-    //村民預設值
-    public static final int CitizenNum=3;
-    public static final int CitizenMax=6;
+    public static final int CitizenNum = 3; //村民預設量
+    public static final int CitizenMax = 6; //村民上限量
 
+    public static final int INITIAL_ARMY_SIZE = 3;//士兵預設量
+    public static final int ArmyMax = 10;         //士兵上限量
 
+    public static final int INITIAL_AIR_SIZE = 0; //飛行兵預設量
 
-    public static final int INITIAL_ARMY_SIZE = 3;//10;
-    public static final int ArmyMax=10;
-
-
-    public static final int INITIAL_AIR_SIZE = 0;
+    public static final int TOTAL_ZOMBIE_ROUND = 6;// 殭屍總共波數
 
 
     /**

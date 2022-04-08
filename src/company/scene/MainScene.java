@@ -333,8 +333,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //City更新
         city.update();
         zombieKingdom.update();
-        //TODO: Del
-//        zombieNormal.update();
 
         //判斷現在有無選取按鈕
         if (currentButton != null) {
@@ -442,7 +440,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             preDragging = currentButton.isDragging();
             isPreAllNonBuildGrid = buildingArea.isAllNonOnBuildGrid();
         }
-
 
         //升級
         if (currentBuildNode != null) {
@@ -875,8 +872,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
         //殭屍偵測所有遊戲物件
         for (Zombie zombie : zombieKingdom.getZombieTroop().getLandTroop()) {
 
-//            System.out.println("殭屍ID:"+zombie);
-
             if (!zombie.isAlive()) {
                 continue;
             }
@@ -927,13 +922,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                     }
 
                     GameObject gameObject = zombie.getAttackTarget();
-//                    if (gameObject.getFightEffect() == null) {
-//                        gameObject.setFightEffect(new FightEffect(gameObject.painter().centerX(), gameObject.painter().centerY()));
-//                    } else {
-//                        if (gameObject.getFightEffect().isDue()) {
-//                            gameObject.setFightEffect(null);
-//                        }
-//                    }
+
                     gameObject.setFightEffect(new FightEffect(gameObject.painter().centerX(), gameObject.painter().centerY()));
 
                     if (zombie.getAttackTarget() instanceof Building) {
@@ -994,12 +983,20 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             thisRoundTimePass = 1;
             city.doCityWorkAndTimePass(thisRoundTimePass);
         }
-        //20分鐘後結束 或主堡死去 或巫妖王死去
-        if (!city.isAlive() || StatusBar.instance().getTime() > 20 * 60) {//
 
+        System.out.println("Z: " + zombieKingdom.getAttackRound());
+
+        //判斷結束條件 => 主堡死去 或 打贏了最後一波殭屍王軍團
+        if (!city.isAlive() || zombieKingdom.getAttackRound() > TOTAL_ZOMBIE_ROUND && zombieKingdom.isClear()) {
+
+            // Win or Lose
             boolean isWin = city.isAlive();
 
-//            SceneController.getInstance().change(new EndScene(startTime, isWin));
+            if(!city.isAlive()){ // Lose
+                SceneController.getInstance().change(new EndScene(startTime, !isWin));
+            } else { // Win
+                SceneController.getInstance().change(new EndScene(startTime, isWin));
+            }
         }
     }
 
@@ -1019,8 +1016,6 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
             // 紀錄當下的滑鼠位置
             currentMouseX = e.getX();
             currentMouseY = e.getY();
-
-            //HintDialog.instance().mouseTrig(e, state, trigTime);
 
             city.mouseTrig(e, state, trigTime);
             //如果現在沒有框選

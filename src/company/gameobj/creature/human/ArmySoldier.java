@@ -11,8 +11,8 @@ public class ArmySoldier extends Soldier  {  //士兵
 
     private static final int painterWidth = 64;
     private static final int painterHeight = 64;
-    private static final int colliderWidth = 256;
-    private static final int colliderHeight = 256;
+    private static final int colliderWidth = 300;
+    private static final int colliderHeight = 300;
     private static final int SPEED = 4;
 
 

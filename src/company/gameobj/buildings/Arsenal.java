@@ -112,10 +112,10 @@ public class Arsenal extends Building {
                 .setTechLevelNeedUpgrade(2)
                 .setHp(800)
                 .setWoodCostCreate(30)
-                .setSteelCostCreate(40)
+                .setSteelCostCreate(20)
                 .setGasCostCreate(0)
-                .setWoodCostLevelUpC(40)
-                .setSteelCostLevelUpC(50)
+                .setWoodCostLevelUpC(50)
+                .setSteelCostLevelUpC(40)
                 .setGasCostLevelup(0)
                 .setImgPath(new Path().img().building().Arsenal());
         imgInit();
@@ -123,6 +123,9 @@ public class Arsenal extends Building {
 
     @Override
     public void paintComponent(Graphics g) {
+        g.setColor(Color.white);
+        g.setFont(new Font("Dialog", Font.BOLD, Global.FONT_SIZE));
+
         //升級中及完成顯示白色
         g.setColor(Color.white);
 

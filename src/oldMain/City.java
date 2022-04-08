@@ -194,7 +194,7 @@ public class City implements GameKernel.GameInterface, CommandSolver.MouseComman
             int currentPlaneNum=military.getAirForceNum();
             int addPlaneNum = buildings.getNewPlaneNum(resource);
             for (int i = currentPlaneNum; i < currentPlaneNum+addPlaneNum; i++) {
-                if(i >= 4){
+                if(i >= 2){
                     break;
                 }
                 this.military.addAirForce(1,tarmacArr.getX(i)+AirForceSoldier.colliderWidth/2,tarmacArr.getY(i)+AirForceSoldier.colliderHeight/2);
