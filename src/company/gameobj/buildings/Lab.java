@@ -29,7 +29,7 @@ public class Lab extends Building {
     public Lab(int x, int y) {
         super(x, y);
         init();
-        getIcons().add(new UpGradeIcon(getIcons().size(),"升級科技等級"));
+
     }
 
     //設定現在是否在升級科技
@@ -38,6 +38,7 @@ public class Lab extends Building {
     }
 
     public Lab() {
+
         init();
     }
     //初始化
@@ -58,6 +59,7 @@ public class Lab extends Building {
                 .setGasCostLevelup(0)
                 .setImgPath(new Path().img().building().Lab());
         imgInit();
+        getIcons().add(new UpGradeIcon(getIcons().size(),"升級科技等級"));
     }
     @Override
     public String toString() {
@@ -78,10 +80,11 @@ public class Lab extends Building {
                 super.setLevel(0);
             }
             case 1:{//一級時 需要升級的資源改變
-                super.setWoodCostLevelUp(60);
-                super.setSteelCostLevelUp(30);
-                super.setGasCostLevelUp(10);
-                super.setLevel(1);
+//                Button處文字需要更新
+//                setWoodCostLevelUp(60);
+//                setSteelCostLevelUp(30);
+//                setGasCostLevelUp(10);
+                setLevel(1);
                 break;
             }
         }
@@ -100,10 +103,10 @@ public class Lab extends Building {
             g.drawImage(getImg(), painter().left(), painter().top(), painter().width(), painter().height(), null);
             //畫出Icon
             if (isShowIcon()) {
-                g.setFont(new Font("Dialog", Font.BOLD, Global.FONT_SIZE));
                 //畫出等級
                 g.drawString("目前科技等級" + City.getTechLevel(), painter().width() / 2 + painter().left() - Global.FONT_SIZE * 2, painter().top() - showStringHeight());
                 for (int i = 0; i < getIcons().size(); i++) {
+
                     getIcons().get(i).paint(g);
                 }
 

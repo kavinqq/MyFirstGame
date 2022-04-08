@@ -100,9 +100,6 @@ public class Base extends Building {
                 super.setLevel(0);
             }
             case 1: {//一級時 需要升級的資源改變
-                super.setWoodCostLevelUp(60);
-                super.setSteelCostLevelUp(30);
-                super.setGasCostLevelUp(10);
                 super.setLevel(1);
                 break;
             }

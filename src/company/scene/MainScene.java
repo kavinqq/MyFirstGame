@@ -463,7 +463,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                 } else if (!type.instance().isEnoughUpgrade(city.getResource())) {
                     ToastController.instance().print("升級-物資不足");
 
-                } else if (city.canUpgradeBuilding(type)) {
+                }
 
                     switch (type) {
                         case LAB: {
@@ -503,7 +503,7 @@ public class MainScene extends Scene implements CommandSolver.KeyListener {
                             }
                         }
                     }
-                }
+
                 //限制按鈕按一次 就變成false;
                 currentBuildNode.getBuilding().shutAllUpdateIconCan();
             }

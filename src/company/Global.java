@@ -146,10 +146,11 @@ public class Global {
     public static final int CitizenNum=3;
     public static final int CitizenMax=5;
 
-    public static final int ArmyNum=3;
-    public static final int ArmyMax=10;
+
 
     public static final int INITIAL_ARMY_SIZE = 1;//10;
+    public static final int ArmyMax=10;
+
     public static final int INITIAL_AIR_SIZE = 0;
 
 
